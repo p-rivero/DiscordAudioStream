@@ -467,7 +467,7 @@ namespace quick_screen_recorder
 							{
 								if (pci.flags == Recorder.CURSOR_SHOWING)
 								{
-									Recorder.DrawIcon(g.GetHdc(), pci.ptScreenPos.x, pci.ptScreenPos.y, pci.hCursor);
+									Recorder.DrawIcon(g.GetHdc(), pci.ptScreenPos.x - (int)xNumeric.Value, pci.ptScreenPos.y - (int)yNumeric.Value, pci.hCursor);
 									g.ReleaseHdc();
 								}
 							}
