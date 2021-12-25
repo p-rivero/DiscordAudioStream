@@ -47,8 +47,9 @@ namespace quick_screen_recorder
 				if (this.Left + newWidth > limitEndX) newWidth = limitEndX - this.Left;
 				if (this.Top + newHeight > limitEndY) newHeight = limitEndY - this.Top;
 
-				(this.Owner as MainForm).SetAreaWidth(newWidth);
-				(this.Owner as MainForm).SetAreaHeight(newHeight);
+				// Omit 2 pixels for red border
+				(this.Owner as MainForm).SetAreaWidth(newWidth - 2);
+				(this.Owner as MainForm).SetAreaHeight(newHeight - 2);
 			}));
 		}
 
@@ -88,14 +89,16 @@ namespace quick_screen_recorder
 		private void AreaForm_SizeChanged(object sender, EventArgs e)
 		{
 			this.Refresh();
-			(this.Owner as MainForm).SetMaximumX(screenWidth - this.Width);
-			(this.Owner as MainForm).SetMaximumY(screenHeight - this.Height);
+			// Omit 2 pixels for red border
+			(this.Owner as MainForm).SetMaximumX(screenWidth - this.Width - 2);
+			(this.Owner as MainForm).SetMaximumY(screenHeight - this.Height - 2);
 		}
 
 		private void AreaForm_LocationChanged(object sender, EventArgs e)
 		{
-			(this.Owner as MainForm).SetAreaX(this.Left);
-			(this.Owner as MainForm).SetAreaY(this.Top);
+			// Omit 1 pixel for red border
+			(this.Owner as MainForm).SetAreaX(this.Left + 1);
+			(this.Owner as MainForm).SetAreaY(this.Top + 1);
 		}
 
 		public void SetMaximumArea(Rectangle screen)

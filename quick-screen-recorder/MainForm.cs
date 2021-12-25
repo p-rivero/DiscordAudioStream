@@ -315,10 +315,11 @@ namespace quick_screen_recorder
 			{
 				areaForm.Show();
 
-				widthNumeric.Value = areaForm.Width;
-				heightNumeric.Value = areaForm.Height;
-				xNumeric.Value = areaForm.Left;
-				yNumeric.Value = areaForm.Top;
+				// Omit pixels of the red border
+				widthNumeric.Value = areaForm.Width - 2;
+				heightNumeric.Value = areaForm.Height - 2;
+				xNumeric.Value = areaForm.Left + 1;
+				yNumeric.Value = areaForm.Top + 1;
 
 				// TODO: Make custom numericBox that doesn't throw an exception
 				widthNumeric.Enabled = true;
@@ -398,9 +399,9 @@ namespace quick_screen_recorder
 			{
 				try
 				{
-					areaForm.Width = (int)widthNumeric.Value;
+					areaForm.Width = (int)widthNumeric.Value + 2;
 				}
-				catch (InvalidOperationException ex)
+				catch (InvalidOperationException)
 				{
 					// TODO: Handle
 				}
@@ -413,9 +414,9 @@ namespace quick_screen_recorder
 			{
 				try
 				{
-					areaForm.Height = (int)heightNumeric.Value;
+					areaForm.Height = (int)heightNumeric.Value + 2;
 				}
-				catch (InvalidOperationException ex)
+				catch (InvalidOperationException)
 				{
 					// TODO: Handle
 				}
@@ -615,9 +616,10 @@ namespace quick_screen_recorder
 			{
 				try
 				{
-					areaForm.Left = (int)xNumeric.Value;
+					// Omit 1 pixel for red border
+					areaForm.Left = (int)xNumeric.Value - 1;
 				}
-				catch (InvalidOperationException ex)
+				catch (InvalidOperationException)
 				{
 					// TODO: Handle
 				}
@@ -630,9 +632,10 @@ namespace quick_screen_recorder
 			{
 				try
 				{
-					areaForm.Top = (int)yNumeric.Value;
+					// Omit 1 pixel for red border
+					areaForm.Top = (int)yNumeric.Value - 1;
 				}
-				catch (InvalidOperationException ex)
+				catch (InvalidOperationException)
 				{
 					// TODO: Handle
 				}
