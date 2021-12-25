@@ -117,5 +117,17 @@ namespace quick_screen_recorder
 			if (this.Left + this.Width > limitEndX) this.Left = limitEndX - this.Width;
 			if (this.Top + this.Height > limitEndY) this.Top = limitEndY - this.Height;
 		}
-	}
+
+        private void AreaForm_Activated(object sender, EventArgs e)
+        {
+			dragBtn.Visible = true;
+			titleBtn.Visible = true;
+		}
+
+        private void AreaForm_Deactivate(object sender, EventArgs e)
+        {
+			dragBtn.Visible = false;
+			titleBtn.Visible = false;
+		}
+    }
 }
