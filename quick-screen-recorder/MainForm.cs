@@ -430,7 +430,7 @@ namespace quick_screen_recorder
 				while (true)
 				{
 					Preview();
-					Thread.Sleep(100);
+					Thread.Sleep(16);
 				}
 			});
 
