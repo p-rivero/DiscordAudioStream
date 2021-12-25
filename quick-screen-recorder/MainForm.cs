@@ -575,7 +575,7 @@ namespace quick_screen_recorder
 			widthNumeric.Maximum = SystemInformation.VirtualScreen.Width;
 			heightNumeric.Maximum = SystemInformation.VirtualScreen.Height;
 
-			areaForm.SetMaximumArea(SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height);
+			areaForm.SetMaximumArea(SystemInformation.VirtualScreen);
 		}
 
 		private void settingsBtn_Click(object sender, EventArgs e)

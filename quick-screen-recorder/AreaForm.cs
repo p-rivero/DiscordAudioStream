@@ -20,8 +20,10 @@ namespace quick_screen_recorder
 
 		private System.Timers.Timer resizeTimer = new System.Timers.Timer();
 
-		private int maxWidth = 4096;
-		private int maxHeight = 4096;
+		private int startX = -1;
+		private int startY = -1;
+		private int screenWidth = -1;
+		private int screenHeight = -1;
 
 		public AreaForm()
 		{
@@ -39,8 +41,11 @@ namespace quick_screen_recorder
 				int newWidth = curSize.Width + curPos.X - startPos.X;
 				int newHeight = curSize.Height + curPos.Y - startPos.Y;
 
-				if (newWidth > 4096) newWidth = 4096;
-				if (newHeight > 4096) newHeight = 4096;
+				int limitEndX = startX + screenWidth;
+				int limitEndY = startY + screenHeight;
+
+				if (this.Left + newWidth > limitEndX) newWidth = limitEndX - this.Left;
+				if (this.Top + newHeight > limitEndY) newHeight = limitEndY - this.Top;
 
 				(this.Owner as MainForm).SetAreaWidth(newWidth);
 				(this.Owner as MainForm).SetAreaHeight(newHeight);
@@ -83,8 +88,8 @@ namespace quick_screen_recorder
 		private void AreaForm_SizeChanged(object sender, EventArgs e)
 		{
 			this.Refresh();
-			(this.Owner as MainForm).SetMaximumX(maxWidth - this.Width);
-			(this.Owner as MainForm).SetMaximumY(maxHeight - this.Height);
+			(this.Owner as MainForm).SetMaximumX(screenWidth - this.Width);
+			(this.Owner as MainForm).SetMaximumY(screenHeight - this.Height);
 		}
 
 		private void AreaForm_LocationChanged(object sender, EventArgs e)
@@ -93,19 +98,24 @@ namespace quick_screen_recorder
 			(this.Owner as MainForm).SetAreaY(this.Top);
 		}
 
-		public void SetMaximumArea(int maxW, int maxH)
+		public void SetMaximumArea(Rectangle screen)
 		{
-			maxWidth = maxW;
-			maxHeight = maxH;
+			screenWidth = screen.Width;
+			screenHeight = screen.Height;
+			startX = screen.X;
+			startY = screen.Y;
 		}
 
 		private void AreaForm_ResizeEnd(object sender, EventArgs e)
 		{
-			if (this.Left < 0) this.Left = 0;
-			if (this.Top < 0) this.Top = 0;
+			int limitEndX = startX + screenWidth;
+			int limitEndY = startY + screenHeight;
 
-			if (this.Left + this.Width > maxWidth) this.Left = maxWidth - this.Width;
-			if (this.Top + this.Height > maxHeight) this.Top = maxHeight - this.Height;
+			if (this.Left < startX) this.Left = startX;
+			if (this.Top < startY) this.Top = startY;
+
+			if (this.Left + this.Width > limitEndX) this.Left = limitEndX - this.Width;
+			if (this.Top + this.Height > limitEndY) this.Top = limitEndY - this.Height;
 		}
 	}
 }
