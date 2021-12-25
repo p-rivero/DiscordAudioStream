@@ -37,7 +37,14 @@ namespace quick_screen_recorder
 				ThemeManager.allowDarkModeForApp(true);
 			}
 
-			Application.Run(new MainForm(darkMode));
+			try
+			{
+				Application.Run(new MainForm(darkMode));
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 		}
 
 		[System.Runtime.InteropServices.DllImport("user32.dll")]

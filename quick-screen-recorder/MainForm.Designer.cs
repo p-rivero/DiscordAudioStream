@@ -258,7 +258,7 @@
             this.widthNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.widthNumeric.Location = new System.Drawing.Point(233, 82);
             this.widthNumeric.Maximum = new decimal(new int[] {
-            4096,
+            9999,
             0,
             0,
             0});
@@ -302,7 +302,7 @@
             this.heightNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.heightNumeric.Location = new System.Drawing.Point(287, 82);
             this.heightNumeric.Maximum = new decimal(new int[] {
-            4096,
+            9999,
             0,
             0,
             0});

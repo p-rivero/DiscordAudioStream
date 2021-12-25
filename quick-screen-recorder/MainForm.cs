@@ -320,6 +320,7 @@ namespace quick_screen_recorder
 				xNumeric.Value = areaForm.Left;
 				yNumeric.Value = areaForm.Top;
 
+				// TODO: Make custom numericBox that doesn't throw an exception
 				widthNumeric.Enabled = true;
 				heightNumeric.Enabled = true;
 				xNumeric.Enabled = true;
@@ -395,7 +396,14 @@ namespace quick_screen_recorder
 		{
 			if (widthNumeric.Enabled)
 			{
-				areaForm.Width = (int)widthNumeric.Value;
+				try
+				{
+					areaForm.Width = (int)widthNumeric.Value;
+				}
+				catch (InvalidOperationException ex)
+				{
+					// TODO: Handle
+				}
 			}
 		}
 
@@ -403,7 +411,14 @@ namespace quick_screen_recorder
 		{
 			if (heightNumeric.Enabled)
 			{
-				areaForm.Height = (int)heightNumeric.Value;
+				try
+				{
+					areaForm.Height = (int)heightNumeric.Value;
+				}
+				catch (InvalidOperationException ex)
+				{
+					// TODO: Handle
+				}
 			}
 		}
 
@@ -598,7 +613,14 @@ namespace quick_screen_recorder
 		{
 			if (xNumeric.Enabled)
 			{
-				areaForm.Left = (int)xNumeric.Value;
+				try
+				{
+					areaForm.Left = (int)xNumeric.Value;
+				}
+				catch (InvalidOperationException ex)
+				{
+					// TODO: Handle
+				}
 			}
 		}
 
@@ -606,7 +628,14 @@ namespace quick_screen_recorder
 		{
 			if (yNumeric.Enabled)
 			{
-				areaForm.Top = (int)yNumeric.Value;
+				try
+				{
+					areaForm.Top = (int)yNumeric.Value;
+				}
+				catch (InvalidOperationException ex)
+				{
+					// TODO: Handle
+				}
 			}
 		}
 
