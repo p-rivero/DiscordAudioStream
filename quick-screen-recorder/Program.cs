@@ -39,7 +39,8 @@ namespace quick_screen_recorder
 
 			try
 			{
-				Application.Run(new MainForm(darkMode));
+				MainForm mainForm = new MainForm(darkMode);
+				Application.Run(mainForm);
 			}
 			catch (Exception ex)
 			{
