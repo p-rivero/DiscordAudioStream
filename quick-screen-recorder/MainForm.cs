@@ -777,6 +777,8 @@ namespace quick_screen_recorder
 		{
 			if (streamEnabled)
 			{
+				size.Width = Math.Max(160, size.Width);
+				size.Height = Math.Max(160, size.Height);
 				BeginInvoke(new Action(() =>
 				{
 					Size = size;
