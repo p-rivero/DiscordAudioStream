@@ -46,10 +46,10 @@
             this.xNumeric = new QuickLibrary.QlibNumericBox();
             this.locationLabel = new System.Windows.Forms.Label();
             this.widthNumeric = new QuickLibrary.QlibNumericBox();
-            this.qualityComboBox = new QuickLibrary.QlibComboBox();
             this.heightNumeric = new QuickLibrary.QlibNumericBox();
             this.areaComboBox = new QuickLibrary.QlibComboBox();
             this.captureCursorCheckBox = new QuickLibrary.QlibCheckBox();
+            this.qualityComboBox = new QuickLibrary.QlibComboBox();
             this.inputDeviceLabel = new System.Windows.Forms.Label();
             this.audioGroup = new QuickLibrary.QlibGroupBox();
             this.refreshAudioBtn = new System.Windows.Forms.Button();
@@ -60,12 +60,13 @@
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.recButton = new System.Windows.Forms.Button();
             this.previewBox = new System.Windows.Forms.PictureBox();
-            this.toolStrip1 = new QuickLibrary.QlibToolStrip();
+            this.toolStrip = new QuickLibrary.QlibToolStrip();
             this.previewBtn = new System.Windows.Forms.ToolStripButton();
             this.onTopBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsBtn = new System.Windows.Forms.ToolStripButton();
             this.aboutBtn = new System.Windows.Forms.ToolStripButton();
+            this.startButton = new System.Windows.Forms.Button();
             this.videoGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.yNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xNumeric)).BeginInit();
@@ -74,7 +75,7 @@
             this.audioGroup.SuspendLayout();
             this.generalGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
-            this.toolStrip1.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // folderTextBox
@@ -134,16 +135,17 @@
             // qualityLabel
             // 
             this.qualityLabel.AutoSize = true;
-            this.qualityLabel.Location = new System.Drawing.Point(19, 25);
+            this.qualityLabel.Location = new System.Drawing.Point(19, 84);
             this.qualityLabel.Name = "qualityLabel";
             this.qualityLabel.Size = new System.Drawing.Size(48, 15);
             this.qualityLabel.TabIndex = 10;
             this.qualityLabel.Text = "Quality:";
+            this.qualityLabel.Visible = false;
             // 
             // areaLabel
             // 
             this.areaLabel.AutoSize = true;
-            this.areaLabel.Location = new System.Drawing.Point(33, 55);
+            this.areaLabel.Location = new System.Drawing.Point(33, 22);
             this.areaLabel.Name = "areaLabel";
             this.areaLabel.Size = new System.Drawing.Size(34, 15);
             this.areaLabel.TabIndex = 18;
@@ -159,19 +161,17 @@
             this.videoGroup.Controls.Add(this.xNumeric);
             this.videoGroup.Controls.Add(this.locationLabel);
             this.videoGroup.Controls.Add(this.widthNumeric);
-            this.videoGroup.Controls.Add(this.qualityComboBox);
             this.videoGroup.Controls.Add(this.heightNumeric);
             this.videoGroup.Controls.Add(this.areaComboBox);
             this.videoGroup.Controls.Add(this.captureCursorCheckBox);
             this.videoGroup.Controls.Add(this.areaLabel);
-            this.videoGroup.Controls.Add(this.qualityLabel);
-            this.videoGroup.Location = new System.Drawing.Point(9, 157);
+            this.videoGroup.Location = new System.Drawing.Point(9, 58);
             this.videoGroup.Margin = new System.Windows.Forms.Padding(0, 9, 0, 0);
             this.videoGroup.Name = "videoGroup";
-            this.videoGroup.Size = new System.Drawing.Size(340, 140);
+            this.videoGroup.Size = new System.Drawing.Size(340, 110);
             this.videoGroup.TabIndex = 6;
             this.videoGroup.TabStop = false;
-            this.videoGroup.Text = "Video options";
+            this.videoGroup.Text = "Video capture";
             // 
             // refreshScreensBtn
             // 
@@ -179,7 +179,7 @@
             this.refreshScreensBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.refreshScreensBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.refreshScreensBtn.Image = ((System.Drawing.Image)(resources.GetObject("refreshScreensBtn.Image")));
-            this.refreshScreensBtn.Location = new System.Drawing.Point(311, 52);
+            this.refreshScreensBtn.Location = new System.Drawing.Point(311, 19);
             this.refreshScreensBtn.Margin = new System.Windows.Forms.Padding(0);
             this.refreshScreensBtn.Name = "refreshScreensBtn";
             this.refreshScreensBtn.Size = new System.Drawing.Size(23, 23);
@@ -189,7 +189,7 @@
             // 
             // hideTaskbarCheckBox
             // 
-            this.hideTaskbarCheckBox.Location = new System.Drawing.Point(132, 113);
+            this.hideTaskbarCheckBox.Location = new System.Drawing.Point(132, 80);
             this.hideTaskbarCheckBox.Name = "hideTaskbarCheckBox";
             this.hideTaskbarCheckBox.Size = new System.Drawing.Size(92, 19);
             this.hideTaskbarCheckBox.TabIndex = 14;
@@ -200,7 +200,7 @@
             // sizelabel
             // 
             this.sizelabel.AutoSize = true;
-            this.sizelabel.Location = new System.Drawing.Point(197, 84);
+            this.sizelabel.Location = new System.Drawing.Point(197, 51);
             this.sizelabel.Name = "sizelabel";
             this.sizelabel.Size = new System.Drawing.Size(30, 15);
             this.sizelabel.TabIndex = 22;
@@ -209,7 +209,7 @@
             // yNumeric
             // 
             this.yNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.yNumeric.Location = new System.Drawing.Point(127, 82);
+            this.yNumeric.Location = new System.Drawing.Point(127, 49);
             this.yNumeric.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -228,7 +228,7 @@
             // xNumeric
             // 
             this.xNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.xNumeric.Location = new System.Drawing.Point(73, 82);
+            this.xNumeric.Location = new System.Drawing.Point(73, 49);
             this.xNumeric.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -247,7 +247,7 @@
             // locationLabel
             // 
             this.locationLabel.AutoSize = true;
-            this.locationLabel.Location = new System.Drawing.Point(11, 84);
+            this.locationLabel.Location = new System.Drawing.Point(11, 51);
             this.locationLabel.Name = "locationLabel";
             this.locationLabel.Size = new System.Drawing.Size(56, 15);
             this.locationLabel.TabIndex = 19;
@@ -256,7 +256,7 @@
             // widthNumeric
             // 
             this.widthNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.widthNumeric.Location = new System.Drawing.Point(233, 82);
+            this.widthNumeric.Location = new System.Drawing.Point(233, 49);
             this.widthNumeric.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -277,30 +277,10 @@
             0});
             this.widthNumeric.ValueChanged += new System.EventHandler(this.widthNumeric_ValueChanged);
             // 
-            // qualityComboBox
-            // 
-            this.qualityComboBox.BackColor = System.Drawing.SystemColors.Window;
-            this.qualityComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.qualityComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.qualityComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.qualityComboBox.FormattingEnabled = true;
-            this.qualityComboBox.IntegralHeight = false;
-            this.qualityComboBox.Items.AddRange(new object[] {
-            "25% - Low (Motion JPEG)",
-            "50% - Medium (Motion JPEG)",
-            "75% - High (Motion JPEG)",
-            "100% - Original (Motion JPEG)",
-            "Uncompressed"});
-            this.qualityComboBox.Location = new System.Drawing.Point(73, 22);
-            this.qualityComboBox.Name = "qualityComboBox";
-            this.qualityComboBox.Size = new System.Drawing.Size(261, 24);
-            this.qualityComboBox.TabIndex = 7;
-            this.qualityComboBox.SelectedIndexChanged += new System.EventHandler(this.qualityComboBox_SelectedIndexChanged);
-            // 
             // heightNumeric
             // 
             this.heightNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.heightNumeric.Location = new System.Drawing.Point(287, 82);
+            this.heightNumeric.Location = new System.Drawing.Point(287, 49);
             this.heightNumeric.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -327,7 +307,7 @@
             this.areaComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.areaComboBox.FormattingEnabled = true;
             this.areaComboBox.IntegralHeight = false;
-            this.areaComboBox.Location = new System.Drawing.Point(73, 52);
+            this.areaComboBox.Location = new System.Drawing.Point(73, 19);
             this.areaComboBox.Name = "areaComboBox";
             this.areaComboBox.Size = new System.Drawing.Size(231, 24);
             this.areaComboBox.TabIndex = 8;
@@ -337,13 +317,34 @@
             // 
             this.captureCursorCheckBox.Checked = true;
             this.captureCursorCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.captureCursorCheckBox.Location = new System.Drawing.Point(230, 113);
+            this.captureCursorCheckBox.Location = new System.Drawing.Point(230, 80);
             this.captureCursorCheckBox.Name = "captureCursorCheckBox";
             this.captureCursorCheckBox.Size = new System.Drawing.Size(104, 19);
             this.captureCursorCheckBox.TabIndex = 15;
             this.captureCursorCheckBox.Text = "Capture cursor";
             this.captureCursorCheckBox.UseVisualStyleBackColor = true;
             this.captureCursorCheckBox.CheckedChanged += new System.EventHandler(this.captureCursorCheckBox_CheckedChanged);
+            // 
+            // qualityComboBox
+            // 
+            this.qualityComboBox.BackColor = System.Drawing.SystemColors.Window;
+            this.qualityComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.qualityComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.qualityComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.qualityComboBox.FormattingEnabled = true;
+            this.qualityComboBox.IntegralHeight = false;
+            this.qualityComboBox.Items.AddRange(new object[] {
+            "25% - Low (Motion JPEG)",
+            "50% - Medium (Motion JPEG)",
+            "75% - High (Motion JPEG)",
+            "100% - Original (Motion JPEG)",
+            "Uncompressed"});
+            this.qualityComboBox.Location = new System.Drawing.Point(73, 81);
+            this.qualityComboBox.Name = "qualityComboBox";
+            this.qualityComboBox.Size = new System.Drawing.Size(261, 24);
+            this.qualityComboBox.TabIndex = 7;
+            this.qualityComboBox.Visible = false;
+            this.qualityComboBox.SelectedIndexChanged += new System.EventHandler(this.qualityComboBox_SelectedIndexChanged);
             // 
             // inputDeviceLabel
             // 
@@ -361,13 +362,13 @@
             this.audioGroup.Controls.Add(this.inputDeviceComboBox);
             this.audioGroup.Controls.Add(this.separateAudioCheckBox);
             this.audioGroup.Controls.Add(this.inputDeviceLabel);
-            this.audioGroup.Location = new System.Drawing.Point(9, 306);
+            this.audioGroup.Location = new System.Drawing.Point(9, 177);
             this.audioGroup.Margin = new System.Windows.Forms.Padding(0, 9, 0, 0);
             this.audioGroup.Name = "audioGroup";
-            this.audioGroup.Size = new System.Drawing.Size(340, 80);
+            this.audioGroup.Size = new System.Drawing.Size(340, 56);
             this.audioGroup.TabIndex = 16;
             this.audioGroup.TabStop = false;
-            this.audioGroup.Text = "Audio options";
+            this.audioGroup.Text = "Audio capture";
             // 
             // refreshAudioBtn
             // 
@@ -408,6 +409,7 @@
             this.separateAudioCheckBox.TabIndex = 19;
             this.separateAudioCheckBox.Text = "Write audio to a separate file (.wav)";
             this.separateAudioCheckBox.UseVisualStyleBackColor = true;
+            this.separateAudioCheckBox.Visible = false;
             // 
             // generalGroup
             // 
@@ -418,13 +420,16 @@
             this.generalGroup.Controls.Add(this.folderLabel);
             this.generalGroup.Controls.Add(this.fileNameTextBox);
             this.generalGroup.Controls.Add(this.fileLabel);
-            this.generalGroup.Location = new System.Drawing.Point(9, 58);
+            this.generalGroup.Controls.Add(this.qualityComboBox);
+            this.generalGroup.Controls.Add(this.qualityLabel);
+            this.generalGroup.Location = new System.Drawing.Point(9, -77);
             this.generalGroup.Margin = new System.Windows.Forms.Padding(0, 9, 0, 0);
             this.generalGroup.Name = "generalGroup";
-            this.generalGroup.Size = new System.Drawing.Size(340, 90);
+            this.generalGroup.Size = new System.Drawing.Size(340, 126);
             this.generalGroup.TabIndex = 2;
             this.generalGroup.TabStop = false;
-            this.generalGroup.Text = "General options";
+            this.generalGroup.Text = "Recording";
+            this.generalGroup.Visible = false;
             // 
             // aviLabel
             // 
@@ -441,52 +446,50 @@
             this.recButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.recButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.recButton.Image = ((System.Drawing.Image)(resources.GetObject("recButton.Image")));
-            this.recButton.Location = new System.Drawing.Point(9, 9);
+            this.recButton.Location = new System.Drawing.Point(223, 111);
             this.recButton.Margin = new System.Windows.Forms.Padding(0);
             this.recButton.Name = "recButton";
-            this.recButton.Size = new System.Drawing.Size(120, 40);
+            this.recButton.Size = new System.Drawing.Size(120, 43);
             this.recButton.TabIndex = 0;
             this.recButton.Text = " REC (Alt+R)";
             this.recButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.recButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.recButton.UseVisualStyleBackColor = false;
+            this.recButton.Visible = false;
             this.recButton.Click += new System.EventHandler(this.recButton_Click);
             // 
             // previewBox
             // 
-            this.previewBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.previewBox.BackColor = System.Drawing.Color.Black;
             this.previewBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.previewBox.Location = new System.Drawing.Point(358, 9);
             this.previewBox.Margin = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.previewBox.Name = "previewBox";
-            this.previewBox.Size = new System.Drawing.Size(437, 376);
+            this.previewBox.Size = new System.Drawing.Size(437, 248);
             this.previewBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.previewBox.TabIndex = 26;
             this.previewBox.TabStop = false;
             // 
-            // toolStrip1
+            // toolStrip
             // 
-            this.toolStrip1.BackColor = System.Drawing.SystemColors.Control;
-            this.toolStrip1.CanOverflow = false;
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStrip.CanOverflow = false;
+            this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.previewBtn,
             this.onTopBtn,
             this.toolStripSeparator1,
             this.settingsBtn,
             this.aboutBtn});
-            this.toolStrip1.Location = new System.Drawing.Point(232, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Padding = new System.Windows.Forms.Padding(9);
-            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.Size = new System.Drawing.Size(132, 43);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.TabStop = true;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip.Location = new System.Drawing.Point(9, 9);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Padding = new System.Windows.Forms.Padding(9);
+            this.toolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.toolStrip.Size = new System.Drawing.Size(132, 43);
+            this.toolStrip.TabIndex = 1;
+            this.toolStrip.TabStop = true;
+            this.toolStrip.Text = "toolStrip1";
             // 
             // previewBtn
             // 
@@ -548,13 +551,27 @@
             this.aboutBtn.Text = "About | F1";
             this.aboutBtn.Click += new System.EventHandler(this.aboutBtn_Click);
             // 
+            // startButton
+            // 
+            this.startButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.startButton.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.startButton.Location = new System.Drawing.Point(208, 14);
+            this.startButton.Name = "startButton";
+            this.startButton.Size = new System.Drawing.Size(140, 34);
+            this.startButton.TabIndex = 27;
+            this.startButton.Text = "START STREAM";
+            this.startButton.UseVisualStyleBackColor = true;
+            this.startButton.Click += new System.EventHandler(this.startButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(804, 394);
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(804, 266);
+            this.Controls.Add(this.startButton);
             this.Controls.Add(this.previewBox);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.generalGroup);
             this.Controls.Add(this.audioGroup);
             this.Controls.Add(this.videoGroup);
@@ -582,8 +599,8 @@
             this.generalGroup.ResumeLayout(false);
             this.generalGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).EndInit();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -613,7 +630,7 @@
 		private QuickLibrary.QlibNumericBox heightNumeric;
 		private QuickLibrary.QlibNumericBox widthNumeric;
 		private System.Windows.Forms.Button refreshAudioBtn;
-		private QuickLibrary.QlibToolStrip toolStrip1;
+		private QuickLibrary.QlibToolStrip toolStrip;
 		private System.Windows.Forms.ToolStripButton onTopBtn;
 		private System.Windows.Forms.ToolStripButton aboutBtn;
 		private System.Windows.Forms.ToolStripButton settingsBtn;
@@ -627,6 +644,7 @@
 		private System.Windows.Forms.PictureBox previewBox;
 		private System.Windows.Forms.ToolStripButton previewBtn;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-	}
+        private System.Windows.Forms.Button startButton;
+    }
 }
 

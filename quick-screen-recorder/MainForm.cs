@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Runtime.InteropServices;
 using QuickLibrary;
+using System.Diagnostics;
 
 namespace quick_screen_recorder
 {
@@ -20,6 +21,7 @@ namespace quick_screen_recorder
 		private Recorder recorder = null;
 
 		private bool darkMode;
+		private bool streamEnabled = false;
 
 		public MainForm(bool darkMode)
 		{
@@ -77,7 +79,7 @@ namespace quick_screen_recorder
 			generalGroup.SetDarkMode(darkMode);
 			videoGroup.SetDarkMode(darkMode);
 			audioGroup.SetDarkMode(darkMode);
-			toolStrip1.SetDarkMode(darkMode, false);
+			toolStrip.SetDarkMode(darkMode, false);
 			browseFolderBtn.SetDarkMode(darkMode);
 			qualityComboBox.SetDarkMode(darkMode);
 			inputDeviceComboBox.SetDarkMode(darkMode);
@@ -443,66 +445,70 @@ namespace quick_screen_recorder
 
 			Task task = new Task(() =>
 			{
+				Stopwatch stopwatch = new Stopwatch();
+				const int INTERVAL_MS = 16; // Target around 60 FPS
+
 				while (true)
 				{
+					stopwatch.Restart();
 					Preview();
-					Thread.Sleep(16);
+					stopwatch.Stop();
+					int wait = INTERVAL_MS - (int)stopwatch.ElapsedMilliseconds;
+					if (wait > 0)
+					{
+						Thread.Sleep(wait);
+					}
 				}
 			});
-
 			task.Start();
 
-			if (Properties.Settings.Default.CheckForUpdates)
-			{
-				UpdateManager.checkForUpdates(false, darkMode, this.TopMost, "ModuleArt", "quick-screen-recorder", "Quick Screen Recorder", "QuickScreenRecorder-Setup.msi");
-			}
+			//if (Properties.Settings.Default.CheckForUpdates)
+			//{
+			//	UpdateManager.checkForUpdates(false, darkMode, this.TopMost, "ModuleArt", "quick-screen-recorder", "Quick Screen Recorder", "QuickScreenRecorder-Setup.msi");
+			//}
 		}
 
 		private void Preview()
 		{
-			if (this.Visible && this.Width > 700)
+			try
 			{
-				try
+				int width = (int)widthNumeric.Value;
+				int height = (int)heightNumeric.Value;
+				int x = (int)xNumeric.Value;
+				int y = (int)yNumeric.Value;
+
+				Bitmap BMP = new Bitmap(width, height);
+				using (var g = Graphics.FromImage(BMP))
 				{
-					int width = (int)widthNumeric.Value;
-					int height = (int)heightNumeric.Value;
-					int x = (int)xNumeric.Value;
-					int y = (int)yNumeric.Value;
+					g.CopyFromScreen(new Point(x, y), Point.Empty, new Size(width, height), CopyPixelOperation.SourceCopy);
 
-					Bitmap BMP = new Bitmap(width, height);
-					using (var g = Graphics.FromImage(BMP))
+					if (captureCursorCheckBox.Checked)
 					{
-						g.CopyFromScreen(new Point(x, y), Point.Empty, new Size(width, height), CopyPixelOperation.SourceCopy);
+						Recorder.CURSORINFO pci;
+						pci.cbSize = Marshal.SizeOf(typeof(Recorder.CURSORINFO));
 
-						if (captureCursorCheckBox.Checked)
+						if (Recorder.GetCursorInfo(out pci))
 						{
-							Recorder.CURSORINFO pci;
-							pci.cbSize = Marshal.SizeOf(typeof(Recorder.CURSORINFO));
-
-							if (Recorder.GetCursorInfo(out pci))
+							if (pci.flags == Recorder.CURSOR_SHOWING)
 							{
-								if (pci.flags == Recorder.CURSOR_SHOWING)
-								{
-									Recorder.DrawIcon(g.GetHdc(), pci.ptScreenPos.x - (int)xNumeric.Value, pci.ptScreenPos.y - (int)yNumeric.Value, pci.hCursor);
-									g.ReleaseHdc();
-								}
+								Recorder.DrawIcon(g.GetHdc(), pci.ptScreenPos.x - (int)xNumeric.Value, pci.ptScreenPos.y - (int)yNumeric.Value, pci.hCursor);
+								g.ReleaseHdc();
 							}
 						}
-
-						g.Flush();
 					}
 
-					if (previewBox.Image != null)
-					{
-						previewBox.Image.Dispose();
-						previewBox.Image = null;
-					}
-					previewBox.Image = BMP;
+					g.Flush();
 				}
-				catch
+
+				if (previewBox.Image != null)
 				{
-
+					previewBox.Image.Dispose();
 				}
+				previewBox.Image = BMP;
+			}
+			catch
+			{
+
 			}
 		}
 
@@ -749,6 +755,33 @@ namespace quick_screen_recorder
 				{
 					aboutBtn.PerformClick();
 				}
+			}
+		}
+
+		private void startButton_Click(object sender, EventArgs e)
+		{
+			int width = (int)widthNumeric.Value;
+			int height = (int)heightNumeric.Value;
+
+			previewBox.Location = new Point(0, 0);
+			videoGroup.Visible = false;
+			audioGroup.Visible = false;
+			startButton.Visible = false;
+			toolStrip.Visible = false;
+			streamEnabled = true;
+
+			SetPreviewSize(new Size(width, height));
+		}
+
+		public void SetPreviewSize(Size size)
+		{
+			if (streamEnabled)
+			{
+				BeginInvoke(new Action(() =>
+				{
+					Size = size;
+					previewBox.Size = size;
+				}));
 			}
 		}
 	}
