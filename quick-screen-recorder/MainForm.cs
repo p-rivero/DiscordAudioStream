@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Threading;
-using System.Runtime.InteropServices;
 using QuickLibrary;
 using System.Diagnostics;
 
@@ -22,6 +21,7 @@ namespace quick_screen_recorder
 
 		private bool darkMode;
 		private bool streamEnabled = false;
+		const int TARGET_FRAMERATE = 60;
 
 		public MainForm(bool darkMode)
 		{
@@ -443,73 +443,49 @@ namespace quick_screen_recorder
 				folderTextBox.Text = Properties.Settings.Default.Folder;
 			}
 
-			Task task = new Task(() =>
+			ScreenCaptureWorker.Initialize(widthNumeric, heightNumeric, xNumeric, yNumeric, captureCursorCheckBox);
+			ScreenCaptureWorker.StartWorkers(TARGET_FRAMERATE, 2);
+
+			Task drawTask = new Task(() =>
 			{
 				Stopwatch stopwatch = new Stopwatch();
-				const int INTERVAL_MS = 16; // Target around 60 FPS
+                const int INTERVAL_MS = 1000 / TARGET_FRAMERATE;
 
-				while (true)
+				try
 				{
-					stopwatch.Restart();
-					Preview();
-					stopwatch.Stop();
-					int wait = INTERVAL_MS - (int)stopwatch.ElapsedMilliseconds;
-					if (wait > 0)
+					while (true)
 					{
-						Thread.Sleep(wait);
+						stopwatch.Restart();
+						Invoke(new Action(() =>
+						{
+							if (previewBox.Image != null)
+							{
+								previewBox.Image.Dispose();
+							}
+							previewBox.Image = ScreenCaptureWorker.GetNextFrame();
+						}));
+						stopwatch.Stop();
+
+						int wait = INTERVAL_MS - (int)stopwatch.ElapsedMilliseconds;
+						if (wait > 0)
+						{
+							Thread.Sleep(wait);
+						}
 					}
 				}
+				catch (ObjectDisposedException ex)
+                {
+					// Trying to dispose previewBox but it was destroyed (app is closing)
+					return;
+                }
 			});
-			task.Start();
+			drawTask.Start();
+
 
 			//if (Properties.Settings.Default.CheckForUpdates)
 			//{
 			//	UpdateManager.checkForUpdates(false, darkMode, this.TopMost, "ModuleArt", "quick-screen-recorder", "Quick Screen Recorder", "QuickScreenRecorder-Setup.msi");
 			//}
-		}
-
-		private void Preview()
-		{
-			try
-			{
-				int width = (int)widthNumeric.Value;
-				int height = (int)heightNumeric.Value;
-				int x = (int)xNumeric.Value;
-				int y = (int)yNumeric.Value;
-
-				Bitmap BMP = new Bitmap(width, height);
-				using (var g = Graphics.FromImage(BMP))
-				{
-					g.CopyFromScreen(new Point(x, y), Point.Empty, new Size(width, height), CopyPixelOperation.SourceCopy);
-
-					if (captureCursorCheckBox.Checked)
-					{
-						Recorder.CURSORINFO pci;
-						pci.cbSize = Marshal.SizeOf(typeof(Recorder.CURSORINFO));
-
-						if (Recorder.GetCursorInfo(out pci))
-						{
-							if (pci.flags == Recorder.CURSOR_SHOWING)
-							{
-								Recorder.DrawIcon(g.GetHdc(), pci.ptScreenPos.x - (int)xNumeric.Value, pci.ptScreenPos.y - (int)yNumeric.Value, pci.hCursor);
-								g.ReleaseHdc();
-							}
-						}
-					}
-
-					g.Flush();
-				}
-
-				if (previewBox.Image != null)
-				{
-					previewBox.Image.Dispose();
-				}
-				previewBox.Image = BMP;
-			}
-			catch
-			{
-
-			}
 		}
 
 		protected override void WndProc(ref Message m)
@@ -779,9 +755,9 @@ namespace quick_screen_recorder
 			{
 				size.Width = Math.Max(160, size.Width);
 				size.Height = Math.Max(160, size.Height);
+				Size = size;
 				BeginInvoke(new Action(() =>
 				{
-					Size = size;
 					previewBox.Size = size;
 				}));
 			}

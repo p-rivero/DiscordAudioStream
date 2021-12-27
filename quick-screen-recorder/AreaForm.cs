@@ -25,6 +25,9 @@ namespace quick_screen_recorder
 		private int screenWidth = -1;
 		private int screenHeight = -1;
 
+		private int oldWidth = -1;
+		private int oldHeight = -1;
+
 		public AreaForm()
 		{
 			InitializeComponent();
@@ -41,6 +44,12 @@ namespace quick_screen_recorder
 				int newWidth = curSize.Width + curPos.X - startPos.X;
 				int newHeight = curSize.Height + curPos.Y - startPos.Y;
 
+				if (newWidth == oldWidth && newHeight == oldHeight)
+					return;
+
+				oldWidth = newWidth;
+				oldHeight = newHeight;
+
 				int limitEndX = startX + screenWidth;
 				int limitEndY = startY + screenHeight;
 
@@ -48,9 +57,10 @@ namespace quick_screen_recorder
 				if (Top + newHeight > limitEndY) newHeight = limitEndY - Top;
 
 				// Omit 2 pixels for red border
-				(Owner as MainForm).SetAreaWidth(newWidth - 2);
-				(Owner as MainForm).SetAreaHeight(newHeight - 2);
-				(Owner as MainForm).SetPreviewSize(new Size(newWidth-2, newHeight-2));
+				MainForm mainForm = Owner as MainForm;
+				mainForm.SetAreaWidth(newWidth - 2);
+				mainForm.SetAreaHeight(newHeight - 2);
+				mainForm.SetPreviewSize(new Size(newWidth-2, newHeight-2));
 			}));
 		}
 
