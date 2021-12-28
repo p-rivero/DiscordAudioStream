@@ -5,7 +5,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Threading.Tasks;
 using System.Threading;
 using QuickLibrary;
 using System.Diagnostics;
@@ -446,16 +445,16 @@ namespace quick_screen_recorder
 			ScreenCaptureWorker.Initialize(widthNumeric, heightNumeric, xNumeric, yNumeric, captureCursorCheckBox);
 			ScreenCaptureWorker.StartWorkers(TARGET_FRAMERATE, 2);
 
-			Task drawTask = new Task(() =>
+			Thread drawThread = new Thread(() =>
 			{
 				Stopwatch stopwatch = new Stopwatch();
-                const int INTERVAL_MS = 1000 / TARGET_FRAMERATE;
+				const int INTERVAL_MS = 1000 / TARGET_FRAMERATE;
 
-				try
+				while (true)
 				{
-					while (true)
+					stopwatch.Restart();
+					try
 					{
-						stopwatch.Restart();
 						Invoke(new Action(() =>
 						{
 							if (previewBox.Image != null)
@@ -464,22 +463,23 @@ namespace quick_screen_recorder
 							}
 							previewBox.Image = ScreenCaptureWorker.GetNextFrame();
 						}));
-						stopwatch.Stop();
+					}
+					catch (InvalidOperationException)
+					{
+						// Form is closing
+						return;
+					}
+					stopwatch.Stop();
 
-						int wait = INTERVAL_MS - (int)stopwatch.ElapsedMilliseconds;
-						if (wait > 0)
-						{
-							Thread.Sleep(wait);
-						}
+					int wait = INTERVAL_MS - (int)stopwatch.ElapsedMilliseconds;
+					if (wait > 0)
+					{
+						Thread.Sleep(wait);
 					}
 				}
-				catch (ObjectDisposedException ex)
-                {
-					// Trying to dispose previewBox but it was destroyed (app is closing)
-					return;
-                }
 			});
-			drawTask.Start();
+			drawThread.IsBackground = true;
+			drawThread.Start();
 
 
 			//if (Properties.Settings.Default.CheckForUpdates)
@@ -509,6 +509,7 @@ namespace quick_screen_recorder
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			ScreenCaptureWorker.StopWorkers();
 			HotkeyManager.UnregisterHotKey(this.Handle, 0);
 		}
 

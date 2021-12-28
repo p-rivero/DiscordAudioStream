@@ -4,15 +4,16 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace quick_screen_recorder
 {
-    internal class ScreenCaptureWorker
-    {
-        private static ConcurrentQueue<Bitmap> frameQueue = new ConcurrentQueue<Bitmap>();
+	internal class ScreenCaptureWorker
+	{
+		private static ConcurrentQueue<Bitmap> frameQueue = new ConcurrentQueue<Bitmap>();
 		private const int LIMIT_QUEUE_SZ = 5;
+
+		private static ScreenCaptureWorker[] workers;
 
 		private static NumericUpDown widthNumeric = null;
 		private static NumericUpDown heightNumeric = null;
@@ -21,10 +22,11 @@ namespace quick_screen_recorder
 		private static CheckBox captureCursorCheckBox = null;
 
 		private static int INTERVAL_MS;
+		private Thread captureThread;
 
 
 		public static void Initialize(NumericUpDown w, NumericUpDown h, NumericUpDown x, NumericUpDown y, CheckBox cursor)
-        {
+		{
 			widthNumeric = w;
 			heightNumeric = h;
 			xNumeric = x;
@@ -33,39 +35,48 @@ namespace quick_screen_recorder
 		}
 
 		public static void StartWorkers(double targetFramerate, int numThreads)
-        {
-			//double frameratePerThread = targetFramerate / numThreads;
+		{
 			double waitTimeMs = (1000.0 / targetFramerate);
 			INTERVAL_MS = (int) (waitTimeMs * numThreads);
 			int offset = (int) waitTimeMs;
 
+			workers = new ScreenCaptureWorker[numThreads];
+
 			for (int i = 0; i < numThreads; i++)
-            {
-				new ScreenCaptureWorker();
+			{
+				workers[i] = new ScreenCaptureWorker();
 				Thread.Sleep(offset);
 			}
-        }
+		}
+
+		public static void StopWorkers()
+		{
+			foreach (ScreenCaptureWorker worker in workers)
+			{
+				worker.Stop();
+			}
+		}
 
 		// Return the next frame, if it exists (null otherwise)
 		public static Bitmap GetNextFrame()
-        {
+		{
 			Bitmap frame;
 			bool success = frameQueue.TryDequeue(out frame);
 
 			if (success) return frame;
 			return null;
-        }
+		}
 
 
 
 		private ScreenCaptureWorker()
-        {
+		{
 			if (widthNumeric == null || heightNumeric == null || xNumeric == null || yNumeric == null)
-            {
+			{
 				throw new InvalidOperationException("Must call initialize() before creating workers");
 			}
 
-			Task task = new Task(() =>
+			captureThread = new Thread(() =>
 			{
 				Stopwatch stopwatch = new Stopwatch();
 
@@ -82,7 +93,8 @@ namespace quick_screen_recorder
 					}
 				}
 			});
-			task.Start();
+			captureThread.IsBackground = true;
+			captureThread.Start();
 		}
 
 
@@ -131,6 +143,11 @@ namespace quick_screen_recorder
 			{
 				// TODO: Remove try-catch
 			}
+		}
+
+		private void Stop()
+		{
+			captureThread.Abort();
 		}
 	}
 }
