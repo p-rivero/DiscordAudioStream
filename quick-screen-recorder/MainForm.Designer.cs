@@ -39,6 +39,8 @@
             this.qualityLabel = new System.Windows.Forms.Label();
             this.areaLabel = new System.Windows.Forms.Label();
             this.videoGroup = new QuickLibrary.QlibGroupBox();
+            this.scaleLabel = new System.Windows.Forms.Label();
+            this.scaleComboBox = new QuickLibrary.QlibComboBox();
             this.refreshScreensBtn = new System.Windows.Forms.Button();
             this.hideTaskbarCheckBox = new QuickLibrary.QlibCheckBox();
             this.sizelabel = new System.Windows.Forms.Label();
@@ -140,12 +142,11 @@
             this.qualityLabel.Size = new System.Drawing.Size(48, 15);
             this.qualityLabel.TabIndex = 10;
             this.qualityLabel.Text = "Quality:";
-            this.qualityLabel.Visible = false;
             // 
             // areaLabel
             // 
             this.areaLabel.AutoSize = true;
-            this.areaLabel.Location = new System.Drawing.Point(33, 22);
+            this.areaLabel.Location = new System.Drawing.Point(86, 22);
             this.areaLabel.Name = "areaLabel";
             this.areaLabel.Size = new System.Drawing.Size(34, 15);
             this.areaLabel.TabIndex = 18;
@@ -154,6 +155,8 @@
             // videoGroup
             // 
             this.videoGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.videoGroup.Controls.Add(this.scaleLabel);
+            this.videoGroup.Controls.Add(this.scaleComboBox);
             this.videoGroup.Controls.Add(this.refreshScreensBtn);
             this.videoGroup.Controls.Add(this.hideTaskbarCheckBox);
             this.videoGroup.Controls.Add(this.sizelabel);
@@ -165,13 +168,38 @@
             this.videoGroup.Controls.Add(this.areaComboBox);
             this.videoGroup.Controls.Add(this.captureCursorCheckBox);
             this.videoGroup.Controls.Add(this.areaLabel);
-            this.videoGroup.Location = new System.Drawing.Point(9, 58);
+            this.videoGroup.Location = new System.Drawing.Point(9, 55);
             this.videoGroup.Margin = new System.Windows.Forms.Padding(0, 9, 0, 0);
             this.videoGroup.Name = "videoGroup";
-            this.videoGroup.Size = new System.Drawing.Size(340, 110);
+            this.videoGroup.Size = new System.Drawing.Size(340, 138);
             this.videoGroup.TabIndex = 6;
             this.videoGroup.TabStop = false;
             this.videoGroup.Text = "Video capture";
+            // 
+            // scaleLabel
+            // 
+            this.scaleLabel.AutoSize = true;
+            this.scaleLabel.Location = new System.Drawing.Point(38, 52);
+            this.scaleLabel.Name = "scaleLabel";
+            this.scaleLabel.Size = new System.Drawing.Size(82, 15);
+            this.scaleLabel.TabIndex = 24;
+            this.scaleLabel.Text = "Scale window:";
+            // 
+            // scaleComboBox
+            // 
+            this.scaleComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.scaleComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.scaleComboBox.FormattingEnabled = true;
+            this.scaleComboBox.IntegralHeight = false;
+            this.scaleComboBox.Items.AddRange(new object[] {
+            "Full resolution",
+            "50% resolution",
+            "25% Resolution"});
+            this.scaleComboBox.Location = new System.Drawing.Point(127, 49);
+            this.scaleComboBox.Name = "scaleComboBox";
+            this.scaleComboBox.Size = new System.Drawing.Size(177, 24);
+            this.scaleComboBox.TabIndex = 23;
+            this.scaleComboBox.SelectedIndexChanged += new System.EventHandler(this.scaleComboBox_SelectedIndexChanged);
             // 
             // refreshScreensBtn
             // 
@@ -189,7 +217,7 @@
             // 
             // hideTaskbarCheckBox
             // 
-            this.hideTaskbarCheckBox.Location = new System.Drawing.Point(132, 80);
+            this.hideTaskbarCheckBox.Location = new System.Drawing.Point(132, 114);
             this.hideTaskbarCheckBox.Name = "hideTaskbarCheckBox";
             this.hideTaskbarCheckBox.Size = new System.Drawing.Size(92, 19);
             this.hideTaskbarCheckBox.TabIndex = 14;
@@ -200,7 +228,7 @@
             // sizelabel
             // 
             this.sizelabel.AutoSize = true;
-            this.sizelabel.Location = new System.Drawing.Point(197, 51);
+            this.sizelabel.Location = new System.Drawing.Point(197, 85);
             this.sizelabel.Name = "sizelabel";
             this.sizelabel.Size = new System.Drawing.Size(30, 15);
             this.sizelabel.TabIndex = 22;
@@ -209,7 +237,7 @@
             // yNumeric
             // 
             this.yNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.yNumeric.Location = new System.Drawing.Point(127, 49);
+            this.yNumeric.Location = new System.Drawing.Point(127, 83);
             this.yNumeric.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -228,7 +256,7 @@
             // xNumeric
             // 
             this.xNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.xNumeric.Location = new System.Drawing.Point(73, 49);
+            this.xNumeric.Location = new System.Drawing.Point(73, 83);
             this.xNumeric.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -247,7 +275,7 @@
             // locationLabel
             // 
             this.locationLabel.AutoSize = true;
-            this.locationLabel.Location = new System.Drawing.Point(11, 51);
+            this.locationLabel.Location = new System.Drawing.Point(11, 85);
             this.locationLabel.Name = "locationLabel";
             this.locationLabel.Size = new System.Drawing.Size(56, 15);
             this.locationLabel.TabIndex = 19;
@@ -256,7 +284,7 @@
             // widthNumeric
             // 
             this.widthNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.widthNumeric.Location = new System.Drawing.Point(233, 49);
+            this.widthNumeric.Location = new System.Drawing.Point(233, 83);
             this.widthNumeric.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -280,7 +308,7 @@
             // heightNumeric
             // 
             this.heightNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.heightNumeric.Location = new System.Drawing.Point(287, 49);
+            this.heightNumeric.Location = new System.Drawing.Point(287, 83);
             this.heightNumeric.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -307,9 +335,9 @@
             this.areaComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.areaComboBox.FormattingEnabled = true;
             this.areaComboBox.IntegralHeight = false;
-            this.areaComboBox.Location = new System.Drawing.Point(73, 19);
+            this.areaComboBox.Location = new System.Drawing.Point(127, 19);
             this.areaComboBox.Name = "areaComboBox";
-            this.areaComboBox.Size = new System.Drawing.Size(231, 24);
+            this.areaComboBox.Size = new System.Drawing.Size(177, 24);
             this.areaComboBox.TabIndex = 8;
             this.areaComboBox.SelectedIndexChanged += new System.EventHandler(this.areaComboBox_SelectedIndexChanged);
             // 
@@ -317,7 +345,7 @@
             // 
             this.captureCursorCheckBox.Checked = true;
             this.captureCursorCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.captureCursorCheckBox.Location = new System.Drawing.Point(230, 80);
+            this.captureCursorCheckBox.Location = new System.Drawing.Point(230, 114);
             this.captureCursorCheckBox.Name = "captureCursorCheckBox";
             this.captureCursorCheckBox.Size = new System.Drawing.Size(104, 19);
             this.captureCursorCheckBox.TabIndex = 15;
@@ -343,17 +371,16 @@
             this.qualityComboBox.Name = "qualityComboBox";
             this.qualityComboBox.Size = new System.Drawing.Size(261, 24);
             this.qualityComboBox.TabIndex = 7;
-            this.qualityComboBox.Visible = false;
             this.qualityComboBox.SelectedIndexChanged += new System.EventHandler(this.qualityComboBox_SelectedIndexChanged);
             // 
             // inputDeviceLabel
             // 
             this.inputDeviceLabel.AutoSize = true;
-            this.inputDeviceLabel.Location = new System.Drawing.Point(29, 26);
+            this.inputDeviceLabel.Location = new System.Drawing.Point(45, 26);
             this.inputDeviceLabel.Name = "inputDeviceLabel";
-            this.inputDeviceLabel.Size = new System.Drawing.Size(38, 15);
+            this.inputDeviceLabel.Size = new System.Drawing.Size(75, 15);
             this.inputDeviceLabel.TabIndex = 26;
-            this.inputDeviceLabel.Text = "Input:";
+            this.inputDeviceLabel.Text = "Input device:";
             // 
             // audioGroup
             // 
@@ -362,7 +389,7 @@
             this.audioGroup.Controls.Add(this.inputDeviceComboBox);
             this.audioGroup.Controls.Add(this.separateAudioCheckBox);
             this.audioGroup.Controls.Add(this.inputDeviceLabel);
-            this.audioGroup.Location = new System.Drawing.Point(9, 177);
+            this.audioGroup.Location = new System.Drawing.Point(9, 202);
             this.audioGroup.Margin = new System.Windows.Forms.Padding(0, 9, 0, 0);
             this.audioGroup.Name = "audioGroup";
             this.audioGroup.Size = new System.Drawing.Size(340, 56);
@@ -395,9 +422,9 @@
             this.inputDeviceComboBox.Items.AddRange(new object[] {
             "None",
             "System sounds (Soundcard)"});
-            this.inputDeviceComboBox.Location = new System.Drawing.Point(73, 22);
+            this.inputDeviceComboBox.Location = new System.Drawing.Point(127, 22);
             this.inputDeviceComboBox.Name = "inputDeviceComboBox";
-            this.inputDeviceComboBox.Size = new System.Drawing.Size(231, 24);
+            this.inputDeviceComboBox.Size = new System.Drawing.Size(177, 24);
             this.inputDeviceComboBox.TabIndex = 17;
             this.inputDeviceComboBox.SelectedIndexChanged += new System.EventHandler(this.inputDeviceComboBox_SelectedIndexChanged);
             // 
@@ -422,7 +449,7 @@
             this.generalGroup.Controls.Add(this.fileLabel);
             this.generalGroup.Controls.Add(this.qualityComboBox);
             this.generalGroup.Controls.Add(this.qualityLabel);
-            this.generalGroup.Location = new System.Drawing.Point(9, -77);
+            this.generalGroup.Location = new System.Drawing.Point(9, -134);
             this.generalGroup.Margin = new System.Windows.Forms.Padding(0, 9, 0, 0);
             this.generalGroup.Name = "generalGroup";
             this.generalGroup.Size = new System.Drawing.Size(340, 126);
@@ -462,6 +489,7 @@
             // 
             this.previewBox.BackColor = System.Drawing.Color.Black;
             this.previewBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.previewBox.InitialImage = null;
             this.previewBox.Location = new System.Drawing.Point(358, 9);
             this.previewBox.Margin = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.previewBox.Name = "previewBox";
@@ -569,7 +597,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(804, 266);
+            this.ClientSize = new System.Drawing.Size(804, 267);
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.previewBox);
             this.Controls.Add(this.toolStrip);
@@ -646,6 +674,8 @@
 		private System.Windows.Forms.ToolStripButton previewBtn;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.Button startButton;
+        private System.Windows.Forms.Label scaleLabel;
+        private QuickLibrary.QlibComboBox scaleComboBox;
     }
 }
 

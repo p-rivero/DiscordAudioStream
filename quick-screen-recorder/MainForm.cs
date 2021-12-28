@@ -21,6 +21,8 @@ namespace quick_screen_recorder
 		private bool darkMode;
 		private bool streamEnabled = false;
 		private const int TARGET_FRAMERATE = 60;
+		private double scaleMultiplier = 1;
+
 		private AudioPlayback audioPlayback = null;
 		private MMDeviceCollection audioDevices;
 
@@ -45,6 +47,8 @@ namespace quick_screen_recorder
 
 			previewBtn.Checked = Properties.Settings.Default.Preview;
 			enabledPreview(previewBtn.Checked);
+			scaleComboBox.SelectedIndex = Properties.Settings.Default.ScaleIndex;
+			updateScaleMultiplier(scaleComboBox.SelectedIndex);
 
 			applyDarkTheme(darkMode);
 		}
@@ -85,6 +89,7 @@ namespace quick_screen_recorder
 			qualityComboBox.SetDarkMode(darkMode);
 			inputDeviceComboBox.SetDarkMode(darkMode);
 			areaComboBox.SetDarkMode(darkMode);
+			scaleComboBox.SetDarkMode(darkMode);
 			widthNumeric.SetDarkMode(darkMode);
 			heightNumeric.SetDarkMode(darkMode);
 			xNumeric.SetDarkMode(darkMode);
@@ -781,14 +786,28 @@ namespace quick_screen_recorder
 		{
 			if (streamEnabled)
 			{
-				size.Width = Math.Max(160, size.Width);
-				size.Height = Math.Max(160, size.Height);
+				size.Width  = (int)(Math.Max(160, size.Width) * scaleMultiplier);
+				size.Height = (int)(Math.Max(160, size.Height) * scaleMultiplier);
 				Size = size;
 				BeginInvoke(new Action(() =>
 				{
 					previewBox.Size = size;
 				}));
 			}
+		}
+
+		private void scaleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			updateScaleMultiplier(scaleComboBox.SelectedIndex);
+			Properties.Settings.Default.ScaleIndex = scaleComboBox.SelectedIndex;
+			Properties.Settings.Default.Save();
+		}
+		private void updateScaleMultiplier(int index)
+		{
+			if (index == 0)		 scaleMultiplier = 1;              // Original resolution
+			else if (index == 1) scaleMultiplier = Math.Sqrt(0.5); // 50% resolution
+			else if (index == 2) scaleMultiplier = 0.5;            // 25% resolution
+			else throw new ArgumentException("Invalid index");
 		}
 	}
 }
