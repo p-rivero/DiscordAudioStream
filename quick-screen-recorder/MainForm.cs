@@ -21,6 +21,7 @@ namespace quick_screen_recorder
 		private bool darkMode;
 		private bool streamEnabled = false;
 		const int TARGET_FRAMERATE = 60;
+		AudioPlayback audioPlayback = null;
 
 		public MainForm(bool darkMode)
 		{
@@ -510,6 +511,7 @@ namespace quick_screen_recorder
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			ScreenCaptureWorker.StopWorkers();
+			if (audioPlayback != null) audioPlayback.Stop();
 			HotkeyManager.UnregisterHotKey(this.Handle, 0);
 		}
 
@@ -746,6 +748,8 @@ namespace quick_screen_recorder
 			startButton.Visible = false;
 			toolStrip.Visible = false;
 			streamEnabled = true;
+			audioPlayback = new AudioPlayback();
+			audioPlayback.Start();
 
 			SetPreviewSize(new Size(width, height));
 		}

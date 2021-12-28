@@ -76,6 +76,7 @@
     <Compile Include="AreaForm.Designer.cs">
       <DependentUpon>AreaForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AudioPlayback.cs" />
     <Compile Include="ScreenCaptureWorker.cs" />
     <Compile Include="HotkeyManager.cs" />
     <Compile Include="Recorder.cs" />
