@@ -1,9 +1,6 @@
-﻿using NAudio.Wave;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using NAudio.CoreAudioApi;
+using NAudio.Wave;
 
 namespace quick_screen_recorder
 {
@@ -14,9 +11,9 @@ namespace quick_screen_recorder
         private BufferedWaveProvider waveProvider;
         private const int DESIRED_LATENCY_MS = 50;
 
-        public AudioPlayback()
+        public AudioPlayback(MMDevice device)
         {
-            audioSource = new WasapiLoopbackCapture();
+            audioSource = new WasapiLoopbackCapture(device);
             output = new DirectSoundOut(DESIRED_LATENCY_MS);
             audioSource.DataAvailable += audioSource_DataAvailable;
 

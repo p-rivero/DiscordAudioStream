@@ -1,5 +1,4 @@
-﻿using NAudio.Wave;
-using System;
+﻿using System;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -8,6 +7,7 @@ using System.Windows.Forms;
 using System.Threading;
 using QuickLibrary;
 using System.Diagnostics;
+using NAudio.CoreAudioApi;
 
 namespace quick_screen_recorder
 {
@@ -20,8 +20,9 @@ namespace quick_screen_recorder
 
 		private bool darkMode;
 		private bool streamEnabled = false;
-		const int TARGET_FRAMERATE = 60;
-		AudioPlayback audioPlayback = null;
+		private const int TARGET_FRAMERATE = 60;
+		private AudioPlayback audioPlayback = null;
+		private MMDeviceCollection audioDevices;
 
 		public MainForm(bool darkMode)
 		{
@@ -535,17 +536,26 @@ namespace quick_screen_recorder
 
 		private void RefreshAudioDevices()
 		{
-			inputDeviceComboBox.SelectedIndex = 0;
+			inputDeviceComboBox.SelectedIndex = -1;
+			inputDeviceComboBox.Items.Clear();
 
-			while (inputDeviceComboBox.Items.Count > 2)
+			MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
+			audioDevices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+			
+			foreach (MMDevice device in audioDevices)
 			{
-				inputDeviceComboBox.Items.RemoveAt(inputDeviceComboBox.Items.Count - 1);
+				inputDeviceComboBox.Items.Add(device.DeviceFriendlyName);
 			}
 
-			for (int i = 0; i < WaveIn.DeviceCount; i++)
-			{
-				inputDeviceComboBox.Items.Add(WaveIn.GetCapabilities(i).ProductName);
-			}
+			//while (inputDeviceComboBox.Items.Count > 2)
+			//{
+			//    inputDeviceComboBox.Items.RemoveAt(inputDeviceComboBox.Items.Count - 1);
+			//}
+
+			//for (int i = 0; i < WaveIn.DeviceCount; i++)
+			//{
+			//    inputDeviceComboBox.Items.Add(WaveIn.GetCapabilities(i).ProductName);
+			//}
 		}
 
 		private void RefreshScreens()
@@ -742,14 +752,27 @@ namespace quick_screen_recorder
 			int width = (int)widthNumeric.Value;
 			int height = (int)heightNumeric.Value;
 
+			if (inputDeviceComboBox.SelectedIndex == -1)
+			{
+				DialogResult r = MessageBox.Show("No audio source selected, continue anyways?", "Warning",
+					MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+				if (r == DialogResult.No)
+					return;
+			}
+			else
+			{
+				MMDevice selectedDevice = audioDevices[inputDeviceComboBox.SelectedIndex];
+				audioPlayback = new AudioPlayback(selectedDevice);
+				audioPlayback.Start();
+			}
+
 			previewBox.Location = new Point(0, 0);
 			videoGroup.Visible = false;
 			audioGroup.Visible = false;
 			startButton.Visible = false;
 			toolStrip.Visible = false;
 			streamEnabled = true;
-			audioPlayback = new AudioPlayback();
-			audioPlayback.Start();
 
 			SetPreviewSize(new Size(width, height));
 		}
