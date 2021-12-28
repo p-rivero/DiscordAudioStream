@@ -10,19 +10,21 @@ namespace quick_screen_recorder
     class AudioPlayback
     {
         private IWaveIn audioSource;
-        private WaveOut output;
+        private DirectSoundOut output;
         private BufferedWaveProvider waveProvider;
+        private const int DESIRED_LATENCY_MS = 50;
 
         public AudioPlayback()
         {
             audioSource = new WasapiLoopbackCapture();
-            output = new WaveOut();
+            output = new DirectSoundOut(DESIRED_LATENCY_MS);
             audioSource.DataAvailable += audioSource_DataAvailable;
 
 
             WaveFormat format = audioSource.WaveFormat;
             waveProvider = new BufferedWaveProvider(format);
             waveProvider.DiscardOnBufferOverflow = true;
+            waveProvider.BufferDuration = TimeSpan.FromSeconds(2);
 
             output.Init(waveProvider);
         }
