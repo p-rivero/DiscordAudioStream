@@ -20,6 +20,8 @@ namespace quick_screen_recorder
 
 		private bool darkMode;
 		private bool streamEnabled = false;
+
+		private ScreenCaptureWorker screenCaptureWorker;
 		private const int TARGET_FRAMERATE = 60;
 		private double scaleMultiplier = 1;
 
@@ -450,7 +452,7 @@ namespace quick_screen_recorder
 			}
 
 			ScreenCaptureWorker.Initialize(widthNumeric, heightNumeric, xNumeric, yNumeric, captureCursorCheckBox);
-			ScreenCaptureWorker.StartWorkers(TARGET_FRAMERATE, 2);
+			screenCaptureWorker = new ScreenCaptureWorker(TARGET_FRAMERATE);
 
 			Thread drawThread = new Thread(() =>
 			{
@@ -462,13 +464,15 @@ namespace quick_screen_recorder
 					stopwatch.Restart();
 					try
 					{
+						Bitmap next = ScreenCaptureWorker.GetNextFrame();
+						if (next == null) continue;
 						Invoke(new Action(() =>
 						{
 							if (previewBox.Image != null)
 							{
 								previewBox.Image.Dispose();
 							}
-							previewBox.Image = ScreenCaptureWorker.GetNextFrame();
+							previewBox.Image = next;
 						}));
 					}
 					catch (InvalidOperationException)
@@ -516,7 +520,7 @@ namespace quick_screen_recorder
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			ScreenCaptureWorker.StopWorkers();
+			screenCaptureWorker.Stop();
 			if (audioPlayback != null) audioPlayback.Stop();
 			HotkeyManager.UnregisterHotKey(this.Handle, 0);
 		}
