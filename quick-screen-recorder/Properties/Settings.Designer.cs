@@ -130,5 +130,17 @@ namespace quick_screen_recorder.Properties {
                 this["ScaleIndex"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int AreaIndex {
+            get {
+                return ((int)(this["AreaIndex"]));
+            }
+            set {
+                this["AreaIndex"] = value;
+            }
+        }
     }
 }

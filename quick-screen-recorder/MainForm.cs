@@ -20,6 +20,9 @@ namespace quick_screen_recorder
 
 		private bool darkMode;
 		private bool streamEnabled = false;
+		private Size defaultWindowSize;
+		private Size defaultPreviewSize;
+		private Point defaultPreviewLocation;
 
 		private ScreenCaptureWorker screenCaptureWorker;
 		private const int TARGET_FRAMERATE = 60;
@@ -38,6 +41,11 @@ namespace quick_screen_recorder
 			this.darkMode = darkMode;
 
 			InitializeComponent();
+			previewBox.Visible = true;
+
+			defaultWindowSize = this.Size;
+			defaultPreviewSize = previewBox.Size;
+			defaultPreviewLocation = previewBox.Location;
 
 			areaForm = new AreaForm();
 			areaForm.Owner = this;
@@ -48,9 +56,10 @@ namespace quick_screen_recorder
 			RefreshAudioDevices();
 
 			previewBtn.Checked = Properties.Settings.Default.Preview;
-			enabledPreview(previewBtn.Checked);
+			enablePreview(previewBtn.Checked);
+
+			areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
 			scaleComboBox.SelectedIndex = Properties.Settings.Default.ScaleIndex;
-			updateScaleMultiplier(scaleComboBox.SelectedIndex);
 
 			applyDarkTheme(darkMode);
 		}
@@ -317,6 +326,12 @@ namespace quick_screen_recorder
 		private void areaComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			RefreshAreaInfo();
+			// Do not save settings for Custom Area
+			if (areaComboBox.SelectedIndex == areaComboBox.Items.Count - 1)
+				return;
+
+			Properties.Settings.Default.AreaIndex = areaComboBox.SelectedIndex;
+			Properties.Settings.Default.Save();
 		}
 
 		private void RefreshAreaInfo()
@@ -518,11 +533,24 @@ namespace quick_screen_recorder
 			}
 		}
 
-		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			screenCaptureWorker.Stop();
-			if (audioPlayback != null) audioPlayback.Stop();
-			HotkeyManager.UnregisterHotKey(this.Handle, 0);
+			base.OnFormClosing(e);
+
+			if (e.CloseReason == CloseReason.WindowsShutDown) return;
+
+			if (streamEnabled)
+			{
+				e.Cancel = true; // Do not close form
+
+				// Instead, return to settings
+				EndStream();
+			}
+			else
+			{
+				screenCaptureWorker.Stop();
+				HotkeyManager.UnregisterHotKey(this.Handle, 0);
+			}
 		}
 
 		private void onTopCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -590,7 +618,15 @@ namespace quick_screen_recorder
 
 			areaComboBox.Items.Add("Custom area");
 
-			areaComboBox.SelectedIndex = 0;
+			try
+			{
+				areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
+			}
+			catch (ArgumentOutOfRangeException)
+			{
+				// Number of screen may have changed
+				areaComboBox.SelectedIndex = 0;
+			}
 
 			widthNumeric.Maximum = SystemInformation.VirtualScreen.Width;
 			heightNumeric.Maximum = SystemInformation.VirtualScreen.Height;
@@ -670,15 +706,19 @@ namespace quick_screen_recorder
 			Properties.Settings.Default.Save();
 		}
 
-		private void enabledPreview(bool b)
+		private void enablePreview(bool visible)
 		{
-			if (previewBtn.Checked)
-			{
-				this.Width = 820;
-			}
+			previewBox.Visible = visible;
+
+			if (visible)
+            {
+				this.Size = defaultWindowSize;
+            }
 			else
-			{
-				this.Width = 374;
+            {
+				Size newSize = this.Size;
+				newSize.Width = defaultWindowSize.Width - (defaultPreviewSize.Width + 10);
+				this.Size = newSize;
 
 				if (previewBox.Image != null)
 				{
@@ -693,7 +733,7 @@ namespace quick_screen_recorder
 			Properties.Settings.Default.Preview = previewBtn.Checked;
 			Properties.Settings.Default.Save();
 
-			enabledPreview(previewBtn.Checked);
+			enablePreview(previewBtn.Checked);
 		}
 
 		private void folderTextBox_DragEnter(object sender, DragEventArgs e)
@@ -758,6 +798,36 @@ namespace quick_screen_recorder
 
 		private void startButton_Click(object sender, EventArgs e)
 		{
+			StartStream();
+		}
+
+		public void SetPreviewSize(Size size)
+		{
+			if (streamEnabled)
+			{
+				size.Width  = (int)(Math.Max(160, size.Width) * scaleMultiplier);
+				size.Height = (int)(Math.Max(160, size.Height) * scaleMultiplier);
+				BeginInvoke(new Action(() =>
+				{
+					previewBox.Size = size;
+				}));
+			}
+		}
+
+		private void scaleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			int index = scaleComboBox.SelectedIndex;
+			if (index == 0) scaleMultiplier = 1;              // Original resolution
+			else if (index == 1) scaleMultiplier = Math.Sqrt(0.5); // 50% resolution
+			else if (index == 2) scaleMultiplier = 0.5;            // 25% resolution
+			else throw new ArgumentException("Invalid index");
+
+			Properties.Settings.Default.ScaleIndex = index;
+			Properties.Settings.Default.Save();
+		}
+
+		private void StartStream()
+        {
 			int width = (int)widthNumeric.Value;
 			int height = (int)heightNumeric.Value;
 
@@ -776,42 +846,34 @@ namespace quick_screen_recorder
 				audioPlayback.Start();
 			}
 
+			enablePreview(true);
 			previewBox.Location = new Point(0, 0);
 			videoGroup.Visible = false;
 			audioGroup.Visible = false;
 			startButton.Visible = false;
 			toolStrip.Visible = false;
 			streamEnabled = true;
+			this.AutoSize = true;
 
 			SetPreviewSize(new Size(width, height));
 		}
 
-		public void SetPreviewSize(Size size)
-		{
-			if (streamEnabled)
-			{
-				size.Width  = (int)(Math.Max(160, size.Width) * scaleMultiplier);
-				size.Height = (int)(Math.Max(160, size.Height) * scaleMultiplier);
-				Size = size;
-				BeginInvoke(new Action(() =>
-				{
-					previewBox.Size = size;
-				}));
-			}
-		}
+		private void EndStream()
+        {
+			videoGroup.Visible = true;
+			audioGroup.Visible = true;
+			startButton.Visible = true;
+			toolStrip.Visible = true;
+			streamEnabled = false;
 
-		private void scaleComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			updateScaleMultiplier(scaleComboBox.SelectedIndex);
-			Properties.Settings.Default.ScaleIndex = scaleComboBox.SelectedIndex;
-			Properties.Settings.Default.Save();
-		}
-		private void updateScaleMultiplier(int index)
-		{
-			if (index == 0)		 scaleMultiplier = 1;              // Original resolution
-			else if (index == 1) scaleMultiplier = Math.Sqrt(0.5); // 50% resolution
-			else if (index == 2) scaleMultiplier = 0.5;            // 25% resolution
-			else throw new ArgumentException("Invalid index");
+			enablePreview(previewBtn.Checked);
+			previewBox.Size = defaultPreviewSize;
+			previewBox.Location = defaultPreviewLocation;
+			this.AutoSize = false;
+			this.Size = defaultWindowSize;
+			if (audioPlayback != null) audioPlayback.Stop();
+
+			CenterToScreen();
 		}
 	}
 }
