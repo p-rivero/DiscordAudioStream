@@ -172,6 +172,24 @@
         wMAAAPbrGqURdl2WAAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="volumeMixerButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABkSURBVDhPzZFRCsAwCEO9/1k3doSuhrmVVCFjH+sDKSaS
+        CtpStOsdUTXwKWDv5caG7kEOCJFNOeDo5Ya/IzxcbQqU36LPZqWAalOgBDiZBth4cxnARvSVPsGGepmb
+        zFC13zA7ARIMMf/C+NyRAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="soundDevicesButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADTSURBVDhPtdPNCgFRGMbxs7C2sJWUhdyAnXINcgPuxA5x
+        PXYs7LgEVoosFNmJhP8z4635KGeQp37NzNuc15wP7t/Jva5fpYBJePt5aljhETw5d8cJw+DJkxb2aMMa
+        VDHAFXMVkhnhDA04oAnFGqzRhxpd0EUsKubD21isQQVj9KBpHBGLvZiM1acoY4sStCax+BrMoIE7FJFq
+        4JuCBr2dgoo3aIB+pQ7FGmhXbBG1E6lFjKaBDTqIfoFt40IFX3SQlrAGumY+SJafjrLlpz9Thjj3BMHg
+        NzuDaaezAAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="settingsBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8

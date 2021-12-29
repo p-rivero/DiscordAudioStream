@@ -61,6 +61,9 @@ namespace quick_screen_recorder
 			areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
 			scaleComboBox.SelectedIndex = Properties.Settings.Default.ScaleIndex;
 
+			xNumeric.Minimum = SystemInformation.VirtualScreen.Left;
+			yNumeric.Minimum = SystemInformation.VirtualScreen.Top;
+
 			applyDarkTheme(darkMode);
 		}
 
@@ -76,6 +79,8 @@ namespace quick_screen_recorder
 
 				aboutBtn.Image = Properties.Resources.white_about;
 				onTopBtn.Image = Properties.Resources.white_ontop;
+				volumeMixerButton.Image = Properties.Resources.white_mixer;
+				soundDevicesButton.Image = Properties.Resources.white_speaker;
 				settingsBtn.Image = Properties.Resources.white_settings;
 				previewBtn.Image = Properties.Resources.white_preview;
 
@@ -112,88 +117,32 @@ namespace quick_screen_recorder
 
 		public void SetAreaWidth(int w)
 		{
-			if (w > widthNumeric.Maximum)
-			{
-				widthNumeric.Value = widthNumeric.Maximum;
-			}
-			else
-			{
-				if (w < widthNumeric.Minimum)
-				{
-					widthNumeric.Value = widthNumeric.Minimum;
-				}
-				else
-				{
-					widthNumeric.Value = w;
-				}
-			}
+			widthNumeric.Value = w;
 		}
 
 		public void SetAreaHeight(int h)
 		{
-			if (h > heightNumeric.Maximum)
-			{
-				heightNumeric.Value = heightNumeric.Maximum;
-			}
-			else
-			{
-				if (h < widthNumeric.Minimum)
-				{
-					heightNumeric.Value = heightNumeric.Minimum;
-				}
-				else
-				{
-					heightNumeric.Value = h;
-				}
-			}
+			heightNumeric.Value = h;
 		}
 
 		public void SetAreaX(int x)
 		{
-			if (x > xNumeric.Maximum)
-			{
-				xNumeric.Value = xNumeric.Maximum;
-			}
-			else
-			{
-				if (x < xNumeric.Minimum)
-				{
-					xNumeric.Value = xNumeric.Minimum;
-				}
-				else
-				{
-					xNumeric.Value = x;
-				}
-			}
+			xNumeric.Value = x;
 		}
 
 		public void SetAreaY(int y)
 		{
-			if (y > yNumeric.Maximum)
-			{
-				yNumeric.Value = yNumeric.Maximum;
-			}
-			else
-			{
-				if (y < xNumeric.Minimum)
-				{
-					yNumeric.Value = yNumeric.Minimum;
-				}
-				else
-				{
-					yNumeric.Value = y;
-				}
-			}
+			yNumeric.Value = y;
 		}
 
 		public void SetMaximumX(int maxX)
 		{
-			xNumeric.Maximum = maxX;
+			xNumeric.Maximum = maxX + SystemInformation.VirtualScreen.Left;
 		}
 
 		public void SetMaximumY(int maxY)
 		{
-			yNumeric.Maximum = maxY;
+			yNumeric.Maximum = maxY + SystemInformation.VirtualScreen.Top;
 		}
 
 		private void recButton_Click(object sender, EventArgs e)
@@ -876,6 +825,34 @@ namespace quick_screen_recorder
 			x = tmp_x;
 			y = tmp_y;
 			captureCursor = tmp_captureCursor;
+		}
+
+		private void volumeMixerButton_Click(object sender, EventArgs e)
+		{
+			if (Environment.OSVersion.Version.Major >= 10)
+			{
+				Process.Start("ms-settings:apps-volume");
+			}
+			else
+			{
+				// Use old volume mixer
+				var cplPath = Path.Combine(Environment.SystemDirectory, "sndvol.exe");
+				Process.Start(cplPath);
+			}
+		}
+
+		private void soundDevicesButton_Click(object sender, EventArgs e)
+		{
+			if (Environment.OSVersion.Version.Major >= 10)
+			{
+				Process.Start("ms-settings:sound");
+			}
+			else
+			{
+				// Use old sound settings
+				var cplPath = Path.Combine(Environment.SystemDirectory, "control.exe");
+				Process.Start(cplPath, "/name Microsoft.Sound");
+			}
 		}
 	}
 }

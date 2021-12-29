@@ -44,11 +44,7 @@
             this.refreshScreensBtn = new System.Windows.Forms.Button();
             this.hideTaskbarCheckBox = new QuickLibrary.QlibCheckBox();
             this.sizelabel = new System.Windows.Forms.Label();
-            this.yNumeric = new BoundedNumericBox();
-            this.xNumeric = new BoundedNumericBox();
             this.locationLabel = new System.Windows.Forms.Label();
-            this.widthNumeric = new BoundedNumericBox();
-            this.heightNumeric = new BoundedNumericBox();
             this.areaComboBox = new QuickLibrary.QlibComboBox();
             this.captureCursorCheckBox = new QuickLibrary.QlibCheckBox();
             this.qualityComboBox = new QuickLibrary.QlibComboBox();
@@ -66,18 +62,25 @@
             this.previewBtn = new System.Windows.Forms.ToolStripButton();
             this.onTopBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.volumeMixerButton = new System.Windows.Forms.ToolStripButton();
+            this.soundDevicesButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsBtn = new System.Windows.Forms.ToolStripButton();
             this.aboutBtn = new System.Windows.Forms.ToolStripButton();
             this.startButton = new System.Windows.Forms.Button();
+            this.yNumeric = new quick_screen_recorder.BoundedNumericBox();
+            this.xNumeric = new quick_screen_recorder.BoundedNumericBox();
+            this.widthNumeric = new quick_screen_recorder.BoundedNumericBox();
+            this.heightNumeric = new quick_screen_recorder.BoundedNumericBox();
             this.videoGroup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.yNumeric)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.xNumeric)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.widthNumeric)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.heightNumeric)).BeginInit();
             this.audioGroup.SuspendLayout();
             this.generalGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
             this.toolStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.yNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.xNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.widthNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.heightNumeric)).BeginInit();
             this.SuspendLayout();
             // 
             // folderTextBox
@@ -234,44 +237,6 @@
             this.sizelabel.TabIndex = 22;
             this.sizelabel.Text = "Size:";
             // 
-            // yNumeric
-            // 
-            this.yNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.yNumeric.Location = new System.Drawing.Point(127, 83);
-            this.yNumeric.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.yNumeric.Minimum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            -2147483648});
-            this.yNumeric.Name = "yNumeric";
-            this.yNumeric.Size = new System.Drawing.Size(47, 23);
-            this.yNumeric.TabIndex = 11;
-            this.yNumeric.ValueChanged += new System.EventHandler(this.yNumeric_ValueChanged);
-            // 
-            // xNumeric
-            // 
-            this.xNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.xNumeric.Location = new System.Drawing.Point(73, 83);
-            this.xNumeric.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.xNumeric.Minimum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            -2147483648});
-            this.xNumeric.Name = "xNumeric";
-            this.xNumeric.Size = new System.Drawing.Size(47, 23);
-            this.xNumeric.TabIndex = 10;
-            this.xNumeric.ValueChanged += new System.EventHandler(this.xNumeric_ValueChanged);
-            // 
             // locationLabel
             // 
             this.locationLabel.AutoSize = true;
@@ -280,54 +245,6 @@
             this.locationLabel.Size = new System.Drawing.Size(56, 15);
             this.locationLabel.TabIndex = 19;
             this.locationLabel.Text = "Location:";
-            // 
-            // widthNumeric
-            // 
-            this.widthNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.widthNumeric.Location = new System.Drawing.Point(233, 83);
-            this.widthNumeric.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.widthNumeric.Minimum = new decimal(new int[] {
-            160,
-            0,
-            0,
-            0});
-            this.widthNumeric.Name = "widthNumeric";
-            this.widthNumeric.Size = new System.Drawing.Size(47, 23);
-            this.widthNumeric.TabIndex = 12;
-            this.widthNumeric.Value = new decimal(new int[] {
-            160,
-            0,
-            0,
-            0});
-            this.widthNumeric.ValueChanged += new System.EventHandler(this.widthNumeric_ValueChanged);
-            // 
-            // heightNumeric
-            // 
-            this.heightNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.heightNumeric.Location = new System.Drawing.Point(287, 83);
-            this.heightNumeric.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.heightNumeric.Minimum = new decimal(new int[] {
-            160,
-            0,
-            0,
-            0});
-            this.heightNumeric.Name = "heightNumeric";
-            this.heightNumeric.Size = new System.Drawing.Size(47, 23);
-            this.heightNumeric.TabIndex = 13;
-            this.heightNumeric.Value = new decimal(new int[] {
-            160,
-            0,
-            0,
-            0});
-            this.heightNumeric.ValueChanged += new System.EventHandler(this.heightNumeric_ValueChanged);
             // 
             // areaComboBox
             // 
@@ -508,13 +425,16 @@
             this.previewBtn,
             this.onTopBtn,
             this.toolStripSeparator1,
+            this.volumeMixerButton,
+            this.soundDevicesButton,
+            this.toolStripSeparator2,
             this.settingsBtn,
             this.aboutBtn});
             this.toolStrip.Location = new System.Drawing.Point(9, 9);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(9);
             this.toolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip.Size = new System.Drawing.Size(132, 43);
+            this.toolStrip.Size = new System.Drawing.Size(217, 43);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.TabStop = true;
             this.toolStrip.Text = "toolStrip1";
@@ -550,9 +470,36 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.AutoSize = false;
-            this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(2, 16);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(2, 20);
+            // 
+            // volumeMixerButton
+            // 
+            this.volumeMixerButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.volumeMixerButton.Image = ((System.Drawing.Image)(resources.GetObject("volumeMixerButton.Image")));
+            this.volumeMixerButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.volumeMixerButton.Name = "volumeMixerButton";
+            this.volumeMixerButton.Size = new System.Drawing.Size(23, 22);
+            this.volumeMixerButton.Text = "Open volume mixer";
+            this.volumeMixerButton.Click += new System.EventHandler(this.volumeMixerButton_Click);
+            // 
+            // soundDevicesButton
+            // 
+            this.soundDevicesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.soundDevicesButton.Image = ((System.Drawing.Image)(resources.GetObject("soundDevicesButton.Image")));
+            this.soundDevicesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.soundDevicesButton.Name = "soundDevicesButton";
+            this.soundDevicesButton.Size = new System.Drawing.Size(23, 22);
+            this.soundDevicesButton.Text = "Configure audio devices";
+            this.soundDevicesButton.Click += new System.EventHandler(this.soundDevicesButton_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.AutoSize = false;
+            this.toolStripSeparator2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(2, 20);
             // 
             // settingsBtn
             // 
@@ -591,6 +538,102 @@
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
+            // yNumeric
+            // 
+            this.yNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.yNumeric.Location = new System.Drawing.Point(127, 83);
+            this.yNumeric.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.yNumeric.Minimum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            -2147483648});
+            this.yNumeric.Name = "yNumeric";
+            this.yNumeric.Size = new System.Drawing.Size(47, 23);
+            this.yNumeric.TabIndex = 11;
+            this.yNumeric.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.yNumeric.ValueChanged += new System.EventHandler(this.yNumeric_ValueChanged);
+            // 
+            // xNumeric
+            // 
+            this.xNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.xNumeric.Location = new System.Drawing.Point(73, 83);
+            this.xNumeric.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.xNumeric.Minimum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            -2147483648});
+            this.xNumeric.Name = "xNumeric";
+            this.xNumeric.Size = new System.Drawing.Size(47, 23);
+            this.xNumeric.TabIndex = 10;
+            this.xNumeric.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.xNumeric.ValueChanged += new System.EventHandler(this.xNumeric_ValueChanged);
+            // 
+            // widthNumeric
+            // 
+            this.widthNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.widthNumeric.Location = new System.Drawing.Point(233, 83);
+            this.widthNumeric.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.widthNumeric.Minimum = new decimal(new int[] {
+            160,
+            0,
+            0,
+            0});
+            this.widthNumeric.Name = "widthNumeric";
+            this.widthNumeric.Size = new System.Drawing.Size(47, 23);
+            this.widthNumeric.TabIndex = 12;
+            this.widthNumeric.Value = new decimal(new int[] {
+            160,
+            0,
+            0,
+            0});
+            this.widthNumeric.ValueChanged += new System.EventHandler(this.widthNumeric_ValueChanged);
+            // 
+            // heightNumeric
+            // 
+            this.heightNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.heightNumeric.Location = new System.Drawing.Point(287, 83);
+            this.heightNumeric.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.heightNumeric.Minimum = new decimal(new int[] {
+            160,
+            0,
+            0,
+            0});
+            this.heightNumeric.Name = "heightNumeric";
+            this.heightNumeric.Size = new System.Drawing.Size(47, 23);
+            this.heightNumeric.TabIndex = 13;
+            this.heightNumeric.Value = new decimal(new int[] {
+            160,
+            0,
+            0,
+            0});
+            this.heightNumeric.ValueChanged += new System.EventHandler(this.heightNumeric_ValueChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -617,10 +660,6 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.videoGroup.ResumeLayout(false);
             this.videoGroup.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.yNumeric)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.xNumeric)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.widthNumeric)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.heightNumeric)).EndInit();
             this.audioGroup.ResumeLayout(false);
             this.audioGroup.PerformLayout();
             this.generalGroup.ResumeLayout(false);
@@ -628,6 +667,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.yNumeric)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.xNumeric)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.widthNumeric)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.heightNumeric)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -674,6 +717,9 @@
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Label scaleLabel;
         private QuickLibrary.QlibComboBox scaleComboBox;
+        private System.Windows.Forms.ToolStripButton volumeMixerButton;
+        private System.Windows.Forms.ToolStripButton soundDevicesButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
 

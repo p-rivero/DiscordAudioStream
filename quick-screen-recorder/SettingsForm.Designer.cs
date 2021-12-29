@@ -181,7 +181,7 @@
             this.mixerBtn.Name = "mixerBtn";
             this.mixerBtn.Size = new System.Drawing.Size(230, 40);
             this.mixerBtn.TabIndex = 2;
-            this.mixerBtn.Text = " Open volume mixer";
+            this.mixerBtn.Text = " Open classic volume mixer";
             this.mixerBtn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mixerBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.mixerBtn.UseVisualStyleBackColor = false;
