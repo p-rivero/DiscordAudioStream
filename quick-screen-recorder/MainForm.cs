@@ -11,7 +11,7 @@ using NAudio.CoreAudioApi;
 
 namespace quick_screen_recorder
 {
-	public partial class MainForm : Form
+	public partial class MainForm : Form, IScreenCaptureMaster
 	{
 		private AreaForm areaForm;
 		private StopForm stopForm;
@@ -346,7 +346,6 @@ namespace quick_screen_recorder
 				xNumeric.Value = areaForm.Left + 1;
 				yNumeric.Value = areaForm.Top + 1;
 
-				// TODO: Make custom numericBox that doesn't throw an exception
 				widthNumeric.Enabled = true;
 				heightNumeric.Enabled = true;
 				xNumeric.Enabled = true;
@@ -422,14 +421,10 @@ namespace quick_screen_recorder
 		{
 			if (widthNumeric.Enabled)
 			{
-				try
+				Invoke(new Action(() =>
 				{
 					areaForm.Width = (int)widthNumeric.Value + 2;
-				}
-				catch (InvalidOperationException)
-				{
-					// TODO: Handle
-				}
+				}));
 			}
 		}
 
@@ -437,14 +432,10 @@ namespace quick_screen_recorder
 		{
 			if (heightNumeric.Enabled)
 			{
-				try
+				Invoke(new Action(() =>
 				{
 					areaForm.Height = (int)heightNumeric.Value + 2;
-				}
-				catch (InvalidOperationException)
-				{
-					// TODO: Handle
-				}
+				}));
 			}
 		}
 
@@ -466,8 +457,7 @@ namespace quick_screen_recorder
 				folderTextBox.Text = Properties.Settings.Default.Folder;
 			}
 
-			ScreenCaptureWorker.Initialize(widthNumeric, heightNumeric, xNumeric, yNumeric, captureCursorCheckBox);
-			screenCaptureWorker = new ScreenCaptureWorker(TARGET_FRAMERATE);
+			screenCaptureWorker = new ScreenCaptureWorker(TARGET_FRAMERATE, this);
 
 			Thread drawThread = new Thread(() =>
 			{
@@ -654,15 +644,11 @@ namespace quick_screen_recorder
 		{
 			if (xNumeric.Enabled)
 			{
-				try
+				Invoke(new Action(() =>
 				{
 					// Omit 1 pixel for red border
 					areaForm.Left = (int)xNumeric.Value - 1;
-				}
-				catch (InvalidOperationException)
-				{
-					// TODO: Handle
-				}
+				}));
 			}
 		}
 
@@ -670,15 +656,11 @@ namespace quick_screen_recorder
 		{
 			if (yNumeric.Enabled)
 			{
-				try
+				Invoke(new Action(() =>
 				{
 					// Omit 1 pixel for red border
 					areaForm.Top = (int)yNumeric.Value - 1;
-				}
-				catch (InvalidOperationException)
-				{
-					// TODO: Handle
-				}
+				}));
 			}
 		}
 
@@ -711,11 +693,11 @@ namespace quick_screen_recorder
 			previewBox.Visible = visible;
 
 			if (visible)
-            {
+			{
 				this.Size = defaultWindowSize;
-            }
+			}
 			else
-            {
+			{
 				Size newSize = this.Size;
 				newSize.Width = defaultWindowSize.Width - (defaultPreviewSize.Width + 10);
 				this.Size = newSize;
@@ -827,7 +809,7 @@ namespace quick_screen_recorder
 		}
 
 		private void StartStream()
-        {
+		{
 			int width = (int)widthNumeric.Value;
 			int height = (int)heightNumeric.Value;
 
@@ -859,7 +841,7 @@ namespace quick_screen_recorder
 		}
 
 		private void EndStream()
-        {
+		{
 			videoGroup.Visible = true;
 			audioGroup.Visible = true;
 			startButton.Visible = true;
@@ -874,6 +856,26 @@ namespace quick_screen_recorder
 			if (audioPlayback != null) audioPlayback.Stop();
 
 			CenterToScreen();
+		}
+
+		public void getCaptureInfo(out int width, out int height, out int x, out int y, out bool captureCursor)
+		{
+			int tmp_width = 0, tmp_height = 0, tmp_x = 0, tmp_y = 0;
+			bool tmp_captureCursor = false;
+			Invoke(new Action(() =>
+			{
+				tmp_width = (int)widthNumeric.Value;
+				tmp_height = (int)heightNumeric.Value;
+				tmp_x = (int)xNumeric.Value;
+				tmp_y = (int)yNumeric.Value;
+				tmp_captureCursor = captureCursorCheckBox.Checked;
+			}));
+
+			width = tmp_width;
+			height = tmp_height;
+			x = tmp_x;
+			y = tmp_y;
+			captureCursor = tmp_captureCursor;
 		}
 	}
 }

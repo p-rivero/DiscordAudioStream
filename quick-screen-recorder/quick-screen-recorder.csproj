@@ -77,7 +77,11 @@
       <DependentUpon>AreaForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AudioPlayback.cs" />
-    <Compile Include="ScreenCaptureWorker.cs" />
+    <Compile Include="BoundedNumericBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ScreenCapture\IScreenCaptureMaster.cs" />
+    <Compile Include="ScreenCapture\ScreenCaptureWorker.cs" />
     <Compile Include="HotkeyManager.cs" />
     <Compile Include="Recorder.cs" />
     <Compile Include="MainForm.cs">

@@ -44,11 +44,11 @@
             this.refreshScreensBtn = new System.Windows.Forms.Button();
             this.hideTaskbarCheckBox = new QuickLibrary.QlibCheckBox();
             this.sizelabel = new System.Windows.Forms.Label();
-            this.yNumeric = new QuickLibrary.QlibNumericBox();
-            this.xNumeric = new QuickLibrary.QlibNumericBox();
+            this.yNumeric = new BoundedNumericBox();
+            this.xNumeric = new BoundedNumericBox();
             this.locationLabel = new System.Windows.Forms.Label();
-            this.widthNumeric = new QuickLibrary.QlibNumericBox();
-            this.heightNumeric = new QuickLibrary.QlibNumericBox();
+            this.widthNumeric = new BoundedNumericBox();
+            this.heightNumeric = new BoundedNumericBox();
             this.areaComboBox = new QuickLibrary.QlibComboBox();
             this.captureCursorCheckBox = new QuickLibrary.QlibCheckBox();
             this.qualityComboBox = new QuickLibrary.QlibComboBox();
@@ -654,8 +654,8 @@
 		private QuickLibrary.QlibComboBox areaComboBox;
 		private QuickLibrary.QlibComboBox qualityComboBox;
 		private QuickLibrary.QlibComboBox inputDeviceComboBox;
-		private QuickLibrary.QlibNumericBox heightNumeric;
-		private QuickLibrary.QlibNumericBox widthNumeric;
+		private BoundedNumericBox heightNumeric;
+		private BoundedNumericBox widthNumeric;
 		private System.Windows.Forms.Button refreshAudioBtn;
 		private QuickLibrary.QlibToolStrip toolStrip;
 		private System.Windows.Forms.ToolStripButton onTopBtn;
@@ -663,8 +663,8 @@
 		private System.Windows.Forms.ToolStripButton settingsBtn;
 		private QuickLibrary.QlibCheckBox separateAudioCheckBox;
 		private System.Windows.Forms.Label locationLabel;
-		private QuickLibrary.QlibNumericBox xNumeric;
-		private QuickLibrary.QlibNumericBox yNumeric;
+		private BoundedNumericBox xNumeric;
+		private BoundedNumericBox yNumeric;
 		private System.Windows.Forms.Label sizelabel;
 		private QuickLibrary.QlibCheckBox hideTaskbarCheckBox;
 		private System.Windows.Forms.Button refreshScreensBtn;

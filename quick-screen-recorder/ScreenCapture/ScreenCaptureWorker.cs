@@ -10,27 +10,14 @@ namespace quick_screen_recorder
 {
 	internal class ScreenCaptureWorker
 	{
-		private static ConcurrentQueue<Bitmap> frameQueue = new ConcurrentQueue<Bitmap>();
-		private const int LIMIT_QUEUE_SZ = 5;
+		private IScreenCaptureMaster master;
 
-		private static NumericUpDown widthNumeric = null;
-		private static NumericUpDown heightNumeric = null;
-		private static NumericUpDown xNumeric = null;
-		private static NumericUpDown yNumeric = null;
-		private static CheckBox captureCursorCheckBox = null;
+		private static ConcurrentQueue<Bitmap> frameQueue = new ConcurrentQueue<Bitmap>();
+		private const int LIMIT_QUEUE_SZ = 3;
 
 		private int INTERVAL_MS;
 		private Thread captureThread;
 
-
-		public static void Initialize(NumericUpDown w, NumericUpDown h, NumericUpDown x, NumericUpDown y, CheckBox cursor)
-		{
-			widthNumeric = w;
-			heightNumeric = h;
-			xNumeric = x;
-			yNumeric = y;
-			captureCursorCheckBox = cursor;
-		}
 
 		// Return the next frame, if it exists (null otherwise)
 		public static Bitmap GetNextFrame()
@@ -44,12 +31,10 @@ namespace quick_screen_recorder
 
 
 
-		public ScreenCaptureWorker(double targetFramerate)
+		public ScreenCaptureWorker(double targetFramerate, IScreenCaptureMaster captureMaster)
 		{
-			if (widthNumeric == null || heightNumeric == null || xNumeric == null || yNumeric == null)
-			{
-				throw new InvalidOperationException("Must call initialize() before creating workers");
-			}
+			master = captureMaster;
+
 			if (targetFramerate <= 0)
 			{
 				throw new ArgumentOutOfRangeException("The target framerate must be greater than 0");
@@ -86,39 +71,29 @@ namespace quick_screen_recorder
 
 		private void EnqueueFrame()
 		{
-			try
+			master.getCaptureInfo(out int width, out int height, out int x, out int y, out bool captureCursor);
+
+			Bitmap BMP = CaptureScreen(x, y, width, height);
+			if (captureCursor)
 			{
-				int width = (int)widthNumeric.Value;
-				int height = (int)heightNumeric.Value;
-				int x = (int)xNumeric.Value;
-				int y = (int)yNumeric.Value;
+				User32.CURSORINFO pci;
+				pci.cbSize = Marshal.SizeOf(typeof(User32.CURSORINFO));
 
-				Bitmap BMP = CaptureScreen(x, y, width, height);
-				if (captureCursorCheckBox.Checked)
+				if (User32.GetCursorInfo(out pci) && pci.flags == User32.CURSOR_SHOWING)
 				{
-					User32.CURSORINFO pci;
-					pci.cbSize = Marshal.SizeOf(typeof(User32.CURSORINFO));
-
-					if (User32.GetCursorInfo(out pci) && pci.flags == User32.CURSOR_SHOWING)
-					{
-						Graphics g = Graphics.FromImage(BMP);
-						User32.DrawIcon(g.GetHdc(), pci.ptScreenPos.x - (int)xNumeric.Value, pci.ptScreenPos.y - (int)yNumeric.Value, pci.hCursor);
-						g.ReleaseHdc();
-						g.Dispose();
-					}
-				}
-				frameQueue.Enqueue(BMP);
-
-				// Limit the size of frameQueue to LIMIT_QUEUE_SZ
-				if (frameQueue.Count > LIMIT_QUEUE_SZ)
-				{
-					frameQueue.TryDequeue(out Bitmap b);
-					b.Dispose();
+					Graphics g = Graphics.FromImage(BMP);
+					User32.DrawIcon(g.GetHdc(), pci.ptScreenPos.x - x, pci.ptScreenPos.y - y, pci.hCursor);
+					g.ReleaseHdc();
+					g.Dispose();
 				}
 			}
-			catch
+			frameQueue.Enqueue(BMP);
+
+			// Limit the size of frameQueue to LIMIT_QUEUE_SZ
+			if (frameQueue.Count > LIMIT_QUEUE_SZ)
 			{
-				// TODO: Remove try-catch
+				frameQueue.TryDequeue(out Bitmap b);
+				b.Dispose();
 			}
 		}
 
@@ -187,6 +162,8 @@ class User32
 	public static extern int ReleaseDC(int hWnd, int hDC);
 	[DllImport("user32.dll")]
 	public static extern bool DrawIcon(IntPtr hDC, int X, int Y, IntPtr hIcon);
+	[DllImport("user32.dll")]
+	public static extern bool DrawIconEx(IntPtr hdc, int xLeft, int yTop, IntPtr hIcon, int cxWidth, int cyWidth, uint istepIfAniCur, IntPtr hbrFlickerFreeDraw, uint diFlags);
 	[DllImport("user32.dll")]
 	public static extern bool GetCursorInfo(out CURSORINFO pci);
 }
