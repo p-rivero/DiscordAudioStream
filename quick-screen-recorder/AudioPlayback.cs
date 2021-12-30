@@ -11,8 +11,20 @@ namespace quick_screen_recorder
         private BufferedWaveProvider waveProvider;
         private const int DESIRED_LATENCY_MS = 50;
 
-        public AudioPlayback(MMDevice device)
+        private static MMDeviceCollection audioDevices = null;
+
+        public AudioPlayback(int deviceIndex)
         {
+            if (audioDevices == null)
+            {
+                throw new InvalidOperationException("Must call RefreshDevices() before initializing an AudioPlayback");
+            }
+            if (deviceIndex < 0 || deviceIndex > audioDevices.Count)
+            {
+                throw new ArgumentOutOfRangeException("Invalid index");
+            }
+
+            MMDevice device = audioDevices[deviceIndex];
             audioSource = new WasapiLoopbackCapture(device);
             output = new DirectSoundOut(DESIRED_LATENCY_MS);
             audioSource.DataAvailable += audioSource_DataAvailable;
@@ -24,6 +36,20 @@ namespace quick_screen_recorder
             waveProvider.BufferDuration = TimeSpan.FromSeconds(2);
 
             output.Init(waveProvider);
+        }
+
+        public static string[] RefreshDevices()
+        {
+            MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
+            audioDevices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+
+            string[] names = new string[audioDevices.Count];
+
+            for (int i = 0; i < audioDevices.Count; i++)
+            {
+                names[i] = audioDevices[i].DeviceFriendlyName;
+            }
+            return names;
         }
 
         public void Start()

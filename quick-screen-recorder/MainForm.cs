@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using System.Threading;
 using QuickLibrary;
 using System.Diagnostics;
-using NAudio.CoreAudioApi;
 
 namespace quick_screen_recorder
 {
@@ -29,8 +28,7 @@ namespace quick_screen_recorder
 		private double scaleMultiplier = 1;
 
 		private AudioPlayback audioPlayback = null;
-		private MMDeviceCollection audioDevices;
-
+		
 		public MainForm(bool darkMode)
 		{
 			int a = Keys.R.GetHashCode();
@@ -513,26 +511,16 @@ namespace quick_screen_recorder
 
 		private void RefreshAudioDevices()
 		{
-			inputDeviceComboBox.SelectedIndex = -1;
 			inputDeviceComboBox.Items.Clear();
 
-			MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
-			audioDevices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
-			
-			foreach (MMDevice device in audioDevices)
+			string[] names = AudioPlayback.RefreshDevices();
+
+			inputDeviceComboBox.Items.Add("(None)");
+			foreach (string device in names)
 			{
-				inputDeviceComboBox.Items.Add(device.DeviceFriendlyName);
+				inputDeviceComboBox.Items.Add(device);
 			}
-
-			//while (inputDeviceComboBox.Items.Count > 2)
-			//{
-			//    inputDeviceComboBox.Items.RemoveAt(inputDeviceComboBox.Items.Count - 1);
-			//}
-
-			//for (int i = 0; i < WaveIn.DeviceCount; i++)
-			//{
-			//    inputDeviceComboBox.Items.Add(WaveIn.GetCapabilities(i).ProductName);
-			//}
+			inputDeviceComboBox.SelectedIndex = 0;
 		}
 
 		private void RefreshScreens()
@@ -763,7 +751,7 @@ namespace quick_screen_recorder
 			int width = (int)widthNumeric.Value;
 			int height = (int)heightNumeric.Value;
 
-			if (inputDeviceComboBox.SelectedIndex == -1)
+			if (inputDeviceComboBox.SelectedIndex == 0)
 			{
 				DialogResult r = MessageBox.Show("No audio source selected, continue anyways?", "Warning",
 					MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -773,8 +761,8 @@ namespace quick_screen_recorder
 			}
 			else
 			{
-				MMDevice selectedDevice = audioDevices[inputDeviceComboBox.SelectedIndex];
-				audioPlayback = new AudioPlayback(selectedDevice);
+				// Skip "None"
+				audioPlayback = new AudioPlayback(inputDeviceComboBox.SelectedIndex - 1);
 				audioPlayback.Start();
 			}
 
