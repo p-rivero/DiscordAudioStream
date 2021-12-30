@@ -577,7 +577,7 @@
             this.volumeMixerButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.volumeMixerButton.Name = "volumeMixerButton";
             this.volumeMixerButton.Size = new System.Drawing.Size(23, 22);
-            this.volumeMixerButton.Text = "Open volume mixer";
+            this.volumeMixerButton.Text = "Open volume mixer | Ctrl+V";
             this.volumeMixerButton.Click += new System.EventHandler(this.volumeMixerButton_Click);
             // 
             // soundDevicesButton
@@ -587,7 +587,7 @@
             this.soundDevicesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.soundDevicesButton.Name = "soundDevicesButton";
             this.soundDevicesButton.Size = new System.Drawing.Size(23, 22);
-            this.soundDevicesButton.Text = "Configure audio devices";
+            this.soundDevicesButton.Text = "Configure audio devices | Ctrl+A";
             this.soundDevicesButton.Click += new System.EventHandler(this.soundDevicesButton_Click);
             // 
             // toolStripSeparator2

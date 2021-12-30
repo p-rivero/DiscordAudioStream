@@ -706,6 +706,14 @@ namespace quick_screen_recorder
 				{
 					settingsBtn.PerformClick();
 				}
+				else if (e.KeyCode == Keys.V)
+				{
+					volumeMixerButton.PerformClick();
+				}
+				else if (e.KeyCode == Keys.A)
+				{
+					soundDevicesButton.PerformClick();
+				}
 			}
 			else
 			{
