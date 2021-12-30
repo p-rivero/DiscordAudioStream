@@ -92,8 +92,8 @@ namespace quick_screen_recorder
 
 		private void StopForm_Load(object sender, EventArgs e)
 		{
-			User32.RegisterHotKey(this.Handle, 0, User32.FsModifiers.ALT, Keys.R.GetHashCode());
-			User32.RegisterHotKey(this.Handle, 1, User32.FsModifiers.ALT, Keys.M.GetHashCode());
+			User32.RegisterHotKey(this.Handle, 0, User32.FsModifiers.ALT, Keys.R);
+			User32.RegisterHotKey(this.Handle, 1, User32.FsModifiers.ALT, Keys.M);
 		}
 
 		public void UpdateVolumeBar(int volume)
@@ -123,7 +123,6 @@ namespace quick_screen_recorder
 
 		private void muteCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
-			Console.WriteLine("a");
 			(this.Owner as MainForm).MuteRecorder(muteCheckBox.Checked);
 		}
 	}

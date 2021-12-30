@@ -33,6 +33,7 @@ namespace quick_screen_recorder
 
 		public MainForm(bool darkMode)
 		{
+			int a = Keys.R.GetHashCode();
 			if (darkMode)
 			{
 				this.HandleCreated += new EventHandler(ThemeManager.formHandleCreated);
@@ -154,7 +155,7 @@ namespace quick_screen_recorder
 		{
 			try
 			{
-				User32.RegisterHotKey(this.Handle, 0, User32.FsModifiers.ALT, Keys.R.GetHashCode());
+				User32.RegisterHotKey(this.Handle, 0, User32.FsModifiers.ALT, Keys.R);
 
 				if (areaComboBox.SelectedIndex == areaComboBox.Items.Count - 1)
 				{
@@ -390,7 +391,7 @@ namespace quick_screen_recorder
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			User32.RegisterHotKey(this.Handle, 0, User32.FsModifiers.ALT, Keys.R.GetHashCode());
+			User32.RegisterHotKey(this.Handle, 0, User32.FsModifiers.ALT, Keys.R);
 
 			onTopBtn.Checked = Properties.Settings.Default.AlwaysOnTop;
 			qualityComboBox.SelectedIndex = Properties.Settings.Default.QualityIndex;
@@ -797,13 +798,12 @@ namespace quick_screen_recorder
 			toolStrip.Visible = true;
 			streamEnabled = false;
 
-			enablePreview(previewBtn.Checked);
 			previewBox.Size = defaultPreviewSize;
 			previewBox.Location = defaultPreviewLocation;
 			this.AutoSize = false;
-			this.Size = defaultWindowSize;
 			if (audioPlayback != null) audioPlayback.Stop();
 
+			enablePreview(previewBtn.Checked);
 			CenterToScreen();
 		}
 

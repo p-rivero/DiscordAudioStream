@@ -72,7 +72,7 @@ class User32
 	[DllImport("user32.dll")]
 	public static extern bool ReleaseCapture();
 	[DllImport("user32.dll")]
-	public static extern bool RegisterHotKey(IntPtr hWnd, int id, FsModifiers fsModifiers, int vk);
+	public static extern bool RegisterHotKey(IntPtr hWnd, int id, FsModifiers fsModifiers, System.Windows.Forms.Keys vk);
 	[DllImport("user32.dll")]
 	public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 }
