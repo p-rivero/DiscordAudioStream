@@ -86,11 +86,5 @@ namespace quick_screen_recorder
 		{
 			Process.Start("https://github.com/ModuleArt/quick-picture-viewer/blob/master/LICENSE.md/");
 		}
-
-		[DllImport("User32.dll", CharSet = CharSet.Auto)]
-		public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
-
-		[DllImport("User32.dll")]
-		private static extern IntPtr GetWindowDC(IntPtr hWnd);
 	}
 }

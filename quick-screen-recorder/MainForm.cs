@@ -154,7 +154,7 @@ namespace quick_screen_recorder
 		{
 			try
 			{
-				HotkeyManager.RegisterHotKey(this.Handle, 0, (int)HotkeyManager.KeyModifier.Alt, Keys.R.GetHashCode());
+				User32.RegisterHotKey(this.Handle, 0, User32.FsModifiers.ALT, Keys.R.GetHashCode());
 
 				if (areaComboBox.SelectedIndex == areaComboBox.Items.Count - 1)
 				{
@@ -216,7 +216,7 @@ namespace quick_screen_recorder
 				areaForm.Hide();
 				this.Hide();
 
-				HotkeyManager.UnregisterHotKey(this.Handle, 0);
+				User32.UnregisterHotKey(this.Handle, 0);
 
 				string videoStr = videoStr = width + "x" + height + " (";
 				if (quality == 0)
@@ -390,7 +390,7 @@ namespace quick_screen_recorder
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			HotkeyManager.RegisterHotKey(this.Handle, 0, (int)HotkeyManager.KeyModifier.Alt, Keys.R.GetHashCode());
+			User32.RegisterHotKey(this.Handle, 0, User32.FsModifiers.ALT, Keys.R.GetHashCode());
 
 			onTopBtn.Checked = Properties.Settings.Default.AlwaysOnTop;
 			qualityComboBox.SelectedIndex = Properties.Settings.Default.QualityIndex;
@@ -460,9 +460,9 @@ namespace quick_screen_recorder
 			if (m.Msg == 0x0312)
 			{
 				Keys key = (Keys)(((int)m.LParam >> 16) & 0xFFFF);
-				HotkeyManager.KeyModifier modifier = (HotkeyManager.KeyModifier)((int)m.LParam & 0xFFFF);
+				User32.FsModifiers modifier = (User32.FsModifiers)((int)m.LParam & 0xFFFF);
 
-				if (modifier == HotkeyManager.KeyModifier.Alt)
+				if (modifier == User32.FsModifiers.ALT)
 				{
 					if (key == Keys.R)
 					{
@@ -488,7 +488,7 @@ namespace quick_screen_recorder
 			else
 			{
 				screenCaptureWorker.Stop();
-				HotkeyManager.UnregisterHotKey(this.Handle, 0);
+				User32.UnregisterHotKey(this.Handle, 0);
 			}
 		}
 
@@ -829,7 +829,10 @@ namespace quick_screen_recorder
 
 		private void volumeMixerButton_Click(object sender, EventArgs e)
 		{
-			if (Environment.OSVersion.Version.Major >= 10)
+			var osVersionInfo = Ntdll.OSVERSIONINFOEX.Init();
+			Ntdll.RtlGetVersion(ref osVersionInfo); 
+
+			if (osVersionInfo.MajorVersion >= 10)
 			{
 				Process.Start("ms-settings:apps-volume");
 			}
@@ -843,7 +846,10 @@ namespace quick_screen_recorder
 
 		private void soundDevicesButton_Click(object sender, EventArgs e)
 		{
-			if (Environment.OSVersion.Version.Major >= 10)
+			var osVersionInfo = Ntdll.OSVERSIONINFOEX.Init();
+			Ntdll.RtlGetVersion(ref osVersionInfo);
+
+			if (osVersionInfo.MajorVersion >= 10 && osVersionInfo.BuildNumber >= 17063)
 			{
 				Process.Start("ms-settings:sound");
 			}

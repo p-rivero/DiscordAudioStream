@@ -63,8 +63,8 @@ namespace quick_screen_recorder
 			(Owner as MainForm).StopRec();
 			(Owner as MainForm).Show();
 
-			HotkeyManager.UnregisterHotKey(this.Handle, 0);
-			HotkeyManager.UnregisterHotKey(this.Handle, 1);
+			User32.UnregisterHotKey(this.Handle, 0);
+			User32.UnregisterHotKey(this.Handle, 1);
 		}
 
 		protected override void WndProc(ref Message m)
@@ -74,9 +74,9 @@ namespace quick_screen_recorder
 			if (m.Msg == 0x0312)
 			{
 				Keys key = (Keys)(((int)m.LParam >> 16) & 0xFFFF);
-				HotkeyManager.KeyModifier modifier = (HotkeyManager.KeyModifier)((int)m.LParam & 0xFFFF);
+				User32.FsModifiers modifier = (User32.FsModifiers)((int)m.LParam & 0xFFFF);
 
-				if (modifier == HotkeyManager.KeyModifier.Alt)
+				if (modifier == User32.FsModifiers.ALT)
 				{
 					if (key == Keys.R)
 					{
@@ -92,8 +92,8 @@ namespace quick_screen_recorder
 
 		private void StopForm_Load(object sender, EventArgs e)
 		{
-			HotkeyManager.RegisterHotKey(this.Handle, 0, (int)HotkeyManager.KeyModifier.Alt, Keys.R.GetHashCode());
-			HotkeyManager.RegisterHotKey(this.Handle, 1, (int)HotkeyManager.KeyModifier.Alt, Keys.M.GetHashCode());
+			User32.RegisterHotKey(this.Handle, 0, User32.FsModifiers.ALT, Keys.R.GetHashCode());
+			User32.RegisterHotKey(this.Handle, 1, User32.FsModifiers.ALT, Keys.M.GetHashCode());
 		}
 
 		public void UpdateVolumeBar(int volume)

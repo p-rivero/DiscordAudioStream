@@ -10,11 +10,6 @@ namespace quick_screen_recorder
 		private const int WM_NCLBUTTONDOWN = 0xA1;
 		private const int HT_CAPTION = 0x2;
 
-		[System.Runtime.InteropServices.DllImport("user32.dll")]
-		private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-		[System.Runtime.InteropServices.DllImport("user32.dll")]
-		private static extern bool ReleaseCapture();
-
 		private Point startPos;
 		private Size curSize;
 
@@ -85,8 +80,8 @@ namespace quick_screen_recorder
 				else
 				{
 					Cursor.Current = Cursors.SizeAll;
-					ReleaseCapture();
-					SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+					User32.ReleaseCapture();
+					User32.SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
 				}
 			}
 		}

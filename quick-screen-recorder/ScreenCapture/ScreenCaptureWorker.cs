@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace quick_screen_recorder
 {
@@ -116,55 +115,3 @@ namespace quick_screen_recorder
 		}
 	}
 }
-
-
-
-class GDI32
-{
-	[DllImport("GDI32.dll")]
-	public static extern bool BitBlt(int hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, int hdcSrc, int nXSrc, int nYSrc, int dwRop);
-	[DllImport("GDI32.dll")]
-	public static extern int CreateCompatibleBitmap(int hdc, int nWidth, int nHeight);[DllImport("GDI32.dll")]
-	public static extern int CreateCompatibleDC(int hdc);
-	[DllImport("GDI32.dll")]
-	public static extern bool DeleteDC(int hdc);
-	[DllImport("GDI32.dll")]
-	public static extern bool DeleteObject(int hObject);
-	[DllImport("GDI32.dll")]
-	public static extern int GetDeviceCaps(int hdc, int nIndex);
-	[DllImport("GDI32.dll")]
-	public static extern int SelectObject(int hdc, int hgdiobj);
-}
-
-class User32
-{
-	[StructLayout(LayoutKind.Sequential)]
-	public struct POINTAPI
-	{
-		public int x;
-		public int y;
-	}
-	[StructLayout(LayoutKind.Sequential)]
-	public struct CURSORINFO
-	{
-		public Int32 cbSize;
-		public Int32 flags;
-		public IntPtr hCursor;
-		public POINTAPI ptScreenPos;
-	}
-	public const Int32 CURSOR_SHOWING = 0x00000001;
-
-	[DllImport("User32.dll")]
-	public static extern int GetDesktopWindow();
-	[DllImport("User32.dll")]
-	public static extern int GetWindowDC(int hWnd);
-	[DllImport("User32.dll")]
-	public static extern int ReleaseDC(int hWnd, int hDC);
-	[DllImport("user32.dll")]
-	public static extern bool DrawIcon(IntPtr hDC, int X, int Y, IntPtr hIcon);
-	[DllImport("user32.dll")]
-	public static extern bool DrawIconEx(IntPtr hdc, int xLeft, int yTop, IntPtr hIcon, int cxWidth, int cyWidth, uint istepIfAniCur, IntPtr hbrFlickerFreeDraw, uint diFlags);
-	[DllImport("user32.dll")]
-	public static extern bool GetCursorInfo(out CURSORINFO pci);
-}
-

@@ -37,9 +37,7 @@
   <PropertyGroup>
     <ApplicationIcon>rec.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
@@ -83,9 +81,9 @@
     <Compile Include="BoundedNumericBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DLLs.cs" />
     <Compile Include="ScreenCapture\IScreenCaptureMaster.cs" />
     <Compile Include="ScreenCapture\ScreenCaptureWorker.cs" />
-    <Compile Include="HotkeyManager.cs" />
     <Compile Include="Recorder.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -132,7 +130,6 @@
     <EmbeddedResource Include="StopForm.resx">
       <DependentUpon>StopForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

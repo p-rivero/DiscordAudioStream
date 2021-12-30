@@ -34,29 +34,6 @@ namespace quick_screen_recorder
         private int height;
         private bool captureCursor;
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct POINTAPI
-        {
-            public int x;
-            public int y;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct CURSORINFO
-        {
-            public Int32 cbSize;
-            public Int32 flags;
-            public IntPtr hCursor;
-            public POINTAPI ptScreenPos;
-        }
-
-        [DllImport("user32.dll")]
-        public static extern bool GetCursorInfo(out CURSORINFO pci);
-
-        [DllImport("user32.dll")]
-        public static extern bool DrawIcon(IntPtr hDC, int X, int Y, IntPtr hIcon);
-
-        public const Int32 CURSOR_SHOWING = 0x00000001;
 
         public bool Mute = false;
 
@@ -229,14 +206,13 @@ namespace quick_screen_recorder
 
                     if (captureCursor)
                     {
-                        CURSORINFO pci;
-                        pci.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
+                        User32.CURSORINFO pci = User32.CURSORINFO.Init();
 
-                        if (GetCursorInfo(out pci))
+                        if (User32.GetCursorInfo(out pci))
                         {
-                            if (pci.flags == CURSOR_SHOWING)
+                            if (pci.flags == User32.CURSOR_SHOWING)
                             {
-                                DrawIcon(g.GetHdc(), pci.ptScreenPos.x, pci.ptScreenPos.y, pci.hCursor);
+                                User32.DrawIcon(g.GetHdc(), pci.ptScreenPos.x, pci.ptScreenPos.y, pci.hCursor);
                                 g.ReleaseHdc();
                             }
                         }

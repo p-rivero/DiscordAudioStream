@@ -11,7 +11,7 @@ namespace quick_screen_recorder
 		{
 			if (Environment.OSVersion.Version.Major >= 6)
 			{
-				SetProcessDPIAware();
+				User32.SetProcessDPIAware();
 			}
 
 			Application.EnableVisualStyles();
@@ -47,8 +47,5 @@ namespace quick_screen_recorder
 				MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
-
-		[System.Runtime.InteropServices.DllImport("user32.dll")]
-		private static extern bool SetProcessDPIAware();
 	}
 }
