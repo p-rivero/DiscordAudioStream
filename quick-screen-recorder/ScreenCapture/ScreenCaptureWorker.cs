@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Threading;
+
 
 namespace quick_screen_recorder
 {
@@ -71,28 +71,30 @@ namespace quick_screen_recorder
 
 		private void EnqueueFrame()
 		{
-			Bitmap BMP = null;
-			if (master.isCapturingWindow())
+			int width, height, x, y;
+			bool captureCursor = master.IsCapturingCursor();
+			if (ProcessHandleManager.CapturingWindow)
 			{
 				IntPtr proc = ProcessHandleManager.GetHandle();
-				BMP = CaptureWindow(proc);
+				GetWindowArea(proc, out width, out height, out x, out y);
 			}
 			else
 			{
-				master.getCaptureArea(out int width, out int height, out int x, out int y, out bool captureCursor);
-				BMP = CaptureScreen(x, y, width, height);
-				if (captureCursor)
-				{
-					User32.CURSORINFO pci;
-					pci.cbSize = Marshal.SizeOf(typeof(User32.CURSORINFO));
+				master.GetCaptureArea(out width, out height, out x, out y);
+			}
 
-					if (User32.GetCursorInfo(out pci) && pci.flags == User32.CURSOR_SHOWING)
-					{
-						Graphics g = Graphics.FromImage(BMP);
-						User32.DrawIcon(g.GetHdc(), pci.ptScreenPos.x - x, pci.ptScreenPos.y - y, pci.hCursor);
-						g.ReleaseHdc();
-						g.Dispose();
-					}
+			Bitmap BMP = CaptureScreen(x, y, width, height);
+			if (captureCursor)
+			{
+				User32.CURSORINFO pci;
+				pci.cbSize = Marshal.SizeOf(typeof(User32.CURSORINFO));
+
+				if (User32.GetCursorInfo(out pci) && pci.flags == User32.CURSOR_SHOWING)
+				{
+					Graphics g = Graphics.FromImage(BMP);
+					User32.DrawIcon(g.GetHdc(), pci.ptScreenPos.x - x, pci.ptScreenPos.y - y, pci.hCursor);
+					g.ReleaseHdc();
+					g.Dispose();
 				}
 			}
 
@@ -104,6 +106,15 @@ namespace quick_screen_recorder
 				frameQueue.TryDequeue(out Bitmap b);
 				b.Dispose();
 			}
+		}
+
+		private static void GetWindowArea(IntPtr hwnd, out int width, out int height, out int x, out int y)
+		{
+			User32.GetWindowRect(hwnd, out User32.RECT rc);
+			width = rc.Width;
+			height = rc.Height;
+			x = rc.X; 
+			y = rc.Y;
 		}
 
 		private static Bitmap CaptureScreen(int startX, int startY, int width, int height)
@@ -122,23 +133,6 @@ namespace quick_screen_recorder
 			GDI32.DeleteObject(hBitmap);
 
 			return result;
-		}
-
-		public static Bitmap CaptureWindow(IntPtr hwnd)
-		{
-			User32.GetWindowRect(hwnd, out User32.RECT rc);
-			return CaptureScreen(rc.X, rc.Y, rc.Width, rc.Height);
-
-			//Bitmap bmp = new Bitmap(rc.Width, rc.Height, PixelFormat.Format32bppArgb);
-			//Graphics gfxBmp = Graphics.FromImage(bmp);
-			//IntPtr hdcBitmap = gfxBmp.GetHdc();
-
-			//User32.PrintWindow(hwnd, hdcBitmap, 0);
-
-			//gfxBmp.ReleaseHdc(hdcBitmap);
-			//gfxBmp.Dispose();
-
-			//return bmp;
 		}
 	}
 }

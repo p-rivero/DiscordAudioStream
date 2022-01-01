@@ -24,7 +24,6 @@ namespace quick_screen_recorder
 		private const int TARGET_FRAMERATE = 60;
 		private double scaleMultiplier = 1;
 		private int numberOfScreens = -1;
-		private bool capturingWindow = false;
 
 		private AudioPlayback audioPlayback = null;
 		
@@ -147,16 +146,10 @@ namespace quick_screen_recorder
 				return;
 
 			RefreshAreaInfo();
-			// Do not save settings for Custom Area
-			if (areaComboBox.SelectedIndex == numberOfScreens)
+			// Do not save settings for Custom Area or Window
+			if (areaComboBox.SelectedIndex >= numberOfScreens)
 				return;
 
-			// Do not save settings for windows capture
-			if (areaComboBox.SelectedIndex > numberOfScreens)
-			{
-				ProcessHandleManager.SelectedIndex = areaComboBox.SelectedIndex - numberOfScreens - 1;
-				return;
-			}
 			Properties.Settings.Default.AreaIndex = areaComboBox.SelectedIndex;
 			Properties.Settings.Default.Save();
 		}
@@ -180,7 +173,7 @@ namespace quick_screen_recorder
 				yNumeric.Enabled = true;
 
 				hideTaskbarCheckBox.Enabled = false;
-				capturingWindow = false;
+				ProcessHandleManager.CapturingWindow = false;
 			}
 			// Window
 			else if (areaComboBox.SelectedIndex > numberOfScreens)
@@ -193,7 +186,8 @@ namespace quick_screen_recorder
 				yNumeric.Enabled = false;
 
 				hideTaskbarCheckBox.Enabled = false;
-				capturingWindow = true;
+				ProcessHandleManager.SelectedIndex = areaComboBox.SelectedIndex - numberOfScreens - 1;
+				ProcessHandleManager.CapturingWindow = true;
 			}
 			// Screen
 			else
@@ -206,7 +200,7 @@ namespace quick_screen_recorder
 				yNumeric.Enabled = false;
 
 				hideTaskbarCheckBox.Enabled = true;
-				capturingWindow = false;
+				ProcessHandleManager.CapturingWindow = false;
 
 				if (Screen.AllScreens.Length > 1)
 				{
@@ -348,6 +342,7 @@ namespace quick_screen_recorder
 			{
 				screenCaptureWorker.Stop();
 				User32.UnregisterHotKey(this.Handle, 0);
+				ProcessHandleManager.ClearSelectedIndex();
 			}
 		}
 
@@ -620,29 +615,31 @@ namespace quick_screen_recorder
 			CenterToScreen();
 		}
 
-		public void getCaptureArea(out int width, out int height, out int x, out int y, out bool captureCursor)
+		public void GetCaptureArea(out int width, out int height, out int x, out int y)
 		{
 			int tmp_width = 0, tmp_height = 0, tmp_x = 0, tmp_y = 0;
-			bool tmp_captureCursor = false;
 			Invoke(new Action(() =>
 			{
 				tmp_width = (int)widthNumeric.Value;
 				tmp_height = (int)heightNumeric.Value;
 				tmp_x = (int)xNumeric.Value;
 				tmp_y = (int)yNumeric.Value;
-				tmp_captureCursor = captureCursorCheckBox.Checked;
 			}));
 
 			width = tmp_width;
 			height = tmp_height;
 			x = tmp_x;
 			y = tmp_y;
-			captureCursor = tmp_captureCursor;
 		}
 
-		public bool isCapturingWindow()
+		public bool IsCapturingCursor()
 		{
-			return capturingWindow;
+			//bool tmp_captureCursor = false;
+			//Invoke(new Action(() =>
+			//{
+			//	tmp_captureCursor = captureCursorCheckBox.Checked;
+			//}));
+			return captureCursorCheckBox.Checked;
 		}
 
 		private void volumeMixerButton_Click(object sender, EventArgs e)

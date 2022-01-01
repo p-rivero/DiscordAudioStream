@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace quick_screen_recorder
 {
@@ -15,6 +13,7 @@ namespace quick_screen_recorder
 
 		public static string[] RefreshHandles()
 		{
+			ClearSelectedIndex();
 			IntPtr shellWindow = User32.GetShellWindow();
 			Dictionary<IntPtr, string> windows = new Dictionary<IntPtr, string>();
 
@@ -53,6 +52,8 @@ namespace quick_screen_recorder
 			get { return selectedIndex; }
 			set
 			{
+				ClearSelectedIndex();
+
 				if (procs == null)
 				{
 					throw new InvalidOperationException("Please call RefreshHandles() before attempting to set the index");
@@ -62,6 +63,20 @@ namespace quick_screen_recorder
 					throw new InvalidOperationException("ProcessHandleManager: The provided index is out of bounds");
 				}
 				selectedIndex = value;
+
+				// Set selected process as topmost
+				User32.SetWindowPos(procs[selectedIndex], User32.HWND_TOPMOST, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
+			}
+		}
+
+		private static bool capturingWindow = false;
+		public static bool CapturingWindow
+		{
+			get { return capturingWindow; }
+			set
+			{ 
+				if (!value) ClearSelectedIndex();
+				capturingWindow = value;
 			}
 		}
 
@@ -72,6 +87,15 @@ namespace quick_screen_recorder
 				throw new InvalidOperationException("Incorrect process index, make sure to set SelectedIndex first");
 			}
 			return procs[selectedIndex];
+		}
+
+		public static void ClearSelectedIndex()
+		{
+			if (selectedIndex == -1)
+				return;
+
+			User32.SetWindowPos(procs[selectedIndex], User32.HWND_NOTOPMOST, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
+			selectedIndex = -1;
 		}
 	}
 }

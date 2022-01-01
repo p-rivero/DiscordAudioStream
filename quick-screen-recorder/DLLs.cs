@@ -70,8 +70,19 @@ class User32
 			get { return right - left; }
 			set { right = value + left; }
 		}
+		public RECT(int x, int y, int width, int height)
+        {
+			left = x;
+			top = y;
+			right = width + x;
+			bottom = height + y;
+        }
 	}
 	public const Int32 CURSOR_SHOWING = 0x00000001;
+	public static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+	public static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+	public const int SWP_NOSIZE = 0x0001;
+	public const int SWP_NOMOVE = 0x0002;
 	public enum FsModifiers
 	{
 		NONE = 0x0000,
@@ -120,6 +131,8 @@ class User32
 	public static extern int GetWindowTextLength(IntPtr IntPtr);
 	[DllImport("user32.dll")]
 	public static extern bool IsWindowVisible(IntPtr IntPtr);
+	[DllImport("user32.dll", SetLastError = true)]
+	public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
 }
 
 class Ntdll
