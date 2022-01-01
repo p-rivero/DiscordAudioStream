@@ -13,9 +13,6 @@ namespace quick_screen_recorder
 	public partial class MainForm : Form, IScreenCaptureMaster
 	{
 		private AreaForm areaForm;
-		private StopForm stopForm;
-
-		private Recorder recorder = null;
 
 		private bool darkMode;
 		private bool streamEnabled = false;
@@ -75,21 +72,12 @@ namespace quick_screen_recorder
 				this.ForeColor = Color.White;
 				this.BackColor = ThemeManager.DarkBackColor;
 
-				recButton.BackColor = ThemeManager.DarkSecondColor;
-				recButton.Image = Properties.Resources.white_record;
-
 				aboutBtn.Image = Properties.Resources.white_about;
 				onTopBtn.Image = Properties.Resources.white_ontop;
 				volumeMixerButton.Image = Properties.Resources.white_mixer;
 				soundDevicesButton.Image = Properties.Resources.white_speaker;
 				settingsBtn.Image = Properties.Resources.white_settings;
 				previewBtn.Image = Properties.Resources.white_preview;
-
-				fileNameTextBox.BackColor = ThemeManager.DarkSecondColor;
-				fileNameTextBox.ForeColor = Color.White;
-
-				folderTextBox.BackColor = ThemeManager.DarkSecondColor;
-				folderTextBox.ForeColor = Color.White;
 
 				refreshAudioBtn.BackColor = ThemeManager.DarkSecondColor;
 				refreshAudioBtn.Image = Properties.Resources.white_refresh;
@@ -98,12 +86,9 @@ namespace quick_screen_recorder
 				refreshScreensBtn.Image = Properties.Resources.white_refresh;
 			}
 
-			generalGroup.SetDarkMode(darkMode);
 			videoGroup.SetDarkMode(darkMode);
 			audioGroup.SetDarkMode(darkMode);
 			toolStrip.SetDarkMode(darkMode, false);
-			browseFolderBtn.SetDarkMode(darkMode);
-			qualityComboBox.SetDarkMode(darkMode);
 			inputDeviceComboBox.SetDarkMode(darkMode);
 			areaComboBox.SetDarkMode(darkMode);
 			scaleComboBox.SetDarkMode(darkMode);
@@ -111,7 +96,6 @@ namespace quick_screen_recorder
 			heightNumeric.SetDarkMode(darkMode);
 			xNumeric.SetDarkMode(darkMode);
 			yNumeric.SetDarkMode(darkMode);
-			separateAudioCheckBox.SetDarkMode(darkMode);
 			captureCursorCheckBox.SetDarkMode(darkMode);
 			hideTaskbarCheckBox.SetDarkMode(darkMode);
 		}
@@ -144,122 +128,6 @@ namespace quick_screen_recorder
 		public void SetMaximumY(int maxY)
 		{
 			yNumeric.Maximum = maxY + SystemInformation.VirtualScreen.Top;
-		}
-
-		private void recButton_Click(object sender, EventArgs e)
-		{
-			CheckStartRec();
-		}
-
-		public void StopRec()
-		{
-			try
-			{
-				User32.RegisterHotKey(this.Handle, 0, User32.FsModifiers.ALT, Keys.R);
-
-				if (areaComboBox.SelectedIndex == areaComboBox.Items.Count - 1)
-				{
-					areaForm.Show();
-				}
-
-				recorder.Dispose();
-				recorder.OnPeakVolumeChanged -= Recorder_OnPeakVolumeChanged;
-				recorder = null;
-			}
-			catch
-			{
-				MessageBox.Show("Something went wrong!", "Error");
-			}
-		}
-
-		private void CheckStartRec()
-		{
-			string path = folderTextBox.Text + "/" + fileNameTextBox.Text + ".avi";
-
-			if (File.Exists(path))
-			{
-				DialogResult window = MessageBox.Show(
-					fileNameTextBox.Text + ".avi already exists.\nDo you want to replace it and start recording?",
-					"Warning",
-					MessageBoxButtons.YesNo,
-					MessageBoxIcon.Question
-				);
-
-				if (window == DialogResult.Yes)
-				{
-					StartRec(path);
-				}
-			}
-			else
-			{
-				StartRec(path);
-			}
-		}
-
-		private void StartRec(string path)
-		{
-			try
-			{
-				int quality = 0;
-				int.TryParse(string.Concat(qualityComboBox.Text.Where(char.IsDigit)), out quality);
-				int inputSourceIndex = inputDeviceComboBox.SelectedIndex - 2;
-
-				int width = (int)widthNumeric.Value;
-				int height = (int)heightNumeric.Value;
-				int x = (int)xNumeric.Value;
-				int y = (int)yNumeric.Value;
-
-				recorder = new Recorder(path,
-					quality, x, y, width, height, captureCursorCheckBox.Checked,
-					inputSourceIndex, separateAudioCheckBox.Checked);
-				recorder.OnPeakVolumeChanged += Recorder_OnPeakVolumeChanged;
-
-				areaForm.Hide();
-				this.Hide();
-
-				User32.UnregisterHotKey(this.Handle, 0);
-
-				string videoStr = videoStr = width + "x" + height + " (";
-				if (quality == 0)
-				{
-					videoStr += "Uncompressed";
-				}
-				else
-				{
-					videoStr += quality + "%";
-				}
-				if (captureCursorCheckBox.Checked)
-				{
-					videoStr += ", Cursor";
-				}
-				videoStr += ")";
-
-				string audioStr = inputDeviceComboBox.Text;
-
-				stopForm = new StopForm(DateTime.Now, darkMode, videoStr, audioStr);
-				stopForm.Owner = this;
-				stopForm.Show();
-			}
-			catch
-			{
-				MessageBox.Show("Something went wrong!", "Error");
-			}
-		}
-
-		private void Recorder_OnPeakVolumeChanged(object sender, OnPeakVolumeChangedArgs e)
-		{
-			if (stopForm != null)
-			{
-				stopForm.UpdateVolumeBar(e.Volume);
-			}
-		}
-
-		private void browseFolderBtn_Click(object sender, EventArgs e)
-		{
-			if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
-			{
-				folderTextBox.Text = folderBrowserDialog1.SelectedPath;
-			}
 		}
 
 		private void aboutBtn_Click(object sender, EventArgs e)
@@ -418,21 +286,9 @@ namespace quick_screen_recorder
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			User32.RegisterHotKey(this.Handle, 0, User32.FsModifiers.ALT, Keys.R);
-
 			onTopBtn.Checked = Properties.Settings.Default.AlwaysOnTop;
-			qualityComboBox.SelectedIndex = Properties.Settings.Default.QualityIndex;
 			captureCursorCheckBox.Checked = Properties.Settings.Default.CaptureCursor;
 			hideTaskbarCheckBox.Checked = Properties.Settings.Default.HideTaskbar;
-
-			if (Properties.Settings.Default.Folder == string.Empty)
-			{
-				folderTextBox.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-			}
-			else
-			{
-				folderTextBox.Text = Properties.Settings.Default.Folder;
-			}
 
 			screenCaptureWorker = new ScreenCaptureWorker(TARGET_FRAMERATE, this);
 
@@ -473,31 +329,6 @@ namespace quick_screen_recorder
 			});
 			drawThread.IsBackground = true;
 			drawThread.Start();
-
-
-			//if (Properties.Settings.Default.CheckForUpdates)
-			//{
-			//	UpdateManager.checkForUpdates(false, darkMode, this.TopMost, "ModuleArt", "quick-screen-recorder", "Quick Screen Recorder", "QuickScreenRecorder-Setup.msi");
-			//}
-		}
-
-		protected override void WndProc(ref Message m)
-		{
-			base.WndProc(ref m);
-
-			if (m.Msg == 0x0312)
-			{
-				Keys key = (Keys)(((int)m.LParam >> 16) & 0xFFFF);
-				User32.FsModifiers modifier = (User32.FsModifiers)((int)m.LParam & 0xFFFF);
-
-				if (modifier == User32.FsModifiers.ALT)
-				{
-					if (key == Keys.R)
-					{
-						CheckStartRec();
-					}
-				}
-			}
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
@@ -526,11 +357,6 @@ namespace quick_screen_recorder
 			areaForm.TopMost = onTopBtn.Checked;
 			Properties.Settings.Default.AlwaysOnTop = onTopBtn.Checked;
 			Properties.Settings.Default.Save();
-		}
-
-		public void MuteRecorder(bool b)
-		{
-			recorder.Mute = b;
 		}
 
 		private void refreshBtn_Click(object sender, EventArgs e)
@@ -609,11 +435,6 @@ namespace quick_screen_recorder
 			settingsBox.ShowDialog();
 		}
 
-		private void inputDeviceComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			separateAudioCheckBox.Enabled = inputDeviceComboBox.SelectedIndex != 0;
-		}
-
 		private void xNumeric_ValueChanged(object sender, EventArgs e)
 		{
 			if (xNumeric.Enabled)
@@ -656,12 +477,6 @@ namespace quick_screen_recorder
 			Properties.Settings.Default.Save();
 		}
 
-		private void qualityComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			Properties.Settings.Default.QualityIndex = qualityComboBox.SelectedIndex;
-			Properties.Settings.Default.Save();
-		}
-
 		private void enablePreview(bool visible)
 		{
 			previewBox.Visible = visible;
@@ -690,40 +505,6 @@ namespace quick_screen_recorder
 			Properties.Settings.Default.Save();
 
 			enablePreview(previewBtn.Checked);
-		}
-
-		private void folderTextBox_DragEnter(object sender, DragEventArgs e)
-		{
-			if (e.Data.GetDataPresent(DataFormats.FileDrop))
-			{
-				e.Effect = DragDropEffects.Copy;
-			}
-			else
-			{
-				e.Effect = DragDropEffects.None;
-			}
-		}
-
-		private void folderTextBox_DragDrop(object sender, DragEventArgs e)
-		{
-			string[] FileList = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-
-			FileAttributes attr = File.GetAttributes(FileList[0]);
-
-			if (attr.HasFlag(FileAttributes.Directory))
-			{
-				folderTextBox.Text = FileList[0];
-			}
-			else
-			{
-				folderTextBox.Text = Path.GetDirectoryName(FileList[0]);
-			}
-		}
-
-		private void folderTextBox_TextChanged(object sender, EventArgs e)
-		{
-			Properties.Settings.Default.Folder = folderTextBox.Text;
-			Properties.Settings.Default.Save();
 		}
 
 		private void MainForm_KeyDown(object sender, KeyEventArgs e)

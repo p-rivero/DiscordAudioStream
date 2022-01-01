@@ -49,18 +49,6 @@ namespace quick_screen_recorder.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2")]
-        public int QualityIndex {
-            get {
-                return ((int)(this["QualityIndex"]));
-            }
-            set {
-                this["QualityIndex"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool CaptureCursor {
             get {
@@ -92,30 +80,6 @@ namespace quick_screen_recorder.Properties {
             }
             set {
                 this["Preview"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool CheckForUpdates {
-            get {
-                return ((bool)(this["CheckForUpdates"]));
-            }
-            set {
-                this["CheckForUpdates"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Folder {
-            get {
-                return ((string)(this["Folder"]));
-            }
-            set {
-                this["Folder"] = value;
             }
         }
         

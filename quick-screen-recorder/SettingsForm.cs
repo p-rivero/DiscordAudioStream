@@ -54,8 +54,6 @@ namespace quick_screen_recorder
 			{
 				darkThemeRadio.Checked = true;
 			}
-
-			updatesCheckBox.Checked = Properties.Settings.Default.CheckForUpdates;
 		}
 
 		private void SettingsForm_KeyDown(object sender, KeyEventArgs e)
@@ -68,8 +66,6 @@ namespace quick_screen_recorder
 
 		private void updatesCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
-			Properties.Settings.Default.CheckForUpdates = updatesCheckBox.Checked;
-			Properties.Settings.Default.Save();
 		}
 
 		private void systemThemeRadio_CheckedChanged(object sender, EventArgs e)

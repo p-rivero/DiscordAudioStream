@@ -30,13 +30,7 @@
 		{
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.folderTextBox = new System.Windows.Forms.TextBox();
-            this.browseFolderBtn = new QuickLibrary.QlibTextButton();
-            this.folderLabel = new System.Windows.Forms.Label();
-            this.fileNameTextBox = new System.Windows.Forms.TextBox();
-            this.fileLabel = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.qualityLabel = new System.Windows.Forms.Label();
             this.areaLabel = new System.Windows.Forms.Label();
             this.videoGroup = new QuickLibrary.QlibGroupBox();
             this.scaleLabel = new System.Windows.Forms.Label();
@@ -44,23 +38,14 @@
             this.refreshScreensBtn = new System.Windows.Forms.Button();
             this.hideTaskbarCheckBox = new QuickLibrary.QlibCheckBox();
             this.sizelabel = new System.Windows.Forms.Label();
-            this.yNumeric = new quick_screen_recorder.BoundedNumericBox();
-            this.xNumeric = new quick_screen_recorder.BoundedNumericBox();
             this.locationLabel = new System.Windows.Forms.Label();
-            this.widthNumeric = new quick_screen_recorder.BoundedNumericBox();
-            this.heightNumeric = new quick_screen_recorder.BoundedNumericBox();
             this.areaComboBox = new QuickLibrary.QlibComboBox();
             this.captureCursorCheckBox = new QuickLibrary.QlibCheckBox();
-            this.qualityComboBox = new QuickLibrary.QlibComboBox();
             this.inputDeviceLabel = new System.Windows.Forms.Label();
             this.audioGroup = new QuickLibrary.QlibGroupBox();
             this.refreshAudioBtn = new System.Windows.Forms.Button();
             this.inputDeviceComboBox = new QuickLibrary.QlibComboBox();
-            this.separateAudioCheckBox = new QuickLibrary.QlibCheckBox();
-            this.generalGroup = new QuickLibrary.QlibGroupBox();
-            this.aviLabel = new System.Windows.Forms.Label();
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
-            this.recButton = new System.Windows.Forms.Button();
             this.previewBox = new System.Windows.Forms.PictureBox();
             this.toolStrip = new QuickLibrary.QlibToolStrip();
             this.previewBtn = new System.Windows.Forms.ToolStripButton();
@@ -72,79 +57,19 @@
             this.settingsBtn = new System.Windows.Forms.ToolStripButton();
             this.aboutBtn = new System.Windows.Forms.ToolStripButton();
             this.startButton = new System.Windows.Forms.Button();
+            this.yNumeric = new quick_screen_recorder.BoundedNumericBox();
+            this.xNumeric = new quick_screen_recorder.BoundedNumericBox();
+            this.widthNumeric = new quick_screen_recorder.BoundedNumericBox();
+            this.heightNumeric = new quick_screen_recorder.BoundedNumericBox();
             this.videoGroup.SuspendLayout();
+            this.audioGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
+            this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.yNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.widthNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightNumeric)).BeginInit();
-            this.audioGroup.SuspendLayout();
-            this.generalGroup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
-            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // folderTextBox
-            // 
-            this.folderTextBox.AllowDrop = true;
-            this.folderTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.folderTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.folderTextBox.Location = new System.Drawing.Point(73, 22);
-            this.folderTextBox.Name = "folderTextBox";
-            this.folderTextBox.Size = new System.Drawing.Size(185, 23);
-            this.folderTextBox.TabIndex = 3;
-            this.folderTextBox.TextChanged += new System.EventHandler(this.folderTextBox_TextChanged);
-            this.folderTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.folderTextBox_DragDrop);
-            this.folderTextBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.folderTextBox_DragEnter);
-            // 
-            // browseFolderBtn
-            // 
-            this.browseFolderBtn.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.browseFolderBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.browseFolderBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.browseFolderBtn.Location = new System.Drawing.Point(265, 22);
-            this.browseFolderBtn.Name = "browseFolderBtn";
-            this.browseFolderBtn.Size = new System.Drawing.Size(69, 23);
-            this.browseFolderBtn.TabIndex = 4;
-            this.browseFolderBtn.Text = "Browse";
-            this.browseFolderBtn.UseVisualStyleBackColor = false;
-            this.browseFolderBtn.Click += new System.EventHandler(this.browseFolderBtn_Click);
-            // 
-            // folderLabel
-            // 
-            this.folderLabel.AutoSize = true;
-            this.folderLabel.Location = new System.Drawing.Point(24, 26);
-            this.folderLabel.Name = "folderLabel";
-            this.folderLabel.Size = new System.Drawing.Size(43, 15);
-            this.folderLabel.TabIndex = 3;
-            this.folderLabel.Text = "Folder:";
-            // 
-            // fileNameTextBox
-            // 
-            this.fileNameTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.fileNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.fileNameTextBox.Location = new System.Drawing.Point(73, 52);
-            this.fileNameTextBox.Name = "fileNameTextBox";
-            this.fileNameTextBox.Size = new System.Drawing.Size(230, 23);
-            this.fileNameTextBox.TabIndex = 5;
-            this.fileNameTextBox.Text = "NewVideo1";
-            // 
-            // fileLabel
-            // 
-            this.fileLabel.AutoSize = true;
-            this.fileLabel.Location = new System.Drawing.Point(6, 55);
-            this.fileLabel.Name = "fileLabel";
-            this.fileLabel.Size = new System.Drawing.Size(61, 15);
-            this.fileLabel.TabIndex = 5;
-            this.fileLabel.Text = "File name:";
-            // 
-            // qualityLabel
-            // 
-            this.qualityLabel.AutoSize = true;
-            this.qualityLabel.Location = new System.Drawing.Point(19, 84);
-            this.qualityLabel.Name = "qualityLabel";
-            this.qualityLabel.Size = new System.Drawing.Size(48, 15);
-            this.qualityLabel.TabIndex = 10;
-            this.qualityLabel.Text = "Quality:";
             // 
             // areaLabel
             // 
@@ -237,54 +162,6 @@
             this.sizelabel.TabIndex = 22;
             this.sizelabel.Text = "Size:";
             // 
-            // yNumeric
-            // 
-            this.yNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.yNumeric.Location = new System.Drawing.Point(127, 83);
-            this.yNumeric.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.yNumeric.Minimum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            -2147483648});
-            this.yNumeric.Name = "yNumeric";
-            this.yNumeric.Size = new System.Drawing.Size(47, 23);
-            this.yNumeric.TabIndex = 11;
-            this.yNumeric.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.yNumeric.ValueChanged += new System.EventHandler(this.yNumeric_ValueChanged);
-            // 
-            // xNumeric
-            // 
-            this.xNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.xNumeric.Location = new System.Drawing.Point(73, 83);
-            this.xNumeric.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.xNumeric.Minimum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            -2147483648});
-            this.xNumeric.Name = "xNumeric";
-            this.xNumeric.Size = new System.Drawing.Size(47, 23);
-            this.xNumeric.TabIndex = 10;
-            this.xNumeric.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.xNumeric.ValueChanged += new System.EventHandler(this.xNumeric_ValueChanged);
-            // 
             // locationLabel
             // 
             this.locationLabel.AutoSize = true;
@@ -293,54 +170,6 @@
             this.locationLabel.Size = new System.Drawing.Size(56, 15);
             this.locationLabel.TabIndex = 19;
             this.locationLabel.Text = "Location:";
-            // 
-            // widthNumeric
-            // 
-            this.widthNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.widthNumeric.Location = new System.Drawing.Point(233, 83);
-            this.widthNumeric.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.widthNumeric.Minimum = new decimal(new int[] {
-            160,
-            0,
-            0,
-            0});
-            this.widthNumeric.Name = "widthNumeric";
-            this.widthNumeric.Size = new System.Drawing.Size(47, 23);
-            this.widthNumeric.TabIndex = 12;
-            this.widthNumeric.Value = new decimal(new int[] {
-            160,
-            0,
-            0,
-            0});
-            this.widthNumeric.ValueChanged += new System.EventHandler(this.widthNumeric_ValueChanged);
-            // 
-            // heightNumeric
-            // 
-            this.heightNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.heightNumeric.Location = new System.Drawing.Point(287, 83);
-            this.heightNumeric.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.heightNumeric.Minimum = new decimal(new int[] {
-            160,
-            0,
-            0,
-            0});
-            this.heightNumeric.Name = "heightNumeric";
-            this.heightNumeric.Size = new System.Drawing.Size(47, 23);
-            this.heightNumeric.TabIndex = 13;
-            this.heightNumeric.Value = new decimal(new int[] {
-            160,
-            0,
-            0,
-            0});
-            this.heightNumeric.ValueChanged += new System.EventHandler(this.heightNumeric_ValueChanged);
             // 
             // areaComboBox
             // 
@@ -366,26 +195,6 @@
             this.captureCursorCheckBox.UseVisualStyleBackColor = true;
             this.captureCursorCheckBox.CheckedChanged += new System.EventHandler(this.captureCursorCheckBox_CheckedChanged);
             // 
-            // qualityComboBox
-            // 
-            this.qualityComboBox.BackColor = System.Drawing.SystemColors.Window;
-            this.qualityComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.qualityComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.qualityComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.qualityComboBox.FormattingEnabled = true;
-            this.qualityComboBox.IntegralHeight = false;
-            this.qualityComboBox.Items.AddRange(new object[] {
-            "25% - Low (Motion JPEG)",
-            "50% - Medium (Motion JPEG)",
-            "75% - High (Motion JPEG)",
-            "100% - Original (Motion JPEG)",
-            "Uncompressed"});
-            this.qualityComboBox.Location = new System.Drawing.Point(73, 81);
-            this.qualityComboBox.Name = "qualityComboBox";
-            this.qualityComboBox.Size = new System.Drawing.Size(261, 24);
-            this.qualityComboBox.TabIndex = 7;
-            this.qualityComboBox.SelectedIndexChanged += new System.EventHandler(this.qualityComboBox_SelectedIndexChanged);
-            // 
             // inputDeviceLabel
             // 
             this.inputDeviceLabel.AutoSize = true;
@@ -400,7 +209,6 @@
             this.audioGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.audioGroup.Controls.Add(this.refreshAudioBtn);
             this.audioGroup.Controls.Add(this.inputDeviceComboBox);
-            this.audioGroup.Controls.Add(this.separateAudioCheckBox);
             this.audioGroup.Controls.Add(this.inputDeviceLabel);
             this.audioGroup.Location = new System.Drawing.Point(9, 202);
             this.audioGroup.Margin = new System.Windows.Forms.Padding(0, 9, 0, 0);
@@ -439,64 +247,6 @@
             this.inputDeviceComboBox.Name = "inputDeviceComboBox";
             this.inputDeviceComboBox.Size = new System.Drawing.Size(177, 24);
             this.inputDeviceComboBox.TabIndex = 17;
-            this.inputDeviceComboBox.SelectedIndexChanged += new System.EventHandler(this.inputDeviceComboBox_SelectedIndexChanged);
-            // 
-            // separateAudioCheckBox
-            // 
-            this.separateAudioCheckBox.Location = new System.Drawing.Point(123, 53);
-            this.separateAudioCheckBox.Name = "separateAudioCheckBox";
-            this.separateAudioCheckBox.Size = new System.Drawing.Size(211, 19);
-            this.separateAudioCheckBox.TabIndex = 19;
-            this.separateAudioCheckBox.Text = "Write audio to a separate file (.wav)";
-            this.separateAudioCheckBox.UseVisualStyleBackColor = true;
-            this.separateAudioCheckBox.Visible = false;
-            // 
-            // generalGroup
-            // 
-            this.generalGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.generalGroup.Controls.Add(this.aviLabel);
-            this.generalGroup.Controls.Add(this.folderTextBox);
-            this.generalGroup.Controls.Add(this.browseFolderBtn);
-            this.generalGroup.Controls.Add(this.folderLabel);
-            this.generalGroup.Controls.Add(this.fileNameTextBox);
-            this.generalGroup.Controls.Add(this.fileLabel);
-            this.generalGroup.Controls.Add(this.qualityComboBox);
-            this.generalGroup.Controls.Add(this.qualityLabel);
-            this.generalGroup.Location = new System.Drawing.Point(9, -134);
-            this.generalGroup.Margin = new System.Windows.Forms.Padding(0, 9, 0, 0);
-            this.generalGroup.Name = "generalGroup";
-            this.generalGroup.Size = new System.Drawing.Size(340, 126);
-            this.generalGroup.TabIndex = 2;
-            this.generalGroup.TabStop = false;
-            this.generalGroup.Text = "Recording";
-            this.generalGroup.Visible = false;
-            // 
-            // aviLabel
-            // 
-            this.aviLabel.AutoSize = true;
-            this.aviLabel.Location = new System.Drawing.Point(309, 55);
-            this.aviLabel.Name = "aviLabel";
-            this.aviLabel.Size = new System.Drawing.Size(25, 15);
-            this.aviLabel.TabIndex = 26;
-            this.aviLabel.Text = ".avi";
-            // 
-            // recButton
-            // 
-            this.recButton.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.recButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.recButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.recButton.Image = ((System.Drawing.Image)(resources.GetObject("recButton.Image")));
-            this.recButton.Location = new System.Drawing.Point(223, 111);
-            this.recButton.Margin = new System.Windows.Forms.Padding(0);
-            this.recButton.Name = "recButton";
-            this.recButton.Size = new System.Drawing.Size(120, 43);
-            this.recButton.TabIndex = 0;
-            this.recButton.Text = " REC (Alt+R)";
-            this.recButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.recButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.recButton.UseVisualStyleBackColor = false;
-            this.recButton.Visible = false;
-            this.recButton.Click += new System.EventHandler(this.recButton_Click);
             // 
             // previewBox
             // 
@@ -530,7 +280,7 @@
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(9);
             this.toolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip.Size = new System.Drawing.Size(186, 43);
+            this.toolStrip.Size = new System.Drawing.Size(217, 43);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.TabStop = true;
             this.toolStrip.Text = "toolStrip1";
@@ -634,6 +384,102 @@
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
+            // yNumeric
+            // 
+            this.yNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.yNumeric.Location = new System.Drawing.Point(127, 83);
+            this.yNumeric.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.yNumeric.Minimum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            -2147483648});
+            this.yNumeric.Name = "yNumeric";
+            this.yNumeric.Size = new System.Drawing.Size(47, 23);
+            this.yNumeric.TabIndex = 11;
+            this.yNumeric.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.yNumeric.ValueChanged += new System.EventHandler(this.yNumeric_ValueChanged);
+            // 
+            // xNumeric
+            // 
+            this.xNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.xNumeric.Location = new System.Drawing.Point(73, 83);
+            this.xNumeric.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.xNumeric.Minimum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            -2147483648});
+            this.xNumeric.Name = "xNumeric";
+            this.xNumeric.Size = new System.Drawing.Size(47, 23);
+            this.xNumeric.TabIndex = 10;
+            this.xNumeric.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.xNumeric.ValueChanged += new System.EventHandler(this.xNumeric_ValueChanged);
+            // 
+            // widthNumeric
+            // 
+            this.widthNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.widthNumeric.Location = new System.Drawing.Point(233, 83);
+            this.widthNumeric.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.widthNumeric.Minimum = new decimal(new int[] {
+            160,
+            0,
+            0,
+            0});
+            this.widthNumeric.Name = "widthNumeric";
+            this.widthNumeric.Size = new System.Drawing.Size(47, 23);
+            this.widthNumeric.TabIndex = 12;
+            this.widthNumeric.Value = new decimal(new int[] {
+            160,
+            0,
+            0,
+            0});
+            this.widthNumeric.ValueChanged += new System.EventHandler(this.widthNumeric_ValueChanged);
+            // 
+            // heightNumeric
+            // 
+            this.heightNumeric.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.heightNumeric.Location = new System.Drawing.Point(287, 83);
+            this.heightNumeric.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.heightNumeric.Minimum = new decimal(new int[] {
+            160,
+            0,
+            0,
+            0});
+            this.heightNumeric.Name = "heightNumeric";
+            this.heightNumeric.Size = new System.Drawing.Size(47, 23);
+            this.heightNumeric.TabIndex = 13;
+            this.heightNumeric.Value = new decimal(new int[] {
+            160,
+            0,
+            0,
+            0});
+            this.heightNumeric.ValueChanged += new System.EventHandler(this.heightNumeric_ValueChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -643,10 +489,8 @@
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.previewBox);
             this.Controls.Add(this.toolStrip);
-            this.Controls.Add(this.generalGroup);
             this.Controls.Add(this.audioGroup);
             this.Controls.Add(this.videoGroup);
-            this.Controls.Add(this.recButton);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -659,42 +503,29 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.videoGroup.ResumeLayout(false);
             this.videoGroup.PerformLayout();
+            this.audioGroup.ResumeLayout(false);
+            this.audioGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.previewBox)).EndInit();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.yNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.widthNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightNumeric)).EndInit();
-            this.audioGroup.ResumeLayout(false);
-            this.audioGroup.PerformLayout();
-            this.generalGroup.ResumeLayout(false);
-            this.generalGroup.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.previewBox)).EndInit();
-            this.toolStrip.ResumeLayout(false);
-            this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.Button recButton;
-		private System.Windows.Forms.TextBox folderTextBox;
-		private QuickLibrary.QlibTextButton browseFolderBtn;
-		private System.Windows.Forms.Label folderLabel;
-		private System.Windows.Forms.TextBox fileNameTextBox;
-		private System.Windows.Forms.Label fileLabel;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-		private System.Windows.Forms.Label qualityLabel;
 		private System.Windows.Forms.Label areaLabel;
 		private QuickLibrary.QlibGroupBox videoGroup;
 		private QuickLibrary.QlibCheckBox captureCursorCheckBox;
 		private System.Windows.Forms.Label inputDeviceLabel;
 		private QuickLibrary.QlibGroupBox audioGroup;
-		private QuickLibrary.QlibGroupBox generalGroup;
-		private System.Windows.Forms.Label aviLabel;
 		private System.Windows.Forms.Timer updateTimer;
 		private QuickLibrary.QlibComboBox areaComboBox;
-		private QuickLibrary.QlibComboBox qualityComboBox;
 		private QuickLibrary.QlibComboBox inputDeviceComboBox;
 		private BoundedNumericBox heightNumeric;
 		private BoundedNumericBox widthNumeric;
@@ -703,7 +534,6 @@
 		private System.Windows.Forms.ToolStripButton onTopBtn;
 		private System.Windows.Forms.ToolStripButton aboutBtn;
 		private System.Windows.Forms.ToolStripButton settingsBtn;
-		private QuickLibrary.QlibCheckBox separateAudioCheckBox;
 		private System.Windows.Forms.Label locationLabel;
 		private BoundedNumericBox xNumeric;
 		private BoundedNumericBox yNumeric;

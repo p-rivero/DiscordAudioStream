@@ -144,15 +144,6 @@
   <metadata name="updateTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <data name="recButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vAAADrwBlbxySQAAAJpJREFUOE/V0kEKgkAYxfEhkNYdwCCyjiCtxWtJdYqs24VWO9e2qv9rmNU4NeAm
-        H/zgUxE/9Zm/zBJn3NChxQkpfqbEHXtkWGCDI3S+QDArPJB/jvzsoOvacDAXVHYM5gC9zmAaaItvWeNq
-        Rz9PJHYMZo7ejn5iNtgiuMHobzD6LyiuB3qSejBDdA9cXBN1wwtqZI2oJk4uxrwB/C8fBaOJmUsAAAAA
-        SUVORK5CYII=
-</value>
-  </data>
   <metadata name="toolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>311, 21</value>
   </metadata>
