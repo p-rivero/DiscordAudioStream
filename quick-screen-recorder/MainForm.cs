@@ -26,6 +26,8 @@ namespace quick_screen_recorder
 		private ScreenCaptureWorker screenCaptureWorker;
 		private const int TARGET_FRAMERATE = 60;
 		private double scaleMultiplier = 1;
+		private int numberOfScreens = -1;
+		private bool capturingWindow = false;
 
 		private AudioPlayback audioPlayback = null;
 		
@@ -273,18 +275,28 @@ namespace quick_screen_recorder
 
 		private void areaComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			RefreshAreaInfo();
-			// Do not save settings for Custom Area
-			if (areaComboBox.SelectedIndex == areaComboBox.Items.Count - 1)
+			if (numberOfScreens == -1)
 				return;
 
+			RefreshAreaInfo();
+			// Do not save settings for Custom Area
+			if (areaComboBox.SelectedIndex == numberOfScreens)
+				return;
+
+			// Do not save settings for windows capture
+			if (areaComboBox.SelectedIndex > numberOfScreens)
+			{
+				ProcessHandleManager.SelectedIndex = areaComboBox.SelectedIndex - numberOfScreens - 1;
+				return;
+			}
 			Properties.Settings.Default.AreaIndex = areaComboBox.SelectedIndex;
 			Properties.Settings.Default.Save();
 		}
 
 		private void RefreshAreaInfo()
 		{
-			if (areaComboBox.SelectedIndex == areaComboBox.Items.Count - 1)
+			// Custom area
+			if (areaComboBox.SelectedIndex == numberOfScreens)
 			{
 				areaForm.Show();
 
@@ -300,7 +312,22 @@ namespace quick_screen_recorder
 				yNumeric.Enabled = true;
 
 				hideTaskbarCheckBox.Enabled = false;
+				capturingWindow = false;
 			}
+			// Window
+			else if (areaComboBox.SelectedIndex > numberOfScreens)
+			{
+				areaForm.Hide();
+
+				widthNumeric.Enabled = false;
+				heightNumeric.Enabled = false;
+				xNumeric.Enabled = false;
+				yNumeric.Enabled = false;
+
+				hideTaskbarCheckBox.Enabled = false;
+				capturingWindow = true;
+			}
+			// Screen
 			else
 			{
 				areaForm.Hide();
@@ -311,10 +338,12 @@ namespace quick_screen_recorder
 				yNumeric.Enabled = false;
 
 				hideTaskbarCheckBox.Enabled = true;
+				capturingWindow = false;
 
 				if (Screen.AllScreens.Length > 1)
 				{
-					if (areaComboBox.SelectedIndex == areaComboBox.Items.Count - 2)
+					// All screens
+					if (areaComboBox.SelectedIndex == numberOfScreens - 1)
 					{
 						widthNumeric.Value = SystemInformation.VirtualScreen.Width;
 						heightNumeric.Value = SystemInformation.VirtualScreen.Height;
@@ -544,7 +573,7 @@ namespace quick_screen_recorder
 				areaComboBox.Items.Add("Everything");
 			}
 
-			areaComboBox.Items.Add("Custom area");
+			numberOfScreens = areaComboBox.Items.Count;
 
 			try
 			{
@@ -554,6 +583,13 @@ namespace quick_screen_recorder
 			{
 				// Number of screen may have changed
 				areaComboBox.SelectedIndex = 0;
+			}
+
+			areaComboBox.Items.Add("Custom area");
+
+			foreach (string window in ProcessHandleManager.RefreshHandles())
+			{
+				areaComboBox.Items.Add(window);
 			}
 
 			widthNumeric.Maximum = SystemInformation.VirtualScreen.Width;
@@ -803,7 +839,7 @@ namespace quick_screen_recorder
 			CenterToScreen();
 		}
 
-		public void getCaptureInfo(out int width, out int height, out int x, out int y, out bool captureCursor)
+		public void getCaptureArea(out int width, out int height, out int x, out int y, out bool captureCursor)
 		{
 			int tmp_width = 0, tmp_height = 0, tmp_x = 0, tmp_y = 0;
 			bool tmp_captureCursor = false;
@@ -821,6 +857,11 @@ namespace quick_screen_recorder
 			x = tmp_x;
 			y = tmp_y;
 			captureCursor = tmp_captureCursor;
+		}
+
+		public bool isCapturingWindow()
+		{
+			return capturingWindow;
 		}
 
 		private void volumeMixerButton_Click(object sender, EventArgs e)

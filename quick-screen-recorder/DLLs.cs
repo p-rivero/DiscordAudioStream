@@ -42,6 +42,35 @@ class User32
 			return new CURSORINFO { cbSize = Marshal.SizeOf(typeof(CURSORINFO)) };
 		}
 	}
+	[StructLayout(LayoutKind.Sequential)]
+	public struct RECT
+	{
+		private int left;
+		private int top;
+		private int right;
+		private int bottom;
+
+		public int X
+		{
+			get { return left; }
+			set { left = value; }
+		}
+		public int Y
+		{
+			get { return top; }
+			set { top = value; }
+		}
+		public int Height
+		{
+			get { return bottom - top; }
+			set { bottom = value + top; }
+		}
+		public int Width
+		{
+			get { return right - left; }
+			set { right = value + left; }
+		}
+	}
 	public const Int32 CURSOR_SHOWING = 0x00000001;
 	public enum FsModifiers
 	{
@@ -52,12 +81,14 @@ class User32
 		WIN = 0x0008,
 		NOREPEAT = 0x4000
 	}
+	// Delegate called for each window 
+	public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 
-	[DllImport("User32.dll")]
+	[DllImport("user32.dll")]
 	public static extern int GetDesktopWindow();
-	[DllImport("User32.dll")]
+	[DllImport("user32.dll")]
 	public static extern int GetWindowDC(int hWnd);
-	[DllImport("User32.dll")]
+	[DllImport("user32.dll")]
 	public static extern int ReleaseDC(int hWnd, int hDC);
 	[DllImport("user32.dll")]
 	public static extern bool DrawIcon(IntPtr hDC, int X, int Y, IntPtr hIcon);
@@ -75,6 +106,20 @@ class User32
 	public static extern bool RegisterHotKey(IntPtr hWnd, int id, FsModifiers fsModifiers, System.Windows.Forms.Keys vk);
 	[DllImport("user32.dll")]
 	public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+	[DllImport("user32.dll")]
+	public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+	[DllImport("user32.dll")]
+	public static extern bool PrintWindow(IntPtr hWnd, IntPtr hdcBlt, int nFlags);
+	[DllImport("user32.dll")]
+	public static extern bool EnumWindows(EnumWindowsProc enumProc, IntPtr lParam);
+	[DllImport("user32.dll")]
+	public static extern IntPtr GetShellWindow();
+	[DllImport("user32.dll")]
+	public static extern int GetWindowText(IntPtr IntPtr, System.Text.StringBuilder lpString, int nMaxCount);
+	[DllImport("user32.dll")]
+	public static extern int GetWindowTextLength(IntPtr IntPtr);
+	[DllImport("user32.dll")]
+	public static extern bool IsWindowVisible(IntPtr IntPtr);
 }
 
 class Ntdll
@@ -106,3 +151,28 @@ class Ntdll
 	}
 }
 
+class Dwmapi
+{
+	public enum DwmWindowAttribute
+	{
+		NCRENDERING_ENABLED = 1,
+		NCRENDERING_POLICY,
+		TRANSITIONS_FORCEDISABLED,
+		ALLOW_NCPAINT,
+		CAPTION_BUTTON_BOUNDS,
+		NONCLIENT_RTL_LAYOUT,
+		FORCE_ICONIC_REPRESENTATION,
+		FLIP3D_POLICY,
+		EXTENDED_FRAME_BOUNDS,
+		HAS_ICONIC_BITMAP,
+		DISALLOW_PEEK,
+		EXCLUDED_FROM_PEEK,
+		CLOAK,
+		CLOAKED,
+		FREEZE_REPRESENTATION,
+		LAST
+	}
+
+	[DllImport("dwmapi.dll")]
+	public static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out IntPtr pvAttribute, int cbAttribute);
+}

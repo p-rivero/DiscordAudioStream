@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="DLLs.cs" />
     <Compile Include="ScreenCapture\IScreenCaptureMaster.cs" />
+    <Compile Include="ScreenCapture\ProcessHandleManager.cs" />
     <Compile Include="ScreenCapture\ScreenCaptureWorker.cs" />
     <Compile Include="Recorder.cs" />
     <Compile Include="MainForm.cs">
