@@ -32,22 +32,22 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.areaLabel = new System.Windows.Forms.Label();
-            this.videoGroup = new QuickLibrary.QlibGroupBox();
+            this.videoGroup = new CustomComponents.DarkThemeGroupBox();
             this.scaleLabel = new System.Windows.Forms.Label();
-            this.scaleComboBox = new QuickLibrary.QlibComboBox();
+            this.scaleComboBox = new CustomComponents.DarkThemeComboBox();
             this.refreshScreensBtn = new System.Windows.Forms.Button();
-            this.hideTaskbarCheckBox = new QuickLibrary.QlibCheckBox();
+            this.hideTaskbarCheckBox = new CustomComponents.DarkThemeCheckBox();
             this.sizelabel = new System.Windows.Forms.Label();
             this.locationLabel = new System.Windows.Forms.Label();
-            this.areaComboBox = new QuickLibrary.QlibComboBox();
-            this.captureCursorCheckBox = new QuickLibrary.QlibCheckBox();
+            this.areaComboBox = new CustomComponents.DarkThemeComboBox();
+            this.captureCursorCheckBox = new CustomComponents.DarkThemeCheckBox();
             this.inputDeviceLabel = new System.Windows.Forms.Label();
-            this.audioGroup = new QuickLibrary.QlibGroupBox();
+            this.audioGroup = new CustomComponents.DarkThemeGroupBox();
             this.refreshAudioBtn = new System.Windows.Forms.Button();
-            this.inputDeviceComboBox = new QuickLibrary.QlibComboBox();
+            this.inputDeviceComboBox = new CustomComponents.DarkThemeComboBox();
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.previewBox = new System.Windows.Forms.PictureBox();
-            this.toolStrip = new QuickLibrary.QlibToolStrip();
+            this.toolStrip = new CustomComponents.DarkThemeToolStrip();
             this.previewBtn = new System.Windows.Forms.ToolStripButton();
             this.onTopBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -57,10 +57,10 @@
             this.settingsBtn = new System.Windows.Forms.ToolStripButton();
             this.aboutBtn = new System.Windows.Forms.ToolStripButton();
             this.startButton = new System.Windows.Forms.Button();
-            this.yNumeric = new quick_screen_recorder.BoundedNumericBox();
-            this.xNumeric = new quick_screen_recorder.BoundedNumericBox();
-            this.widthNumeric = new quick_screen_recorder.BoundedNumericBox();
-            this.heightNumeric = new quick_screen_recorder.BoundedNumericBox();
+            this.yNumeric = new CustomComponents.DarkThemeNumericBox();
+            this.xNumeric = new CustomComponents.DarkThemeNumericBox();
+            this.widthNumeric = new CustomComponents.DarkThemeNumericBox();
+            this.heightNumeric = new CustomComponents.DarkThemeNumericBox();
             this.videoGroup.SuspendLayout();
             this.audioGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
@@ -74,7 +74,7 @@
             // areaLabel
             // 
             this.areaLabel.AutoSize = true;
-            this.areaLabel.Location = new System.Drawing.Point(86, 22);
+            this.areaLabel.Location = new System.Drawing.Point(33, 23);
             this.areaLabel.Name = "areaLabel";
             this.areaLabel.Size = new System.Drawing.Size(34, 15);
             this.areaLabel.TabIndex = 18;
@@ -107,11 +107,11 @@
             // scaleLabel
             // 
             this.scaleLabel.AutoSize = true;
-            this.scaleLabel.Location = new System.Drawing.Point(38, 52);
+            this.scaleLabel.Location = new System.Drawing.Point(30, 52);
             this.scaleLabel.Name = "scaleLabel";
-            this.scaleLabel.Size = new System.Drawing.Size(82, 15);
+            this.scaleLabel.Size = new System.Drawing.Size(37, 15);
             this.scaleLabel.TabIndex = 24;
-            this.scaleLabel.Text = "Scale window:";
+            this.scaleLabel.Text = "Scale:";
             // 
             // scaleComboBox
             // 
@@ -123,9 +123,9 @@
             "Full resolution",
             "50% resolution",
             "25% Resolution"});
-            this.scaleComboBox.Location = new System.Drawing.Point(127, 49);
+            this.scaleComboBox.Location = new System.Drawing.Point(73, 49);
             this.scaleComboBox.Name = "scaleComboBox";
-            this.scaleComboBox.Size = new System.Drawing.Size(177, 24);
+            this.scaleComboBox.Size = new System.Drawing.Size(231, 24);
             this.scaleComboBox.TabIndex = 23;
             this.scaleComboBox.SelectedIndexChanged += new System.EventHandler(this.scaleComboBox_SelectedIndexChanged);
             // 
@@ -177,9 +177,9 @@
             this.areaComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.areaComboBox.FormattingEnabled = true;
             this.areaComboBox.IntegralHeight = false;
-            this.areaComboBox.Location = new System.Drawing.Point(127, 19);
+            this.areaComboBox.Location = new System.Drawing.Point(73, 19);
             this.areaComboBox.Name = "areaComboBox";
-            this.areaComboBox.Size = new System.Drawing.Size(177, 24);
+            this.areaComboBox.Size = new System.Drawing.Size(231, 24);
             this.areaComboBox.TabIndex = 8;
             this.areaComboBox.SelectedIndexChanged += new System.EventHandler(this.areaComboBox_SelectedIndexChanged);
             // 
@@ -198,11 +198,11 @@
             // inputDeviceLabel
             // 
             this.inputDeviceLabel.AutoSize = true;
-            this.inputDeviceLabel.Location = new System.Drawing.Point(45, 26);
+            this.inputDeviceLabel.Location = new System.Drawing.Point(29, 26);
             this.inputDeviceLabel.Name = "inputDeviceLabel";
-            this.inputDeviceLabel.Size = new System.Drawing.Size(75, 15);
+            this.inputDeviceLabel.Size = new System.Drawing.Size(38, 15);
             this.inputDeviceLabel.TabIndex = 26;
-            this.inputDeviceLabel.Text = "Input device:";
+            this.inputDeviceLabel.Text = "Input:";
             // 
             // audioGroup
             // 
@@ -243,9 +243,9 @@
             this.inputDeviceComboBox.Items.AddRange(new object[] {
             "None",
             "System sounds (Soundcard)"});
-            this.inputDeviceComboBox.Location = new System.Drawing.Point(127, 22);
+            this.inputDeviceComboBox.Location = new System.Drawing.Point(73, 22);
             this.inputDeviceComboBox.Name = "inputDeviceComboBox";
-            this.inputDeviceComboBox.Size = new System.Drawing.Size(177, 24);
+            this.inputDeviceComboBox.Size = new System.Drawing.Size(231, 24);
             this.inputDeviceComboBox.TabIndex = 17;
             // 
             // previewBox
@@ -280,7 +280,7 @@
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(9);
             this.toolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip.Size = new System.Drawing.Size(217, 43);
+            this.toolStrip.Size = new System.Drawing.Size(186, 43);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.TabStop = true;
             this.toolStrip.Text = "toolStrip1";
@@ -520,32 +520,32 @@
 		#endregion
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
 		private System.Windows.Forms.Label areaLabel;
-		private QuickLibrary.QlibGroupBox videoGroup;
-		private QuickLibrary.QlibCheckBox captureCursorCheckBox;
+		private CustomComponents.DarkThemeGroupBox videoGroup;
+		private CustomComponents.DarkThemeCheckBox captureCursorCheckBox;
 		private System.Windows.Forms.Label inputDeviceLabel;
-		private QuickLibrary.QlibGroupBox audioGroup;
+		private CustomComponents.DarkThemeGroupBox audioGroup;
 		private System.Windows.Forms.Timer updateTimer;
-		private QuickLibrary.QlibComboBox areaComboBox;
-		private QuickLibrary.QlibComboBox inputDeviceComboBox;
-		private BoundedNumericBox heightNumeric;
-		private BoundedNumericBox widthNumeric;
+		private CustomComponents.DarkThemeComboBox areaComboBox;
+		private CustomComponents.DarkThemeComboBox inputDeviceComboBox;
+		private CustomComponents.DarkThemeNumericBox heightNumeric;
+		private CustomComponents.DarkThemeNumericBox widthNumeric;
 		private System.Windows.Forms.Button refreshAudioBtn;
-		private QuickLibrary.QlibToolStrip toolStrip;
+		private CustomComponents.DarkThemeToolStrip toolStrip;
 		private System.Windows.Forms.ToolStripButton onTopBtn;
 		private System.Windows.Forms.ToolStripButton aboutBtn;
 		private System.Windows.Forms.ToolStripButton settingsBtn;
 		private System.Windows.Forms.Label locationLabel;
-		private BoundedNumericBox xNumeric;
-		private BoundedNumericBox yNumeric;
+		private CustomComponents.DarkThemeNumericBox xNumeric;
+		private CustomComponents.DarkThemeNumericBox yNumeric;
 		private System.Windows.Forms.Label sizelabel;
-		private QuickLibrary.QlibCheckBox hideTaskbarCheckBox;
+		private CustomComponents.DarkThemeCheckBox hideTaskbarCheckBox;
 		private System.Windows.Forms.Button refreshScreensBtn;
 		private System.Windows.Forms.PictureBox previewBox;
 		private System.Windows.Forms.ToolStripButton previewBtn;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Label scaleLabel;
-        private QuickLibrary.QlibComboBox scaleComboBox;
+        private CustomComponents.DarkThemeComboBox scaleComboBox;
         private System.Windows.Forms.ToolStripButton volumeMixerButton;
         private System.Windows.Forms.ToolStripButton soundDevicesButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;

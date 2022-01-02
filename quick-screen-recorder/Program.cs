@@ -1,4 +1,4 @@
-﻿using QuickLibrary;
+﻿using CustomComponents;
 using System;
 using System.Windows.Forms;
 
@@ -21,7 +21,7 @@ namespace quick_screen_recorder
 			int theme = Properties.Settings.Default.Theme;
 			if (theme == 0)
 			{
-				darkMode = ThemeManager.isDarkTheme();
+				darkMode = DarkThemeManager.IsDarkTheme();
 			}
 			else if (theme == 1)
 			{
@@ -34,7 +34,7 @@ namespace quick_screen_recorder
 
 			if (darkMode)
 			{
-				ThemeManager.allowDarkModeForApp(true);
+				Uxtheme.AllowDarkModeForApp(true);
 			}
 
 			try

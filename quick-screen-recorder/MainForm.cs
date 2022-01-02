@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using System.Threading;
-using QuickLibrary;
 using System.Diagnostics;
+using CustomComponents;
 
 namespace quick_screen_recorder
 {
@@ -32,7 +30,7 @@ namespace quick_screen_recorder
 			int a = Keys.R.GetHashCode();
 			if (darkMode)
 			{
-				this.HandleCreated += new EventHandler(ThemeManager.formHandleCreated);
+				this.HandleCreated += new EventHandler(DarkThemeManager.formHandleCreated);
 			}
 
 			this.darkMode = darkMode;
@@ -69,7 +67,7 @@ namespace quick_screen_recorder
 			if (darkMode)
 			{
 				this.ForeColor = Color.White;
-				this.BackColor = ThemeManager.DarkBackColor;
+				this.BackColor = DarkThemeManager.DarkBackColor;
 
 				aboutBtn.Image = Properties.Resources.white_about;
 				onTopBtn.Image = Properties.Resources.white_ontop;
@@ -78,10 +76,10 @@ namespace quick_screen_recorder
 				settingsBtn.Image = Properties.Resources.white_settings;
 				previewBtn.Image = Properties.Resources.white_preview;
 
-				refreshAudioBtn.BackColor = ThemeManager.DarkSecondColor;
+				refreshAudioBtn.BackColor = DarkThemeManager.DarkSecondColor;
 				refreshAudioBtn.Image = Properties.Resources.white_refresh;
 
-				refreshScreensBtn.BackColor = ThemeManager.DarkSecondColor;
+				refreshScreensBtn.BackColor = DarkThemeManager.DarkSecondColor;
 				refreshScreensBtn.Image = Properties.Resources.white_refresh;
 			}
 
@@ -675,5 +673,5 @@ namespace quick_screen_recorder
 				Process.Start(cplPath, "/name Microsoft.Sound");
 			}
 		}
-	}
+    }
 }

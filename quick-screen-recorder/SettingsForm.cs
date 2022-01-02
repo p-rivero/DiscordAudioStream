@@ -1,8 +1,7 @@
-﻿using QuickLibrary;
-using System;
+﻿using System;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Windows.Forms;
+using CustomComponents;
 
 namespace quick_screen_recorder
 {
@@ -12,29 +11,29 @@ namespace quick_screen_recorder
 		{
 			if (darkMode)
 			{
-				this.HandleCreated += new EventHandler(ThemeManager.formHandleCreated);
+				this.HandleCreated += new EventHandler(DarkThemeManager.formHandleCreated);
 			}
 
 			InitializeComponent();
 
 			if (darkMode)
 			{
-				this.BackColor = ThemeManager.DarkBackColor;
+				this.BackColor = DarkThemeManager.DarkBackColor;
 				this.ForeColor = Color.White;
 
-				settingsTabs.BackTabColor = ThemeManager.DarkBackColor;
-				settingsTabs.BorderColor = ThemeManager.DarkSecondColor;
-				settingsTabs.HeaderColor = ThemeManager.DarkSecondColor;
+				settingsTabs.BackTabColor = DarkThemeManager.DarkBackColor;
+				settingsTabs.BorderColor = DarkThemeManager.DarkSecondColor;
+				settingsTabs.HeaderColor = DarkThemeManager.DarkSecondColor;
 				settingsTabs.TextColor = Color.White;
 				settingsTabs.HorizontalLineColor = Color.Transparent;
 
-				mixerBtn.BackColor = ThemeManager.DarkSecondColor;
+				mixerBtn.BackColor = DarkThemeManager.DarkSecondColor;
 				mixerBtn.Image = Properties.Resources.white_mixer;
-				winSoundBtn.BackColor = ThemeManager.DarkSecondColor;
+				winSoundBtn.BackColor = DarkThemeManager.DarkSecondColor;
 				winSoundBtn.Image = Properties.Resources.white_speaker;
 			}
 
-			settingsTabs.ActiveColor = ThemeManager.AccentColor;
+			settingsTabs.ActiveColor = DarkThemeManager.AccentColor;
 
 			systemThemeRadio.SetDarkMode(darkMode);
 			darkThemeRadio.SetDarkMode(darkMode);

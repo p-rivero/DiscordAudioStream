@@ -44,11 +44,9 @@
   <ItemGroup>
     <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="PresentationFramework" />
-    <Reference Include="QuickLibrary">
-      <HintPath>..\..\QuickLibrary\QuickLibrary\bin\Release\QuickLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -75,7 +73,26 @@
       <DependentUpon>AreaForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AudioPlayback.cs" />
-    <Compile Include="BoundedNumericBox.cs">
+    <Compile Include="CustomComponents\DarkThemeGroupBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomComponents\DarkThemeNumericBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomComponents\DarkThemeCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomComponents\DarkThemeComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomComponents\DarkThemeManager.cs" />
+    <Compile Include="CustomComponents\DarkThemeRadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomComponents\DarkThemeTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomComponents\DarkThemeToolStrip.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DLLs.cs" />

@@ -1,10 +1,9 @@
-﻿using QuickLibrary;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using CustomComponents;
 
 namespace quick_screen_recorder
 {
@@ -16,7 +15,7 @@ namespace quick_screen_recorder
 		{
 			if (darkMode)
 			{
-				this.HandleCreated += new EventHandler(ThemeManager.formHandleCreated);
+				this.HandleCreated += new EventHandler(DarkThemeManager.formHandleCreated);
 			}
 
 			this.darkMode = darkMode;
@@ -38,15 +37,15 @@ namespace quick_screen_recorder
 
 			if (darkMode)
 			{
-				this.BackColor = ThemeManager.DarkBackColor;
+				this.BackColor = DarkThemeManager.DarkBackColor;
 				this.ForeColor = Color.White;
 			}
 
-			updatesLink.LinkColor = ThemeManager.AccentColor;
-			developerLink.LinkColor = ThemeManager.AccentColor;
-			projectLink.LinkColor = ThemeManager.AccentColor;
-			licenseLink.LinkColor = ThemeManager.AccentColor;
-			issuesLink.LinkColor = ThemeManager.AccentColor;
+			updatesLink.LinkColor = DarkThemeManager.AccentColor;
+			developerLink.LinkColor = DarkThemeManager.AccentColor;
+			projectLink.LinkColor = DarkThemeManager.AccentColor;
+			licenseLink.LinkColor = DarkThemeManager.AccentColor;
+			issuesLink.LinkColor = DarkThemeManager.AccentColor;
 
 			infoGroup.SetDarkMode(darkMode);
 			pagesGroup.SetDarkMode(darkMode);
@@ -69,8 +68,7 @@ namespace quick_screen_recorder
 
 		private void updatesLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			MainForm parent = (MainForm)this.Owner;
-			UpdateManager.checkForUpdates(true, darkMode, this.TopMost, "ModuleArt", "quick-screen-recorder", "Quick Screen Recorder", "QuickScreenRecorder-Setup.msi");
+			Process.Start("https://github.com/ModuleArt/quick-picture-viewer/issues/");
 			this.Close();
 		}
 

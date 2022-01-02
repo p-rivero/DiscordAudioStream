@@ -29,11 +29,11 @@
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.licenseLabel = new System.Windows.Forms.Label();
-            this.darkThemeRadio = new QuickLibrary.QlibRadioButton();
-            this.lightThemeRadio = new QuickLibrary.QlibRadioButton();
-            this.systemThemeRadio = new QuickLibrary.QlibRadioButton();
-            this.updatesCheckBox = new QuickLibrary.QlibCheckBox();
-            this.settingsTabs = new QuickLibrary.QlibTabControl();
+            this.darkThemeRadio = new CustomComponents.DarkThemeRadioButton();
+            this.lightThemeRadio = new CustomComponents.DarkThemeRadioButton();
+            this.systemThemeRadio = new CustomComponents.DarkThemeRadioButton();
+            this.updatesCheckBox = new CustomComponents.DarkThemeCheckBox();
+            this.settingsTabs = new CustomComponents.DarkThemeTabControl();
             this.themePage = new System.Windows.Forms.TabPage();
             this.audioPage = new System.Windows.Forms.TabPage();
             this.winSoundBtn = new System.Windows.Forms.Button();
@@ -112,6 +112,7 @@
             this.settingsTabs.Controls.Add(this.themePage);
             this.settingsTabs.Controls.Add(this.audioPage);
             this.settingsTabs.Controls.Add(this.updatesPage);
+            this.settingsTabs.DraggableTabs = false;
             this.settingsTabs.HeaderColor = System.Drawing.SystemColors.ControlLight;
             this.settingsTabs.HorizontalLineColor = System.Drawing.Color.Transparent;
             this.settingsTabs.ItemSize = new System.Drawing.Size(240, 16);
@@ -227,12 +228,12 @@
 		}
 
 		#endregion
-		private QuickLibrary.QlibRadioButton lightThemeRadio;
-		private QuickLibrary.QlibRadioButton systemThemeRadio;
-		private QuickLibrary.QlibRadioButton darkThemeRadio;
-		private QuickLibrary.QlibCheckBox updatesCheckBox;
+		private CustomComponents.DarkThemeRadioButton lightThemeRadio;
+		private CustomComponents.DarkThemeRadioButton systemThemeRadio;
+		private CustomComponents.DarkThemeRadioButton darkThemeRadio;
+		private CustomComponents.DarkThemeCheckBox updatesCheckBox;
 		private System.Windows.Forms.Label licenseLabel;
-		private QuickLibrary.QlibTabControl settingsTabs;
+		private CustomComponents.DarkThemeTabControl settingsTabs;
 		private System.Windows.Forms.TabPage themePage;
 		private System.Windows.Forms.TabPage updatesPage;
 		private System.Windows.Forms.TabPage audioPage;
