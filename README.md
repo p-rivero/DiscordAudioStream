@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/quick-screen-recorder/resources/imgs/rec96.png">
+  <img src="/DiscordAudioStream/resources/imgs/rec96.png">
 </p>
 <h1 align="center">Quick Screen Recorder</h1>
 
@@ -8,11 +8,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/ModuleArt/quick-screen-recorder/releases">
-    <img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/ModuleArt/quick-screen-recorder/total">
-    <img alt="GitHub release (latest by date including pre-releases)" src="https://img.shields.io/github/v/release/moduleart/quick-screen-recorder?include_prereleases">
+  <a href="https://github.com/ModuleArt/DiscordAudioStream/releases">
+    <img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/ModuleArt/DiscordAudioStream/total">
+    <img alt="GitHub release (latest by date including pre-releases)" src="https://img.shields.io/github/v/release/moduleart/DiscordAudioStream?include_prereleases">
   </a>
-  <a alt="Trello roadmap" href="https://trello.com/b/LFUzVgvI/quick-screen-recorder">
+  <a alt="Trello roadmap" href="https://trello.com/b/LFUzVgvI/DiscordAudioStream">
     <img src="https://img.shields.io/badge/planner-trello-%230079BF">
   </a>
   <a alt="Buy ma a coffee" href="https://www.patreon.com/moduleart">
@@ -22,7 +22,7 @@
 
 <h2 align="center">Install</h2>
 <p align="center">
-  Windows 7, 8.1, 10 | <a href="https://github.com/ModuleArt/quick-screen-recorder/releases/tag/v1.2.1">v1.2.1</a> (2.3 MB) | <a href="https://github.com/ModuleArt/quick-screen-recorder/releases/download/v1.2.1/QuickScreenRecorder-Setup.msi">Download</a><br><br>
+  Windows 7, 8.1, 10 | <a href="https://github.com/ModuleArt/DiscordAudioStream/releases/tag/v1.2.1">v1.2.1</a> (2.3 MB) | <a href="https://github.com/ModuleArt/DiscordAudioStream/releases/download/v1.2.1/QuickScreenRecorder-Setup.msi">Download</a><br><br>
   Uses <a href="https://dotnet.microsoft.com/download/dotnet-framework/net472">.Net 4.7.2</a><br><br>
   <img src="/docs/screenshots/main.png">
 </p>

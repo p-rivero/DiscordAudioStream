@@ -1,4 +1,4 @@
-﻿namespace quick_screen_recorder
+﻿namespace DiscordAudioStream
 {
 	partial class AboutForm
 	{

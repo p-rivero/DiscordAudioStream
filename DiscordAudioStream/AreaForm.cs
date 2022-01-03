@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Timers;
 using System.Windows.Forms;
 
-namespace quick_screen_recorder
+namespace DiscordAudioStream
 {
 	public partial class AreaForm : Form
 	{

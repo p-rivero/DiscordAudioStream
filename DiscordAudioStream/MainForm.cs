@@ -6,7 +6,7 @@ using System.Threading;
 using System.Diagnostics;
 using CustomComponents;
 
-namespace quick_screen_recorder
+namespace DiscordAudioStream
 {
 	public partial class MainForm : Form, IScreenCaptureMaster
 	{

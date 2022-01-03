@@ -318,7 +318,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D08759ECA3B748AAA04474B66AAD2F4E"
             {
-            "SourcePath" = "8:..\\quick-screen-recorder\\rec.ico"
+            "SourcePath" = "8:..\\DiscordAudioStream\\rec.ico"
             "TargetName" = "8:rec.ico"
             "Tag" = "8:"
             "Folder" = "8:_D598DEC863C249D2B9AC211BBDB1CCAE"
@@ -338,8 +338,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DA9DA888B7664DFA9587ED0E68E8F543"
             {
-            "SourcePath" = "8:..\\quick-screen-recorder\\resources\\quick-screen-recorder.VisualElementsManifest.xml"
-            "TargetName" = "8:quick-screen-recorder.VisualElementsManifest.xml"
+            "SourcePath" = "8:..\\DiscordAudioStream\\resources\\DiscordAudioStream.VisualElementsManifest.xml"
+            "TargetName" = "8:DiscordAudioStream.VisualElementsManifest.xml"
             "Tag" = "8:"
             "Folder" = "8:_D598DEC863C249D2B9AC211BBDB1CCAE"
             "Condition" = "8:"
@@ -454,7 +454,7 @@
         "ProductVersion" = "8:1.2.1"
         "Manufacturer" = "8:Module Art"
         "ARPHELPTELEPHONE" = "8:"
-        "ARPHELPLINK" = "8:https://github.com/ModuleArt/quick-screen-recorder/issues"
+        "ARPHELPLINK" = "8:https://github.com/ModuleArt/DiscordAudioStream/issues"
         "Title" = "8:Quick Screen Recorder"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Module Art"
@@ -993,7 +993,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_85D7539BB9D4423F8AB19F51EEFD1ACF"
             {
-            "SourcePath" = "8:..\\quick-screen-recorder\\obj\\Release\\quick-screen-recorder.exe"
+            "SourcePath" = "8:..\\DiscordAudioStream\\obj\\Release\\DiscordAudioStream.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_D598DEC863C249D2B9AC211BBDB1CCAE"

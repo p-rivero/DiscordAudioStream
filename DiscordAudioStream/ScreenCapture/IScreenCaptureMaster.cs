@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace quick_screen_recorder
+namespace DiscordAudioStream
 {
 	public interface IScreenCaptureMaster
 	{

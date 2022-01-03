@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using CustomComponents;
 
-namespace quick_screen_recorder
+namespace DiscordAudioStream
 {
 	partial class SettingsForm : Form
 	{

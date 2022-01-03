@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{739D3A11-1F74-40EF-8CA8-3789066D7E58}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>quick_screen_recorder</RootNamespace>
-    <AssemblyName>quick-screen-recorder</AssemblyName>
+    <RootNamespace>DiscordAudioStream</RootNamespace>
+    <AssemblyName>DiscordAudioStream</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace quick_screen_recorder
+namespace DiscordAudioStream
 {
 	static class Program
 	{

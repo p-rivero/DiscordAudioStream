@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace quick_screen_recorder.Properties {
+namespace DiscordAudioStream.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

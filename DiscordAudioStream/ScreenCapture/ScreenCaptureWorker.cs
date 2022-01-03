@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 
 
-namespace quick_screen_recorder
+namespace DiscordAudioStream
 {
 	internal class ScreenCaptureWorker
 	{

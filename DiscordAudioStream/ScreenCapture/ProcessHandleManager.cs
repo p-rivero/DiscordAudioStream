@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace quick_screen_recorder
+namespace DiscordAudioStream
 {
 	public class ProcessHandleManager
 	{

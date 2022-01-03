@@ -2,7 +2,7 @@
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
-namespace quick_screen_recorder
+namespace DiscordAudioStream
 {
     class AudioPlayback
     {
