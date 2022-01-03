@@ -38,7 +38,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>rec.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
@@ -156,7 +157,6 @@
     <None Include="resources\imgs\stop.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="rec.ico" />
     <None Include="resources\imgs\light\white-speaker.png" />
     <None Include="resources\imgs\light\white-mixer.png" />
     <None Include="resources\imgs\light\white-preview.png" />

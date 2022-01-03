@@ -28,7 +28,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AreaForm));
             this.dragBtn = new System.Windows.Forms.Button();
             this.titleBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -74,7 +73,6 @@
             this.Controls.Add(this.dragBtn);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(160, 160);
             this.Name = "AreaForm";
             this.ShowInTaskbar = false;
