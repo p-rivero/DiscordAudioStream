@@ -32,18 +32,20 @@
             this.logoPictureBox = new System.Windows.Forms.PictureBox();
             this.productLabel = new System.Windows.Forms.Label();
             this.versionLabel = new System.Windows.Forms.Label();
-            this.companyLabel = new System.Windows.Forms.Label();
-            this.authorLabel = new System.Windows.Forms.Label();
+            this.basedOnLabel = new System.Windows.Forms.Label();
             this.descriptionLabel = new System.Windows.Forms.Label();
-            this.developerLink = new System.Windows.Forms.LinkLabel();
             this.projectLink = new System.Windows.Forms.LinkLabel();
             this.infoGroup = new CustomComponents.DarkThemeGroupBox();
+            this.moduleArtLabel = new System.Windows.Forms.LinkLabel();
+            this.byLabel = new System.Windows.Forms.Label();
+            this.screenRecorderLink = new System.Windows.Forms.LinkLabel();
             this.licenseLabel = new System.Windows.Forms.Label();
+            this.updatesLink = new System.Windows.Forms.LinkLabel();
             this.issuesLink = new System.Windows.Forms.LinkLabel();
             this.pagesGroup = new CustomComponents.DarkThemeGroupBox();
+            this.authorLink = new System.Windows.Forms.LinkLabel();
             this.licenseLink = new System.Windows.Forms.LinkLabel();
             this.aboutTooltip = new System.Windows.Forms.ToolTip(this.components);
-            this.updatesLink = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
             this.infoGroup.SuspendLayout();
             this.pagesGroup.SuspendLayout();
@@ -63,71 +65,49 @@
             // productLabel
             // 
             this.productLabel.AutoSize = true;
-            this.productLabel.Location = new System.Drawing.Point(6, 28);
+            this.productLabel.Location = new System.Drawing.Point(6, 19);
             this.productLabel.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
             this.productLabel.Name = "productLabel";
-            this.productLabel.Size = new System.Drawing.Size(126, 15);
+            this.productLabel.Size = new System.Drawing.Size(122, 15);
             this.productLabel.TabIndex = 27;
-            this.productLabel.Text = "Quick Screen Recorder";
+            this.productLabel.Text = "Discord Audio Stream";
             // 
             // versionLabel
             // 
             this.versionLabel.AutoSize = true;
-            this.versionLabel.Location = new System.Drawing.Point(6, 49);
+            this.versionLabel.Location = new System.Drawing.Point(6, 40);
             this.versionLabel.Margin = new System.Windows.Forms.Padding(3);
             this.versionLabel.Name = "versionLabel";
             this.versionLabel.Size = new System.Drawing.Size(45, 15);
             this.versionLabel.TabIndex = 28;
             this.versionLabel.Text = "Version";
             // 
-            // companyLabel
+            // basedOnLabel
             // 
-            this.companyLabel.AutoSize = true;
-            this.companyLabel.Location = new System.Drawing.Point(6, 103);
-            this.companyLabel.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
-            this.companyLabel.Name = "companyLabel";
-            this.companyLabel.Size = new System.Drawing.Size(127, 15);
-            this.companyLabel.TabIndex = 29;
-            this.companyLabel.Text = "Created by Module Art";
-            // 
-            // authorLabel
-            // 
-            this.authorLabel.AutoSize = true;
-            this.authorLabel.Location = new System.Drawing.Point(6, 124);
-            this.authorLabel.Margin = new System.Windows.Forms.Padding(3);
-            this.authorLabel.Name = "authorLabel";
-            this.authorLabel.Size = new System.Drawing.Size(134, 15);
-            this.authorLabel.TabIndex = 30;
-            this.authorLabel.Text = "Author: Eugene Volynko";
+            this.basedOnLabel.AutoSize = true;
+            this.basedOnLabel.Location = new System.Drawing.Point(6, 155);
+            this.basedOnLabel.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
+            this.basedOnLabel.MaximumSize = new System.Drawing.Size(190, 0);
+            this.basedOnLabel.Name = "basedOnLabel";
+            this.basedOnLabel.Size = new System.Drawing.Size(58, 15);
+            this.basedOnLabel.TabIndex = 29;
+            this.basedOnLabel.Text = "Based on ";
             // 
             // descriptionLabel
             // 
             this.descriptionLabel.AutoSize = true;
-            this.descriptionLabel.Location = new System.Drawing.Point(6, 151);
+            this.descriptionLabel.Location = new System.Drawing.Point(6, 64);
             this.descriptionLabel.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
+            this.descriptionLabel.MaximumSize = new System.Drawing.Size(244, 0);
             this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.Size = new System.Drawing.Size(221, 30);
+            this.descriptionLabel.Size = new System.Drawing.Size(244, 30);
             this.descriptionLabel.TabIndex = 31;
-            this.descriptionLabel.Text = "Lightweight desktop screen recorder for\r\nWindows, built on top of WinForms (C#)\r\n" +
-    "";
-            // 
-            // developerLink
-            // 
-            this.developerLink.AutoSize = true;
-            this.developerLink.Location = new System.Drawing.Point(6, 28);
-            this.developerLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
-            this.developerLink.Name = "developerLink";
-            this.developerLink.Size = new System.Drawing.Size(67, 15);
-            this.developerLink.TabIndex = 2;
-            this.developerLink.TabStop = true;
-            this.developerLink.Text = "Module Art";
-            this.aboutTooltip.SetToolTip(this.developerLink, "Open developer page in browser");
-            this.developerLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.developerLink_LinkClicked);
+            this.descriptionLabel.Text = "Utility for streaming the entire screen (or use OBS) with Discord... with audio!";
             // 
             // projectLink
             // 
             this.projectLink.AutoSize = true;
-            this.projectLink.Location = new System.Drawing.Point(79, 28);
+            this.projectLink.Location = new System.Drawing.Point(62, 28);
             this.projectLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
             this.projectLink.Name = "projectLink";
             this.projectLink.Size = new System.Drawing.Size(73, 15);
@@ -139,13 +119,15 @@
             // 
             // infoGroup
             // 
+            this.infoGroup.Controls.Add(this.moduleArtLabel);
+            this.infoGroup.Controls.Add(this.byLabel);
+            this.infoGroup.Controls.Add(this.screenRecorderLink);
             this.infoGroup.Controls.Add(this.licenseLabel);
             this.infoGroup.Controls.Add(this.updatesLink);
             this.infoGroup.Controls.Add(this.versionLabel);
-            this.infoGroup.Controls.Add(this.companyLabel);
-            this.infoGroup.Controls.Add(this.productLabel);
             this.infoGroup.Controls.Add(this.descriptionLabel);
-            this.infoGroup.Controls.Add(this.authorLabel);
+            this.infoGroup.Controls.Add(this.basedOnLabel);
+            this.infoGroup.Controls.Add(this.productLabel);
             this.infoGroup.Location = new System.Drawing.Point(9, 98);
             this.infoGroup.Margin = new System.Windows.Forms.Padding(0, 9, 0, 0);
             this.infoGroup.Name = "infoGroup";
@@ -153,6 +135,43 @@
             this.infoGroup.TabIndex = 34;
             this.infoGroup.TabStop = false;
             this.infoGroup.Text = "Info";
+            // 
+            // moduleArtLabel
+            // 
+            this.moduleArtLabel.AutoSize = true;
+            this.moduleArtLabel.Location = new System.Drawing.Point(23, 170);
+            this.moduleArtLabel.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
+            this.moduleArtLabel.Name = "moduleArtLabel";
+            this.moduleArtLabel.Size = new System.Drawing.Size(162, 15);
+            this.moduleArtLabel.TabIndex = 39;
+            this.moduleArtLabel.TabStop = true;
+            this.moduleArtLabel.Text = "Module Art (Eugene Volynko)";
+            this.aboutTooltip.SetToolTip(this.moduleArtLabel, "Open \"Quick Screen Recorder\" in GitHub");
+            this.moduleArtLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.moduleArtLabel_LinkClicked);
+            // 
+            // byLabel
+            // 
+            this.byLabel.AutoSize = true;
+            this.byLabel.Location = new System.Drawing.Point(6, 170);
+            this.byLabel.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
+            this.byLabel.MaximumSize = new System.Drawing.Size(190, 0);
+            this.byLabel.Name = "byLabel";
+            this.byLabel.Size = new System.Drawing.Size(20, 15);
+            this.byLabel.TabIndex = 38;
+            this.byLabel.Text = "by";
+            // 
+            // screenRecorderLink
+            // 
+            this.screenRecorderLink.AutoSize = true;
+            this.screenRecorderLink.Location = new System.Drawing.Point(58, 155);
+            this.screenRecorderLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
+            this.screenRecorderLink.Name = "screenRecorderLink";
+            this.screenRecorderLink.Size = new System.Drawing.Size(126, 15);
+            this.screenRecorderLink.TabIndex = 7;
+            this.screenRecorderLink.TabStop = true;
+            this.screenRecorderLink.Text = "Quick Screen Recorder";
+            this.aboutTooltip.SetToolTip(this.screenRecorderLink, "Open \"Quick Screen Recorder\" in GitHub");
+            this.screenRecorderLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.screenRecorderLink_LinkClicked);
             // 
             // licenseLabel
             // 
@@ -164,10 +183,22 @@
             this.licenseLabel.TabIndex = 37;
             this.licenseLabel.Text = "License: GPL-3.0";
             // 
+            // updatesLink
+            // 
+            this.updatesLink.AutoSize = true;
+            this.updatesLink.Location = new System.Drawing.Point(6, 106);
+            this.updatesLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
+            this.updatesLink.Name = "updatesLink";
+            this.updatesLink.Size = new System.Drawing.Size(127, 15);
+            this.updatesLink.TabIndex = 0;
+            this.updatesLink.TabStop = true;
+            this.updatesLink.Text = "Check for new releases";
+            this.updatesLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.updatesLink_LinkClicked);
+            // 
             // issuesLink
             // 
             this.issuesLink.AutoSize = true;
-            this.issuesLink.Location = new System.Drawing.Point(158, 28);
+            this.issuesLink.Location = new System.Drawing.Point(151, 28);
             this.issuesLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
             this.issuesLink.Name = "issuesLink";
             this.issuesLink.Size = new System.Drawing.Size(38, 15);
@@ -179,8 +210,8 @@
             // 
             // pagesGroup
             // 
+            this.pagesGroup.Controls.Add(this.authorLink);
             this.pagesGroup.Controls.Add(this.licenseLink);
-            this.pagesGroup.Controls.Add(this.developerLink);
             this.pagesGroup.Controls.Add(this.projectLink);
             this.pagesGroup.Controls.Add(this.issuesLink);
             this.pagesGroup.Location = new System.Drawing.Point(9, 333);
@@ -190,6 +221,19 @@
             this.pagesGroup.TabIndex = 37;
             this.pagesGroup.TabStop = false;
             this.pagesGroup.Text = "Links";
+            // 
+            // authorLink
+            // 
+            this.authorLink.AutoSize = true;
+            this.authorLink.Location = new System.Drawing.Point(6, 28);
+            this.authorLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
+            this.authorLink.Name = "authorLink";
+            this.authorLink.Size = new System.Drawing.Size(44, 15);
+            this.authorLink.TabIndex = 40;
+            this.authorLink.TabStop = true;
+            this.authorLink.Text = "Author";
+            this.aboutTooltip.SetToolTip(this.authorLink, "Open author page in GitHub");
+            this.authorLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.authorLink_LinkClicked);
             // 
             // licenseLink
             // 
@@ -203,18 +247,6 @@
             this.licenseLink.Text = "License";
             this.aboutTooltip.SetToolTip(this.licenseLink, "Open license page in browser");
             this.licenseLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.licenseLink_LinkClicked);
-            // 
-            // updatesLink
-            // 
-            this.updatesLink.AutoSize = true;
-            this.updatesLink.Location = new System.Drawing.Point(6, 76);
-            this.updatesLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
-            this.updatesLink.Name = "updatesLink";
-            this.updatesLink.Size = new System.Drawing.Size(103, 15);
-            this.updatesLink.TabIndex = 0;
-            this.updatesLink.TabStop = true;
-            this.updatesLink.Text = "Check for updates";
-            this.updatesLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.updatesLink_LinkClicked);
             // 
             // AboutForm
             // 
@@ -250,10 +282,8 @@
 		private System.Windows.Forms.PictureBox logoPictureBox;
 		private System.Windows.Forms.Label productLabel;
 		private System.Windows.Forms.Label versionLabel;
-		private System.Windows.Forms.Label companyLabel;
-		private System.Windows.Forms.Label authorLabel;
+		private System.Windows.Forms.Label basedOnLabel;
 		private System.Windows.Forms.Label descriptionLabel;
-		private System.Windows.Forms.LinkLabel developerLink;
 		private System.Windows.Forms.LinkLabel projectLink;
 		private CustomComponents.DarkThemeGroupBox infoGroup;
 		private System.Windows.Forms.LinkLabel issuesLink;
@@ -262,5 +292,9 @@
 		private System.Windows.Forms.LinkLabel licenseLink;
 		private System.Windows.Forms.ToolTip aboutTooltip;
         private System.Windows.Forms.LinkLabel updatesLink;
+        private System.Windows.Forms.LinkLabel screenRecorderLink;
+        private System.Windows.Forms.LinkLabel moduleArtLabel;
+        private System.Windows.Forms.Label byLabel;
+        private System.Windows.Forms.LinkLabel authorLink;
     }
 }

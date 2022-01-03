@@ -42,34 +42,30 @@ namespace DiscordAudioStream
 			}
 
 			updatesLink.LinkColor = DarkThemeManager.AccentColor;
-			developerLink.LinkColor = DarkThemeManager.AccentColor;
+			screenRecorderLink.LinkColor = DarkThemeManager.AccentColor;
+			moduleArtLabel.LinkColor = DarkThemeManager.AccentColor;
 			projectLink.LinkColor = DarkThemeManager.AccentColor;
 			licenseLink.LinkColor = DarkThemeManager.AccentColor;
 			issuesLink.LinkColor = DarkThemeManager.AccentColor;
+			authorLink.LinkColor = DarkThemeManager.AccentColor;
 
 			infoGroup.SetDarkMode(darkMode);
 			pagesGroup.SetDarkMode(darkMode);
 		}
 
-		private void developerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
-			Process.Start("https://github.com/ModuleArt/");
-		}
-
 		private void projectLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start("https://github.com/ModuleArt/quick-picture-viewer/");
+			Process.Start("https://github.com/p-rivero/DiscordAudioStream");
 		}
 
 		private void issuesLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start("https://github.com/ModuleArt/quick-picture-viewer/issues/");
+			Process.Start("https://github.com/p-rivero/DiscordAudioStream/issues");
 		}
 
 		private void updatesLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start("https://github.com/ModuleArt/quick-picture-viewer/issues/");
-			this.Close();
+			Process.Start("https://github.com/p-rivero/DiscordAudioStream/releases");
 		}
 
 		private void AboutForm_KeyDown(object sender, KeyEventArgs e)
@@ -82,7 +78,22 @@ namespace DiscordAudioStream
 
 		private void licenseLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start("https://github.com/ModuleArt/quick-picture-viewer/blob/master/LICENSE.md/");
+			Process.Start("https://github.com/p-rivero/DiscordAudioStream/blob/master/LICENSE");
+		}
+
+		private void moduleArtLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			Process.Start("https://github.com/ModuleArt");
+		}
+
+		private void screenRecorderLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			Process.Start("https://github.com/ModuleArt/quick-screen-recorder");
+		}
+
+		private void authorLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			Process.Start("https://github.com/p-rivero");
 		}
 	}
 }

@@ -79,7 +79,7 @@
             this.Name = "AreaForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Recording area - Quick Screen Recorder";
+            this.Text = "Recording area - Discord Audio Stream";
             this.TransparencyKey = System.Drawing.Color.MediumBlue;
             this.Activated += new System.EventHandler(this.AreaForm_Activated);
             this.Deactivate += new System.EventHandler(this.AreaForm_Deactivate);
