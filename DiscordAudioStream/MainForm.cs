@@ -410,6 +410,7 @@ namespace DiscordAudioStream
 			{
 				areaComboBox.Items.Add(window);
 			}
+			areaComboBox.Items.Add(new DarkThemeComboBox.Dummy());
 
 			widthNumeric.Maximum = SystemInformation.VirtualScreen.Width;
 			heightNumeric.Maximum = SystemInformation.VirtualScreen.Height;

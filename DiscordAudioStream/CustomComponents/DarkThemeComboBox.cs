@@ -23,6 +23,9 @@ namespace CustomComponents
                 return text;
             }
         }
+        public class Dummy
+        {
+        }
 
         public DarkThemeComboBox()
         {
@@ -93,11 +96,11 @@ namespace CustomComponents
                 {
                     Brush brush = new SolidBrush(e.BackColor);
                     Rectangle bounds = e.Bounds;
-                    bounds.Height -= 10;
+                    bounds.Height -= ItemHeight;
                     e.Graphics.FillRectangle(brush, bounds);
                     brush.Dispose();
 
-                    float Y = e.Bounds.Bottom - 5;
+                    float Y = e.Bounds.Bottom - ItemHeight/2;
                     e.Graphics.DrawLine(new Pen(DarkThemeManager.BorderColor), e.Bounds.Left + 5, Y, e.Bounds.Right - 5, Y);
                 }
                 else
@@ -117,7 +120,9 @@ namespace CustomComponents
         protected override void OnMeasureItem(MeasureItemEventArgs e)
         {
             if (Items[e.Index] is ItemWithSeparator)
-                e.ItemHeight += 10;
+                e.ItemHeight += ItemHeight;
+            else if (Items[e.Index] is Dummy)
+                e.ItemHeight = 0;
 
             base.OnMeasureItem(e);
         }
