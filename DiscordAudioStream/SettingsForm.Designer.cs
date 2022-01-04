@@ -28,119 +28,19 @@
 		private void InitializeComponent()
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
-            this.licenseLabel = new System.Windows.Forms.Label();
-            this.darkThemeRadio = new CustomComponents.DarkThemeRadioButton();
-            this.lightThemeRadio = new CustomComponents.DarkThemeRadioButton();
-            this.systemThemeRadio = new CustomComponents.DarkThemeRadioButton();
-            this.updatesCheckBox = new CustomComponents.DarkThemeCheckBox();
-            this.settingsTabs = new CustomComponents.DarkThemeTabControl();
-            this.themePage = new System.Windows.Forms.TabPage();
             this.audioPage = new System.Windows.Forms.TabPage();
             this.winSoundBtn = new System.Windows.Forms.Button();
             this.mixerBtn = new System.Windows.Forms.Button();
-            this.updatesPage = new System.Windows.Forms.TabPage();
-            this.settingsTabs.SuspendLayout();
-            this.themePage.SuspendLayout();
+            this.themePage = new System.Windows.Forms.TabPage();
+            this.licenseLabel = new System.Windows.Forms.Label();
+            this.systemThemeRadio = new CustomComponents.DarkThemeRadioButton();
+            this.darkThemeRadio = new CustomComponents.DarkThemeRadioButton();
+            this.lightThemeRadio = new CustomComponents.DarkThemeRadioButton();
+            this.settingsTabs = new CustomComponents.DarkThemeTabControl();
             this.audioPage.SuspendLayout();
-            this.updatesPage.SuspendLayout();
+            this.themePage.SuspendLayout();
+            this.settingsTabs.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // licenseLabel
-            // 
-            this.licenseLabel.AutoSize = true;
-            this.licenseLabel.Location = new System.Drawing.Point(6, 96);
-            this.licenseLabel.Margin = new System.Windows.Forms.Padding(3);
-            this.licenseLabel.Name = "licenseLabel";
-            this.licenseLabel.Size = new System.Drawing.Size(120, 15);
-            this.licenseLabel.TabIndex = 38;
-            this.licenseLabel.Text = "* App restart required";
-            // 
-            // darkThemeRadio
-            // 
-            this.darkThemeRadio.Location = new System.Drawing.Point(9, 65);
-            this.darkThemeRadio.Margin = new System.Windows.Forms.Padding(9, 0, 9, 9);
-            this.darkThemeRadio.Name = "darkThemeRadio";
-            this.darkThemeRadio.Size = new System.Drawing.Size(49, 19);
-            this.darkThemeRadio.TabIndex = 2;
-            this.darkThemeRadio.Text = "Dark";
-            this.darkThemeRadio.UseVisualStyleBackColor = true;
-            this.darkThemeRadio.CheckedChanged += new System.EventHandler(this.darkThemeRadio_CheckedChanged);
-            // 
-            // lightThemeRadio
-            // 
-            this.lightThemeRadio.Location = new System.Drawing.Point(9, 37);
-            this.lightThemeRadio.Margin = new System.Windows.Forms.Padding(9, 0, 9, 9);
-            this.lightThemeRadio.Name = "lightThemeRadio";
-            this.lightThemeRadio.Size = new System.Drawing.Size(52, 19);
-            this.lightThemeRadio.TabIndex = 1;
-            this.lightThemeRadio.Text = "Light";
-            this.lightThemeRadio.UseVisualStyleBackColor = true;
-            this.lightThemeRadio.CheckedChanged += new System.EventHandler(this.lightThemeRadio_CheckedChanged);
-            // 
-            // systemThemeRadio
-            // 
-            this.systemThemeRadio.Checked = true;
-            this.systemThemeRadio.Location = new System.Drawing.Point(9, 9);
-            this.systemThemeRadio.Margin = new System.Windows.Forms.Padding(9);
-            this.systemThemeRadio.Name = "systemThemeRadio";
-            this.systemThemeRadio.Size = new System.Drawing.Size(123, 19);
-            this.systemThemeRadio.TabIndex = 0;
-            this.systemThemeRadio.TabStop = true;
-            this.systemThemeRadio.Text = "Use system setting";
-            this.systemThemeRadio.UseVisualStyleBackColor = true;
-            this.systemThemeRadio.CheckedChanged += new System.EventHandler(this.systemThemeRadio_CheckedChanged);
-            // 
-            // updatesCheckBox
-            // 
-            this.updatesCheckBox.Location = new System.Drawing.Point(9, 9);
-            this.updatesCheckBox.Margin = new System.Windows.Forms.Padding(9);
-            this.updatesCheckBox.Name = "updatesCheckBox";
-            this.updatesCheckBox.Size = new System.Drawing.Size(202, 19);
-            this.updatesCheckBox.TabIndex = 0;
-            this.updatesCheckBox.Text = "Check for updates on app startup";
-            this.updatesCheckBox.UseVisualStyleBackColor = true;
-            this.updatesCheckBox.CheckedChanged += new System.EventHandler(this.updatesCheckBox_CheckedChanged);
-            // 
-            // settingsTabs
-            // 
-            this.settingsTabs.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.settingsTabs.AllowDrop = true;
-            this.settingsTabs.BackTabColor = System.Drawing.Color.White;
-            this.settingsTabs.BorderColor = System.Drawing.SystemColors.ControlLight;
-            this.settingsTabs.ClosingButtonColor = System.Drawing.Color.WhiteSmoke;
-            this.settingsTabs.ClosingMessage = null;
-            this.settingsTabs.Controls.Add(this.themePage);
-            this.settingsTabs.Controls.Add(this.audioPage);
-            this.settingsTabs.Controls.Add(this.updatesPage);
-            this.settingsTabs.DraggableTabs = false;
-            this.settingsTabs.HeaderColor = System.Drawing.SystemColors.ControlLight;
-            this.settingsTabs.HorizontalLineColor = System.Drawing.Color.Transparent;
-            this.settingsTabs.ItemSize = new System.Drawing.Size(240, 16);
-            this.settingsTabs.Location = new System.Drawing.Point(9, 9);
-            this.settingsTabs.Margin = new System.Windows.Forms.Padding(0, 0, 0, 9);
-            this.settingsTabs.Name = "settingsTabs";
-            this.settingsTabs.SelectedIndex = 0;
-            this.settingsTabs.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.settingsTabs.ShowClosingButton = false;
-            this.settingsTabs.ShowClosingMessage = false;
-            this.settingsTabs.Size = new System.Drawing.Size(256, 145);
-            this.settingsTabs.TabIndex = 13;
-            this.settingsTabs.TextColor = System.Drawing.Color.Black;
-            // 
-            // themePage
-            // 
-            this.themePage.BackColor = System.Drawing.Color.White;
-            this.themePage.Controls.Add(this.licenseLabel);
-            this.themePage.Controls.Add(this.systemThemeRadio);
-            this.themePage.Controls.Add(this.darkThemeRadio);
-            this.themePage.Controls.Add(this.lightThemeRadio);
-            this.themePage.Location = new System.Drawing.Point(4, 20);
-            this.themePage.Margin = new System.Windows.Forms.Padding(0);
-            this.themePage.Name = "themePage";
-            this.themePage.Padding = new System.Windows.Forms.Padding(3);
-            this.themePage.Size = new System.Drawing.Size(248, 121);
-            this.themePage.TabIndex = 0;
-            this.themePage.Text = "Theme";
             // 
             // audioPage
             // 
@@ -188,17 +88,90 @@
             this.mixerBtn.UseVisualStyleBackColor = false;
             this.mixerBtn.Click += new System.EventHandler(this.mixerBtn_Click);
             // 
-            // updatesPage
+            // themePage
             // 
-            this.updatesPage.BackColor = System.Drawing.Color.White;
-            this.updatesPage.Controls.Add(this.updatesCheckBox);
-            this.updatesPage.Location = new System.Drawing.Point(4, 20);
-            this.updatesPage.Margin = new System.Windows.Forms.Padding(0);
-            this.updatesPage.Name = "updatesPage";
-            this.updatesPage.Padding = new System.Windows.Forms.Padding(3);
-            this.updatesPage.Size = new System.Drawing.Size(248, 121);
-            this.updatesPage.TabIndex = 1;
-            this.updatesPage.Text = "Updates";
+            this.themePage.BackColor = System.Drawing.Color.White;
+            this.themePage.Controls.Add(this.licenseLabel);
+            this.themePage.Controls.Add(this.systemThemeRadio);
+            this.themePage.Controls.Add(this.darkThemeRadio);
+            this.themePage.Controls.Add(this.lightThemeRadio);
+            this.themePage.Location = new System.Drawing.Point(4, 20);
+            this.themePage.Margin = new System.Windows.Forms.Padding(0);
+            this.themePage.Name = "themePage";
+            this.themePage.Padding = new System.Windows.Forms.Padding(3);
+            this.themePage.Size = new System.Drawing.Size(248, 121);
+            this.themePage.TabIndex = 0;
+            this.themePage.Text = "Theme";
+            // 
+            // licenseLabel
+            // 
+            this.licenseLabel.AutoSize = true;
+            this.licenseLabel.Location = new System.Drawing.Point(6, 96);
+            this.licenseLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.licenseLabel.Name = "licenseLabel";
+            this.licenseLabel.Size = new System.Drawing.Size(120, 15);
+            this.licenseLabel.TabIndex = 38;
+            this.licenseLabel.Text = "* App restart required";
+            // 
+            // systemThemeRadio
+            // 
+            this.systemThemeRadio.Checked = true;
+            this.systemThemeRadio.Location = new System.Drawing.Point(9, 9);
+            this.systemThemeRadio.Margin = new System.Windows.Forms.Padding(9);
+            this.systemThemeRadio.Name = "systemThemeRadio";
+            this.systemThemeRadio.Size = new System.Drawing.Size(123, 19);
+            this.systemThemeRadio.TabIndex = 0;
+            this.systemThemeRadio.TabStop = true;
+            this.systemThemeRadio.Text = "Use system setting";
+            this.systemThemeRadio.UseVisualStyleBackColor = true;
+            this.systemThemeRadio.CheckedChanged += new System.EventHandler(this.systemThemeRadio_CheckedChanged);
+            // 
+            // darkThemeRadio
+            // 
+            this.darkThemeRadio.Location = new System.Drawing.Point(9, 65);
+            this.darkThemeRadio.Margin = new System.Windows.Forms.Padding(9, 0, 9, 9);
+            this.darkThemeRadio.Name = "darkThemeRadio";
+            this.darkThemeRadio.Size = new System.Drawing.Size(49, 19);
+            this.darkThemeRadio.TabIndex = 2;
+            this.darkThemeRadio.Text = "Dark";
+            this.darkThemeRadio.UseVisualStyleBackColor = true;
+            this.darkThemeRadio.CheckedChanged += new System.EventHandler(this.darkThemeRadio_CheckedChanged);
+            // 
+            // lightThemeRadio
+            // 
+            this.lightThemeRadio.Location = new System.Drawing.Point(9, 37);
+            this.lightThemeRadio.Margin = new System.Windows.Forms.Padding(9, 0, 9, 9);
+            this.lightThemeRadio.Name = "lightThemeRadio";
+            this.lightThemeRadio.Size = new System.Drawing.Size(52, 19);
+            this.lightThemeRadio.TabIndex = 1;
+            this.lightThemeRadio.Text = "Light";
+            this.lightThemeRadio.UseVisualStyleBackColor = true;
+            this.lightThemeRadio.CheckedChanged += new System.EventHandler(this.lightThemeRadio_CheckedChanged);
+            // 
+            // settingsTabs
+            // 
+            this.settingsTabs.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.settingsTabs.AllowDrop = true;
+            this.settingsTabs.BackTabColor = System.Drawing.Color.White;
+            this.settingsTabs.BorderColor = System.Drawing.SystemColors.ControlLight;
+            this.settingsTabs.ClosingButtonColor = System.Drawing.Color.WhiteSmoke;
+            this.settingsTabs.ClosingMessage = null;
+            this.settingsTabs.Controls.Add(this.themePage);
+            this.settingsTabs.Controls.Add(this.audioPage);
+            this.settingsTabs.DraggableTabs = false;
+            this.settingsTabs.HeaderColor = System.Drawing.SystemColors.ControlLight;
+            this.settingsTabs.HorizontalLineColor = System.Drawing.Color.Transparent;
+            this.settingsTabs.ItemSize = new System.Drawing.Size(240, 16);
+            this.settingsTabs.Location = new System.Drawing.Point(9, 9);
+            this.settingsTabs.Margin = new System.Windows.Forms.Padding(0, 0, 0, 9);
+            this.settingsTabs.Name = "settingsTabs";
+            this.settingsTabs.SelectedIndex = 0;
+            this.settingsTabs.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.settingsTabs.ShowClosingButton = false;
+            this.settingsTabs.ShowClosingMessage = false;
+            this.settingsTabs.Size = new System.Drawing.Size(256, 145);
+            this.settingsTabs.TabIndex = 13;
+            this.settingsTabs.TextColor = System.Drawing.Color.Black;
             // 
             // SettingsForm
             // 
@@ -218,26 +191,24 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SettingsForm_KeyDown);
-            this.settingsTabs.ResumeLayout(false);
+            this.audioPage.ResumeLayout(false);
             this.themePage.ResumeLayout(false);
             this.themePage.PerformLayout();
-            this.audioPage.ResumeLayout(false);
-            this.updatesPage.ResumeLayout(false);
+            this.settingsTabs.ResumeLayout(false);
             this.ResumeLayout(false);
 
 		}
 
-		#endregion
-		private CustomComponents.DarkThemeRadioButton lightThemeRadio;
-		private CustomComponents.DarkThemeRadioButton systemThemeRadio;
-		private CustomComponents.DarkThemeRadioButton darkThemeRadio;
-		private CustomComponents.DarkThemeCheckBox updatesCheckBox;
-		private System.Windows.Forms.Label licenseLabel;
-		private CustomComponents.DarkThemeTabControl settingsTabs;
-		private System.Windows.Forms.TabPage themePage;
-		private System.Windows.Forms.TabPage updatesPage;
-		private System.Windows.Forms.TabPage audioPage;
-		private System.Windows.Forms.Button mixerBtn;
-		private System.Windows.Forms.Button winSoundBtn;
-	}
+        #endregion
+
+        private System.Windows.Forms.TabPage audioPage;
+        private System.Windows.Forms.Button winSoundBtn;
+        private System.Windows.Forms.Button mixerBtn;
+        private System.Windows.Forms.TabPage themePage;
+        private System.Windows.Forms.Label licenseLabel;
+        private CustomComponents.DarkThemeRadioButton systemThemeRadio;
+        private CustomComponents.DarkThemeRadioButton darkThemeRadio;
+        private CustomComponents.DarkThemeRadioButton lightThemeRadio;
+        private CustomComponents.DarkThemeTabControl settingsTabs;
+    }
 }

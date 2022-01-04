@@ -38,7 +38,6 @@ namespace DiscordAudioStream
 			systemThemeRadio.SetDarkMode(darkMode);
 			darkThemeRadio.SetDarkMode(darkMode);
 			lightThemeRadio.SetDarkMode(darkMode);
-			updatesCheckBox.SetDarkMode(darkMode);
 
 			int theme = Properties.Settings.Default.Theme;
 			if (theme == 0)
