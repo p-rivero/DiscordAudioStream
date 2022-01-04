@@ -404,7 +404,7 @@ namespace DiscordAudioStream
 				areaComboBox.SelectedIndex = 0;
 			}
 
-			areaComboBox.Items.Add("Custom area");
+			areaComboBox.Items.Add(new DarkThemeComboBox.ItemWithSeparator("Custom area"));
 
 			foreach (string window in ProcessHandleManager.RefreshHandles())
 			{
