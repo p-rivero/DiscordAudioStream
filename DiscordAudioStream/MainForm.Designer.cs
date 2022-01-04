@@ -278,6 +278,7 @@
             this.areaComboBox.Name = "areaComboBox";
             this.areaComboBox.Size = new System.Drawing.Size(231, 24);
             this.areaComboBox.TabIndex = 8;
+            this.areaComboBox.DropDown += new System.EventHandler(this.areaComboBox_DropDown);
             this.areaComboBox.SelectedIndexChanged += new System.EventHandler(this.areaComboBox_SelectedIndexChanged);
             // 
             // captureCursorCheckBox

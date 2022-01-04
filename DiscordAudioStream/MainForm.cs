@@ -681,5 +681,12 @@ namespace DiscordAudioStream
 				if (Properties.Settings.Default.AutoExit) Close();
 			}));
 		}
+
+		private void areaComboBox_DropDown(object sender, EventArgs e)
+		{
+			// Only refresh if doing so won't change the currently selected item
+			if (areaComboBox.SelectedIndex < numberOfScreens)
+				RefreshScreens();
+		}
 	}
 }
