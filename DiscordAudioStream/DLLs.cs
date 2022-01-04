@@ -71,12 +71,12 @@ class User32
 			set { right = value + left; }
 		}
 		public RECT(int x, int y, int width, int height)
-        {
+		{
 			left = x;
 			top = y;
 			right = width + x;
 			bottom = height + y;
-        }
+		}
 	}
 	public enum WindowCompositionAttribute
 	{
@@ -123,6 +123,8 @@ class User32
 	public static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
 	public const int SWP_NOSIZE = 0x0001;
 	public const int SWP_NOMOVE = 0x0002;
+	public const int PW_RENDERFULLCONTENT = 0x00000002;
+	public const int PW_CLIENTONLY = 0x1;
 	public enum FsModifiers
 	{
 		NONE = 0x0000,

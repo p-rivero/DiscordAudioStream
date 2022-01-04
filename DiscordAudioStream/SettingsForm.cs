@@ -54,6 +54,7 @@ namespace DiscordAudioStream
 			}
 
 			autoExitCheckbox.Checked = Properties.Settings.Default.AutoExit;
+			experimentalCaptureCheckBox.Checked = Properties.Settings.Default.UseExperimentalCapture;
 		}
 
 		private void SettingsForm_KeyDown(object sender, KeyEventArgs e)
@@ -112,5 +113,12 @@ namespace DiscordAudioStream
 			Properties.Settings.Default.AutoExit = autoExitCheckbox.Checked;
 			Properties.Settings.Default.Save();
 		}
-	}
+
+		private void experimentalCaptureCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			ProcessHandleManager.ClearSelectedIndex();
+			Properties.Settings.Default.UseExperimentalCapture = experimentalCaptureCheckBox.Checked;
+			Properties.Settings.Default.Save();
+		}
+    }
 }

@@ -102,7 +102,15 @@ namespace DiscordAudioStream
 				master.GetCaptureArea(out windowSize, out position);
 			}
 
-			Bitmap BMP = CaptureScreen(position, windowSize);
+			Bitmap BMP;
+			if (ProcessHandleManager.CapturingWindow && Properties.Settings.Default.UseExperimentalCapture)
+			{
+				BMP = CaptureWindow(ProcessHandleManager.GetHandle(), windowSize);
+			} else
+			{
+				BMP = CaptureScreen(position, windowSize);
+			}
+
 			if (captureCursor)
 			{
 				User32.CURSORINFO pci;
@@ -151,5 +159,17 @@ namespace DiscordAudioStream
 
 			return result;
 		}
+
+		public Bitmap CaptureWindow(IntPtr hwnd, Size winSize)
+		{
+			Bitmap bmp = new Bitmap(winSize.Width, winSize.Height);
+			Graphics gfxBmp = Graphics.FromImage(bmp);
+			IntPtr hdcBitmap = gfxBmp.GetHdc();
+			User32.PrintWindow(hwnd, hdcBitmap, User32.PW_RENDERFULLCONTENT);
+			gfxBmp.ReleaseHdc(hdcBitmap);
+			gfxBmp.Dispose();
+			return bmp;
+		}
+
 	}
 }

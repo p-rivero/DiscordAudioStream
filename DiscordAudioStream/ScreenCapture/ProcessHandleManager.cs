@@ -68,8 +68,11 @@ namespace DiscordAudioStream
 				}
 				selectedIndex = value;
 
-				// Set selected process as topmost
-				User32.SetWindowPos(procs[selectedIndex], User32.HWND_TOPMOST, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
+				if (!Properties.Settings.Default.UseExperimentalCapture)
+				{
+					// Set selected process as topmost
+					User32.SetWindowPos(procs[selectedIndex], User32.HWND_TOPMOST, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
+				}
 			}
 		}
 
@@ -98,7 +101,10 @@ namespace DiscordAudioStream
 			if (selectedIndex == -1)
 				return;
 
-			User32.SetWindowPos(procs[selectedIndex], User32.HWND_NOTOPMOST, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
+			if (!Properties.Settings.Default.UseExperimentalCapture)
+			{
+				User32.SetWindowPos(procs[selectedIndex], User32.HWND_NOTOPMOST, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
+			}
 			selectedIndex = -1;
 		}
 	}

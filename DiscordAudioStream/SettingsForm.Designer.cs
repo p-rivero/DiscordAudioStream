@@ -32,12 +32,14 @@
             this.winSoundBtn = new System.Windows.Forms.Button();
             this.mixerBtn = new System.Windows.Forms.Button();
             this.themePage = new System.Windows.Forms.TabPage();
-            this.licenseLabel = new System.Windows.Forms.Label();
+            this.restartLabel = new System.Windows.Forms.Label();
             this.systemThemeRadio = new CustomComponents.DarkThemeRadioButton();
             this.darkThemeRadio = new CustomComponents.DarkThemeRadioButton();
             this.lightThemeRadio = new CustomComponents.DarkThemeRadioButton();
             this.settingsTabs = new CustomComponents.DarkThemeTabControl();
             this.capturePage = new System.Windows.Forms.TabPage();
+            this.experimentalCaptureLabel = new System.Windows.Forms.Label();
+            this.experimentalCaptureCheckBox = new CustomComponents.DarkThemeCheckBox();
             this.autoExitCheckbox = new CustomComponents.DarkThemeCheckBox();
             this.audioPage.SuspendLayout();
             this.themePage.SuspendLayout();
@@ -94,7 +96,7 @@
             // themePage
             // 
             this.themePage.BackColor = System.Drawing.Color.White;
-            this.themePage.Controls.Add(this.licenseLabel);
+            this.themePage.Controls.Add(this.restartLabel);
             this.themePage.Controls.Add(this.systemThemeRadio);
             this.themePage.Controls.Add(this.darkThemeRadio);
             this.themePage.Controls.Add(this.lightThemeRadio);
@@ -106,15 +108,15 @@
             this.themePage.TabIndex = 0;
             this.themePage.Text = "Theme";
             // 
-            // licenseLabel
+            // restartLabel
             // 
-            this.licenseLabel.AutoSize = true;
-            this.licenseLabel.Location = new System.Drawing.Point(6, 96);
-            this.licenseLabel.Margin = new System.Windows.Forms.Padding(3);
-            this.licenseLabel.Name = "licenseLabel";
-            this.licenseLabel.Size = new System.Drawing.Size(120, 15);
-            this.licenseLabel.TabIndex = 38;
-            this.licenseLabel.Text = "* App restart required";
+            this.restartLabel.AutoSize = true;
+            this.restartLabel.Location = new System.Drawing.Point(6, 96);
+            this.restartLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.restartLabel.Name = "restartLabel";
+            this.restartLabel.Size = new System.Drawing.Size(120, 15);
+            this.restartLabel.TabIndex = 38;
+            this.restartLabel.Text = "* App restart required";
             // 
             // systemThemeRadio
             // 
@@ -180,6 +182,8 @@
             // capturePage
             // 
             this.capturePage.BackColor = System.Drawing.Color.White;
+            this.capturePage.Controls.Add(this.experimentalCaptureLabel);
+            this.capturePage.Controls.Add(this.experimentalCaptureCheckBox);
             this.capturePage.Controls.Add(this.autoExitCheckbox);
             this.capturePage.Location = new System.Drawing.Point(4, 20);
             this.capturePage.Margin = new System.Windows.Forms.Padding(0);
@@ -188,6 +192,30 @@
             this.capturePage.Size = new System.Drawing.Size(248, 121);
             this.capturePage.TabIndex = 3;
             this.capturePage.Text = "Capture";
+            // 
+            // experimentalCaptureLabel
+            // 
+            this.experimentalCaptureLabel.AutoSize = true;
+            this.experimentalCaptureLabel.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.experimentalCaptureLabel.Location = new System.Drawing.Point(6, 63);
+            this.experimentalCaptureLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.experimentalCaptureLabel.MaximumSize = new System.Drawing.Size(240, 0);
+            this.experimentalCaptureLabel.Name = "experimentalCaptureLabel";
+            this.experimentalCaptureLabel.Size = new System.Drawing.Size(234, 52);
+            this.experimentalCaptureLabel.TabIndex = 39;
+            this.experimentalCaptureLabel.Text = "* Use an alternative API for recording single windows without bringing them to fr" +
+    "ont. Turn it off if you experience flickering. Requires Windows 8 or higher.";
+            // 
+            // experimentalCaptureCheckBox
+            // 
+            this.experimentalCaptureCheckBox.AutoSize = true;
+            this.experimentalCaptureCheckBox.Location = new System.Drawing.Point(9, 34);
+            this.experimentalCaptureCheckBox.Name = "experimentalCaptureCheckBox";
+            this.experimentalCaptureCheckBox.Size = new System.Drawing.Size(213, 19);
+            this.experimentalCaptureCheckBox.TabIndex = 1;
+            this.experimentalCaptureCheckBox.Text = "Use experimental capture method *";
+            this.experimentalCaptureCheckBox.UseVisualStyleBackColor = true;
+            this.experimentalCaptureCheckBox.CheckedChanged += new System.EventHandler(this.experimentalCaptureCheckBox_CheckedChanged);
             // 
             // autoExitCheckbox
             // 
@@ -234,12 +262,14 @@
         private System.Windows.Forms.Button winSoundBtn;
         private System.Windows.Forms.Button mixerBtn;
         private System.Windows.Forms.TabPage themePage;
-        private System.Windows.Forms.Label licenseLabel;
+        private System.Windows.Forms.Label restartLabel;
         private CustomComponents.DarkThemeRadioButton systemThemeRadio;
         private CustomComponents.DarkThemeRadioButton darkThemeRadio;
         private CustomComponents.DarkThemeRadioButton lightThemeRadio;
         private CustomComponents.DarkThemeTabControl settingsTabs;
         private System.Windows.Forms.TabPage capturePage;
         private CustomComponents.DarkThemeCheckBox autoExitCheckbox;
+        private CustomComponents.DarkThemeCheckBox experimentalCaptureCheckBox;
+        private System.Windows.Forms.Label experimentalCaptureLabel;
     }
 }

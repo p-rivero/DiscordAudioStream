@@ -118,5 +118,17 @@ namespace DiscordAudioStream.Properties {
                 this["AutoExit"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseExperimentalCapture {
+            get {
+                return ((bool)(this["UseExperimentalCapture"]));
+            }
+            set {
+                this["UseExperimentalCapture"] = value;
+            }
+        }
     }
 }
