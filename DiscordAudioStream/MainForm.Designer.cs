@@ -269,8 +269,11 @@
             // 
             // areaComboBox
             // 
+            this.areaComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.areaComboBox.DropDownHeight = 200;
             this.areaComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.areaComboBox.FormattingEnabled = true;
+            this.areaComboBox.IntegralHeight = false;
             this.areaComboBox.Location = new System.Drawing.Point(73, 19);
             this.areaComboBox.Name = "areaComboBox";
             this.areaComboBox.Size = new System.Drawing.Size(231, 24);

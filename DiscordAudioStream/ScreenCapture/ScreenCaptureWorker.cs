@@ -17,6 +17,7 @@ namespace DiscordAudioStream
 
 		private int INTERVAL_MS;
 		private Thread captureThread;
+		private Size oldSize = new Size(-1, -1);
 
 
 		// Return the next frame, if it exists (null otherwise)
@@ -49,7 +50,18 @@ namespace DiscordAudioStream
 				while (true)
 				{
 					stopwatch.Restart();
-					EnqueueFrame();
+					try
+					{
+						EnqueueFrame();
+					}
+					catch (ThreadAbortException)
+					{
+						break;
+					}
+					catch (Exception)
+					{
+						master.AbortCapture();
+					}
 					stopwatch.Stop();
 
 					int wait = INTERVAL_MS - (int)stopwatch.ElapsedMilliseconds;
@@ -71,19 +83,26 @@ namespace DiscordAudioStream
 
 		private void EnqueueFrame()
 		{
-			int width, height, x, y;
+			Size windowSize;
+			Point position;
 			bool captureCursor = master.IsCapturingCursor();
 			if (ProcessHandleManager.CapturingWindow)
 			{
 				IntPtr proc = ProcessHandleManager.GetHandle();
-				GetWindowArea(proc, out width, out height, out x, out y);
+				GetWindowArea(proc, out windowSize, out position);
+
+				if (windowSize != oldSize)
+				{
+					oldSize = windowSize;
+					master.CapturedWindowSizeChanged(windowSize);
+				}
 			}
 			else
 			{
-				master.GetCaptureArea(out width, out height, out x, out y);
+				master.GetCaptureArea(out windowSize, out position);
 			}
 
-			Bitmap BMP = CaptureScreen(x, y, width, height);
+			Bitmap BMP = CaptureScreen(position, windowSize);
 			if (captureCursor)
 			{
 				User32.CURSORINFO pci;
@@ -92,7 +111,7 @@ namespace DiscordAudioStream
 				if (User32.GetCursorInfo(out pci) && pci.flags == User32.CURSOR_SHOWING)
 				{
 					Graphics g = Graphics.FromImage(BMP);
-					User32.DrawIcon(g.GetHdc(), pci.ptScreenPos.x - x, pci.ptScreenPos.y - y, pci.hCursor);
+					User32.DrawIcon(g.GetHdc(), pci.ptScreenPos.x - position.X, pci.ptScreenPos.y - position.Y, pci.hCursor);
 					g.ReleaseHdc();
 					g.Dispose();
 				}
@@ -108,22 +127,20 @@ namespace DiscordAudioStream
 			}
 		}
 
-		private static void GetWindowArea(IntPtr hwnd, out int width, out int height, out int x, out int y)
+		private static void GetWindowArea(IntPtr hwnd, out Size windowSize, out Point position)
 		{
 			User32.GetWindowRect(hwnd, out User32.RECT rc);
-			width = rc.Width;
-			height = rc.Height;
-			x = rc.X; 
-			y = rc.Y;
+			windowSize = new Size(rc.Width, rc.Height);
+			position = new Point(rc.X, rc.Y);
 		}
 
-		private static Bitmap CaptureScreen(int startX, int startY, int width, int height)
+		private static Bitmap CaptureScreen(Point startPos, Size size)
 		{
 			int hdcSrc = User32.GetWindowDC(User32.GetDesktopWindow());
 			int hdcDest = GDI32.CreateCompatibleDC(hdcSrc);
-			int hBitmap = GDI32.CreateCompatibleBitmap(hdcSrc, width, height);
+			int hBitmap = GDI32.CreateCompatibleBitmap(hdcSrc, size.Width, size.Height);
 			GDI32.SelectObject(hdcDest, hBitmap);
-			GDI32.BitBlt(hdcDest, 0, 0, width, height, hdcSrc, startX, startY, 0x00CC0020);
+			GDI32.BitBlt(hdcDest, 0, 0, size.Width, size.Height, hdcSrc, startPos.X, startPos.Y, 0x00CC0020);
 
 			Bitmap result = Image.FromHbitmap(new IntPtr(hBitmap));
 

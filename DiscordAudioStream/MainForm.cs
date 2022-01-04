@@ -553,6 +553,11 @@ namespace DiscordAudioStream
 			}
 		}
 
+		public void CapturedWindowSizeChanged(Size newSize)
+		{
+			SetPreviewSize(newSize);
+		}
+
 		private void scaleComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			int index = scaleComboBox.SelectedIndex;
@@ -567,9 +572,6 @@ namespace DiscordAudioStream
 
 		private void StartStream()
 		{
-			int width = (int)widthNumeric.Value;
-			int height = (int)heightNumeric.Value;
-
 			if (inputDeviceComboBox.SelectedIndex == 0)
 			{
 				DialogResult r = MessageBox.Show("No audio source selected, continue anyways?", "Warning",
@@ -594,7 +596,7 @@ namespace DiscordAudioStream
 			streamEnabled = true;
 			this.AutoSize = true;
 
-			SetPreviewSize(new Size(width, height));
+			SetPreviewSize(previewBox.Image.Size);
 		}
 
 		private void EndStream()
@@ -614,7 +616,7 @@ namespace DiscordAudioStream
 			CenterToScreen();
 		}
 
-		public void GetCaptureArea(out int width, out int height, out int x, out int y)
+		public void GetCaptureArea(out Size size, out Point pos)
 		{
 			int tmp_width = 0, tmp_height = 0, tmp_x = 0, tmp_y = 0;
 			Invoke(new Action(() =>
@@ -625,19 +627,12 @@ namespace DiscordAudioStream
 				tmp_y = (int)yNumeric.Value;
 			}));
 
-			width = tmp_width;
-			height = tmp_height;
-			x = tmp_x;
-			y = tmp_y;
+			size = new Size(tmp_width, tmp_height);
+			pos = new Point(tmp_x, tmp_y);
 		}
 
 		public bool IsCapturingCursor()
 		{
-			//bool tmp_captureCursor = false;
-			//Invoke(new Action(() =>
-			//{
-			//	tmp_captureCursor = captureCursorCheckBox.Checked;
-			//}));
 			return captureCursorCheckBox.Checked;
 		}
 
@@ -674,5 +669,17 @@ namespace DiscordAudioStream
 				Process.Start(cplPath, "/name Microsoft.Sound");
 			}
 		}
-    }
+
+		public void AbortCapture()
+		{
+			Invoke(new Action(() =>
+			{
+				RefreshScreens();
+				if (!streamEnabled) return;
+
+				EndStream();
+				if (Properties.Settings.Default.AutoExit) Close();
+			}));
+		}
+	}
 }

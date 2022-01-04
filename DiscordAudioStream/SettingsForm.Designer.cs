@@ -37,9 +37,12 @@
             this.darkThemeRadio = new CustomComponents.DarkThemeRadioButton();
             this.lightThemeRadio = new CustomComponents.DarkThemeRadioButton();
             this.settingsTabs = new CustomComponents.DarkThemeTabControl();
+            this.capturePage = new System.Windows.Forms.TabPage();
+            this.autoExitCheckbox = new CustomComponents.DarkThemeCheckBox();
             this.audioPage.SuspendLayout();
             this.themePage.SuspendLayout();
             this.settingsTabs.SuspendLayout();
+            this.capturePage.SuspendLayout();
             this.SuspendLayout();
             // 
             // audioPage
@@ -158,6 +161,7 @@
             this.settingsTabs.ClosingMessage = null;
             this.settingsTabs.Controls.Add(this.themePage);
             this.settingsTabs.Controls.Add(this.audioPage);
+            this.settingsTabs.Controls.Add(this.capturePage);
             this.settingsTabs.DraggableTabs = false;
             this.settingsTabs.HeaderColor = System.Drawing.SystemColors.ControlLight;
             this.settingsTabs.HorizontalLineColor = System.Drawing.Color.Transparent;
@@ -172,6 +176,29 @@
             this.settingsTabs.Size = new System.Drawing.Size(256, 145);
             this.settingsTabs.TabIndex = 13;
             this.settingsTabs.TextColor = System.Drawing.Color.Black;
+            // 
+            // capturePage
+            // 
+            this.capturePage.BackColor = System.Drawing.Color.White;
+            this.capturePage.Controls.Add(this.autoExitCheckbox);
+            this.capturePage.Location = new System.Drawing.Point(4, 20);
+            this.capturePage.Margin = new System.Windows.Forms.Padding(0);
+            this.capturePage.Name = "capturePage";
+            this.capturePage.Padding = new System.Windows.Forms.Padding(3);
+            this.capturePage.Size = new System.Drawing.Size(248, 121);
+            this.capturePage.TabIndex = 3;
+            this.capturePage.Text = "Capture";
+            // 
+            // autoExitCheckbox
+            // 
+            this.autoExitCheckbox.AutoSize = true;
+            this.autoExitCheckbox.Location = new System.Drawing.Point(9, 9);
+            this.autoExitCheckbox.Name = "autoExitCheckbox";
+            this.autoExitCheckbox.Size = new System.Drawing.Size(207, 19);
+            this.autoExitCheckbox.TabIndex = 0;
+            this.autoExitCheckbox.Text = "Exit when captured window closes";
+            this.autoExitCheckbox.UseVisualStyleBackColor = true;
+            this.autoExitCheckbox.CheckedChanged += new System.EventHandler(this.autoExitCheckbox_CheckedChanged);
             // 
             // SettingsForm
             // 
@@ -195,6 +222,8 @@
             this.themePage.ResumeLayout(false);
             this.themePage.PerformLayout();
             this.settingsTabs.ResumeLayout(false);
+            this.capturePage.ResumeLayout(false);
+            this.capturePage.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -210,5 +239,7 @@
         private CustomComponents.DarkThemeRadioButton darkThemeRadio;
         private CustomComponents.DarkThemeRadioButton lightThemeRadio;
         private CustomComponents.DarkThemeTabControl settingsTabs;
+        private System.Windows.Forms.TabPage capturePage;
+        private CustomComponents.DarkThemeCheckBox autoExitCheckbox;
     }
 }

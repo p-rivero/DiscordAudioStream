@@ -52,6 +52,8 @@ namespace DiscordAudioStream
 			{
 				darkThemeRadio.Checked = true;
 			}
+
+			autoExitCheckbox.Checked = Properties.Settings.Default.AutoExit;
 		}
 
 		private void SettingsForm_KeyDown(object sender, KeyEventArgs e)
@@ -103,6 +105,12 @@ namespace DiscordAudioStream
 		{
 			var cplPath = System.IO.Path.Combine(Environment.SystemDirectory, "control.exe");
 			System.Diagnostics.Process.Start(cplPath, "/name Microsoft.Sound");
+		}
+
+		private void autoExitCheckbox_CheckedChanged(object sender, EventArgs e)
+		{
+			Properties.Settings.Default.AutoExit = autoExitCheckbox.Checked;
+			Properties.Settings.Default.Save();
 		}
 	}
 }

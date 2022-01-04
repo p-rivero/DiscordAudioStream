@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace DiscordAudioStream
 {
 	public interface IScreenCaptureMaster
 	{
-		void GetCaptureArea(out int width, out int height, out int x, out int y);
+		void GetCaptureArea(out Size windowSize, out Point position);
 		bool IsCapturingCursor();
+		void CapturedWindowSizeChanged(Size newSize);
+		void AbortCapture();
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -23,6 +24,9 @@ namespace DiscordAudioStream
 
 				// Ignore shell
 				if (hWnd == shellWindow) return true;
+
+				// Ignore this window
+				if (hWnd == Process.GetCurrentProcess().MainWindowHandle) return true;
 
 				// Ignore windows without WS_VISIBLE
 				if (!User32.IsWindowVisible(hWnd)) return true;

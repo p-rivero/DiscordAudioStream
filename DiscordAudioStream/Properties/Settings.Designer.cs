@@ -106,5 +106,17 @@ namespace DiscordAudioStream.Properties {
                 this["AreaIndex"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoExit {
+            get {
+                return ((bool)(this["AutoExit"]));
+            }
+            set {
+                this["AutoExit"] = value;
+            }
+        }
     }
 }
