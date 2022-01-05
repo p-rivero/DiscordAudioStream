@@ -204,7 +204,7 @@
             this.experimentalCaptureLabel.Size = new System.Drawing.Size(234, 52);
             this.experimentalCaptureLabel.TabIndex = 39;
             this.experimentalCaptureLabel.Text = "* Use an alternative API for recording single windows without bringing them to fr" +
-    "ont. Turn it off if you experience flickering. Requires Windows 8 or higher.";
+    "ont. Turn it off if you experience flickering. Requires Windows 8.1 or higher.";
             // 
             // experimentalCaptureCheckBox
             // 
