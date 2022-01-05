@@ -36,8 +36,8 @@ namespace DiscordAudioStream
 				if (length == 0) return true;
 
 				// Ignore suspended Windows Store apps
-				Dwmapi.DwmGetWindowAttribute(hWnd, (int)Dwmapi.DwmWindowAttribute.CLOAKED, out IntPtr isCloacked, Marshal.SizeOf(typeof(bool)));
-				if (isCloacked != IntPtr.Zero) return true;
+				if (Dwmapi.GetBoolAttr(hWnd, Dwmapi.DwmWindowAttribute.CLOAKED))
+					return true;
 
 				StringBuilder builder = new StringBuilder(length);
 				User32.GetWindowText(hWnd, builder, length + 1);

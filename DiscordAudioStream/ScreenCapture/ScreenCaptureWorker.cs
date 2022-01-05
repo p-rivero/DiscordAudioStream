@@ -102,6 +102,9 @@ namespace DiscordAudioStream
 				master.GetCaptureArea(out windowSize, out position);
 			}
 
+			if (windowSize.Width == 0 && windowSize.Height == 0)
+				return;
+
 			Bitmap BMP;
 			if (ProcessHandleManager.CapturingWindow && Properties.Settings.Default.UseExperimentalCapture)
 			{
@@ -137,9 +140,17 @@ namespace DiscordAudioStream
 
 		private static void GetWindowArea(IntPtr hwnd, out Size windowSize, out Point position)
 		{
-			User32.GetWindowRect(hwnd, out User32.RECT rc);
-			windowSize = new Size(rc.Width, rc.Height);
-			position = new Point(rc.X, rc.Y);
+			// Get size of client area (don't use X and Y, these are relative to the WINDOW rect)
+			User32.GetClientRect(hwnd, out User32.RECT clientRect);
+			// Get frame size and position (generally more accurate than GetWindowRect)
+			User32.RECT frame = Dwmapi.GetRectAttr(hwnd, Dwmapi.DwmWindowAttribute.EXTENDED_FRAME_BOUNDS);
+
+			// Trim the black bar at the top when the window is maximized,
+			// as well as the title bar for applications with a defined client area
+			int yOffset = frame.Height - clientRect.Height;
+
+			windowSize = new Size(clientRect.Width, clientRect.Height);
+			position = new Point(frame.X + 1, frame.Y + yOffset);
 		}
 
 		private static Bitmap CaptureScreen(Point startPos, Size size)
@@ -165,7 +176,7 @@ namespace DiscordAudioStream
 			Bitmap bmp = new Bitmap(winSize.Width, winSize.Height);
 			Graphics gfxBmp = Graphics.FromImage(bmp);
 			IntPtr hdcBitmap = gfxBmp.GetHdc();
-			User32.PrintWindow(hwnd, hdcBitmap, User32.PW_RENDERFULLCONTENT);
+			User32.PrintWindow(hwnd, hdcBitmap, User32.PW_CLIENTONLY|User32.PW_RENDERFULLCONTENT);
 			gfxBmp.ReleaseHdc(hdcBitmap);
 			gfxBmp.Dispose();
 			return bmp;

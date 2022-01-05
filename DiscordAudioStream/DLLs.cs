@@ -177,6 +177,8 @@ class User32
 	public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
 	[DllImport("user32.dll")]
 	public static extern bool SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttribData data);
+	[DllImport("user32.dll")]
+	public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
 }
 
 class Ntdll
@@ -231,7 +233,20 @@ class Dwmapi
 	}
 
 	[DllImport("dwmapi.dll")]
-	public static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out IntPtr pvAttribute, int cbAttribute);
+	private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out bool pvAttribute, int cbAttribute);
+	[DllImport("dwmapi.dll")]
+	private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out User32.RECT pvAttribute, int cbAttribute);
+
+	public static bool GetBoolAttr(IntPtr hwnd, DwmWindowAttribute attribute)
+	{
+		DwmGetWindowAttribute(hwnd, (int)attribute, out bool pvAttribute, Marshal.SizeOf(typeof(bool)));
+		return pvAttribute;
+	}
+	public static User32.RECT GetRectAttr(IntPtr hwnd, DwmWindowAttribute attribute)
+	{
+		DwmGetWindowAttribute(hwnd, (int)attribute, out User32.RECT pvAttribute, Marshal.SizeOf(typeof(User32.RECT)));
+		return pvAttribute;
+	}
 }
 
 class Uxtheme
