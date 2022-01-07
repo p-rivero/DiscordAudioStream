@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
-
+using System.Windows.Forms;
 
 namespace DiscordAudioStream
 {
@@ -18,6 +18,7 @@ namespace DiscordAudioStream
 		private int INTERVAL_MS;
 		private Thread captureThread;
 		private Size oldSize = new Size(-1, -1);
+		private int cursorSize = -1;
 
 
 		// Return the next frame, if it exists (null otherwise)
@@ -104,26 +105,36 @@ namespace DiscordAudioStream
 
 			if (windowSize.Width == 0 && windowSize.Height == 0)
 				return;
+			// Todo: detect 
 
 			Bitmap BMP;
 			if (ProcessHandleManager.CapturingWindow && Properties.Settings.Default.UseExperimentalCapture)
 			{
 				BMP = CaptureWindow(ProcessHandleManager.GetHandle(), windowSize);
-			} else
+			}
+			else
 			{
 				BMP = CaptureScreen(position, windowSize);
 			}
 
 			if (captureCursor)
 			{
-				User32.CURSORINFO pci;
-				pci.cbSize = Marshal.SizeOf(typeof(User32.CURSORINFO));
+				User32.CURSORINFO pci = User32.CURSORINFO.Init();
 
-				if (User32.GetCursorInfo(out pci) && pci.flags == User32.CURSOR_SHOWING)
+				if (User32.GetCursorInfo(ref pci) && pci.flags == User32.CURSOR_SHOWING)
 				{
+					// Get the cursor hotspot
+					User32.GetIconInfo(pci.hCursor, out User32.ICONINFO iconInfo);
+					// Screen coordinates where the cursor has to be drawn (compensate for hotspot)
+					Point cursorPos = new Point(pci.ptScreenPos.x - iconInfo.xHotspot, pci.ptScreenPos.y - iconInfo.yHotspot);
+					// Transform from screen coordinates (relative to main screen) to window coordinates (relative to captured area)
+					cursorPos.X -= position.X;
+					cursorPos.Y -= position.Y;
+
+					// Draw the cursor
 					Graphics g = Graphics.FromImage(BMP);
-					User32.DrawIcon(g.GetHdc(), pci.ptScreenPos.x - position.X, pci.ptScreenPos.y - position.Y, pci.hCursor);
-					g.ReleaseHdc();
+					int size = GetCursorSize();
+					User32.DrawIconEx(g.GetHdc(), cursorPos.X, cursorPos.Y, pci.hCursor, size, size, 0, IntPtr.Zero, User32.DI_NORMAL);
 					g.Dispose();
 				}
 			}
@@ -182,5 +193,14 @@ namespace DiscordAudioStream
 			return bmp;
 		}
 
+		private int GetCursorSize()
+		{
+			if (cursorSize == -1)
+			{
+				string scale = Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Accessibility", "CursorSize", 0).ToString();
+				cursorSize = 32 + (int.Parse(scale) - 1) * 16;
+			}
+			return cursorSize;
+		}
 	}
 }

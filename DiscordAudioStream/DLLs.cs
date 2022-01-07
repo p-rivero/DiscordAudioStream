@@ -116,6 +116,15 @@ class User32
 		public IntPtr Data;
 		public int SizeOfData;
 	}
+	[StructLayout(LayoutKind.Sequential)]
+	public struct ICONINFO
+	{
+		public bool fIcon;
+		public int xHotspot;
+		public int yHotspot;
+		public IntPtr hbmMask;
+		public IntPtr hbmColor;
+	}
 
 
 	public const Int32 CURSOR_SHOWING = 0x00000001;
@@ -125,6 +134,7 @@ class User32
 	public const int SWP_NOMOVE = 0x0002;
 	public const int PW_RENDERFULLCONTENT = 0x00000002;
 	public const int PW_CLIENTONLY = 0x1;
+	public const int DI_NORMAL = 0x0003;
 	public enum FsModifiers
 	{
 		NONE = 0x0000,
@@ -148,7 +158,9 @@ class User32
 	[DllImport("user32.dll")]
 	public static extern bool DrawIconEx(IntPtr hdc, int xLeft, int yTop, IntPtr hIcon, int cxWidth, int cyWidth, uint istepIfAniCur, IntPtr hbrFlickerFreeDraw, uint diFlags);
 	[DllImport("user32.dll")]
-	public static extern bool GetCursorInfo(out CURSORINFO pci);
+	public static extern bool GetCursorInfo(ref CURSORINFO pci);
+	[DllImport("user32.dll")]
+	public static extern bool GetIconInfo(IntPtr hIcon, out ICONINFO piconinfo);
 	[DllImport("user32.dll")]
 	public static extern bool SetProcessDPIAware();
 	[DllImport("user32.dll")]
