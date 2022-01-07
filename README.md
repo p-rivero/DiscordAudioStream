@@ -2,7 +2,7 @@
 
 Windows utility that allows Discord to stream (with audio!) the entire desktop or a specific window (including an OBS composition).
 
-Made out of necessity and continuous frustration, using C# and WinForms.
+Made out of necessity and continuous frustration. Built with WinForms (C#).
 
 
 <p align="center">
@@ -23,7 +23,6 @@ Made out of necessity and continuous frustration, using C# and WinForms.
     </a>
 </p>
 
----
 
 
 ## Who is this for?
@@ -37,7 +36,7 @@ If any of these are true, this utility may be for you.
 
 ## Does it only work for Discord?
 
-Not at all, you can use this utility with any video conferencing software that allows screen-sharing of a specific window.
+Not at all, you can use this utility with any video conferencing software that allows screen-sharing a specific window.
 
 However, keep in mind that this utility has been built and tested only for Discord, so some of the steps below will be different and you may encounter errors.
 
@@ -46,6 +45,12 @@ However, keep in mind that this utility has been built and tested only for Disco
 
 Yes, this program uses Windows APIs that are not available on MacOS or Linux.
 
+
+## Why is it licensed under GPLv3?
+
+This program is a fork of [quick-screen-recorder](https://github.com/ModuleArt/quick-screen-recorder), by [ModuleArt](https://github.com/ModuleArt), which is licensed under the GPLv3 license.
+
+Unfortunately, GPLv3 forces any derivative work to also be licensed under GPLv3, which means I'm unable to offer a more permissive license.
 
 
 # How do I use it?
@@ -76,9 +81,9 @@ The following steps depend on what you want to do.
 
 5. In the *Video capture area* dropdown, select the screen you want to share.
 
-6. (Optional) The next step will create a new window with the same size as the screen you are sharing. In order to make its size more manageable, you may want to change the "Video capture scale" dropdown to 50%.
+6. (Optional) The next step will create a new window with the same size as the screen you are sharing. In order to make its size more manageable, you may want to change the *Video capture scale* dropdown to 50%.
 
-7. Click the *Start stream* button. This will create a new window. You should now be able to hear the audio from the programs you stopped hearing in step 3.
+7. Click the *Start Stream* button. This will create a new window. You should now be able to hear the audio from the programs you stopped hearing in step 3.
 
 8. In Discord, select "Share Your Screen". This will show a list of open windows. Select the window called "Discord Audio Stream" (the one that was created in step 7).
 
@@ -96,9 +101,7 @@ The following steps depend on what you want to do.
 
 First, follow steps 1-4 above.
 
-> **Important:** the program for which you want to share the audio **is NOT** OBS. OBS doesn't actually output any audio.
-> 
-> Instead, you must identify which programs you are recording and share their audio (change their output device) separately.
+> **Important:** the program for which you want to share the audio **is NOT** OBS (OBS doesn't actually output any audio). Instead, you must identify which programs you are recording and share their audio (change their output device) separately.
 > 
 > For example, if you have added the following sources to your OBS composition:
 > - The game you are playing
@@ -113,7 +116,7 @@ Now follow this steps:
 
 6. Open the Discord Audio Stream utility (this program). In the *Video capture area* dropdown, select the window "Windowed Projector (Preview)" (the one that was created in step 5).
 
-7. Click the *Start stream* button. This will create a new window. You should now be able to hear the audio from the programs you stopped hearing in step 3.
+7. Click the *Start Stream* button. This will create a new window. You should now be able to hear the audio from the programs you stopped hearing in step 3.
 
 8. In Discord, select "Share Your Screen". This will show a list of open windows. Select the window called "Discord Audio Stream" (the one that was created in step 7).
 
@@ -121,7 +124,4 @@ Now follow this steps:
 
     - **Very important:** remember to restore the output device of your programs to "Default". Otherwise, you won't be able to hear their audio.
     - Keep in mind that if you minimize the window that was created in step 7, your Discord stream will probably be paused. You may want to hide this window behind other windows, without minimizing it.
-
----
-
 
