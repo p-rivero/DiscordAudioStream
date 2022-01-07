@@ -1,41 +1,127 @@
-<p align="center">
-  <img src="/DiscordAudioStream/resources/imgs/rec96.png">
-</p>
-<h1 align="center">Quick Screen Recorder</h1>
+# Discord Audio Stream
+
+Windows utility that allows Discord to stream (with audio!) the entire desktop or a specific window (including an OBS composition).
+
+Made out of necessity and continuous frustration, using C# and WinForms.
+
 
 <p align="center">
-  Quick Screen Recorder is a lightweight desktop screen recorder for Windows, built on top of WinForms (C#).
+    <img alt="Logo" src="DiscordAudioStream/resources/imgs/logo-100.png">
 </p>
-
 <p align="center">
-  <a href="https://github.com/ModuleArt/DiscordAudioStream/releases">
-    <img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/ModuleArt/DiscordAudioStream/total">
-    <img alt="GitHub release (latest by date including pre-releases)" src="https://img.shields.io/github/v/release/moduleart/DiscordAudioStream?include_prereleases">
-  </a>
-  <a alt="Trello roadmap" href="https://trello.com/b/LFUzVgvI/DiscordAudioStream">
-    <img src="https://img.shields.io/badge/planner-trello-%230079BF">
-  </a>
-  <a alt="Buy ma a coffee" href="https://www.patreon.com/moduleart">
-    <img alt="Patreon" src="https://img.shields.io/badge/donate-patreon-%23E85B46">
-  </a>
+    <a href="https://github.com/p-rivero/DiscordAudioStream/releases">
+        <img alt="Releases" src="https://img.shields.io/github/downloads/p-rivero/DiscordAudioStream/total">
+    </a>
+    <a href="https://github.com/p-rivero/DiscordAudioStream/issues">
+        <img alt="Issues" src="https://img.shields.io/github/issues/p-rivero/DiscordAudioStream">
+    </a>
+    <a href="https://github.com/p-rivero/DiscordAudioStream/pulls">
+        <img alt="Pull requests" src="https://img.shields.io/github/issues-pr/p-rivero/DiscordAudioStream">
+    </a>
+    <a href="https://github.com/p-rivero/DiscordAudioStream/blob/master/LICENSE">
+        <img alt="License" src="https://img.shields.io/github/license/p-rivero/DiscordAudioStream">
+    </a>
 </p>
 
-<h2 align="center">Install</h2>
-<p align="center">
-  Windows 7, 8.1, 10 | <a href="https://github.com/ModuleArt/DiscordAudioStream/releases/tag/v1.2.1">v1.2.1</a> (2.3 MB) | <a href="https://github.com/ModuleArt/DiscordAudioStream/releases/download/v1.2.1/QuickScreenRecorder-Setup.msi">Download</a><br><br>
-  Uses <a href="https://dotnet.microsoft.com/download/dotnet-framework/net472">.Net 4.7.2</a><br><br>
-  <img src="/docs/screenshots/main.png">
-</p>
+---
 
-<h2 align="center">Features</h2>
-- Screen recording in .avi format<br>
-- Record screen area<br>
-- Multimonitor support<br>
-- Cursor capturing<br>
-- Ability to record system sounds or a microphone
 
-<h2 align="center">Other "Quick" apps</h2>
-<p align="center">
-  <a href="https://github.com/ModuleArt/quick-picture-viewer/">Quick Picture Viewer</a> - Lightweight, versatile desktop photo viewer for Windows<br>
-  <a href="https://github.com/ModuleArt/quick-color-picker/">Quick Color Picker</a> - Lightweight desktop color picker and color editor utility for Windows
-</p>
+## Who is this for?
+
+If you use Discord regularly, you may be used to screen-sharing (streaming) a specific window. You may also have tried to stream the entire screen, only to realize that your friends cannot hear any audio from your desktop.
+
+Similarly, you may be an advanced user who wants to step up your Discord streams by using OBS. While you can stream the OBS video output easily, it's not possible to stream the audio without configuring an advanced audio setup.
+
+If any of these are true, this utility may be for you.
+
+
+## Does it only work for Discord?
+
+Not at all, you can use this utility with any video conferencing software that allows screen-sharing of a specific window.
+
+However, keep in mind that this utility has been built and tested only for Discord, so some of the steps below will be different and you may encounter errors.
+
+
+## Does it only work on Windows?
+
+Yes, this program uses Windows APIs that are not available on MacOS or Linux.
+
+
+
+# How do I use it?
+
+First, [download](https://github.com/p-rivero/DiscordAudioStream/releases) and extract the program. You should be able to execute it directly without installing anything.
+  
+The following steps depend on what you want to do.
+
+---
+
+**Stream the entire desktop with audio:**
+
+1. Decide for which programs you want to actually share the audio.
+
+    **Tip:** your answer should never be *"all of them"*. You should, at least, exclude Discord (otherwise, the viewers of your stream will hear themselves).
+    
+2. Open the volume mixer. You can do this from the utility by using `Ctrl+V` or clicking the mixer icon: ![Volume mixer icon](DiscordAudioStream/resources/imgs/readme/mixer-button.png).
+
+3. *For each* of the programs whose audio you want to share, change its *output* device from "Default" to another device (that you are not currently using). For example, if you have Steam installed you should have a virtual audio device called "Steam Streaming Speakers" that you can use (unless you are using it for other purposes).
+
+    - Set the output of *all* the desired programs to **the same** audio device.
+    - Don't worry if you stop hearing the audio from the programs you are sharing. Later you will be able to hear them again.
+    - Make sure that there are no other programs outputting audio to the device you selected. Everything that gets output to this device will be shared.
+
+    ![Change audio device in volume mixer](DiscordAudioStream/resources/imgs/readme/audio-device.png)
+
+4. In the *Audio capture input* dropdown, select the (previously unused) audio device that you have chosen in step 3.
+
+5. In the *Video capture area* dropdown, select the screen you want to share.
+
+6. (Optional) The next step will create a new window with the same size as the screen you are sharing. In order to make its size more manageable, you may want to change the "Video capture scale" dropdown to 50%.
+
+7. Click the *Start stream* button. This will create a new window. You should now be able to hear the audio from the programs you stopped hearing in step 3.
+
+8. In Discord, select "Share Your Screen". This will show a list of open windows. Select the window called "Discord Audio Stream" (the one that was created in step 7).
+
+9. You are now sharing your screen with the audio from the selected programs. When you are done, you can close the utility.
+
+    - **Very important:** remember to restore the output device of your programs to "Default". Otherwise, you won't be able to hear their audio.
+    - Keep in mind that if you minimize the window that was created in step 7, your Discord stream will probably be paused. You may want to hide this window behind other windows, without minimizing it.
+
+
+    ![Video and audio dropdowns](DiscordAudioStream/resources/imgs/readme/dropdowns.png)
+    
+---
+
+**Stream to Discord using OBS:**
+
+First, follow steps 1-4 above.
+
+> **Important:** the program for which you want to share the audio **is NOT** OBS. OBS doesn't actually output any audio.
+> 
+> Instead, you must identify which programs you are recording and share their audio (change their output device) separately.
+> 
+> For example, if you have added the following sources to your OBS composition:
+> - The game you are playing
+> - Your webcam + microphone
+> - Stream alerts (with audio), using Google Chrome
+> 
+> Then, the programs for which you want to share the audio are 1. the game and 2. Google Chrome. Do not worry about the microphone, since Discord already shares it when you enter a call.
+
+Now follow this steps:
+
+5. In OBS, right-click the preview and select "Windowed Projector (Preview)". This will create a new window. You can now minimize OBS (but not the preview window). You may want to make this window slightly bigger, in order to improve video quality.
+
+6. Open the Discord Audio Stream utility (this program). In the *Video capture area* dropdown, select the window "Windowed Projector (Preview)" (the one that was created in step 5).
+
+7. Click the *Start stream* button. This will create a new window. You should now be able to hear the audio from the programs you stopped hearing in step 3.
+
+8. In Discord, select "Share Your Screen". This will show a list of open windows. Select the window called "Discord Audio Stream" (the one that was created in step 7).
+
+9. You are now sharing your OBS composition with the audio from the selected programs. When you are done, you can close the utility.
+
+    - **Very important:** remember to restore the output device of your programs to "Default". Otherwise, you won't be able to hear their audio.
+    - Keep in mind that if you minimize the window that was created in step 7, your Discord stream will probably be paused. You may want to hide this window behind other windows, without minimizing it.
+
+---
+
+
