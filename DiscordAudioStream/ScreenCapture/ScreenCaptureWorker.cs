@@ -2,9 +2,8 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Threading;
-using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace DiscordAudioStream
 {
@@ -197,7 +196,7 @@ namespace DiscordAudioStream
 		{
 			if (cursorSize == -1)
 			{
-				string scale = Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Accessibility", "CursorSize", 0).ToString();
+				string scale = Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Accessibility", "CursorSize", 1).ToString();
 				cursorSize = 32 + (int.Parse(scale) - 1) * 16;
 			}
 			return cursorSize;
