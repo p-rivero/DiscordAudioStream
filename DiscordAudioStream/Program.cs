@@ -1,6 +1,8 @@
 ﻿using CustomComponents;
 using System;
 using System.Windows.Forms;
+using System.Reflection;
+using System.Resources;
 
 namespace DiscordAudioStream
 {
@@ -9,6 +11,8 @@ namespace DiscordAudioStream
 		[STAThread]
 		static void Main(string[] args)
 		{
+			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+
 			if (Environment.OSVersion.Version.Major >= 6)
 			{
 				User32.SetProcessDPIAware();
@@ -46,6 +50,22 @@ namespace DiscordAudioStream
 			{
 				MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
+		}
+
+
+		static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+		{
+			string dllName = args.Name.Contains(",") ? args.Name.Substring(0, args.Name.IndexOf(',')) : args.Name.Replace(".dll", "");
+
+			dllName = dllName.Replace(".", "_");
+
+			if (dllName.EndsWith("_resources")) return null;
+
+			ResourceManager rm = new ResourceManager(MethodBase.GetCurrentMethod().DeclaringType.Namespace + ".Properties.Resources", Assembly.GetExecutingAssembly());
+
+			byte[] bytes = (byte[])rm.GetObject(dllName);
+
+			return Assembly.Load(bytes);
 		}
 	}
 }
