@@ -6,7 +6,7 @@ Made out of necessity and continuous frustration. Built with WinForms (C#).
 
 
 <p align="center">
-    <img alt="Logo" src="DiscordAudioStream/resources/imgs/logo-100.png">
+    <img alt="Logo" src="docs/readme/logo-100.png">
 </p>
 <p align="center">
     <a href="https://github.com/p-rivero/DiscordAudioStream/releases">
@@ -67,7 +67,7 @@ The following steps depend on what you want to do.
 
     **Tip:** your answer should never be *"all of them"*. You should, at least, exclude Discord (otherwise, the viewers of your stream will hear themselves).
     
-2. Open the volume mixer. You can do this from the utility by using `Ctrl+V` or clicking the mixer icon: ![Volume mixer icon](DiscordAudioStream/resources/imgs/readme/mixer-button.png).
+2. Open the volume mixer. You can do this from the utility by using `Ctrl+V` or clicking the mixer icon: ![Volume mixer icon](docs/readme/mixer-button.png).
 
 3. *For each* of the programs whose audio you want to share, change its *output* device from "Default" to another device (that you are not currently using). For example, if you have Steam installed you should have a virtual audio device called "Steam Streaming Speakers" that you can use (unless you are using it for other purposes).
 
@@ -75,7 +75,7 @@ The following steps depend on what you want to do.
     - Don't worry if you stop hearing the audio from the programs you are sharing. Later you will be able to hear them again.
     - Make sure that there are no other programs outputting audio to the device you selected. Everything that gets output to this device will be shared.
 
-    ![Change audio device in volume mixer](DiscordAudioStream/resources/imgs/readme/audio-device.png)
+    ![Change audio device in volume mixer](docs/readme/audio-device.png)
 
 4. In the *Audio capture input* dropdown, select the (previously unused) audio device that you have chosen in step 3.
 
@@ -93,7 +93,7 @@ The following steps depend on what you want to do.
     - Keep in mind that if you minimize the window that was created in step 7, your Discord stream will probably be paused. You may want to hide this window behind other windows, without minimizing it.
 
 
-    ![Video and audio dropdowns](DiscordAudioStream/resources/imgs/readme/dropdowns.png)
+    ![Video and audio dropdowns](docs/readme/dropdowns.png)
     
 ---
 
