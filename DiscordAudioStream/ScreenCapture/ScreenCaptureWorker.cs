@@ -102,12 +102,14 @@ namespace DiscordAudioStream
 				master.GetCaptureArea(out windowSize, out position);
 			}
 
-			if (windowSize.Width == 0 && windowSize.Height == 0)
-				return;
-			// Todo: detect 
-
 			Bitmap BMP;
-			if (ProcessHandleManager.CapturingWindow && Properties.Settings.Default.UseExperimentalCapture)
+
+			if (windowSize.Width == 0 && windowSize.Height == 0)
+			{
+				// Minimized windows store app. Display a black square.
+				BMP = new Bitmap(1, 1);
+			}
+			else if (ProcessHandleManager.CapturingWindow && Properties.Settings.Default.UseExperimentalCapture)
 			{
 				BMP = CaptureWindow(ProcessHandleManager.GetHandle(), windowSize);
 			}
@@ -151,7 +153,12 @@ namespace DiscordAudioStream
 		private static void GetWindowArea(IntPtr hwnd, out Size windowSize, out Point position)
 		{
 			// Get size of client area (don't use X and Y, these are relative to the WINDOW rect)
-			User32.GetClientRect(hwnd, out User32.RECT clientRect);
+			bool success = User32.GetClientRect(hwnd, out User32.RECT clientRect);
+			if (!success)
+			{
+				throw new Exception("Window was closed");
+			}
+
 			// Get frame size and position (generally more accurate than GetWindowRect)
 			User32.RECT frame = Dwmapi.GetRectAttr(hwnd, Dwmapi.DwmWindowAttribute.EXTENDED_FRAME_BOUNDS);
 
