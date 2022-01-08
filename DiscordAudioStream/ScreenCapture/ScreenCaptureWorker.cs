@@ -133,10 +133,15 @@ namespace DiscordAudioStream
 					cursorPos.Y -= position.Y;
 
 					// Draw the cursor
-					Graphics g = Graphics.FromImage(BMP);
-					int size = GetCursorSize();
-					User32.DrawIconEx(g.GetHdc(), cursorPos.X, cursorPos.Y, pci.hCursor, size, size, 0, IntPtr.Zero, User32.DI_NORMAL);
-					g.Dispose();
+					using (Graphics g = Graphics.FromImage(BMP))
+					{
+						int size = GetCursorSize();
+						User32.DrawIconEx(g.GetHdc(), cursorPos.X, cursorPos.Y, pci.hCursor, size, size, 0, IntPtr.Zero, User32.DI_NORMAL);
+					}
+
+					// Clean up
+					GDI32.DeleteObject(iconInfo.hbmMask);
+					GDI32.DeleteObject(iconInfo.hbmColor);
 				}
 			}
 
@@ -172,13 +177,13 @@ namespace DiscordAudioStream
 
 		private static Bitmap CaptureScreen(Point startPos, Size size)
 		{
-			int hdcSrc = User32.GetWindowDC(User32.GetDesktopWindow());
-			int hdcDest = GDI32.CreateCompatibleDC(hdcSrc);
-			int hBitmap = GDI32.CreateCompatibleBitmap(hdcSrc, size.Width, size.Height);
+			IntPtr hdcSrc = User32.GetWindowDC(User32.GetDesktopWindow());
+			IntPtr hdcDest = GDI32.CreateCompatibleDC(hdcSrc);
+			IntPtr hBitmap = GDI32.CreateCompatibleBitmap(hdcSrc, size.Width, size.Height);
 			GDI32.SelectObject(hdcDest, hBitmap);
-			GDI32.BitBlt(hdcDest, 0, 0, size.Width, size.Height, hdcSrc, startPos.X, startPos.Y, 0x00CC0020);
+			GDI32.BitBlt(hdcDest, 0, 0, size.Width, size.Height, hdcSrc, startPos.X, startPos.Y, GDI32.RasterOps.SRCCOPY);
 
-			Bitmap result = Image.FromHbitmap(new IntPtr(hBitmap));
+			Bitmap result = Image.FromHbitmap(hBitmap);
 
 			// Cleanup
 			User32.ReleaseDC(User32.GetDesktopWindow(), hdcSrc);
@@ -190,13 +195,13 @@ namespace DiscordAudioStream
 
 		public Bitmap CaptureWindow(IntPtr hwnd, Size winSize)
 		{
-			Bitmap bmp = new Bitmap(winSize.Width, winSize.Height);
-			Graphics gfxBmp = Graphics.FromImage(bmp);
-			IntPtr hdcBitmap = gfxBmp.GetHdc();
-			User32.PrintWindow(hwnd, hdcBitmap, User32.PW_CLIENTONLY|User32.PW_RENDERFULLCONTENT);
-			gfxBmp.ReleaseHdc(hdcBitmap);
-			gfxBmp.Dispose();
-			return bmp;
+			Bitmap result = new Bitmap(winSize.Width, winSize.Height);
+
+			using (Graphics g = Graphics.FromImage(result))
+			{
+				User32.PrintWindow(hwnd, g.GetHdc(), User32.PW_CLIENTONLY | User32.PW_RENDERFULLCONTENT);
+			}
+			return result;
 		}
 
 		private int GetCursorSize()

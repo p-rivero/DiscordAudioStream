@@ -5,20 +5,40 @@ using System.Security;
 
 class GDI32
 {
+	public enum RasterOps : uint
+	{
+		SRCCOPY = 0x00CC0020,
+		SRCPAINT = 0x00EE0086,
+		SRCAND = 0x008800C6,
+		SRCINVERT = 0x00660046,
+		SRCERASE = 0x00440328,
+		NOTSRCCOPY = 0x00330008,
+		NOTSRCERASE = 0x001100A6,
+		MERGECOPY = 0x00C000CA,
+		MERGEPAINT = 0x00BB0226,
+		PATCOPY = 0x00F00021,
+		PATPAINT = 0x00FB0A09,
+		PATINVERT = 0x005A0049,
+		DSTINVERT = 0x00550009,
+		BLACKNESS = 0x00000042,
+		WHITENESS = 0x00FF0062,
+		CAPTUREBLT = 0x40000000 //only if WinVer >= 5.0.0 (see wingdi.h)
+	}
+
 	[DllImport("GDI32.dll")]
-	public static extern bool BitBlt(int hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, int hdcSrc, int nXSrc, int nYSrc, int dwRop);
+	public static extern bool BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, RasterOps dwRop);
 	[DllImport("GDI32.dll")]
-	public static extern int CreateCompatibleBitmap(int hdc, int nWidth, int nHeight);
+	public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);
 	[DllImport("GDI32.dll")]
-	public static extern int CreateCompatibleDC(int hdc);
+	public static extern IntPtr CreateCompatibleDC(IntPtr hdc);
 	[DllImport("GDI32.dll")]
-	public static extern bool DeleteDC(int hdc);
+	public static extern bool DeleteDC(IntPtr hdc);
 	[DllImport("GDI32.dll")]
-	public static extern bool DeleteObject(int hObject);
+	public static extern bool DeleteObject(IntPtr hObject);
 	[DllImport("GDI32.dll")]
-	public static extern int GetDeviceCaps(int hdc, int nIndex);
+	public static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
 	[DllImport("GDI32.dll")]
-	public static extern int SelectObject(int hdc, int hgdiobj);
+	public static extern int SelectObject(IntPtr hdc, IntPtr hgdiobj);
 }
 
 class User32
@@ -148,11 +168,11 @@ class User32
 	public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 
 	[DllImport("user32.dll")]
-	public static extern int GetDesktopWindow();
+	public static extern IntPtr GetDesktopWindow();
 	[DllImport("user32.dll")]
-	public static extern int GetWindowDC(int hWnd);
+	public static extern IntPtr GetWindowDC(IntPtr hWnd);
 	[DllImport("user32.dll")]
-	public static extern int ReleaseDC(int hWnd, int hDC);
+	public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
 	[DllImport("user32.dll")]
 	public static extern bool DrawIcon(IntPtr hDC, int X, int Y, IntPtr hIcon);
 	[DllImport("user32.dll")]
