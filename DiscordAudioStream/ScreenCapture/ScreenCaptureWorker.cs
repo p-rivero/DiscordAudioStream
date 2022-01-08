@@ -83,39 +83,39 @@ namespace DiscordAudioStream
 
 		private void EnqueueFrame()
 		{
-			Size windowSize;
+			Size size;
 			Point position;
 			bool captureCursor = master.IsCapturingCursor();
 			if (ProcessHandleManager.CapturingWindow)
 			{
 				IntPtr proc = ProcessHandleManager.GetHandle();
-				GetWindowArea(proc, out windowSize, out position);
+				GetWindowArea(proc, out size, out position);
 
-				if (windowSize != oldSize)
+				if (size != oldSize)
 				{
-					oldSize = windowSize;
-					master.CapturedWindowSizeChanged(windowSize);
+					oldSize = size;
+					master.CapturedWindowSizeChanged(size);
 				}
 			}
 			else
 			{
-				master.GetCaptureArea(out windowSize, out position);
+				master.GetCaptureArea(out size, out position);
 			}
 
 			Bitmap BMP;
 
-			if (windowSize.Width == 0 && windowSize.Height == 0)
+			if (size.IsEmpty)
 			{
 				// Minimized windows store app. Display a black square.
 				BMP = new Bitmap(1, 1);
 			}
 			else if (ProcessHandleManager.CapturingWindow && Properties.Settings.Default.UseExperimentalCapture)
 			{
-				BMP = CaptureWindow(ProcessHandleManager.GetHandle(), windowSize);
+				BMP = CaptureWindow(ProcessHandleManager.GetHandle(), size);
 			}
 			else
 			{
-				BMP = CaptureScreen(position, windowSize);
+				BMP = CaptureScreen(position, size);
 			}
 
 			if (captureCursor)
@@ -135,8 +135,8 @@ namespace DiscordAudioStream
 					// Draw the cursor
 					using (Graphics g = Graphics.FromImage(BMP))
 					{
-						int size = GetCursorSize();
-						User32.DrawIconEx(g.GetHdc(), cursorPos.X, cursorPos.Y, pci.hCursor, size, size, 0, IntPtr.Zero, User32.DI_NORMAL);
+						int cursorSz = GetCursorSize();
+						User32.DrawIconEx(g.GetHdc(), cursorPos.X, cursorPos.Y, pci.hCursor, cursorSz, cursorSz, 0, IntPtr.Zero, User32.DI_NORMAL);
 					}
 
 					// Clean up
