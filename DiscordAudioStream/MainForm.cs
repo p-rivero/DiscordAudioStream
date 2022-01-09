@@ -230,14 +230,13 @@ namespace DiscordAudioStream
 
 		private void RefreshAreaInfo()
 		{
-			bool enableAreaControls;
 			if (!Created) return;
 
 			// Custom area
 			if (areaComboBox.SelectedIndex == numberOfScreens)
 			{
 				areaForm.Show();
-				enableAreaControls = true;
+				EnableAreaControls(true);
 				hideTaskbarCheckBox.Enabled = false;
 
 				ProcessHandleManager.ClearSelectedIndex();
@@ -252,7 +251,7 @@ namespace DiscordAudioStream
 			else if (areaComboBox.SelectedIndex > numberOfScreens)
 			{
 				areaForm.Hide();
-				enableAreaControls = false;
+				EnableAreaControls(false);
 				hideTaskbarCheckBox.Enabled = false;
 
 				ProcessHandleManager.SelectedIndex = areaComboBox.SelectedIndex - numberOfScreens - 1;
@@ -261,7 +260,7 @@ namespace DiscordAudioStream
 			else
 			{
 				areaForm.Hide();
-				enableAreaControls = false;
+				EnableAreaControls(false);
 				hideTaskbarCheckBox.Enabled = true;
 
 				ProcessHandleManager.ClearSelectedIndex();
@@ -287,11 +286,14 @@ namespace DiscordAudioStream
 				xNumeric.Value = area.X;
 				yNumeric.Value = area.Y;
 			}
+		}
 
-			widthNumeric.Enabled = enableAreaControls;
-			heightNumeric.Enabled = enableAreaControls;
-			xNumeric.Enabled = enableAreaControls;
-			yNumeric.Enabled = enableAreaControls;
+		private void EnableAreaControls(bool enabled)
+		{
+			widthNumeric.Enabled = enabled;
+			heightNumeric.Enabled = enabled;
+			xNumeric.Enabled = enabled;
+			yNumeric.Enabled = enabled;
 		}
 
 		private void RefreshAudioDevices()
