@@ -79,9 +79,9 @@ The following steps depend on what you want to do.
 
 4. In the *Audio capture input* dropdown, select the (previously unused) audio device that you have chosen in step 3.
 
-5. In the *Video capture area* dropdown, select the screen you want to share.
+5. (Optional) In the upcoming steps we will create a new window with the same size as the screen you are sharing. In order to make its size more manageable, you may want to change the *Video capture scale* dropdown to 50%.
 
-6. (Optional) The next step will create a new window with the same size as the screen you are sharing. In order to make its size more manageable, you may want to change the *Video capture scale* dropdown to 50%.
+6. In the *Video capture area* dropdown, select the screen you want to share.
 
 7. Click the *Start Stream* button. This will create a new window. You should now be able to hear the audio from the programs you stopped hearing in step 3.
 
