@@ -423,6 +423,7 @@ namespace DiscordAudioStream
 			onTopBtn.Checked = Properties.Settings.Default.AlwaysOnTop;
 			captureCursorCheckBox.Checked = Properties.Settings.Default.CaptureCursor;
 			hideTaskbarCheckBox.Checked = Properties.Settings.Default.HideTaskbar;
+			RefreshAreaInfo();
 
 			screenCaptureWorker = new ScreenCaptureWorker(TARGET_FRAMERATE, this);
 
