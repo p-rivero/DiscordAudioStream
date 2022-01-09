@@ -27,7 +27,6 @@ namespace DiscordAudioStream
 		
 		public MainForm(bool darkMode)
 		{
-			int a = Keys.R.GetHashCode();
 			if (darkMode)
 			{
 				this.HandleCreated += new EventHandler(DarkThemeManager.formHandleCreated);
@@ -60,7 +59,7 @@ namespace DiscordAudioStream
 			}
 
 			previewBtn.Checked = Properties.Settings.Default.Preview;
-			enablePreview(previewBtn.Checked);
+			EnablePreview(previewBtn.Checked);
 
 			areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
 			scaleComboBox.SelectedIndex = Properties.Settings.Default.ScaleIndex;
@@ -68,40 +67,11 @@ namespace DiscordAudioStream
 			xNumeric.Minimum = SystemInformation.VirtualScreen.Left;
 			yNumeric.Minimum = SystemInformation.VirtualScreen.Top;
 
-			applyDarkTheme(darkMode);
+			ApplyDarkTheme(darkMode);
 		}
 
-		private void applyDarkTheme(bool darkMode)
-		{
-			if (darkMode)
-			{
-				this.ForeColor = Color.White;
-				this.BackColor = DarkThemeManager.DarkBackColor;
 
-				aboutBtn.Image = Properties.Resources.white_about;
-				onTopBtn.Image = Properties.Resources.white_ontop;
-				volumeMixerButton.Image = Properties.Resources.white_mixer;
-				soundDevicesButton.Image = Properties.Resources.white_speaker;
-				settingsBtn.Image = Properties.Resources.white_settings;
-				previewBtn.Image = Properties.Resources.white_preview;
-
-				refreshAudioBtn.BackColor = DarkThemeManager.DarkSecondColor;
-				refreshAudioBtn.Image = Properties.Resources.white_refresh;
-			}
-
-			videoGroup.SetDarkMode(darkMode);
-			audioGroup.SetDarkMode(darkMode);
-			toolStrip.SetDarkMode(darkMode, false);
-			inputDeviceComboBox.SetDarkMode(darkMode);
-			areaComboBox.SetDarkMode(darkMode);
-			scaleComboBox.SetDarkMode(darkMode);
-			widthNumeric.SetDarkMode(darkMode);
-			heightNumeric.SetDarkMode(darkMode);
-			xNumeric.SetDarkMode(darkMode);
-			yNumeric.SetDarkMode(darkMode);
-			captureCursorCheckBox.SetDarkMode(darkMode);
-			hideTaskbarCheckBox.SetDarkMode(darkMode);
-		}
+		// PUBLIC METHODS
 
 		public void SetAreaWidth(int w)
 		{
@@ -133,159 +103,318 @@ namespace DiscordAudioStream
 			yNumeric.Maximum = maxY + SystemInformation.VirtualScreen.Top;
 		}
 
-		private void aboutBtn_Click(object sender, EventArgs e)
+		public void SetPreviewSize(Size size)
 		{
-			AboutForm aboutBox = new AboutForm(darkMode);
-			aboutBox.Owner = this;
-			if (this.TopMost)
+			if (streamEnabled)
 			{
-				aboutBox.TopMost = true;
+				size.Width = (int)(Math.Max(160, size.Width) * scaleMultiplier);
+				size.Height = (int)(Math.Max(160, size.Height) * scaleMultiplier);
+				BeginInvoke(new Action(() =>
+				{
+					previewBox.Size = size;
+				}));
 			}
-			aboutBox.ShowDialog();
 		}
 
-		private void areaComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		public void UpdateAreaComboBox()
 		{
-			if (numberOfScreens == -1)
-				return;
-
-			// Do not select the dummy object at the end of the list
-			if (areaComboBox.SelectedIndex == areaComboBox.Items.Count - 1)
+			IntPtr handle = IntPtr.Zero;
+			int oldIndex = areaComboBox.SelectedIndex;
+			if (oldIndex > numberOfScreens)
 			{
-				areaComboBox.SelectedIndex = areaComboBox.Items.Count - 2;
+				// We were capturing a window, store its handle
+				handle = ProcessHandleManager.GetHandle();
 			}
 
-			RefreshAreaInfo();
-			// Do not save settings for Custom Area or Window
-			if (areaComboBox.SelectedIndex >= numberOfScreens)
-				return;
+			// Refresh list of windows
+			RefreshScreens();
 
-			Properties.Settings.Default.AreaIndex = areaComboBox.SelectedIndex;
-			Properties.Settings.Default.Save();
+			if (oldIndex > numberOfScreens)
+			{
+				// We were capturing a window, see if it still exists
+				int newIndex = ProcessHandleManager.Lookup(handle);
+				if (newIndex == -1)
+				{
+					// Window has been closed, return to last saved screen
+					areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
+				}
+				else
+				{
+					// Window still exists
+					areaComboBox.SelectedIndex = newIndex + numberOfScreens + 1;
+				}
+			}
+			else
+			{
+				// We were capturing a screen
+				areaComboBox.SelectedIndex = oldIndex;
+			}
+		}
+
+
+		// IScreenCaptureMaster interface
+
+		public void GetCaptureArea(out Size size, out Point pos)
+		{
+			int tmp_width = 0, tmp_height = 0, tmp_x = 0, tmp_y = 0;
+			Invoke(new Action(() =>
+			{
+				tmp_width = (int)widthNumeric.Value;
+				tmp_height = (int)heightNumeric.Value;
+				tmp_x = (int)xNumeric.Value;
+				tmp_y = (int)yNumeric.Value;
+			}));
+
+			size = new Size(tmp_width, tmp_height);
+			pos = new Point(tmp_x, tmp_y);
+		}
+
+		public bool IsCapturingCursor()
+		{
+			return captureCursorCheckBox.Checked;
+		}
+
+		public void CapturedWindowSizeChanged(Size newSize)
+		{
+			SetPreviewSize(newSize);
+		}
+
+		public void AbortCapture()
+		{
+			Invoke(new Action(() =>
+			{
+				RefreshScreens();
+				areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
+				if (!streamEnabled) return;
+
+				EndStream();
+				if (Properties.Settings.Default.AutoExit) Close();
+			}));
+		}
+
+
+
+		// PRIVATE METHODS
+
+		private void ApplyDarkTheme(bool darkMode)
+		{
+			if (darkMode)
+			{
+				this.ForeColor = Color.White;
+				this.BackColor = DarkThemeManager.DarkBackColor;
+
+				aboutBtn.Image = Properties.Resources.white_about;
+				onTopBtn.Image = Properties.Resources.white_ontop;
+				volumeMixerButton.Image = Properties.Resources.white_mixer;
+				soundDevicesButton.Image = Properties.Resources.white_speaker;
+				settingsBtn.Image = Properties.Resources.white_settings;
+				previewBtn.Image = Properties.Resources.white_preview;
+
+				refreshAudioBtn.BackColor = DarkThemeManager.DarkSecondColor;
+				refreshAudioBtn.Image = Properties.Resources.white_refresh;
+			}
+
+			videoGroup.SetDarkMode(darkMode);
+			audioGroup.SetDarkMode(darkMode);
+			toolStrip.SetDarkMode(darkMode, false);
+			inputDeviceComboBox.SetDarkMode(darkMode);
+			areaComboBox.SetDarkMode(darkMode);
+			scaleComboBox.SetDarkMode(darkMode);
+			widthNumeric.SetDarkMode(darkMode);
+			heightNumeric.SetDarkMode(darkMode);
+			xNumeric.SetDarkMode(darkMode);
+			yNumeric.SetDarkMode(darkMode);
+			captureCursorCheckBox.SetDarkMode(darkMode);
+			hideTaskbarCheckBox.SetDarkMode(darkMode);
 		}
 
 		private void RefreshAreaInfo()
 		{
+			bool enableAreaControls;
+			if (!Created) return;
+
 			// Custom area
 			if (areaComboBox.SelectedIndex == numberOfScreens)
 			{
 				areaForm.Show();
+				enableAreaControls = true;
+				hideTaskbarCheckBox.Enabled = false;
+
+				ProcessHandleManager.ClearSelectedIndex();
 
 				// Omit pixels of the red border
 				widthNumeric.Value = areaForm.Width - 2;
 				heightNumeric.Value = areaForm.Height - 2;
 				xNumeric.Value = areaForm.Left + 1;
 				yNumeric.Value = areaForm.Top + 1;
-
-				widthNumeric.Enabled = true;
-				heightNumeric.Enabled = true;
-				xNumeric.Enabled = true;
-				yNumeric.Enabled = true;
-
-				hideTaskbarCheckBox.Enabled = false;
-				ProcessHandleManager.ClearSelectedIndex();
 			}
 			// Window
 			else if (areaComboBox.SelectedIndex > numberOfScreens)
 			{
 				areaForm.Hide();
-
-				widthNumeric.Enabled = false;
-				heightNumeric.Enabled = false;
-				xNumeric.Enabled = false;
-				yNumeric.Enabled = false;
-
+				enableAreaControls = false;
 				hideTaskbarCheckBox.Enabled = false;
+
 				ProcessHandleManager.SelectedIndex = areaComboBox.SelectedIndex - numberOfScreens - 1;
 			}
 			// Screen
 			else
 			{
 				areaForm.Hide();
-
-				widthNumeric.Enabled = false;
-				heightNumeric.Enabled = false;
-				xNumeric.Enabled = false;
-				yNumeric.Enabled = false;
-
+				enableAreaControls = false;
 				hideTaskbarCheckBox.Enabled = true;
-				ProcessHandleManager.ClearSelectedIndex();
 
-				if (Screen.AllScreens.Length > 1)
+				ProcessHandleManager.ClearSelectedIndex();
+				Rectangle area;
+
+				if (Screen.AllScreens.Length > 1 && areaComboBox.SelectedIndex == numberOfScreens - 1)
 				{
 					// All screens
-					if (areaComboBox.SelectedIndex == numberOfScreens - 1)
-					{
-						widthNumeric.Value = SystemInformation.VirtualScreen.Width;
-						heightNumeric.Value = SystemInformation.VirtualScreen.Height;
-						xNumeric.Value = SystemInformation.VirtualScreen.Left;
-						yNumeric.Value = SystemInformation.VirtualScreen.Top;
-
-						hideTaskbarCheckBox.Enabled = false;
-					}
-					else
-					{
-						hideTaskbarCheckBox.Enabled = true;
-
-						if (hideTaskbarCheckBox.Checked)
-						{
-							widthNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].WorkingArea.Width;
-							heightNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].WorkingArea.Height;
-							xNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].WorkingArea.X;
-							yNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].WorkingArea.Y;
-						}
-						else
-						{
-							widthNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].Bounds.Width;
-							heightNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].Bounds.Height;
-							xNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].Bounds.X;
-							yNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].Bounds.Y;
-						}
-					}
+					hideTaskbarCheckBox.Enabled = false;
+					area = SystemInformation.VirtualScreen;
 				}
 				else
 				{
-					if (hideTaskbarCheckBox.Checked)
-					{
-						widthNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].WorkingArea.Width;
-						heightNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].WorkingArea.Height;
-						xNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].WorkingArea.X;
-						yNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].WorkingArea.Y;
-					}
-					else
-					{
-						widthNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].Bounds.Width;
-						heightNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].Bounds.Height;
-						xNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].Bounds.X;
-						yNumeric.Value = Screen.AllScreens[areaComboBox.SelectedIndex].Bounds.Y;
-					}
-
+					// Single screen
 					hideTaskbarCheckBox.Enabled = true;
+					Screen screen = Screen.AllScreens[areaComboBox.SelectedIndex];
+					if (hideTaskbarCheckBox.Checked) area = screen.WorkingArea;
+					else area = screen.Bounds;
+				}
+
+				widthNumeric.Value = area.Width;
+				heightNumeric.Value = area.Height;
+				xNumeric.Value = area.X;
+				yNumeric.Value = area.Y;
+			}
+
+			widthNumeric.Enabled = enableAreaControls;
+			heightNumeric.Enabled = enableAreaControls;
+			xNumeric.Enabled = enableAreaControls;
+			yNumeric.Enabled = enableAreaControls;
+		}
+
+		private void RefreshAudioDevices()
+		{
+			inputDeviceComboBox.Items.Clear();
+			inputDeviceComboBox.Items.Add("(None)");
+
+			foreach (string device in AudioPlayback.RefreshDevices())
+			{
+				inputDeviceComboBox.Items.Add(device);
+			}
+			inputDeviceComboBox.SelectedIndex = 0;
+		}
+
+		private void RefreshScreens()
+		{
+			areaComboBox.Items.Clear();
+
+			for (int i = 0; i < Screen.AllScreens.Length; i++)
+			{
+				Rectangle bounds = Screen.AllScreens[i].Bounds;
+				if (Screen.AllScreens[i].Primary)
+				{
+					areaComboBox.Items.Add("Primary screen (" + bounds.Width + "x" + bounds.Height + ")");
+				}
+				else
+				{
+					areaComboBox.Items.Add("Screen " + (i + 1) + " (" + bounds.Width + "x" + bounds.Height + ")");
+				}
+			}
+			if (Screen.AllScreens.Length > 1)
+			{
+				areaComboBox.Items.Add("Everything");
+			}
+
+			numberOfScreens = areaComboBox.Items.Count;
+
+			areaComboBox.Items.Add(new DarkThemeComboBox.ItemWithSeparator("Custom area"));
+
+			foreach (string window in ProcessHandleManager.RefreshHandles())
+			{
+				areaComboBox.Items.Add(window);
+			}
+			areaComboBox.Items.Add(new DarkThemeComboBox.Dummy());
+
+			widthNumeric.Maximum = SystemInformation.VirtualScreen.Width;
+			heightNumeric.Maximum = SystemInformation.VirtualScreen.Height;
+
+			areaForm.SetMaximumArea(SystemInformation.VirtualScreen);
+		}
+
+		private void StartStream()
+		{
+			if (inputDeviceComboBox.SelectedIndex == 0)
+			{
+				DialogResult r = MessageBox.Show("No audio source selected, continue anyways?", "Warning",
+					MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+				if (r == DialogResult.No)
+					return;
+			}
+			else
+			{
+				// Skip "None"
+				audioPlayback = new AudioPlayback(inputDeviceComboBox.SelectedIndex - 1);
+				audioPlayback.Start();
+			}
+
+			EnablePreview(true);
+			previewBox.Location = new Point(0, 0);
+			videoGroup.Visible = false;
+			audioGroup.Visible = false;
+			startButton.Visible = false;
+			toolStrip.Visible = false;
+			streamEnabled = true;
+			this.AutoSize = true;
+
+			SetPreviewSize(previewBox.Image.Size);
+		}
+
+		private void EndStream()
+		{
+			videoGroup.Visible = true;
+			audioGroup.Visible = true;
+			startButton.Visible = true;
+			toolStrip.Visible = true;
+			streamEnabled = false;
+
+			previewBox.Size = defaultPreviewSize;
+			previewBox.Location = defaultPreviewLocation;
+			this.AutoSize = false;
+			if (audioPlayback != null) audioPlayback.Stop();
+
+			EnablePreview(previewBtn.Checked);
+			CenterToScreen();
+		}
+
+		private void EnablePreview(bool visible)
+		{
+			previewBox.Visible = visible;
+
+			if (visible)
+			{
+				this.Size = defaultWindowSize;
+			}
+			else
+			{
+				Size newSize = this.Size;
+				newSize.Width = defaultWindowSize.Width - (defaultPreviewSize.Width + 10);
+				this.Size = newSize;
+
+				if (previewBox.Image != null)
+				{
+					previewBox.Image.Dispose();
+					previewBox.Image = null;
 				}
 			}
 		}
 
-		private void widthNumeric_ValueChanged(object sender, EventArgs e)
-		{
-			if (widthNumeric.Enabled)
-			{
-				Invoke(new Action(() =>
-				{
-					areaForm.Width = (int)widthNumeric.Value + 2;
-				}));
-			}
-		}
 
-		private void heightNumeric_ValueChanged(object sender, EventArgs e)
-		{
-			if (heightNumeric.Enabled)
-			{
-				Invoke(new Action(() =>
-				{
-					areaForm.Height = (int)heightNumeric.Value + 2;
-				}));
-			}
-		}
+
+
+		// EVENTS
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
@@ -355,148 +484,6 @@ namespace DiscordAudioStream
 			}
 		}
 
-		private void onTopCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-			this.TopMost = onTopBtn.Checked;
-			areaForm.TopMost = onTopBtn.Checked;
-			Properties.Settings.Default.AlwaysOnTop = onTopBtn.Checked;
-			Properties.Settings.Default.Save();
-		}
-
-		private void refreshBtn_Click(object sender, EventArgs e)
-		{
-			RefreshAudioDevices();
-		}
-
-		private void RefreshAudioDevices()
-		{
-			inputDeviceComboBox.Items.Clear();
-
-			string[] names = AudioPlayback.RefreshDevices();
-
-			inputDeviceComboBox.Items.Add("(None)");
-			foreach (string device in names)
-			{
-				inputDeviceComboBox.Items.Add(device);
-			}
-			inputDeviceComboBox.SelectedIndex = 0;
-		}
-
-		private void RefreshScreens()
-		{
-			areaComboBox.Items.Clear();
-
-			for (int i = 0; i < Screen.AllScreens.Length; i++)
-			{
-				if (Screen.AllScreens[i].Primary)
-				{
-					areaComboBox.Items.Add("Primary screen (" + Screen.AllScreens[i].Bounds.Width + "x" + Screen.AllScreens[i].Bounds.Height + ")");
-				}
-				else
-				{
-					areaComboBox.Items.Add("Screen " + (i + 1) + " (" + Screen.AllScreens[i].Bounds.Width + "x" + Screen.AllScreens[i].Bounds.Height + ")");
-				}
-			}
-
-			if (Screen.AllScreens.Length > 1)
-			{
-				areaComboBox.Items.Add("Everything");
-			}
-
-			numberOfScreens = areaComboBox.Items.Count;
-
-			areaComboBox.Items.Add(new DarkThemeComboBox.ItemWithSeparator("Custom area"));
-
-			foreach (string window in ProcessHandleManager.RefreshHandles())
-			{
-				areaComboBox.Items.Add(window);
-			}
-			areaComboBox.Items.Add(new DarkThemeComboBox.Dummy());
-
-			widthNumeric.Maximum = SystemInformation.VirtualScreen.Width;
-			heightNumeric.Maximum = SystemInformation.VirtualScreen.Height;
-
-			areaForm.SetMaximumArea(SystemInformation.VirtualScreen);
-		}
-
-		private void settingsBtn_Click(object sender, EventArgs e)
-		{
-			SettingsForm settingsBox = new SettingsForm(darkMode, this);
-			settingsBox.Owner = this;
-			if (this.TopMost)
-			{
-				settingsBox.TopMost = true;
-			}
-			settingsBox.ShowDialog();
-		}
-
-		private void xNumeric_ValueChanged(object sender, EventArgs e)
-		{
-			if (xNumeric.Enabled)
-			{
-				Invoke(new Action(() =>
-				{
-					// Omit 1 pixel for red border
-					areaForm.Left = (int)xNumeric.Value - 1;
-				}));
-			}
-		}
-
-		private void yNumeric_ValueChanged(object sender, EventArgs e)
-		{
-			if (yNumeric.Enabled)
-			{
-				Invoke(new Action(() =>
-				{
-					// Omit 1 pixel for red border
-					areaForm.Top = (int)yNumeric.Value - 1;
-				}));
-			}
-		}
-
-		private void hideTaskbarCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-			RefreshAreaInfo();
-			Properties.Settings.Default.HideTaskbar = hideTaskbarCheckBox.Checked;
-			Properties.Settings.Default.Save();
-		}
-
-		private void captureCursorCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-			Properties.Settings.Default.CaptureCursor = captureCursorCheckBox.Checked;
-			Properties.Settings.Default.Save();
-		}
-
-		private void enablePreview(bool visible)
-		{
-			previewBox.Visible = visible;
-
-			if (visible)
-			{
-				this.Size = defaultWindowSize;
-			}
-			else
-			{
-				Size newSize = this.Size;
-				newSize.Width = defaultWindowSize.Width - (defaultPreviewSize.Width + 10);
-				this.Size = newSize;
-
-				if (previewBox.Image != null)
-				{
-					previewBox.Image.Dispose();
-					previewBox.Image = null;
-				}
-			}
-		}
-
-		private void previewBtn_CheckedChanged(object sender, EventArgs e)
-		{
-			Properties.Settings.Default.Preview = previewBtn.Checked;
-			Properties.Settings.Default.Save();
-
-			enablePreview(previewBtn.Checked);
-		}
-
 		private void MainForm_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Control)
@@ -531,111 +518,28 @@ namespace DiscordAudioStream
 			}
 		}
 
-		private void startButton_Click(object sender, EventArgs e)
-		{
-			StartStream();
-		}
 
-		public void SetPreviewSize(Size size)
+		private void previewBtn_CheckedChanged(object sender, EventArgs e)
 		{
-			if (streamEnabled)
-			{
-				size.Width  = (int)(Math.Max(160, size.Width) * scaleMultiplier);
-				size.Height = (int)(Math.Max(160, size.Height) * scaleMultiplier);
-				BeginInvoke(new Action(() =>
-				{
-					previewBox.Size = size;
-				}));
-			}
-		}
-
-		public void CapturedWindowSizeChanged(Size newSize)
-		{
-			SetPreviewSize(newSize);
-		}
-
-		private void scaleComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			int index = scaleComboBox.SelectedIndex;
-			if (index == 0) scaleMultiplier = 1;              // Original resolution
-			else if (index == 1) scaleMultiplier = Math.Sqrt(0.5); // 50% resolution
-			else if (index == 2) scaleMultiplier = 0.5;            // 25% resolution
-			else throw new ArgumentException("Invalid index");
-
-			Properties.Settings.Default.ScaleIndex = index;
+			Properties.Settings.Default.Preview = previewBtn.Checked;
 			Properties.Settings.Default.Save();
+
+			EnablePreview(previewBtn.Checked);
 		}
 
-		private void StartStream()
+		private void onTopCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
-			if (inputDeviceComboBox.SelectedIndex == 0)
-			{
-				DialogResult r = MessageBox.Show("No audio source selected, continue anyways?", "Warning",
-					MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			Properties.Settings.Default.AlwaysOnTop = onTopBtn.Checked;
+			Properties.Settings.Default.Save();
 
-				if (r == DialogResult.No)
-					return;
-			}
-			else
-			{
-				// Skip "None"
-				audioPlayback = new AudioPlayback(inputDeviceComboBox.SelectedIndex - 1);
-				audioPlayback.Start();
-			}
-
-			enablePreview(true);
-			previewBox.Location = new Point(0, 0);
-			videoGroup.Visible = false;
-			audioGroup.Visible = false;
-			startButton.Visible = false;
-			toolStrip.Visible = false;
-			streamEnabled = true;
-			this.AutoSize = true;
-
-			SetPreviewSize(previewBox.Image.Size);
-		}
-
-		private void EndStream()
-		{
-			videoGroup.Visible = true;
-			audioGroup.Visible = true;
-			startButton.Visible = true;
-			toolStrip.Visible = true;
-			streamEnabled = false;
-
-			previewBox.Size = defaultPreviewSize;
-			previewBox.Location = defaultPreviewLocation;
-			this.AutoSize = false;
-			if (audioPlayback != null) audioPlayback.Stop();
-
-			enablePreview(previewBtn.Checked);
-			CenterToScreen();
-		}
-
-		public void GetCaptureArea(out Size size, out Point pos)
-		{
-			int tmp_width = 0, tmp_height = 0, tmp_x = 0, tmp_y = 0;
-			Invoke(new Action(() =>
-			{
-				tmp_width = (int)widthNumeric.Value;
-				tmp_height = (int)heightNumeric.Value;
-				tmp_x = (int)xNumeric.Value;
-				tmp_y = (int)yNumeric.Value;
-			}));
-
-			size = new Size(tmp_width, tmp_height);
-			pos = new Point(tmp_x, tmp_y);
-		}
-
-		public bool IsCapturingCursor()
-		{
-			return captureCursorCheckBox.Checked;
+			TopMost = onTopBtn.Checked;
+			areaForm.TopMost = onTopBtn.Checked;
 		}
 
 		private void volumeMixerButton_Click(object sender, EventArgs e)
 		{
 			var osVersionInfo = Ntdll.OSVERSIONINFOEX.Init();
-			Ntdll.RtlGetVersion(ref osVersionInfo); 
+			Ntdll.RtlGetVersion(ref osVersionInfo);
 
 			if (osVersionInfo.MajorVersion >= 10)
 			{
@@ -666,57 +570,136 @@ namespace DiscordAudioStream
 			}
 		}
 
-		public void AbortCapture()
+		private void settingsBtn_Click(object sender, EventArgs e)
 		{
-			Invoke(new Action(() =>
+			SettingsForm settingsBox = new SettingsForm(darkMode, this);
+			settingsBox.Owner = this;
+			if (this.TopMost)
 			{
-				RefreshScreens();
-				areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
-				if (!streamEnabled) return;
-
-				EndStream();
-				if (Properties.Settings.Default.AutoExit) Close();
-			}));
+				settingsBox.TopMost = true;
+			}
+			settingsBox.ShowDialog();
 		}
+
+		private void aboutBtn_Click(object sender, EventArgs e)
+		{
+			AboutForm aboutBox = new AboutForm(darkMode);
+			aboutBox.Owner = this;
+			if (this.TopMost)
+			{
+				aboutBox.TopMost = true;
+			}
+			aboutBox.ShowDialog();
+		}
+
+		private void startButton_Click(object sender, EventArgs e)
+		{
+			StartStream();
+		}
+
+
 
 		private void areaComboBox_DropDown(object sender, EventArgs e)
 		{
 			UpdateAreaComboBox();
 		}
 
-		public void UpdateAreaComboBox()
+		private void areaComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			IntPtr handle = IntPtr.Zero;
-			int oldIndex = areaComboBox.SelectedIndex;
-			if (oldIndex > numberOfScreens)
+			if (numberOfScreens == -1)
+				return;
+
+			// Do not select the dummy object at the end of the list
+			if (areaComboBox.SelectedIndex == areaComboBox.Items.Count - 1)
 			{
-				// We were capturing a window, store its handle
-				handle = ProcessHandleManager.GetHandle();
+				areaComboBox.SelectedIndex = areaComboBox.Items.Count - 2;
 			}
 
-			// Refresh list of windows
-			RefreshScreens();
+			RefreshAreaInfo();
+			// Do not save settings for Custom Area or Window
+			if (areaComboBox.SelectedIndex >= numberOfScreens)
+				return;
 
-			if (oldIndex > numberOfScreens)
+			Properties.Settings.Default.AreaIndex = areaComboBox.SelectedIndex;
+			Properties.Settings.Default.Save();
+		}
+
+		private void scaleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			int index = scaleComboBox.SelectedIndex;
+			if (index == 0) scaleMultiplier = 1;              // Original resolution
+			else if (index == 1) scaleMultiplier = Math.Sqrt(0.5); // 50% resolution
+			else if (index == 2) scaleMultiplier = 0.5;            // 25% resolution
+			else throw new ArgumentException("Invalid index");
+
+			Properties.Settings.Default.ScaleIndex = index;
+			Properties.Settings.Default.Save();
+		}
+
+
+		private void xNumeric_ValueChanged(object sender, EventArgs e)
+		{
+			if (xNumeric.Enabled)
 			{
-				// We were capturing a window, see if it still exists
-				int newIndex = ProcessHandleManager.Lookup(handle);
-				if (newIndex == -1)
+				Invoke(new Action(() =>
 				{
-					// Window has been closed, return to last saved screen
-					areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
-				}
-				else
-				{
-					// Window still exists
-					areaComboBox.SelectedIndex = newIndex + numberOfScreens + 1;
-				}
+					// Omit 1 pixel for red border
+					areaForm.Left = (int)xNumeric.Value - 1;
+				}));
 			}
-			else
+		}
+
+		private void yNumeric_ValueChanged(object sender, EventArgs e)
+		{
+			if (yNumeric.Enabled)
 			{
-				// We were capturing a screen
-				areaComboBox.SelectedIndex = oldIndex;
+				Invoke(new Action(() =>
+				{
+					// Omit 1 pixel for red border
+					areaForm.Top = (int)yNumeric.Value - 1;
+				}));
 			}
+		}
+		
+		private void widthNumeric_ValueChanged(object sender, EventArgs e)
+		{
+			if (widthNumeric.Enabled)
+			{
+				Invoke(new Action(() =>
+				{
+					areaForm.Width = (int)widthNumeric.Value + 2;
+				}));
+			}
+		}
+
+		private void heightNumeric_ValueChanged(object sender, EventArgs e)
+		{
+			if (heightNumeric.Enabled)
+			{
+				Invoke(new Action(() =>
+				{
+					areaForm.Height = (int)heightNumeric.Value + 2;
+				}));
+			}
+		}
+
+
+		private void hideTaskbarCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			RefreshAreaInfo();
+			Properties.Settings.Default.HideTaskbar = hideTaskbarCheckBox.Checked;
+			Properties.Settings.Default.Save();
+		}
+
+		private void captureCursorCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			Properties.Settings.Default.CaptureCursor = captureCursorCheckBox.Checked;
+			Properties.Settings.Default.Save();
+		}
+
+		private void refreshBtn_Click(object sender, EventArgs e)
+		{
+			RefreshAudioDevices();
 		}
 	}
 }
