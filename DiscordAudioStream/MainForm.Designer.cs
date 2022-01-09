@@ -50,7 +50,6 @@
             this.videoGroup = new CustomComponents.DarkThemeGroupBox();
             this.scaleLabel = new System.Windows.Forms.Label();
             this.scaleComboBox = new CustomComponents.DarkThemeComboBox();
-            this.refreshScreensBtn = new System.Windows.Forms.Button();
             this.hideTaskbarCheckBox = new CustomComponents.DarkThemeCheckBox();
             this.sizelabel = new System.Windows.Forms.Label();
             this.yNumeric = new CustomComponents.DarkThemeNumericBox();
@@ -264,7 +263,6 @@
             this.videoGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.videoGroup.Controls.Add(this.scaleLabel);
             this.videoGroup.Controls.Add(this.scaleComboBox);
-            this.videoGroup.Controls.Add(this.refreshScreensBtn);
             this.videoGroup.Controls.Add(this.hideTaskbarCheckBox);
             this.videoGroup.Controls.Add(this.sizelabel);
             this.videoGroup.Controls.Add(this.yNumeric);
@@ -304,23 +302,9 @@
             "25% Resolution"});
             this.scaleComboBox.Location = new System.Drawing.Point(73, 49);
             this.scaleComboBox.Name = "scaleComboBox";
-            this.scaleComboBox.Size = new System.Drawing.Size(231, 24);
+            this.scaleComboBox.Size = new System.Drawing.Size(261, 24);
             this.scaleComboBox.TabIndex = 23;
             this.scaleComboBox.SelectedIndexChanged += new System.EventHandler(this.scaleComboBox_SelectedIndexChanged);
-            // 
-            // refreshScreensBtn
-            // 
-            this.refreshScreensBtn.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.refreshScreensBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.refreshScreensBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.refreshScreensBtn.Image = ((System.Drawing.Image)(resources.GetObject("refreshScreensBtn.Image")));
-            this.refreshScreensBtn.Location = new System.Drawing.Point(311, 19);
-            this.refreshScreensBtn.Margin = new System.Windows.Forms.Padding(0);
-            this.refreshScreensBtn.Name = "refreshScreensBtn";
-            this.refreshScreensBtn.Size = new System.Drawing.Size(23, 23);
-            this.refreshScreensBtn.TabIndex = 9;
-            this.refreshScreensBtn.UseVisualStyleBackColor = false;
-            this.refreshScreensBtn.Click += new System.EventHandler(this.refreshScreensBtn_Click);
             // 
             // hideTaskbarCheckBox
             // 
@@ -455,7 +439,7 @@
             this.areaComboBox.IntegralHeight = false;
             this.areaComboBox.Location = new System.Drawing.Point(73, 19);
             this.areaComboBox.Name = "areaComboBox";
-            this.areaComboBox.Size = new System.Drawing.Size(231, 24);
+            this.areaComboBox.Size = new System.Drawing.Size(261, 24);
             this.areaComboBox.TabIndex = 8;
             this.areaComboBox.DropDown += new System.EventHandler(this.areaComboBox_DropDown);
             this.areaComboBox.SelectedIndexChanged += new System.EventHandler(this.areaComboBox_SelectedIndexChanged);
@@ -540,7 +524,6 @@
 		private CustomComponents.DarkThemeNumericBox yNumeric;
 		private System.Windows.Forms.Label sizelabel;
 		private CustomComponents.DarkThemeCheckBox hideTaskbarCheckBox;
-		private System.Windows.Forms.Button refreshScreensBtn;
 		private System.Windows.Forms.PictureBox previewBox;
 		private System.Windows.Forms.ToolStripButton previewBtn;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;

@@ -86,9 +86,11 @@ namespace DiscordAudioStream
 			Size size;
 			Point position;
 			bool captureCursor = master.IsCapturingCursor();
-			if (ProcessHandleManager.CapturingWindow)
+			IntPtr proc = ProcessHandleManager.GetHandle();
+
+			if (proc != IntPtr.Zero)
 			{
-				IntPtr proc = ProcessHandleManager.GetHandle();
+				// We are capturing a window
 				GetWindowArea(proc, out size, out position);
 
 				if (size != oldSize)
@@ -99,6 +101,7 @@ namespace DiscordAudioStream
 			}
 			else
 			{
+				// We are capturing a screen
 				master.GetCaptureArea(out size, out position);
 			}
 
@@ -109,8 +112,9 @@ namespace DiscordAudioStream
 				// Minimized windows store app. Display a black square.
 				BMP = new Bitmap(1, 1);
 			}
-			else if (ProcessHandleManager.CapturingWindow && Properties.Settings.Default.UseExperimentalCapture)
+			else if (proc != IntPtr.Zero && Properties.Settings.Default.UseExperimentalCapture)
 			{
+				// We are capturing a window, using the experimental method
 				BMP = CaptureWindow(ProcessHandleManager.GetHandle(), size);
 			}
 			else

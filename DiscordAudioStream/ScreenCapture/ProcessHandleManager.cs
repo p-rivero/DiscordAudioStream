@@ -14,7 +14,7 @@ namespace DiscordAudioStream
 
 		public static string[] RefreshHandles()
 		{
-			ClearSelectedIndex();
+			ClearTopmostWindow();
 			IntPtr shellWindow = User32.GetShellWindow();
 			Dictionary<IntPtr, string> windows = new Dictionary<IntPtr, string>();
 
@@ -41,8 +41,12 @@ namespace DiscordAudioStream
 
 				StringBuilder builder = new StringBuilder(length);
 				User32.GetWindowText(hWnd, builder, length + 1);
+				string name = builder.ToString();
 
-				windows[hWnd] = builder.ToString();
+				// Ignore the "Custom area" window
+				if (name == "Recording area - Discord Audio Stream") return true;
+
+				windows[hWnd] = name;
 				return true;
 
 			}, IntPtr.Zero);
@@ -56,7 +60,7 @@ namespace DiscordAudioStream
 			get { return selectedIndex; }
 			set
 			{
-				ClearSelectedIndex();
+				ClearTopmostWindow();
 
 				if (procs == null)
 				{
@@ -76,27 +80,22 @@ namespace DiscordAudioStream
 			}
 		}
 
-		private static bool capturingWindow = false;
-		public static bool CapturingWindow
-		{
-			get { return capturingWindow; }
-			set
-			{ 
-				if (!value) ClearSelectedIndex();
-				capturingWindow = value;
-			}
-		}
-
 		public static IntPtr GetHandle()
 		{
 			if (selectedIndex < 0 || selectedIndex >= procs.Length)
 			{
-				throw new InvalidOperationException("Incorrect process index, make sure to set SelectedIndex first");
+				return IntPtr.Zero;
 			}
 			return procs[selectedIndex];
 		}
 
 		public static void ClearSelectedIndex()
+		{
+			ClearTopmostWindow();
+			selectedIndex = -1;
+		}
+
+		private static void ClearTopmostWindow()
 		{
 			if (selectedIndex == -1)
 				return;
@@ -105,7 +104,16 @@ namespace DiscordAudioStream
 			{
 				User32.SetWindowPos(procs[selectedIndex], User32.HWND_NOTOPMOST, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
 			}
-			selectedIndex = -1;
+		}
+
+		public static int Lookup(IntPtr handle)
+		{
+			for (int i = 0; i < procs.Length; i++)
+			{
+				if (procs[i] == handle)
+					return i;
+			}
+			return -1;
 		}
 	}
 }

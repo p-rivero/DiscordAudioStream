@@ -49,6 +49,15 @@ namespace DiscordAudioStream
 
 			RefreshScreens();
 			RefreshAudioDevices();
+			try
+			{
+				areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
+			}
+			catch (ArgumentOutOfRangeException)
+			{
+				// Number of screen may have changed
+				areaComboBox.SelectedIndex = 0;
+			}
 
 			previewBtn.Checked = Properties.Settings.Default.Preview;
 			enablePreview(previewBtn.Checked);
@@ -78,9 +87,6 @@ namespace DiscordAudioStream
 
 				refreshAudioBtn.BackColor = DarkThemeManager.DarkSecondColor;
 				refreshAudioBtn.Image = Properties.Resources.white_refresh;
-
-				refreshScreensBtn.BackColor = DarkThemeManager.DarkSecondColor;
-				refreshScreensBtn.Image = Properties.Resources.white_refresh;
 			}
 
 			videoGroup.SetDarkMode(darkMode);
@@ -143,6 +149,12 @@ namespace DiscordAudioStream
 			if (numberOfScreens == -1)
 				return;
 
+			// Do not select the dummy object at the end of the list
+			if (areaComboBox.SelectedIndex == areaComboBox.Items.Count - 1)
+			{
+				areaComboBox.SelectedIndex = areaComboBox.Items.Count - 2;
+			}
+
 			RefreshAreaInfo();
 			// Do not save settings for Custom Area or Window
 			if (areaComboBox.SelectedIndex >= numberOfScreens)
@@ -171,7 +183,7 @@ namespace DiscordAudioStream
 				yNumeric.Enabled = true;
 
 				hideTaskbarCheckBox.Enabled = false;
-				ProcessHandleManager.CapturingWindow = false;
+				ProcessHandleManager.ClearSelectedIndex();
 			}
 			// Window
 			else if (areaComboBox.SelectedIndex > numberOfScreens)
@@ -185,7 +197,6 @@ namespace DiscordAudioStream
 
 				hideTaskbarCheckBox.Enabled = false;
 				ProcessHandleManager.SelectedIndex = areaComboBox.SelectedIndex - numberOfScreens - 1;
-				ProcessHandleManager.CapturingWindow = true;
 			}
 			// Screen
 			else
@@ -198,7 +209,7 @@ namespace DiscordAudioStream
 				yNumeric.Enabled = false;
 
 				hideTaskbarCheckBox.Enabled = true;
-				ProcessHandleManager.CapturingWindow = false;
+				ProcessHandleManager.ClearSelectedIndex();
 
 				if (Screen.AllScreens.Length > 1)
 				{
@@ -394,16 +405,6 @@ namespace DiscordAudioStream
 
 			numberOfScreens = areaComboBox.Items.Count;
 
-			try
-			{
-				areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
-			}
-			catch (ArgumentOutOfRangeException)
-			{
-				// Number of screen may have changed
-				areaComboBox.SelectedIndex = 0;
-			}
-
 			areaComboBox.Items.Add(new DarkThemeComboBox.ItemWithSeparator("Custom area"));
 
 			foreach (string window in ProcessHandleManager.RefreshHandles())
@@ -458,11 +459,6 @@ namespace DiscordAudioStream
 			RefreshAreaInfo();
 			Properties.Settings.Default.HideTaskbar = hideTaskbarCheckBox.Checked;
 			Properties.Settings.Default.Save();
-		}
-
-		private void refreshScreensBtn_Click(object sender, EventArgs e)
-		{
-			RefreshScreens();
 		}
 
 		private void captureCursorCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -675,6 +671,7 @@ namespace DiscordAudioStream
 			Invoke(new Action(() =>
 			{
 				RefreshScreens();
+				areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
 				if (!streamEnabled) return;
 
 				EndStream();
@@ -684,9 +681,37 @@ namespace DiscordAudioStream
 
 		private void areaComboBox_DropDown(object sender, EventArgs e)
 		{
-			// Only refresh if doing so won't change the currently selected item
-			if (areaComboBox.SelectedIndex < numberOfScreens)
-				RefreshScreens();
+			IntPtr handle = IntPtr.Zero;
+			int oldIndex = areaComboBox.SelectedIndex;
+			if (oldIndex > numberOfScreens)
+			{
+				// We were capturing a window, store its handle
+				handle = ProcessHandleManager.GetHandle();
+			}
+
+			// Refresh list of windows
+			RefreshScreens();
+
+			if (oldIndex > numberOfScreens)
+			{
+				// We were capturing a window, see if it still exists
+				int newIndex = ProcessHandleManager.Lookup(handle);
+				if (newIndex == -1)
+				{
+					// Window has been closed, return to last saved screen
+					areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
+				}
+				else
+				{
+					// Window still exists
+					areaComboBox.SelectedIndex = newIndex + numberOfScreens + 1;
+				}
+			}
+			else
+			{
+				// We were capturing a screen
+				areaComboBox.SelectedIndex = oldIndex;
+			}
 		}
 	}
 }
