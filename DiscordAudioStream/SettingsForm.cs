@@ -7,8 +7,12 @@ namespace DiscordAudioStream
 {
 	partial class SettingsForm : Form
 	{
-		public SettingsForm(bool darkMode)
+		MainForm parent;
+
+		public SettingsForm(bool darkMode, MainForm parent)
 		{
+			this.parent = parent;
+
 			if (darkMode)
 			{
 				this.HandleCreated += new EventHandler(DarkThemeManager.formHandleCreated);
@@ -65,10 +69,6 @@ namespace DiscordAudioStream
 			}
 		}
 
-		private void updatesCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-		}
-
 		private void systemThemeRadio_CheckedChanged(object sender, EventArgs e)
 		{
 			if (systemThemeRadio.Checked)
@@ -117,8 +117,9 @@ namespace DiscordAudioStream
 		private void experimentalCaptureCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			ProcessHandleManager.ClearSelectedIndex();
+			parent.UpdateAreaComboBox();
 			Properties.Settings.Default.UseExperimentalCapture = experimentalCaptureCheckBox.Checked;
 			Properties.Settings.Default.Save();
 		}
-    }
+	}
 }

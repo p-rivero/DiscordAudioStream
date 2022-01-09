@@ -421,7 +421,7 @@ namespace DiscordAudioStream
 
 		private void settingsBtn_Click(object sender, EventArgs e)
 		{
-			SettingsForm settingsBox = new SettingsForm(darkMode);
+			SettingsForm settingsBox = new SettingsForm(darkMode, this);
 			settingsBox.Owner = this;
 			if (this.TopMost)
 			{
@@ -680,6 +680,11 @@ namespace DiscordAudioStream
 		}
 
 		private void areaComboBox_DropDown(object sender, EventArgs e)
+		{
+			UpdateAreaComboBox();
+		}
+
+		public void UpdateAreaComboBox()
 		{
 			IntPtr handle = IntPtr.Zero;
 			int oldIndex = areaComboBox.SelectedIndex;
