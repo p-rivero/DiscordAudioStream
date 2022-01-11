@@ -125,3 +125,12 @@ Now follow this steps:
     - **Very important:** remember to restore the output device of your programs to "Default". Otherwise, you won't be able to hear their audio.
     - Keep in mind that if you minimize the window that was created in step 7, your Discord stream will probably be paused. You may want to hide this window behind other windows, without minimizing it.
 
+---
+
+## Common issues:
+
+**When capturing a window, I only get a black screen:** Make sure you are on Windows 8.1 or later. You can also switch to another capture method in the Settings menu (press `Ctrl+,` or click the Settings button ![Settings icon](docs/readme/settings-button.png)).
+
+**The captured window is flickering:** In some cases, the experimental capture method (active by default) can cause noticeable flickering. You can switch to another capture method in the Settings menu (press `Ctrl+,` or click the Settings button ![Settings icon](docs/readme/settings-button.png)).
+
+**My issue is not listed here:** Please let me know in the [issues section](https://github.com/p-rivero/DiscordAudioStream/issues).
