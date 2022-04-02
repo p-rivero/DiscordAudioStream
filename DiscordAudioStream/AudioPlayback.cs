@@ -27,7 +27,7 @@ namespace DiscordAudioStream
             MMDevice device = audioDevices[deviceIndex];
             audioSource = new WasapiLoopbackCapture(device);
             output = new DirectSoundOut(DESIRED_LATENCY_MS);
-            audioSource.DataAvailable += audioSource_DataAvailable;
+            audioSource.DataAvailable += AudioSource_DataAvailable;
 
 
             WaveFormat format = audioSource.WaveFormat;
@@ -54,19 +54,30 @@ namespace DiscordAudioStream
 
         public void Start()
         {
+            output.PlaybackStopped += StoppedHandler;
             audioSource.StartRecording();
             output.Play();
         }
 
         public void Stop()
         {
+            // Remove the handler before stopping manually
+            output.PlaybackStopped -= StoppedHandler;
+
             audioSource.StopRecording();
             output.Stop();
         }
 
-        private void audioSource_DataAvailable(object sender, WaveInEventArgs e)
+        private void AudioSource_DataAvailable(object sender, WaveInEventArgs e)
         {
             waveProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
+        }
+
+        private void StoppedHandler(object sender, StoppedEventArgs e)
+        {
+            // In some cases, streaming to Discord will cause DirectSoundOut to throw an
+            // exception and stop. If that happens, just resume playback
+            output.Play();
         }
     }
 }
