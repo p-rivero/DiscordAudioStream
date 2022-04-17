@@ -155,6 +155,7 @@ class User32
 	public const int PW_RENDERFULLCONTENT = 0x00000002;
 	public const int PW_CLIENTONLY = 0x1;
 	public const int DI_NORMAL = 0x0003;
+	public const int DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = -4;
 	public enum FsModifiers
 	{
 		NONE = 0x0000,
@@ -211,6 +212,8 @@ class User32
 	public static extern bool SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttribData data);
 	[DllImport("user32.dll")]
 	public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+	[DllImport("user32.dll", SetLastError = true)]
+	public static extern bool SetProcessDpiAwarenessContext(int value);
 }
 
 class Ntdll
