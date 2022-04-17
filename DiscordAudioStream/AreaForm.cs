@@ -127,16 +127,19 @@ namespace DiscordAudioStream
 			if (Top + Height > limitEndY) Top = limitEndY - Height;
 		}
 
-        private void AreaForm_Activated(object sender, EventArgs e)
-        {
-			dragBtn.Visible = true;
-			titleBtn.Visible = true;
-		}
-
         private void AreaForm_Deactivate(object sender, EventArgs e)
         {
 			dragBtn.Visible = false;
+			moveBtn.Visible = false;
 			titleBtn.Visible = false;
+		}
+
+        private void AreaForm_MouseEnter(object sender, EventArgs e)
+        {
+			dragBtn.Visible = true;
+			moveBtn.Visible = true;
+			titleBtn.Visible = true;
+			Activate();
 		}
     }
 }

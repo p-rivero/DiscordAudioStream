@@ -41,6 +41,9 @@
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
@@ -135,6 +138,7 @@
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -150,12 +154,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\imgs\rec.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\imgs\stop.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="resources\imgs\light\white-speaker.png" />
     <None Include="resources\imgs\light\white-mixer.png" />
     <None Include="resources\imgs\light\white-preview.png" />
@@ -165,12 +163,11 @@
     <None Include="resources\imgs\light\white-stop.png" />
     <None Include="resources\imgs\light\white-record.png" />
     <None Include="resources\imgs\light\white-about.png" />
-    <None Include="resources\white-stop.png" />
-    <None Include="resources\white-record.png" />
-    <None Include="resources\white-about.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="resources\move.png" />
+    <None Include="resources\resize.png" />
     <None Include="resources\NAudio.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

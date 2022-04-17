@@ -13,11 +13,6 @@ namespace DiscordAudioStream
 		{
 			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
 
-			if (Environment.OSVersion.Version.Major >= 6)
-			{
-				User32.SetProcessDPIAware();
-			}
-
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
