@@ -177,6 +177,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <Content Include="resources\SharpDX.Direct3D11.dll" />
+    <Content Include="resources\SharpDX.dll" />
+    <Content Include="resources\SharpDX.DXGI.dll" />
     <None Include="resources\move.png" />
     <None Include="resources\resize.png" />
     <None Include="resources\NAudio.dll" />

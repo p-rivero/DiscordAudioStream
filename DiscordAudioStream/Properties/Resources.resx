@@ -154,4 +154,13 @@
   <data name="move" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\move.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SharpDX" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sharpdx.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SharpDX_Direct3D11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sharpdx.direct3d11.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SharpDX_DXGI" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sharpdx.dxgi.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
