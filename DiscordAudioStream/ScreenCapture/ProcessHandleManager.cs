@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DiscordAudioStream.ScreenCapture;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,6 +12,16 @@ namespace DiscordAudioStream
 	{
 		private static IntPtr[] procs = null;
 		private static int selectedIndex = -1;
+		private static CaptureState state = null;
+
+		public static CaptureState State
+		{
+			set
+			{
+				if (value == null) throw new ArgumentNullException("value");
+				state = value;
+			}
+		}
 
 		public static string[] RefreshHandles()
 		{
@@ -72,7 +83,7 @@ namespace DiscordAudioStream
 				}
 				selectedIndex = value;
 
-				if (!Properties.Settings.Default.UseExperimentalCapture)
+				if (state != null && state.RequiresBringWindowToFront)
 				{
 					// Set selected process as topmost
 					User32.SetWindowPos(procs[selectedIndex], User32.HWND_TOPMOST, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
@@ -97,10 +108,7 @@ namespace DiscordAudioStream
 
 		private static void ClearTopmostWindow()
 		{
-			if (selectedIndex == -1)
-				return;
-
-			if (!Properties.Settings.Default.UseExperimentalCapture)
+			if (selectedIndex != -1 && state != null && state.RequiresBringWindowToFront)
 			{
 				User32.SetWindowPos(procs[selectedIndex], User32.HWND_NOTOPMOST, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
 			}

@@ -57,6 +57,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutForm.cs">
@@ -72,6 +73,13 @@
       <DependentUpon>AreaForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AudioPlayback.cs" />
+    <Compile Include="ScreenCapture\CaptureState.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\CaptureSourceFactory.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\PrintWindow\PrintWindowCore.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltWindowCapture.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltMonitorCapture.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\CursorPainter.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\DXCapture.cs" />
     <Compile Include="CustomComponents\DarkThemeGroupBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -95,9 +103,17 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DLLs.cs" />
-    <Compile Include="ScreenCapture\IScreenCaptureMaster.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltCapture.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\DXMonitorCapture.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\DXWindowCapture.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\ICaptureSource.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\MeasureTime.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\PrintWindow\PrintWindowCapture.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\WindowCapture.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Helpers\CaptureHelper.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Helpers\Direct3D11Helper.cs" />
     <Compile Include="ScreenCapture\ProcessHandleManager.cs" />
-    <Compile Include="ScreenCapture\ScreenCaptureWorker.cs" />
+    <Compile Include="ScreenCapture\ScreenCaptureManager.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -171,4 +187,11 @@
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.22000.196" />
+    <PackageReference Include="SharpDX.Direct3D11">
+      <Version>4.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
+  </ItemGroup>
 </Project>

@@ -5,23 +5,25 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
 using CustomComponents;
+using DiscordAudioStream.ScreenCapture;
 
 namespace DiscordAudioStream
 {
-	public partial class MainForm : Form, IScreenCaptureMaster
+	public partial class MainForm : Form
 	{
-		private AreaForm areaForm;
+		private readonly AreaForm areaForm;
 
-		private bool darkMode;
+		private readonly bool darkMode;
+		private readonly Size defaultWindowSize;
+		private readonly Size defaultPreviewSize;
+		private readonly Point defaultPreviewLocation;
 		private bool streamEnabled = false;
-		private Size defaultWindowSize;
-		private Size defaultPreviewSize;
-		private Point defaultPreviewLocation;
 
-		private ScreenCaptureWorker screenCaptureWorker;
-		private const int TARGET_FRAMERATE = 60;
 		private double scaleMultiplier = 1;
 		private int numberOfScreens = -1;
+
+		private ScreenCaptureManager screenCapture;
+		private CaptureState captureState = new CaptureState();
 
 		private AudioPlayback audioPlayback = null;
 		
@@ -68,6 +70,8 @@ namespace DiscordAudioStream
 			yNumeric.Minimum = SystemInformation.VirtualScreen.Top;
 
 			ApplyDarkTheme(darkMode);
+
+			ProcessHandleManager.State = captureState;
 		}
 
 
@@ -152,8 +156,7 @@ namespace DiscordAudioStream
 		}
 
 
-		// IScreenCaptureMaster interface
-
+		// TODO: Delete unused
 		public void GetCaptureArea(out Size size, out Point pos)
 		{
 			int tmp_width = 0, tmp_height = 0, tmp_x = 0, tmp_y = 0;
@@ -177,19 +180,6 @@ namespace DiscordAudioStream
 		public void CapturedWindowSizeChanged(Size newSize)
 		{
 			SetPreviewSize(newSize);
-		}
-
-		public void AbortCapture()
-		{
-			Invoke(new Action(() =>
-			{
-				RefreshScreens();
-				areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
-				if (!streamEnabled) return;
-
-				EndStream();
-				if (Properties.Settings.Default.AutoExit) Close();
-			}));
 		}
 
 
@@ -255,6 +245,7 @@ namespace DiscordAudioStream
 				hideTaskbarCheckBox.Enabled = false;
 
 				ProcessHandleManager.SelectedIndex = areaComboBox.SelectedIndex - numberOfScreens - 1;
+				captureState.WindowHandle = ProcessHandleManager.GetHandle();
 			}
 			// Screen
 			else
@@ -271,6 +262,8 @@ namespace DiscordAudioStream
 					// All screens
 					hideTaskbarCheckBox.Enabled = false;
 					area = SystemInformation.VirtualScreen;
+					// TODO: Delete
+					captureState.Screen = Screen.PrimaryScreen;
 				}
 				else
 				{
@@ -279,6 +272,7 @@ namespace DiscordAudioStream
 					Screen screen = Screen.AllScreens[areaComboBox.SelectedIndex];
 					if (hideTaskbarCheckBox.Checked) area = screen.WorkingArea;
 					else area = screen.Bounds;
+					captureState.Screen = screen;
 				}
 
 				widthNumeric.Value = area.Width;
@@ -391,6 +385,19 @@ namespace DiscordAudioStream
 			CenterToScreen();
 		}
 
+		private void AbortCapture()
+		{
+			Invoke(new Action(() =>
+			{
+				RefreshScreens();
+				areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
+				if (!streamEnabled) return;
+
+				EndStream();
+				if (Properties.Settings.Default.AutoExit) Close();
+			}));
+		}
+
 		private void EnablePreview(bool visible)
 		{
 			previewBox.Visible = visible;
@@ -425,20 +432,30 @@ namespace DiscordAudioStream
 			hideTaskbarCheckBox.Checked = Properties.Settings.Default.HideTaskbar;
 			RefreshAreaInfo();
 
-			screenCaptureWorker = new ScreenCaptureWorker(TARGET_FRAMERATE, this);
+			captureState.HideTaskbar = hideTaskbarCheckBox.Checked;
+			captureState.CapturingCursor = captureCursorCheckBox.Checked;
+
+			screenCapture = new ScreenCaptureManager(captureState);
+			screenCapture.CaptureAborted += AbortCapture;
 
 			Thread drawThread = new Thread(() =>
 			{
 				Stopwatch stopwatch = new Stopwatch();
-				const int INTERVAL_MS = 1000 / TARGET_FRAMERATE;
+				const int INTERVAL_MS = 1000 / ScreenCaptureManager.TARGET_FRAMERATE;
+				Size oldSize = new Size(0, 0);
 
 				while (true)
 				{
 					stopwatch.Restart();
 					try
 					{
-						Bitmap next = ScreenCaptureWorker.GetNextFrame();
+						Bitmap next = ScreenCaptureManager.GetNextFrame();
 						if (next == null) continue;
+						if (next.Size != oldSize)
+						{
+							oldSize = next.Size;
+							SetPreviewSize(next.Size);
+						}
 						Invoke(new Action(() =>
 						{
 							if (previewBox.Image != null)
@@ -481,7 +498,7 @@ namespace DiscordAudioStream
 			}
 			else
 			{
-				screenCaptureWorker.Stop();
+				screenCapture.Stop();
 				User32.UnregisterHotKey(this.Handle, 0);
 				ProcessHandleManager.ClearSelectedIndex();
 			}
@@ -631,8 +648,8 @@ namespace DiscordAudioStream
 		{
 			int index = scaleComboBox.SelectedIndex;
 			if (index == 0) scaleMultiplier = 1;              // Original resolution
-			else if (index == 1) scaleMultiplier = Math.Sqrt(0.5); // 50% resolution
-			else if (index == 2) scaleMultiplier = 0.5;            // 25% resolution
+			else if (index == 1) scaleMultiplier = Math.Sqrt(0.50); // 50% resolution
+			else if (index == 2) scaleMultiplier = Math.Sqrt(0.25); // 25% resolution
 			else throw new ArgumentException("Invalid index");
 
 			Properties.Settings.Default.ScaleIndex = index;
@@ -696,6 +713,8 @@ namespace DiscordAudioStream
 
 		private void captureCursorCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
+			captureState.CapturingCursor = captureCursorCheckBox.Checked;
+
 			Properties.Settings.Default.CaptureCursor = captureCursorCheckBox.Checked;
 			Properties.Settings.Default.Save();
 		}
