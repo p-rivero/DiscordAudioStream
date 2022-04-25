@@ -69,8 +69,8 @@ namespace DiscordAudioStream
 			if (e.Button == MouseButtons.Left)
 			{
 				Point downPos = PointToClient(Cursor.Position);
-				if (downPos.X > dragBtn.Location.X && downPos.X < dragBtn.Location.X + dragBtn.Width &&
-					downPos.Y > dragBtn.Location.Y && downPos.Y < dragBtn.Location.Y + dragBtn.Height)
+				if (downPos.X > dragBtn__.Location.X && downPos.X < dragBtn__.Location.X + dragBtn__.Width &&
+					downPos.Y > dragBtn__.Location.Y && downPos.Y < dragBtn__.Location.Y + dragBtn__.Height)
 				{
 					Cursor.Current = Cursors.SizeNWSE;
 					startPos = downPos;
@@ -127,19 +127,19 @@ namespace DiscordAudioStream
 			if (Top + Height > limitEndY) Top = limitEndY - Height;
 		}
 
-        private void AreaForm_Deactivate(object sender, EventArgs e)
-        {
-			dragBtn.Visible = false;
+		private void AreaForm_Deactivate(object sender, EventArgs e)
+		{
+			dragBtn__.Visible = false;
 			moveBtn.Visible = false;
 			titleBtn.Visible = false;
 		}
 
-        private void AreaForm_MouseEnter(object sender, EventArgs e)
-        {
-			dragBtn.Visible = true;
+		private void AreaForm_MouseEnter(object sender, EventArgs e)
+		{
+			dragBtn__.Visible = true;
 			moveBtn.Visible = true;
 			titleBtn.Visible = true;
 			Activate();
 		}
-    }
+	}
 }

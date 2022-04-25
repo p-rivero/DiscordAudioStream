@@ -55,7 +55,7 @@ Unfortunately, GPLv3 forces any derivative work to also be licensed under GPLv3,
 
 # How do I use it?
 
-First, [download](https://github.com/p-rivero/DiscordAudioStream/releases) and extract the program. You should be able to execute it directly without installing anything.
+First, download the program from the [GitHub releases page](https://github.com/p-rivero/DiscordAudioStream/releases). You should be able to execute it directly without installing anything.
   
 The following steps depend on what you want to do.
 
