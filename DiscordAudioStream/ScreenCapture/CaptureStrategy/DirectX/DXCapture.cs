@@ -33,8 +33,15 @@ namespace DiscordAudioStream
 				item.Size);
 			session = framePool.CreateCaptureSession(item);
 
-			// Attempt to disable yellow capture border
-			session.IsBorderRequired = false;
+			// Attempt to disable yellow capture border. This method is only avaiable from Windows 10, version 2104
+			try
+			{
+				session.IsBorderRequired = false;
+			}
+			catch (Exception)
+			{
+				// Not available
+			}
 
 			// Control whether the cursor is enabled
 			session.IsCursorCaptureEnabled = captureCursor;
@@ -70,7 +77,7 @@ namespace DiscordAudioStream
 			}
 
 			using (Texture2D screenTexture = CreateReadableTexture(width, height))
-            {
+			{
 				// copy resource into memory that can be accessed by the CPU
 				using (Texture2D screenTexture2D = Direct3D11Helper.CreateSharpDXTexture2D(frame.Surface))
 				{
