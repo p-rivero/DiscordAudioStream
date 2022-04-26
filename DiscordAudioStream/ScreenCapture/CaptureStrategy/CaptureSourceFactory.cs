@@ -2,10 +2,8 @@
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
-	public class CaptureSourceFactory
+	public static class CaptureSourceFactory
 	{
-		private const bool DEBUG_TIME = false;
-
 		public static ICaptureSource Build(CaptureState state)
 		{
 			ICaptureSource result = null;
@@ -44,10 +42,10 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				}
 			}
 
-			if (DEBUG_TIME)
-			{
-				result = new MeasureTime(result);
-			}
+
+			#if DEBUG_TIME
+			result = new MeasureTime(result);
+			#endif
 
 			return result;
 		}

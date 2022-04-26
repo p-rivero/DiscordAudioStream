@@ -163,4 +163,25 @@
   <data name="SharpDX_DXGI" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\sharpdx.dxgi.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="AuthorLinkUrl" xml:space="preserve">
+    <value>https://github.com/p-rivero</value>
+  </data>
+  <data name="IssuesLinkUrl" xml:space="preserve">
+    <value>https://github.com/p-rivero/DiscordAudioStream/issues</value>
+  </data>
+  <data name="LicenseLinkUrl" xml:space="preserve">
+    <value>https://github.com/p-rivero/DiscordAudioStream/blob/master/LICENSE</value>
+  </data>
+  <data name="ModuleArtLinkUrl" xml:space="preserve">
+    <value>https://github.com/ModuleArt</value>
+  </data>
+  <data name="ProjectLinkUrl" xml:space="preserve">
+    <value>https://github.com/p-rivero/DiscordAudioStream</value>
+  </data>
+  <data name="ScreenRecorderLinkUrl" xml:space="preserve">
+    <value>https://github.com/ModuleArt/quick-screen-recorder</value>
+  </data>
+  <data name="UpdatesLinkUrl" xml:space="preserve">
+    <value>https://github.com/p-rivero/DiscordAudioStream/releases</value>
+  </data>
 </root>

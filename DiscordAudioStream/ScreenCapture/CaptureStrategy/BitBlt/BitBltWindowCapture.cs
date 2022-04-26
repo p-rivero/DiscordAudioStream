@@ -31,8 +31,9 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			return capture.CaptureFrame();
 		}
 
-		public override void Dispose()
+		protected override void Dispose(bool disposing)
 		{
+			base.Dispose(disposing);
 			capture.Dispose();
 		}
 

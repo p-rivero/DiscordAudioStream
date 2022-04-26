@@ -61,6 +61,42 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://github.com/p-rivero.
+        /// </summary>
+        internal static string AuthorLinkUrl {
+            get {
+                return ResourceManager.GetString("AuthorLinkUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream/issues.
+        /// </summary>
+        internal static string IssuesLinkUrl {
+            get {
+                return ResourceManager.GetString("IssuesLinkUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream/blob/master/LICENSE.
+        /// </summary>
+        internal static string LicenseLinkUrl {
+            get {
+                return ResourceManager.GetString("LicenseLinkUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/ModuleArt.
+        /// </summary>
+        internal static string ModuleArtLinkUrl {
+            get {
+                return ResourceManager.GetString("ModuleArtLinkUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap move {
@@ -81,12 +117,30 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream.
+        /// </summary>
+        internal static string ProjectLinkUrl {
+            get {
+                return ResourceManager.GetString("ProjectLinkUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap resize {
             get {
                 object obj = ResourceManager.GetObject("resize", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/ModuleArt/quick-screen-recorder.
+        /// </summary>
+        internal static string ScreenRecorderLinkUrl {
+            get {
+                return ResourceManager.GetString("ScreenRecorderLinkUrl", resourceCulture);
             }
         }
         
@@ -117,6 +171,15 @@ namespace DiscordAudioStream.Properties {
             get {
                 object obj = ResourceManager.GetObject("SharpDX_DXGI", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream/releases.
+        /// </summary>
+        internal static string UpdatesLinkUrl {
+            get {
+                return ResourceManager.GetString("UpdatesLinkUrl", resourceCulture);
             }
         }
         

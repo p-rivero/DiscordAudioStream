@@ -117,7 +117,8 @@ namespace DiscordAudioStream
 
 		private void experimentalCaptureCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
-			ProcessHandleManager.ClearSelectedIndex();
+			// TODO
+			//ProcessHandleManager.ClearSelectedIndex();
 			parent.UpdateAreaComboBox();
 			
 			// TODO

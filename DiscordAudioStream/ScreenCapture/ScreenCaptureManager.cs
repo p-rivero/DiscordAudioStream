@@ -85,6 +85,7 @@ namespace DiscordAudioStream.ScreenCapture
 		private void UpdateState()
 		{
 			ICaptureSource oldSource = currentSource;
+			// TODO: If an exception is thrown, fallback to another method
 			currentSource = CaptureSourceFactory.Build(captureState);
 			// Dispose after switching to avoid data races
 			oldSource?.Dispose();
@@ -98,7 +99,7 @@ namespace DiscordAudioStream.ScreenCapture
 			});
 			if (!task.Wait(TimeSpan.FromMilliseconds(500)))
             {
-				throw new Exception("CaptureFrame() timed out");
+				throw new TimeoutException("CaptureFrame() timed out");
             }
 
 			// Limit the size of frameQueue to LIMIT_QUEUE_SZ

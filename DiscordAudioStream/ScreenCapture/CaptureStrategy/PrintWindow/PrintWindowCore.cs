@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DLLs;
+using System;
 using System.Drawing;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
@@ -23,11 +24,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				User32.PrintWindow(windowHandle, g.GetHdc(), User32.PW_CLIENTONLY | User32.PW_RENDERFULLCONTENT);
 			}
 			return result;
-		}
-
-		public override void Dispose()
-		{
-			// Nothing to clean up
 		}
 	}
 }

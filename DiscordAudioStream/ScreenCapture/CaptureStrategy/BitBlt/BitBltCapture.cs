@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DLLs;
+using System;
 using System.Drawing;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
@@ -12,7 +13,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			if (CaptureAreaRect == null)
 			{
-				throw new ArgumentNullException("Attempting to capture frame without setting CaptureAreaRect");
+				throw new InvalidOperationException("Attempting to capture frame without setting CaptureAreaRect");
 			}
 
 			// Get the target area
@@ -37,7 +38,14 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 		public void Dispose()
 		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
 			// Nothing to clean up
 		}
+
 	}
 }

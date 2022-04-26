@@ -5,8 +5,8 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
 	public class PrintWindowCapture : WindowCapture
 	{
-		private ICaptureSource capture;
-		private IntPtr windowHandle;
+		private readonly ICaptureSource capture;
+		private readonly IntPtr windowHandle;
 
 		public PrintWindowCapture(IntPtr hWnd, bool captureCursor)
 		{
@@ -31,8 +31,9 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			return capture.CaptureFrame();
 		}
 
-		public override void Dispose()
+		protected override void Dispose(bool disposing)
 		{
+			base.Dispose(disposing);
 			capture.Dispose();
 		}
 

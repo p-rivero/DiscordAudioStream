@@ -6,6 +6,7 @@ using System.Threading;
 using System.Diagnostics;
 using CustomComponents;
 using DiscordAudioStream.ScreenCapture;
+using DLLs;
 
 namespace DiscordAudioStream
 {
@@ -23,7 +24,8 @@ namespace DiscordAudioStream
 		private int numberOfScreens = -1;
 
 		private ScreenCaptureManager screenCapture;
-		private CaptureState captureState = new CaptureState();
+		private readonly CaptureState captureState = new CaptureState();
+		private readonly ProcessHandleManager processHandleManager;
 
 		private AudioPlayback audioPlayback = null;
 		
@@ -35,6 +37,7 @@ namespace DiscordAudioStream
 			}
 
 			this.darkMode = darkMode;
+			processHandleManager = new ProcessHandleManager(captureState);
 
 			InitializeComponent();
 			previewBox.Visible = true;
@@ -70,8 +73,6 @@ namespace DiscordAudioStream
 			yNumeric.Minimum = SystemInformation.VirtualScreen.Top;
 
 			ApplyDarkTheme(darkMode);
-
-			ProcessHandleManager.State = captureState;
 		}
 
 
@@ -127,7 +128,7 @@ namespace DiscordAudioStream
 			if (oldIndex > numberOfScreens)
 			{
 				// We were capturing a window, store its handle
-				handle = ProcessHandleManager.GetHandle();
+				handle = processHandleManager.GetHandle();
 			}
 
 			// Refresh list of windows
@@ -136,7 +137,7 @@ namespace DiscordAudioStream
 			if (oldIndex > numberOfScreens)
 			{
 				// We were capturing a window, see if it still exists
-				int newIndex = ProcessHandleManager.Lookup(handle);
+				int newIndex = processHandleManager.Lookup(handle);
 				if (newIndex == -1)
 				{
 					// Window has been closed, return to last saved screen
@@ -229,7 +230,7 @@ namespace DiscordAudioStream
 				EnableAreaControls(true);
 				hideTaskbarCheckBox.Enabled = false;
 
-				ProcessHandleManager.ClearSelectedIndex();
+				processHandleManager.ClearSelectedIndex();
 
 				// Omit pixels of the red border
 				widthNumeric.Value = areaForm.Width - 2;
@@ -244,8 +245,8 @@ namespace DiscordAudioStream
 				EnableAreaControls(false);
 				hideTaskbarCheckBox.Enabled = false;
 
-				ProcessHandleManager.SelectedIndex = areaComboBox.SelectedIndex - numberOfScreens - 1;
-				captureState.WindowHandle = ProcessHandleManager.GetHandle();
+				processHandleManager.SelectedIndex = areaComboBox.SelectedIndex - numberOfScreens - 1;
+				captureState.WindowHandle = processHandleManager.GetHandle();
 			}
 			// Screen
 			else
@@ -254,7 +255,7 @@ namespace DiscordAudioStream
 				EnableAreaControls(false);
 				hideTaskbarCheckBox.Enabled = true;
 
-				ProcessHandleManager.ClearSelectedIndex();
+				processHandleManager.ClearSelectedIndex();
 				Rectangle area;
 
 				if (Screen.AllScreens.Length > 1 && areaComboBox.SelectedIndex == numberOfScreens - 1)
@@ -327,7 +328,7 @@ namespace DiscordAudioStream
 
 			areaComboBox.Items.Add(new DarkThemeComboBox.ItemWithSeparator("Custom area"));
 
-			foreach (string window in ProcessHandleManager.RefreshHandles())
+			foreach (string window in processHandleManager.RefreshHandles())
 			{
 				areaComboBox.Items.Add(window);
 			}
@@ -450,18 +451,21 @@ namespace DiscordAudioStream
 					try
 					{
 						Bitmap next = ScreenCaptureManager.GetNextFrame();
+
+						// Continue iterating until GetNextFrame() doesn't return null
 						if (next == null) continue;
+
+						// Detect size changes
 						if (next.Size != oldSize)
 						{
 							oldSize = next.Size;
 							SetPreviewSize(next.Size);
 						}
+
+						// Display captured frame
 						Invoke(new Action(() =>
 						{
-							if (previewBox.Image != null)
-							{
-								previewBox.Image.Dispose();
-							}
+							previewBox.Image?.Dispose();
 							previewBox.Image = next;
 						}));
 					}
@@ -500,7 +504,7 @@ namespace DiscordAudioStream
 			{
 				screenCapture.Stop();
 				User32.UnregisterHotKey(this.Handle, 0);
-				ProcessHandleManager.ClearSelectedIndex();
+				processHandleManager.ClearSelectedIndex();
 			}
 		}
 

@@ -80,13 +80,6 @@ namespace CustomComponents
 
 		protected override void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
 		{
-			//if (e.KeyChar == '\r' || e.KeyChar == '\n')
-			//{
-			//    Value = decimal.Parse(base.Text);
-			//    e.Handled = true;
-			//    return;
-			//}
-
 			base.OnTextBoxKeyPress(source, e);
 
 			base.Text = Value.ToString();

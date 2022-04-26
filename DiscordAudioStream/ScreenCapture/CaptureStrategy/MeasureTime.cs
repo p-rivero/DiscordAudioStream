@@ -5,7 +5,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
 	public class MeasureTime : ICaptureSource
 	{
-		private ICaptureSource capture;
+		private readonly ICaptureSource capture;
 
 		public MeasureTime(ICaptureSource capture)
 		{
@@ -21,6 +21,12 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		}
 
 		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
 		{
 			capture.Dispose();
 		}

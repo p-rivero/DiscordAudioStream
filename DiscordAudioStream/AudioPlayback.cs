@@ -6,9 +6,9 @@ namespace DiscordAudioStream
 {
     class AudioPlayback
     {
-        private IWaveIn audioSource;
-        private DirectSoundOut output;
-        private BufferedWaveProvider waveProvider;
+        private readonly IWaveIn audioSource;
+        private readonly DirectSoundOut output;
+        private readonly BufferedWaveProvider waveProvider;
         private const int DESIRED_LATENCY_MS = 50;
 
         private static MMDeviceCollection audioDevices = null;
@@ -21,7 +21,7 @@ namespace DiscordAudioStream
             }
             if (deviceIndex < 0 || deviceIndex > audioDevices.Count)
             {
-                throw new ArgumentOutOfRangeException("Invalid index");
+                throw new ArgumentOutOfRangeException("deviceIndex");
             }
 
             MMDevice device = audioDevices[deviceIndex];

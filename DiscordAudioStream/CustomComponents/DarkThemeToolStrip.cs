@@ -25,7 +25,7 @@ namespace CustomComponents
 
     internal class CustomToolStripSystemRenderer : ToolStripSystemRenderer
     {
-        private bool darkMode;
+        private readonly bool darkMode;
 
         public CustomToolStripSystemRenderer(bool darkMode)
         {
@@ -34,6 +34,7 @@ namespace CustomComponents
 
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {
+            // Do not draw border
         }
 
         protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)

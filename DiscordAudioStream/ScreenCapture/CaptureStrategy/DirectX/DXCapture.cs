@@ -15,10 +15,10 @@ namespace DiscordAudioStream
 {
 	// DirectX capture using Windows.Graphics.Capture
 
-	internal class DXCapture : IDisposable, ICaptureSource
+	internal class DXCapture : ICaptureSource
 	{
-		private Direct3D11CaptureFramePool framePool;
-		private GraphicsCaptureSession session;
+		private readonly Direct3D11CaptureFramePool framePool;
+		private readonly GraphicsCaptureSession session;
 		private SizeInt32 lastSize;
 
 		private static readonly IDirect3DDevice device = Direct3D11Helper.CreateDevice();
@@ -43,6 +43,12 @@ namespace DiscordAudioStream
 		}
 
 		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
 		{
 			session?.Dispose();
 			framePool?.Dispose();

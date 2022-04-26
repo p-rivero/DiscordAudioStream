@@ -78,7 +78,7 @@ namespace DiscordAudioStream.ScreenCapture
 			{
 				if (value == IntPtr.Zero)
 				{
-					throw new InvalidOperationException("Trying to set WindowHandle to IntPtr.Zero");
+					throw new ArgumentException("Trying to set WindowHandle to IntPtr.Zero");
 				}
 				// Remove screen (if any)
 				screen = null;
@@ -104,7 +104,7 @@ namespace DiscordAudioStream.ScreenCapture
 			{
 				if (value == null)
 				{
-					throw new InvalidOperationException("Trying to set Screen to null");
+					throw new ArgumentNullException("value");
 				}
 				// Remove window handle (if any)
 				hWnd = IntPtr.Zero;

@@ -12,7 +12,7 @@ namespace CustomComponents
 
         public class ItemWithSeparator
         {
-            private string text;
+            private readonly string text;
             public ItemWithSeparator(string text)
             {
                 this.text = text;

@@ -14,16 +14,6 @@ namespace CustomComponents
             LineAlignment = StringAlignment.Center
         };
 
-        private Color activeColor = Color.FromArgb(0, 122, 204);
-        private Color backTabColor = Color.FromArgb(28, 28, 28);
-        private Color borderColor = Color.FromArgb(30, 30, 30);
-        private Color closingButtonColor = Color.WhiteSmoke;
-        private Color headerColor = Color.FromArgb(45, 45, 48);
-        private Color horizLineColor = Color.FromArgb(0, 122, 204);
-        private Color textColor = Color.FromArgb(255, 255, 255);
-        public Color selectedTextColor = Color.FromArgb(255, 255, 255);
-
-        private string closingMessage;
         private TabPage predraggedTab;
 
         public bool ShowClosingButton
@@ -41,146 +31,52 @@ namespace CustomComponents
         [Category("Colors")]
         [Browsable(true)]
         [Description("The color of the selected page")]
-        public Color ActiveColor
-        {
-            get
-            {
-                return activeColor;
-            }
-            set
-            {
-                activeColor = value;
-            }
-        }
+        public Color ActiveColor { get; set; } = Color.FromArgb(0, 122, 204);
 
         [Category("Colors")]
         [Browsable(true)]
         [Description("The color of the background of the tab")]
-        public Color BackTabColor
-        {
-            get
-            {
-                return backTabColor;
-            }
-            set
-            {
-                backTabColor = value;
-            }
-        }
+        public Color BackTabColor { get; set; } = Color.FromArgb(28, 28, 28);
 
         [Category("Colors")]
         [Browsable(true)]
         [Description("The color of the border of the control")]
-        public Color BorderColor
-        {
-            get
-            {
-                return borderColor;
-            }
-            set
-            {
-                borderColor = value;
-            }
-        }
+        public Color BorderColor { get; set; } = Color.FromArgb(30, 30, 30);
 
         [Category("Colors")]
         [Browsable(true)]
         [Description("The color of the closing button")]
-        public Color ClosingButtonColor
-        {
-            get
-            {
-                return closingButtonColor;
-            }
-            set
-            {
-                closingButtonColor = value;
-            }
-        }
+        public Color ClosingButtonColor { get; set; } = Color.WhiteSmoke;
 
         [Category("Options")]
         [Browsable(true)]
         [Description("The message that will be shown before closing.")]
-        public string ClosingMessage
-        {
-            get
-            {
-                return closingMessage;
-            }
-            set
-            {
-                closingMessage = value;
-            }
-        }
+        public string ClosingMessage { get; set; }
 
         [Category("Colors")]
         [Browsable(true)]
         [Description("The color of the header.")]
-        public Color HeaderColor
-        {
-            get
-            {
-                return headerColor;
-            }
-            set
-            {
-                headerColor = value;
-            }
-        }
+        public Color HeaderColor { get; set; } = Color.FromArgb(45, 45, 48);
 
         [Category("Colors")]
         [Browsable(true)]
         [Description("The color of the horizontal line which is located under the headers of the pages.")]
-        public Color HorizontalLineColor
-        {
-            get
-            {
-                return horizLineColor;
-            }
-            set
-            {
-                horizLineColor = value;
-            }
-        }
+        public Color HorizontalLineColor { get; set; } = Color.FromArgb(0, 122, 204);
 
         [Category("Options")]
         [Browsable(true)]
         [Description("Show a Yes/No message before closing?")]
-        public bool ShowClosingMessage
-        {
-            get;
-            set;
-        }
+        public bool ShowClosingMessage { get; set; }
 
         [Category("Colors")]
         [Browsable(true)]
         [Description("The color of the title of the page")]
-        public Color SelectedTextColor
-        {
-            get
-            {
-                return selectedTextColor;
-            }
-            set
-            {
-                selectedTextColor = value;
-            }
-        }
+        public Color SelectedTextColor { get; set; } = Color.FromArgb(255, 255, 255);
 
         [Category("Colors")]
         [Browsable(true)]
         [Description("The color of the title of the page")]
-        public Color TextColor
-        {
-            get
-            {
-                return textColor;
-            }
-            set
-            {
-                textColor = value;
-            }
-        }
+        public Color TextColor { get; set; } = Color.FromArgb(255, 255, 255);
 
         public DarkThemeTabControl()
         {
@@ -269,13 +165,14 @@ namespace CustomComponents
             graphics.SmoothingMode = SmoothingMode.HighQuality;
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
             graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-            graphics.Clear(headerColor);
+            graphics.Clear(HeaderColor);
             try
             {
-                base.SelectedTab.BackColor = backTabColor;
+                base.SelectedTab.BackColor = BackTabColor;
             }
             catch
             {
+                // Ignore any exception while painting
             }
 
             try
@@ -284,18 +181,19 @@ namespace CustomComponents
             }
             catch
             {
+                // Ignore any exception while painting
             }
 
             for (int i = 0; i <= base.TabCount - 1; i++)
             {
                 Rectangle rectangle = new Rectangle(new Point(GetTabRect(i).Location.X + 2, GetTabRect(i).Location.Y), new Size(GetTabRect(i).Width, GetTabRect(i).Height));
                 Rectangle rectangle2 = new Rectangle(rectangle.Location, new Size(rectangle.Width, rectangle.Height));
-                Brush brush = new SolidBrush(closingButtonColor);
+                Brush brush = new SolidBrush(ClosingButtonColor);
                 if (i == base.SelectedIndex)
                 {
-                    graphics.FillRectangle(new SolidBrush(headerColor), rectangle2);
-                    graphics.FillRectangle(new SolidBrush(activeColor), new Rectangle(rectangle.X - 5, rectangle.Y - 3, rectangle.Width, rectangle.Height + 5));
-                    graphics.DrawString(base.TabPages[i].Text, Font, new SolidBrush(selectedTextColor), rectangle2, CenterSringFormat);
+                    graphics.FillRectangle(new SolidBrush(HeaderColor), rectangle2);
+                    graphics.FillRectangle(new SolidBrush(ActiveColor), new Rectangle(rectangle.X - 5, rectangle.Y - 3, rectangle.Width, rectangle.Height + 5));
+                    graphics.DrawString(base.TabPages[i].Text, Font, new SolidBrush(SelectedTextColor), rectangle2, CenterSringFormat);
                     if (ShowClosingButton)
                     {
                         e.Graphics.DrawString("X", Font, brush, rectangle2.Right - 17, 3f);
@@ -303,13 +201,13 @@ namespace CustomComponents
                 }
                 else
                 {
-                    graphics.DrawString(base.TabPages[i].Text, Font, new SolidBrush(textColor), rectangle2, CenterSringFormat);
+                    graphics.DrawString(base.TabPages[i].Text, Font, new SolidBrush(TextColor), rectangle2, CenterSringFormat);
                 }
             }
 
-            graphics.DrawLine(new Pen(horizLineColor, 5f), new Point(0, 19), new Point(base.Width, 19));
-            graphics.FillRectangle(new SolidBrush(backTabColor), new Rectangle(0, 20, base.Width, base.Height - 20));
-            graphics.DrawRectangle(new Pen(borderColor, 2f), new Rectangle(0, 0, base.Width, base.Height));
+            graphics.DrawLine(new Pen(HorizontalLineColor, 5f), new Point(0, 19), new Point(base.Width, 19));
+            graphics.FillRectangle(new SolidBrush(BackTabColor), new Rectangle(0, 20, base.Width, base.Height - 20));
+            graphics.DrawRectangle(new Pen(BorderColor, 2f), new Rectangle(0, 0, base.Width, base.Height));
             graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
         }
 

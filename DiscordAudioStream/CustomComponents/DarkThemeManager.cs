@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using DLLs;
+using Microsoft.Win32;
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -6,7 +7,7 @@ using System.Windows.Forms;
 
 namespace CustomComponents
 {
-    internal class DarkThemeManager
+    internal static class DarkThemeManager
     {
         public static readonly Color DarkMainColor = Color.Black;
         public static readonly Color DarkBackColor = Color.FromArgb(32, 32, 32);

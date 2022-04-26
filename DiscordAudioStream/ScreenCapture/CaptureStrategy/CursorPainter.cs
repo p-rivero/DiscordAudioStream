@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using DLLs;
+using Microsoft.Win32;
 using System;
 using System.Drawing;
 
@@ -6,30 +7,48 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
 	public class CursorPainter : ICaptureSource
 	{
+		public delegate Rectangle CaptureAreaRectDelegate();
+
+
 		// Get the cursor size only once at the start
 		private int cursorSize = -1;
 		private readonly ICaptureSource source;
-
-
-		public delegate Rectangle CaptureAreaRectDelegate();
-		public CaptureAreaRectDelegate CaptureAreaRect;
+		private CaptureAreaRectDelegate captureAreaRect;
 
 		public CursorPainter(ICaptureSource source)
 		{
 			this.source = source;
 		}
 
+		public CaptureAreaRectDelegate CaptureAreaRect
+		{
+			get
+			{
+				return captureAreaRect;
+			}
+			set
+			{
+				captureAreaRect = value ?? throw new ArgumentNullException("value");
+			}
+		}
+
 		public Bitmap CaptureFrame()
 		{
-			if (CaptureAreaRect == null)
+			if (captureAreaRect == null)
 			{
-				throw new ArgumentNullException("Attempting to paint cursor without setting CaptureAreaRect");
+				throw new ArgumentException("Attempting to paint cursor without setting CaptureAreaRect");
 			}
 			Bitmap bmp = source.CaptureFrame();
-			return PaintCursor(bmp, CaptureAreaRect().Location);
+			return PaintCursor(bmp, captureAreaRect().Location);
 		}
 
 		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
 		{
 			source.Dispose();
 		}

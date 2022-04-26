@@ -1,29 +1,26 @@
 ﻿using DiscordAudioStream.ScreenCapture;
+using DLLs;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace DiscordAudioStream
 {
-	public class ProcessHandleManager
+    public class ProcessHandleManager
 	{
-		private static IntPtr[] procs = null;
-		private static int selectedIndex = -1;
-		private static CaptureState state = null;
+		private IntPtr[] procs = null;
+		private int selectedIndex = -1;
+		private readonly CaptureState state;
 
-		public static CaptureState State
-		{
-			set
-			{
-				if (value == null) throw new ArgumentNullException("value");
-				state = value;
-			}
+
+		public ProcessHandleManager(CaptureState state)
+        {
+			this.state = state ?? throw new ArgumentNullException("state");
 		}
 
-		public static string[] RefreshHandles()
+		public string[] RefreshHandles()
 		{
 			ClearTopmostWindow();
 			IntPtr shellWindow = User32.GetShellWindow();
@@ -66,7 +63,7 @@ namespace DiscordAudioStream
 			return windows.Values.ToArray();
 		}
 
-		public static int SelectedIndex
+		public int SelectedIndex
 		{
 			get { return selectedIndex; }
 			set
@@ -91,7 +88,7 @@ namespace DiscordAudioStream
 			}
 		}
 
-		public static IntPtr GetHandle()
+		public IntPtr GetHandle()
 		{
 			if (selectedIndex < 0 || selectedIndex >= procs.Length)
 			{
@@ -100,21 +97,14 @@ namespace DiscordAudioStream
 			return procs[selectedIndex];
 		}
 
-		public static void ClearSelectedIndex()
+		public void ClearSelectedIndex()
 		{
 			ClearTopmostWindow();
 			selectedIndex = -1;
 		}
 
-		private static void ClearTopmostWindow()
-		{
-			if (selectedIndex != -1 && state != null && state.RequiresBringWindowToFront)
-			{
-				User32.SetWindowPos(procs[selectedIndex], User32.HWND_NOTOPMOST, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
-			}
-		}
-
-		public static int Lookup(IntPtr handle)
+		// Get the index of a given handle
+		public int Lookup(IntPtr handle)
 		{
 			for (int i = 0; i < procs.Length; i++)
 			{
@@ -122,6 +112,15 @@ namespace DiscordAudioStream
 					return i;
 			}
 			return -1;
+		}
+
+
+		private void ClearTopmostWindow()
+		{
+			if (selectedIndex != -1 && state != null && state.RequiresBringWindowToFront)
+			{
+				User32.SetWindowPos(procs[selectedIndex], User32.HWND_NOTOPMOST, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
+			}
 		}
 	}
 }

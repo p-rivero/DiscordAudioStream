@@ -30,47 +30,47 @@ namespace CustomComponents
             }
         }
 
-        protected override void OnPaint(PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs pevent)
         {
-            if (darkMode)
+            if (!darkMode)
             {
-                e.Graphics.Clear(DarkThemeManager.DarkBackColor);
-                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                e.Graphics.FillEllipse(new SolidBrush(DarkThemeManager.DarkSecondColor), new Rectangle(0, 2, 13, 13));
-                if (Focused)
-                {
-                    e.Graphics.DrawEllipse(new Pen(DarkThemeManager.BorderColor, 2f), new Rectangle(1, 3, 11, 11));
-                }
-                else
-                {
-                    e.Graphics.DrawEllipse(new Pen(DarkThemeManager.BorderColor), new Rectangle(0, 2, 13, 13));
-                }
+                base.OnPaint(pevent);
+                return;
+            }
 
-                if (base.Checked)
-                {
-                    if (base.Enabled)
-                    {
-                        e.Graphics.FillEllipse(new SolidBrush(ForeColor), new Rectangle(3, 5, 7, 7));
-                    }
-                    else
-                    {
-                        e.Graphics.FillEllipse(new SolidBrush(DarkThemeManager.BorderColor), new Rectangle(3, 5, 7, 7));
-                    }
-                }
-
-                e.Graphics.TextRenderingHint = TextRenderingHint.SystemDefault;
-                if (base.Enabled)
-                {
-                    e.Graphics.DrawString(darkText, Font, new SolidBrush(ForeColor), 17f, 0f);
-                }
-                else
-                {
-                    e.Graphics.DrawString(darkText, Font, new SolidBrush(DarkThemeManager.BorderColor), 17f, 0f);
-                }
+            pevent.Graphics.Clear(DarkThemeManager.DarkBackColor);
+            pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            pevent.Graphics.FillEllipse(new SolidBrush(DarkThemeManager.DarkSecondColor), new Rectangle(0, 2, 13, 13));
+            if (Focused)
+            {
+                pevent.Graphics.DrawEllipse(new Pen(DarkThemeManager.BorderColor, 2f), new Rectangle(1, 3, 11, 11));
             }
             else
             {
-                base.OnPaint(e);
+                pevent.Graphics.DrawEllipse(new Pen(DarkThemeManager.BorderColor), new Rectangle(0, 2, 13, 13));
+            }
+
+
+            if (base.Checked)
+            {
+                if (base.Enabled)
+                {
+                    pevent.Graphics.FillEllipse(new SolidBrush(ForeColor), new Rectangle(3, 5, 7, 7));
+                }
+                else
+                {
+                    pevent.Graphics.FillEllipse(new SolidBrush(DarkThemeManager.BorderColor), new Rectangle(3, 5, 7, 7));
+                }
+            }
+
+            pevent.Graphics.TextRenderingHint = TextRenderingHint.SystemDefault;
+            if (base.Enabled)
+            {
+                pevent.Graphics.DrawString(darkText, Font, new SolidBrush(ForeColor), 17f, 0f);
+            }
+            else
+            {
+                pevent.Graphics.DrawString(darkText, Font, new SolidBrush(DarkThemeManager.BorderColor), 17f, 0f);
             }
         }
     }
