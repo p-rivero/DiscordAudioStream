@@ -93,14 +93,7 @@ namespace DiscordAudioStream.ScreenCapture
 
 		private void EnqueueFrame()
 		{
-			// Try to enqueue with a timeout of 0.5 seconds
-			var task = Task.Run(() => {
-				frameQueue.Enqueue(currentSource.CaptureFrame());
-			});
-			if (!task.Wait(TimeSpan.FromMilliseconds(500)))
-            {
-				throw new TimeoutException("CaptureFrame() timed out");
-            }
+			frameQueue.Enqueue(currentSource.CaptureFrame());
 
 			// Limit the size of frameQueue to LIMIT_QUEUE_SZ
 			if (frameQueue.Count > LIMIT_QUEUE_SZ)

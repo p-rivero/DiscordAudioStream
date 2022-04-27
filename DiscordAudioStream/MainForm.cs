@@ -502,9 +502,9 @@ namespace DiscordAudioStream
 			}
 			else
 			{
-				screenCapture.Stop();
+				screenCapture?.Stop();
 				User32.UnregisterHotKey(this.Handle, 0);
-				processHandleManager.ClearSelectedIndex();
+				processHandleManager?.ClearSelectedIndex();
 			}
 		}
 

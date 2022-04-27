@@ -37,13 +37,19 @@ namespace DiscordAudioStream
 			// Attempt to disable yellow capture border. This method is only avaiable from Windows 10, version 2104
 			if (ApiInformation.IsPropertyPresent("Windows.Graphics.Capture.GraphicsCaptureSession", "IsBorderRequired"))
 			{
-				session.IsBorderRequired = false;
+				// This must be done in a separate method, otherwise a MethodNotFound will be thrown before any code can be executed
+				DisableBorder(session);
 			}
 
 			// Control whether the cursor is enabled
 			session.IsCursorCaptureEnabled = captureCursor;
 
 			session.StartCapture();
+		}
+
+		private static void DisableBorder(GraphicsCaptureSession session)
+		{
+			session.IsBorderRequired = false;
 		}
 
 		public void Dispose()
@@ -70,19 +76,22 @@ namespace DiscordAudioStream
 			{
 				// The thing we have been capturing has changed size.
 				lastSize = frame.ContentSize;
-				framePool.Recreate(device, DirectXPixelFormat.B8G8R8A8UIntNormalized, 2, frame.ContentSize);
+
+				// Need to recreate the framePool on the UI thread
+				InvokeOnUI(new Action(() =>
+					framePool.Recreate(device, DirectXPixelFormat.B8G8R8A8UIntNormalized, 2, frame.ContentSize)
+				));
 			}
 
 			using (Texture2D screenTexture = CreateReadableTexture(width, height))
 			{
 				// copy resource into memory that can be accessed by the CPU
-				using (Texture2D screenTexture2D = Direct3D11Helper.CreateSharpDXTexture2D(frame.Surface))
+				using (Texture2D frameSurfaceTexture = Direct3D11Helper.CreateSharpDXTexture2D(frame.Surface))
 				{
-					d3dDevice.ImmediateContext.CopyResource(screenTexture2D, screenTexture);
+					d3dDevice.ImmediateContext.CopyResource(frameSurfaceTexture, screenTexture);
 				}
 				frame.Dispose();
 
-				// Get the desktop capture texture
 				var mapSource = d3dDevice.ImmediateContext.MapSubresource(screenTexture, 0, MapMode.Read, SharpDX.Direct3D11.MapFlags.None);
 				var boundsRect = new Rectangle(0, 0, width, height);
 
@@ -128,6 +137,17 @@ namespace DiscordAudioStream
 			};
 
 			return new Texture2D(d3dDevice, texture2DDescription);
+		}
+
+		private static void InvokeOnUI(Action action)
+		{
+			if (System.Windows.Forms.Application.OpenForms.Count == 0)
+			{
+				// No open form, execute on this thread
+				action.Invoke();
+			}
+			// Execute on the UI thread
+			System.Windows.Forms.Application.OpenForms[0].Invoke(action);
 		}
 	}
 }
