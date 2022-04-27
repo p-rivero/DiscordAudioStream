@@ -10,6 +10,7 @@ using SharpDX.DXGI;
 using SharpDX;
 using SharpDX.Direct3D11;
 using System.Drawing.Imaging;
+using Windows.Foundation.Metadata;
 
 namespace DiscordAudioStream
 {
@@ -34,13 +35,9 @@ namespace DiscordAudioStream
 			session = framePool.CreateCaptureSession(item);
 
 			// Attempt to disable yellow capture border. This method is only avaiable from Windows 10, version 2104
-			try
+			if (ApiInformation.IsPropertyPresent("Windows.Graphics.Capture.GraphicsCaptureSession", "IsBorderRequired"))
 			{
 				session.IsBorderRequired = false;
-			}
-			catch (Exception)
-			{
-				// Not available
 			}
 
 			// Control whether the cursor is enabled
