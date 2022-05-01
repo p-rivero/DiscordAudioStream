@@ -22,7 +22,6 @@ namespace DiscordAudioStream
 
 		public string[] RefreshHandles()
 		{
-			ClearTopmostWindow();
 			IntPtr shellWindow = User32.GetShellWindow();
 			Dictionary<IntPtr, string> windows = new Dictionary<IntPtr, string>();
 
@@ -68,8 +67,6 @@ namespace DiscordAudioStream
 			get { return selectedIndex; }
 			set
 			{
-				ClearTopmostWindow();
-
 				if (procs == null)
 				{
 					throw new InvalidOperationException("Please call RefreshHandles() before attempting to set the index");
@@ -99,7 +96,6 @@ namespace DiscordAudioStream
 
 		public void ClearSelectedIndex()
 		{
-			ClearTopmostWindow();
 			selectedIndex = -1;
 		}
 
@@ -112,15 +108,6 @@ namespace DiscordAudioStream
 					return i;
 			}
 			return -1;
-		}
-
-
-		private void ClearTopmostWindow()
-		{
-			if (selectedIndex != -1 && state != null && state.RequiresBringWindowToFront)
-			{
-				User32.SetWindowPos(procs[selectedIndex], User32.HWND_NOTOPMOST, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
-			}
 		}
 	}
 }

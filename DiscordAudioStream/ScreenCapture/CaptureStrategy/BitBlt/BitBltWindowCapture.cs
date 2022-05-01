@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DLLs;
+using System;
 using System.Drawing;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
@@ -24,6 +25,9 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			{
 				capture = bitBlt;
 			}
+
+			// This method cannot capture occluded windows, set selected process as topmost
+			SetWindowTopmost(windowHandle, true);
 		}
 
 		public override Bitmap CaptureFrame()
@@ -35,11 +39,20 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			base.Dispose(disposing);
 			capture.Dispose();
+
+			// We are no longer capturing the window, do not bring it to front
+			SetWindowTopmost(windowHandle, false);
 		}
 
 		private Rectangle GetWindowArea()
 		{
-			return WindowCapture.GetWindowArea(windowHandle);
+			return GetWindowArea(windowHandle);
+		}
+
+		private static void SetWindowTopmost(IntPtr hWnd, bool bringToFront)
+		{
+			IntPtr insertAfter = bringToFront ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST;
+			User32.SetWindowPos(hWnd, insertAfter, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
 		}
 	}
 }

@@ -504,7 +504,6 @@ namespace DiscordAudioStream
 			{
 				screenCapture?.Stop();
 				User32.UnregisterHotKey(this.Handle, 0);
-				processHandleManager?.ClearSelectedIndex();
 			}
 		}
 
@@ -596,7 +595,7 @@ namespace DiscordAudioStream
 
 		private void settingsBtn_Click(object sender, EventArgs e)
 		{
-			SettingsForm settingsBox = new SettingsForm(darkMode, this);
+			SettingsForm settingsBox = new SettingsForm(darkMode, captureState);
 			settingsBox.Owner = this;
 			if (this.TopMost)
 			{

@@ -2,16 +2,17 @@
 using System.Drawing;
 using System.Windows.Forms;
 using CustomComponents;
+using DiscordAudioStream.ScreenCapture;
 
 namespace DiscordAudioStream
 {
 	partial class SettingsForm : Form
 	{
-		MainForm parent;
+		readonly CaptureState captureState;
 
-		public SettingsForm(bool darkMode, MainForm parent)
+		public SettingsForm(bool darkMode, CaptureState state)
 		{
-			this.parent = parent;
+			this.captureState = state;
 
 			if (darkMode)
 			{
@@ -42,6 +43,9 @@ namespace DiscordAudioStream
 			systemThemeRadio.SetDarkMode(darkMode);
 			darkThemeRadio.SetDarkMode(darkMode);
 			lightThemeRadio.SetDarkMode(darkMode);
+			captureMethodGroup.SetDarkMode(darkMode);
+			windowMethodComboBox.SetDarkMode(darkMode);
+			fullscreenMethodComboBox.SetDarkMode(darkMode);
 
 			int theme = Properties.Settings.Default.Theme;
 			if (theme == 0)
@@ -58,8 +62,9 @@ namespace DiscordAudioStream
 			}
 
 			autoExitCheckbox.Checked = Properties.Settings.Default.AutoExit;
-			// TODO
-			//experimentalCaptureCheckBox.Checked = Properties.Settings.Default.CaptureScreenMethod;
+
+			windowMethodComboBox.SelectedIndex = (int) state.WindowMethod;
+			fullscreenMethodComboBox.SelectedIndex = (int) state.ScreenMethod;
 		}
 
 		private void SettingsForm_KeyDown(object sender, KeyEventArgs e)
@@ -115,15 +120,14 @@ namespace DiscordAudioStream
 			Properties.Settings.Default.Save();
 		}
 
-		private void experimentalCaptureCheckBox_CheckedChanged(object sender, EventArgs e)
+		private void fullscreenMethodComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			// TODO
-			//ProcessHandleManager.ClearSelectedIndex();
-			parent.UpdateAreaComboBox();
-			
-			// TODO
-			// Properties.Settings.Default.CaptureScreenMethod = experimentalCaptureCheckBox.Checked;
-			Properties.Settings.Default.Save();
+			captureState.ScreenMethod = (CaptureState.ScreenCaptureMethod) fullscreenMethodComboBox.SelectedIndex;
+		}
+
+		private void windowMethodComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			captureState.WindowMethod = (CaptureState.WindowCaptureMethod) windowMethodComboBox.SelectedIndex;
 		}
 	}
 }
