@@ -37,7 +37,7 @@ namespace DiscordAudioStream
 			}
 
 			this.darkMode = darkMode;
-			processHandleManager = new ProcessHandleManager(captureState);
+			processHandleManager = new ProcessHandleManager();
 
 			InitializeComponent();
 			previewBox.Visible = true;

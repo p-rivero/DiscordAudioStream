@@ -58,7 +58,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			User32.CURSORINFO pci = User32.CURSORINFO.Init();
 
-			if (User32.GetCursorInfo(ref pci) == false || pci.flags != User32.CURSOR_SHOWING)
+			if (!User32.GetCursorInfo(ref pci) || pci.flags != User32.CURSOR_SHOWING)
 			{
 				// Could not get cursor info, or the cursor was hidden. Do not paint the cursor
 				return src;

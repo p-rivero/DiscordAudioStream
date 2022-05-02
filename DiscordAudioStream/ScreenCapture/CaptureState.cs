@@ -152,27 +152,5 @@ namespace DiscordAudioStream.ScreenCapture
 				}
 			}
 		}
-
-		public bool RequiresBringWindowToFront
-		{
-			get
-			{
-				// If we are capturing the screen, there is no need to bring windows to front
-				if (!CapturingWindow) return false;
-
-				switch (WindowMethod)
-				{
-					case WindowCaptureMethod.DirectX:
-						return false;
-					case WindowCaptureMethod.BitBlt:
-						return true;
-					case WindowCaptureMethod.PrintScreen:
-						return false;
-					default:
-						throw new InvalidOperationException("Invalid Window capture method");
-				}
-			}
-		}
-
 	}
 }

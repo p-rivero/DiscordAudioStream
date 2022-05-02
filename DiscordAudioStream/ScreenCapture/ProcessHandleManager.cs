@@ -12,13 +12,6 @@ namespace DiscordAudioStream
 	{
 		private IntPtr[] procs = null;
 		private int selectedIndex = -1;
-		private readonly CaptureState state;
-
-
-		public ProcessHandleManager(CaptureState state)
-        {
-			this.state = state ?? throw new ArgumentNullException("state");
-		}
 
 		public string[] RefreshHandles()
 		{
@@ -76,12 +69,6 @@ namespace DiscordAudioStream
 					throw new InvalidOperationException("ProcessHandleManager: The provided index is out of bounds");
 				}
 				selectedIndex = value;
-
-				if (state != null && state.RequiresBringWindowToFront)
-				{
-					// Set selected process as topmost
-					User32.SetWindowPos(procs[selectedIndex], User32.HWND_TOPMOST, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
-				}
 			}
 		}
 

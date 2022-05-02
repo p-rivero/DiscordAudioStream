@@ -108,8 +108,8 @@ namespace DiscordAudioStream
 					Utilities.CopyMemory(destinationPtr, sourcePtr, width * 4);
 
 					// Advance pointers
-					sourcePtr = IntPtr.Add(sourcePtr, mapSource.RowPitch);
-					destinationPtr = IntPtr.Add(destinationPtr, bitmapData.Stride);
+					sourcePtr += mapSource.RowPitch;
+					destinationPtr += bitmapData.Stride;
 				}
 
 				// Release source and dest locks
