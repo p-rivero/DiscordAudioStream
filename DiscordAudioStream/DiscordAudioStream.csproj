@@ -73,6 +73,11 @@
       <DependentUpon>AreaForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AudioPlayback.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ScreenCapture\CaptureState.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltCustomAreaCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltMultiMonitorCapture.cs" />
@@ -141,14 +146,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -182,8 +182,8 @@
     <Content Include="resources\SharpDX.Direct3D11.dll" />
     <Content Include="resources\SharpDX.dll" />
     <Content Include="resources\SharpDX.DXGI.dll" />
-    <None Include="resources\move.png" />
-    <None Include="resources\resize.png" />
+    <None Include="resources\imgs\move.png" />
+    <None Include="resources\imgs\resize.png" />
     <None Include="resources\NAudio.dll" />
   </ItemGroup>
   <ItemGroup>
