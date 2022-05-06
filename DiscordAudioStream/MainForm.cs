@@ -12,8 +12,6 @@ namespace DiscordAudioStream
 {
 	public partial class MainForm : Form
 	{
-		private readonly AreaForm areaForm;
-
 		private readonly bool darkMode;
 		private readonly Size defaultWindowSize;
 		private readonly Size defaultPreviewSize;
@@ -45,9 +43,6 @@ namespace DiscordAudioStream
 			defaultWindowSize = this.Size;
 			defaultPreviewSize = previewBox.Size;
 			defaultPreviewLocation = previewBox.Location;
-
-			areaForm = new AreaForm();
-			areaForm.Owner = this;
 
 			inputDeviceComboBox.SelectedIndex = 0;
 
@@ -226,22 +221,15 @@ namespace DiscordAudioStream
 			// Custom area
 			if (areaComboBox.SelectedIndex == numberOfScreens)
 			{
-				areaForm.Show();
 				EnableAreaControls(true);
 				hideTaskbarCheckBox.Enabled = false;
 
 				processHandleManager.ClearSelectedIndex();
-
-				// Omit pixels of the red border
-				widthNumeric.Value = areaForm.Width - 2;
-				heightNumeric.Value = areaForm.Height - 2;
-				xNumeric.Value = areaForm.Left + 1;
-				yNumeric.Value = areaForm.Top + 1;
+				captureState.Target = CaptureState.CaptureTarget.CustomArea;
 			}
 			// Window
 			else if (areaComboBox.SelectedIndex > numberOfScreens)
 			{
-				areaForm.Hide();
 				EnableAreaControls(false);
 				hideTaskbarCheckBox.Enabled = false;
 
@@ -251,7 +239,6 @@ namespace DiscordAudioStream
 			// Screen
 			else
 			{
-				areaForm.Hide();
 				EnableAreaControls(false);
 				hideTaskbarCheckBox.Enabled = true;
 
@@ -263,8 +250,7 @@ namespace DiscordAudioStream
 					// All screens
 					hideTaskbarCheckBox.Enabled = false;
 					area = SystemInformation.VirtualScreen;
-					// TODO: Delete
-					captureState.Screen = Screen.PrimaryScreen;
+					captureState.Target = CaptureState.CaptureTarget.AllScreens;
 				}
 				else
 				{
@@ -336,8 +322,6 @@ namespace DiscordAudioStream
 
 			widthNumeric.Maximum = SystemInformation.VirtualScreen.Width;
 			heightNumeric.Maximum = SystemInformation.VirtualScreen.Height;
-
-			areaForm.SetMaximumArea(SystemInformation.VirtualScreen);
 		}
 
 		private void StartStream()
@@ -556,7 +540,6 @@ namespace DiscordAudioStream
 			Properties.Settings.Default.Save();
 
 			TopMost = onTopBtn.Checked;
-			areaForm.TopMost = onTopBtn.Checked;
 		}
 
 		private void volumeMixerButton_Click(object sender, EventArgs e)
@@ -667,7 +650,7 @@ namespace DiscordAudioStream
 				Invoke(new Action(() =>
 				{
 					// Omit 1 pixel for red border
-					areaForm.Left = (int)xNumeric.Value - 1;
+					//areaForm.Left = (int)xNumeric.Value - 1;
 				}));
 			}
 		}
@@ -679,7 +662,7 @@ namespace DiscordAudioStream
 				Invoke(new Action(() =>
 				{
 					// Omit 1 pixel for red border
-					areaForm.Top = (int)yNumeric.Value - 1;
+					//areaForm.Top = (int)yNumeric.Value - 1;
 				}));
 			}
 		}
@@ -690,7 +673,7 @@ namespace DiscordAudioStream
 			{
 				Invoke(new Action(() =>
 				{
-					areaForm.Width = (int)widthNumeric.Value + 2;
+					//areaForm.Width = (int)widthNumeric.Value + 2;
 				}));
 			}
 		}
@@ -701,7 +684,7 @@ namespace DiscordAudioStream
 			{
 				Invoke(new Action(() =>
 				{
-					areaForm.Height = (int)heightNumeric.Value + 2;
+					//areaForm.Height = (int)heightNumeric.Value + 2;
 				}));
 			}
 		}

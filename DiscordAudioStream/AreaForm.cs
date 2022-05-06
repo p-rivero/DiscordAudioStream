@@ -52,11 +52,8 @@ namespace DiscordAudioStream
 				if (Left + newWidth > limitEndX) newWidth = limitEndX - Left;
 				if (Top + newHeight > limitEndY) newHeight = limitEndY - Top;
 
-				// Omit 2 pixels for red border
-				MainForm mainForm = Owner as MainForm;
-				mainForm.SetAreaWidth(newWidth - 2);
-				mainForm.SetAreaHeight(newHeight - 2);
-				mainForm.SetPreviewSize(new Size(newWidth-2, newHeight-2));
+				Width = newWidth;
+				Height = newHeight;
 			}));
 		}
 
@@ -97,15 +94,15 @@ namespace DiscordAudioStream
 		{
 			Refresh();
 			// Omit 2 pixels for red border
-			(Owner as MainForm).SetMaximumX(screenWidth - Width - 2);
-			(Owner as MainForm).SetMaximumY(screenHeight - Height - 2);
+			// (Owner as MainForm).SetMaximumX(screenWidth - Width - 2);
+			// (Owner as MainForm).SetMaximumY(screenHeight - Height - 2);
 		}
 
 		private void AreaForm_LocationChanged(object sender, EventArgs e)
 		{
 			// Omit 1 pixel for red border
-			(Owner as MainForm).SetAreaX(Left + 1);
-			(Owner as MainForm).SetAreaY(Top + 1);
+			//(Owner as MainForm).SetAreaX(Left + 1);
+			//(Owner as MainForm).SetAreaY(Top + 1);
 		}
 
 		public void SetMaximumArea(Rectangle screen)

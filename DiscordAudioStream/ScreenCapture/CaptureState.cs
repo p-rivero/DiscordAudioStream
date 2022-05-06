@@ -16,6 +16,14 @@ namespace DiscordAudioStream.ScreenCapture
 			DirectX,
 			BitBlt
 		}
+		public enum CaptureTarget
+		{
+			Invalid,
+			Screen,
+			Window,
+			AllScreens,
+			CustomArea
+		}
 
 		public delegate void StateChangedDelegate();
 		public event StateChangedDelegate StateChanged;
@@ -23,6 +31,7 @@ namespace DiscordAudioStream.ScreenCapture
 
 		private IntPtr hWnd = IntPtr.Zero;
 		private Screen screen = null;
+		private CaptureTarget captureTarget = CaptureTarget.Invalid;
 		private bool capturingCursor;
 		private bool hideTaskbar;
 
@@ -51,15 +60,30 @@ namespace DiscordAudioStream.ScreenCapture
 			}
 		}
 
-		// True if capturing a window, false if capturing a monitor
-		public bool CapturingWindow {
+		// What kind of item are we capturing now?
+		public CaptureTarget Target {
 			get
 			{
-				if (hWnd == IntPtr.Zero && screen == null)
+				// Default value for captureTarget
+				if (captureTarget == CaptureTarget.Invalid)
 				{
-					throw new InvalidOperationException("Must set either WindowHandle or Screen before calling CapturingWindow");
+					throw new InvalidOperationException("Must set either Target, WindowHandle or Screen before reading Target");
 				}
-				return hWnd != IntPtr.Zero;
+				return captureTarget;
+			}
+			set
+			{
+				if (value == CaptureTarget.Window || value == CaptureTarget.Screen)
+				{
+					throw new ArgumentException("Don't set the Target to Window or Screen manually. Instead, set the WindowHandle or Screen");
+				}
+				if (value == CaptureTarget.Invalid)
+				{
+					throw new ArgumentException("Don't set the capture target to Invalid");
+				}
+				CaptureTarget oldValue = captureTarget;
+				captureTarget = value;
+				if (oldValue != value) StateChanged?.Invoke();
 			}
 		}
 
@@ -85,7 +109,10 @@ namespace DiscordAudioStream.ScreenCapture
 				// Set new handle
 				IntPtr oldValue = hWnd;
 				hWnd = value;
-				if (oldValue != value) StateChanged?.Invoke();
+				// Update Target
+				CaptureTarget oldTarget = captureTarget;
+				captureTarget = CaptureTarget.Window;
+				if (oldValue != value || oldTarget != CaptureTarget.Window) StateChanged?.Invoke();
 			}
 		}
 
@@ -111,7 +138,10 @@ namespace DiscordAudioStream.ScreenCapture
 				// Set new screen
 				Screen oldValue = screen;
 				screen = value;
-				if (oldValue != value) StateChanged?.Invoke();
+				// Update Target
+				CaptureTarget oldTarget = captureTarget;
+				captureTarget = CaptureTarget.Screen;
+				if (oldValue != value || oldTarget != CaptureTarget.Screen) StateChanged?.Invoke();
 			}
 		}
 

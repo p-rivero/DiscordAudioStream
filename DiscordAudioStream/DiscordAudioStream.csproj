@@ -74,6 +74,8 @@
     </Compile>
     <Compile Include="AudioPlayback.cs" />
     <Compile Include="ScreenCapture\CaptureState.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltCustomAreaCapture.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltMultiMonitorCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\CaptureSourceFactory.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\PrintWindow\PrintWindowCore.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltWindowCapture.cs" />

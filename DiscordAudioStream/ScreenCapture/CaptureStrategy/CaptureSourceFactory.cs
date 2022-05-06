@@ -8,38 +8,28 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			ICaptureSource result = null;
 
-			if (state.CapturingWindow)
+			if (state.Target == CaptureState.CaptureTarget.Window)
 			{
-				// Capturing a window
-				switch (state.WindowMethod)
-				{
-					case CaptureState.WindowCaptureMethod.DirectX:
-						result = new DXWindowCapture(state.WindowHandle, state.CapturingCursor);
-						break;
-					case CaptureState.WindowCaptureMethod.BitBlt:
-						result = new BitBltWindowCapture(state.WindowHandle, state.CapturingCursor);
-						break;
-					case CaptureState.WindowCaptureMethod.PrintScreen:
-						result = new PrintWindowCapture(state.WindowHandle, state.CapturingCursor);
-						break;
-					default:
-						throw new ArgumentException("Invalid WindowCaptureMethod");
-				}
+				result = WindowSource(state);
+			}
+			else if (state.Target == CaptureState.CaptureTarget.Screen)
+			{
+				result = ScreenSource(state);
+			}
+			else if (state.Target == CaptureState.CaptureTarget.AllScreens)
+			{
+				// Capturing all screens can only be done using BitBlt for now
+				// There may be faster methods using DirectX
+				result = new BitBltMultimonitorCapture(state.CapturingCursor);
+			}
+			else if (state.Target == CaptureState.CaptureTarget.CustomArea)
+			{
+				// Capturing a custom area can only be done using BitBlt for now
+				result = new BitBltCustomAreaCapture(state.CapturingCursor);
 			}
 			else
 			{
-				// Capturing a screen
-				switch (state.ScreenMethod)
-				{
-					case CaptureState.ScreenCaptureMethod.DirectX:
-						result = new DXMonitorCapture(state.Screen, state.CapturingCursor);
-						break;
-					case CaptureState.ScreenCaptureMethod.BitBlt:
-						result = new BitBltMonitorCapture(state.Screen, state.CapturingCursor, state.HideTaskbar);
-						break;
-					default:
-						throw new ArgumentException("Invalid ScreenCaptureMethod");
-				}
+				throw new ArgumentException("Invalid capture target");
 			}
 
 
@@ -48,6 +38,41 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			#endif
 
 			return result;
+		}
+
+		private static ICaptureSource WindowSource(CaptureState state)
+		{
+			// Capturing a window
+			switch (state.WindowMethod)
+			{
+				case CaptureState.WindowCaptureMethod.DirectX:
+					return new DXWindowCapture(state.WindowHandle, state.CapturingCursor);
+
+				case CaptureState.WindowCaptureMethod.BitBlt:
+					return new BitBltWindowCapture(state.WindowHandle, state.CapturingCursor);
+
+				case CaptureState.WindowCaptureMethod.PrintScreen:
+					return new PrintWindowCapture(state.WindowHandle, state.CapturingCursor);
+
+				default:
+					throw new ArgumentException("Invalid WindowCaptureMethod");
+			}
+		}
+		
+		private static ICaptureSource ScreenSource(CaptureState state)
+		{
+			// Capturing a screen
+			switch (state.ScreenMethod)
+			{
+				case CaptureState.ScreenCaptureMethod.DirectX:
+					return new DXMonitorCapture(state.Screen, state.CapturingCursor);
+				
+				case CaptureState.ScreenCaptureMethod.BitBlt:
+					return new BitBltMonitorCapture(state.Screen, state.CapturingCursor, state.HideTaskbar);
+
+				default:
+					throw new ArgumentException("Invalid ScreenCaptureMethod");
+			}
 		}
 	}
 }
