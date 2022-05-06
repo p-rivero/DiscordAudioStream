@@ -1,5 +1,4 @@
-﻿using DiscordAudioStream.ScreenCapture;
-using DLLs;
+﻿using DLLs;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,12 +7,20 @@ using System.Text;
 
 namespace DiscordAudioStream
 {
-    public class ProcessHandleManager
+    public class ProcessHandleList
 	{
-		private IntPtr[] procs = null;
-		private int selectedIndex = -1;
 
-		public string[] RefreshHandles()
+		private readonly IntPtr[] handles = null;
+		private readonly string[] processNames = null;
+
+		// Cannot instantiate directly, must call ProcessHandleList.Refresh()
+		private ProcessHandleList(Dictionary<IntPtr, string> processes)
+		{
+			handles = processes.Keys.ToArray();
+			processNames = processes.Values.ToArray();
+		}
+
+		public static ProcessHandleList Refresh()
 		{
 			IntPtr shellWindow = User32.GetShellWindow();
 			Dictionary<IntPtr, string> windows = new Dictionary<IntPtr, string>();
@@ -51,47 +58,36 @@ namespace DiscordAudioStream
 
 			}, IntPtr.Zero);
 
-			procs = windows.Keys.ToArray();
-			return windows.Values.ToArray();
+			return new ProcessHandleList(windows);
 		}
 
-		public int SelectedIndex
+		public string[] Names
 		{
-			get { return selectedIndex; }
-			set
+			get { return processNames; }
+		}
+
+		public IntPtr this[int index]
+		{
+			get
 			{
-				if (procs == null)
+				if (handles == null)
 				{
-					throw new InvalidOperationException("Please call RefreshHandles() before attempting to set the index");
+					throw new InvalidOperationException("Call RefreshHandles() before attempting to get a handle");
 				}
-				if (value < 0 || value >= procs.Length)
+				if (index < 0 || index >= handles.Length)
 				{
-					throw new InvalidOperationException("ProcessHandleManager: The provided index is out of bounds");
+					throw new ArgumentOutOfRangeException("index");
 				}
-				selectedIndex = value;
+				return handles[index];
 			}
-		}
-
-		public IntPtr GetHandle()
-		{
-			if (selectedIndex < 0 || selectedIndex >= procs.Length)
-			{
-				return IntPtr.Zero;
-			}
-			return procs[selectedIndex];
-		}
-
-		public void ClearSelectedIndex()
-		{
-			selectedIndex = -1;
 		}
 
 		// Get the index of a given handle
-		public int Lookup(IntPtr handle)
+		public int IndexOf(IntPtr handle)
 		{
-			for (int i = 0; i < procs.Length; i++)
+			for (int i = 0; i < handles.Length; i++)
 			{
-				if (procs[i] == handle)
+				if (handles[i] == handle)
 					return i;
 			}
 			return -1;

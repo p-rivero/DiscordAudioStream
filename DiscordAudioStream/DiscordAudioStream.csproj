@@ -119,7 +119,7 @@
     <Compile Include="ScreenCapture\CaptureStrategy\WindowCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Helpers\CaptureHelper.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Helpers\Direct3D11Helper.cs" />
-    <Compile Include="ScreenCapture\ProcessHandleManager.cs" />
+    <Compile Include="ScreenCapture\ProcessHandleList.cs" />
     <Compile Include="ScreenCapture\ScreenCaptureManager.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

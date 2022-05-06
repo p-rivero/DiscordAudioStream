@@ -22,8 +22,8 @@ namespace DiscordAudioStream
 		private int numberOfScreens = -1;
 
 		private ScreenCaptureManager screenCapture;
+		private ProcessHandleList processHandleList;
 		private readonly CaptureState captureState = new CaptureState();
-		private readonly ProcessHandleManager processHandleManager;
 
 		private AudioPlayback audioPlayback = null;
 		
@@ -35,7 +35,7 @@ namespace DiscordAudioStream
 			}
 
 			this.darkMode = darkMode;
-			processHandleManager = new ProcessHandleManager();
+			processHandleList = ProcessHandleList.Refresh();
 
 			InitializeComponent();
 			previewBox.Visible = true;
@@ -64,44 +64,11 @@ namespace DiscordAudioStream
 			areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
 			scaleComboBox.SelectedIndex = Properties.Settings.Default.ScaleIndex;
 
-			xNumeric.Minimum = SystemInformation.VirtualScreen.Left;
-			yNumeric.Minimum = SystemInformation.VirtualScreen.Top;
-
 			ApplyDarkTheme(darkMode);
 		}
 
 
 		// PUBLIC METHODS
-
-		public void SetAreaWidth(int w)
-		{
-			widthNumeric.Value = w;
-		}
-
-		public void SetAreaHeight(int h)
-		{
-			heightNumeric.Value = h;
-		}
-
-		public void SetAreaX(int x)
-		{
-			xNumeric.Value = x;
-		}
-
-		public void SetAreaY(int y)
-		{
-			yNumeric.Value = y;
-		}
-
-		public void SetMaximumX(int maxX)
-		{
-			xNumeric.Maximum = maxX + SystemInformation.VirtualScreen.Left;
-		}
-
-		public void SetMaximumY(int maxY)
-		{
-			yNumeric.Maximum = maxY + SystemInformation.VirtualScreen.Top;
-		}
 
 		public void SetPreviewSize(Size size)
 		{
@@ -118,12 +85,13 @@ namespace DiscordAudioStream
 
 		public void UpdateAreaComboBox()
 		{
-			IntPtr handle = IntPtr.Zero;
 			int oldIndex = areaComboBox.SelectedIndex;
+			IntPtr oldHandle = IntPtr.Zero;
 			if (oldIndex > numberOfScreens)
 			{
 				// We were capturing a window, store its handle
-				handle = processHandleManager.GetHandle();
+				int windowIndex = oldIndex - numberOfScreens - 1;
+				oldHandle = processHandleList[windowIndex];
 			}
 
 			// Refresh list of windows
@@ -132,8 +100,8 @@ namespace DiscordAudioStream
 			if (oldIndex > numberOfScreens)
 			{
 				// We were capturing a window, see if it still exists
-				int newIndex = processHandleManager.Lookup(handle);
-				if (newIndex == -1)
+				int windowIndex = processHandleList.IndexOf(oldHandle);
+				if (windowIndex == -1)
 				{
 					// Window has been closed, return to last saved screen
 					areaComboBox.SelectedIndex = Properties.Settings.Default.AreaIndex;
@@ -141,7 +109,7 @@ namespace DiscordAudioStream
 				else
 				{
 					// Window still exists
-					areaComboBox.SelectedIndex = newIndex + numberOfScreens + 1;
+					areaComboBox.SelectedIndex = windowIndex + numberOfScreens + 1;
 				}
 			}
 			else
@@ -149,33 +117,6 @@ namespace DiscordAudioStream
 				// We were capturing a screen
 				areaComboBox.SelectedIndex = oldIndex;
 			}
-		}
-
-
-		// TODO: Delete unused
-		public void GetCaptureArea(out Size size, out Point pos)
-		{
-			int tmp_width = 0, tmp_height = 0, tmp_x = 0, tmp_y = 0;
-			Invoke(new Action(() =>
-			{
-				tmp_width = (int)widthNumeric.Value;
-				tmp_height = (int)heightNumeric.Value;
-				tmp_x = (int)xNumeric.Value;
-				tmp_y = (int)yNumeric.Value;
-			}));
-
-			size = new Size(tmp_width, tmp_height);
-			pos = new Point(tmp_x, tmp_y);
-		}
-
-		public bool IsCapturingCursor()
-		{
-			return captureCursorCheckBox.Checked;
-		}
-
-		public void CapturedWindowSizeChanged(Size newSize)
-		{
-			SetPreviewSize(newSize);
 		}
 
 
@@ -206,10 +147,6 @@ namespace DiscordAudioStream
 			inputDeviceComboBox.SetDarkMode(darkMode);
 			areaComboBox.SetDarkMode(darkMode);
 			scaleComboBox.SetDarkMode(darkMode);
-			widthNumeric.SetDarkMode(darkMode);
-			heightNumeric.SetDarkMode(darkMode);
-			xNumeric.SetDarkMode(darkMode);
-			yNumeric.SetDarkMode(darkMode);
 			captureCursorCheckBox.SetDarkMode(darkMode);
 			hideTaskbarCheckBox.SetDarkMode(darkMode);
 		}
@@ -218,63 +155,38 @@ namespace DiscordAudioStream
 		{
 			if (!Created) return;
 
-			// Custom area
-			if (areaComboBox.SelectedIndex == numberOfScreens)
-			{
-				EnableAreaControls(true);
-				hideTaskbarCheckBox.Enabled = false;
+			int windowIndex = areaComboBox.SelectedIndex - numberOfScreens - 1;
 
-				processHandleManager.ClearSelectedIndex();
+			if (windowIndex == -1)
+			{
+				// Index right before first Window: Custom area
+				hideTaskbarCheckBox.Enabled = false;
 				captureState.Target = CaptureState.CaptureTarget.CustomArea;
 			}
-			// Window
-			else if (areaComboBox.SelectedIndex > numberOfScreens)
+			else if (windowIndex >= 0)
 			{
-				EnableAreaControls(false);
+				// Window
 				hideTaskbarCheckBox.Enabled = false;
-
-				processHandleManager.SelectedIndex = areaComboBox.SelectedIndex - numberOfScreens - 1;
-				captureState.WindowHandle = processHandleManager.GetHandle();
+				captureState.WindowHandle = processHandleList[windowIndex];
 			}
-			// Screen
 			else
 			{
-				EnableAreaControls(false);
+				// Screen
 				hideTaskbarCheckBox.Enabled = true;
-
-				processHandleManager.ClearSelectedIndex();
-				Rectangle area;
 
 				if (Screen.AllScreens.Length > 1 && areaComboBox.SelectedIndex == numberOfScreens - 1)
 				{
 					// All screens
 					hideTaskbarCheckBox.Enabled = false;
-					area = SystemInformation.VirtualScreen;
 					captureState.Target = CaptureState.CaptureTarget.AllScreens;
 				}
 				else
 				{
 					// Single screen
 					hideTaskbarCheckBox.Enabled = true;
-					Screen screen = Screen.AllScreens[areaComboBox.SelectedIndex];
-					if (hideTaskbarCheckBox.Checked) area = screen.WorkingArea;
-					else area = screen.Bounds;
-					captureState.Screen = screen;
+					captureState.Screen = Screen.AllScreens[areaComboBox.SelectedIndex];
 				}
-
-				widthNumeric.Value = area.Width;
-				heightNumeric.Value = area.Height;
-				xNumeric.Value = area.X;
-				yNumeric.Value = area.Y;
 			}
-		}
-
-		private void EnableAreaControls(bool enabled)
-		{
-			widthNumeric.Enabled = enabled;
-			heightNumeric.Enabled = enabled;
-			xNumeric.Enabled = enabled;
-			yNumeric.Enabled = enabled;
 		}
 
 		private void RefreshAudioDevices()
@@ -314,14 +226,12 @@ namespace DiscordAudioStream
 
 			areaComboBox.Items.Add(new DarkThemeComboBox.ItemWithSeparator("Custom area"));
 
-			foreach (string window in processHandleManager.RefreshHandles())
+			processHandleList = ProcessHandleList.Refresh();
+			foreach (string window in processHandleList.Names)
 			{
 				areaComboBox.Items.Add(window);
 			}
 			areaComboBox.Items.Add(new DarkThemeComboBox.Dummy());
-
-			widthNumeric.Maximum = SystemInformation.VirtualScreen.Width;
-			heightNumeric.Maximum = SystemInformation.VirtualScreen.Height;
 		}
 
 		private void StartStream()
@@ -641,54 +551,6 @@ namespace DiscordAudioStream
 			Properties.Settings.Default.ScaleIndex = index;
 			Properties.Settings.Default.Save();
 		}
-
-
-		private void xNumeric_ValueChanged(object sender, EventArgs e)
-		{
-			if (xNumeric.Enabled)
-			{
-				Invoke(new Action(() =>
-				{
-					// Omit 1 pixel for red border
-					//areaForm.Left = (int)xNumeric.Value - 1;
-				}));
-			}
-		}
-
-		private void yNumeric_ValueChanged(object sender, EventArgs e)
-		{
-			if (yNumeric.Enabled)
-			{
-				Invoke(new Action(() =>
-				{
-					// Omit 1 pixel for red border
-					//areaForm.Top = (int)yNumeric.Value - 1;
-				}));
-			}
-		}
-		
-		private void widthNumeric_ValueChanged(object sender, EventArgs e)
-		{
-			if (widthNumeric.Enabled)
-			{
-				Invoke(new Action(() =>
-				{
-					//areaForm.Width = (int)widthNumeric.Value + 2;
-				}));
-			}
-		}
-
-		private void heightNumeric_ValueChanged(object sender, EventArgs e)
-		{
-			if (heightNumeric.Enabled)
-			{
-				Invoke(new Action(() =>
-				{
-					//areaForm.Height = (int)heightNumeric.Value + 2;
-				}));
-			}
-		}
-
 
 		private void hideTaskbarCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
