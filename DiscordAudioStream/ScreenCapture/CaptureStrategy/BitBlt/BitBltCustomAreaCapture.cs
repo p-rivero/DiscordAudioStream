@@ -13,7 +13,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			var bitBlt = new BitBltCapture();
 			// Display red rectangle for selecting area
-			areaForm.SetMaximumArea(SystemInformation.VirtualScreen);
 			areaForm.Show();
 
 			bitBlt.CaptureAreaRect += GetCustomArea;
