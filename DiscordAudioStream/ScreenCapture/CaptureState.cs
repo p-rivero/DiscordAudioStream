@@ -60,6 +60,17 @@ namespace DiscordAudioStream.ScreenCapture
 			}
 		}
 
+		// True if this method supports hiding the taskbar
+		public bool HideTaskbarSupported
+		{
+			get
+			{
+				// Only BitBlt screen capture supports hiding taskbar
+				if (Target != CaptureTarget.Screen) return false;
+				return (ScreenMethod == ScreenCaptureMethod.BitBlt);
+			}
+		}
+
 		// What kind of item are we capturing now?
 		public CaptureTarget Target {
 			get

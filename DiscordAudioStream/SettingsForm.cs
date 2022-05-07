@@ -8,7 +8,10 @@ namespace DiscordAudioStream
 {
 	partial class SettingsForm : Form
 	{
-		readonly CaptureState captureState;
+		public delegate void CaptureMethodChangedDelegate();
+		public event CaptureMethodChangedDelegate CaptureMethodChanged;
+
+		private readonly CaptureState captureState;
 
 		public SettingsForm(bool darkMode, CaptureState state)
 		{
@@ -123,11 +126,13 @@ namespace DiscordAudioStream
 		private void fullscreenMethodComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			captureState.ScreenMethod = (CaptureState.ScreenCaptureMethod) fullscreenMethodComboBox.SelectedIndex;
+			CaptureMethodChanged?.Invoke();
 		}
 
 		private void windowMethodComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			captureState.WindowMethod = (CaptureState.WindowCaptureMethod) windowMethodComboBox.SelectedIndex;
+			CaptureMethodChanged?.Invoke();
 		}
 	}
 }

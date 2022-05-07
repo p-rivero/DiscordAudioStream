@@ -157,32 +157,32 @@ namespace DiscordAudioStream
 			if (windowIndex == -1)
 			{
 				// Index right before first Window: Custom area
-				hideTaskbarCheckBox.Enabled = false;
 				captureState.Target = CaptureState.CaptureTarget.CustomArea;
 			}
 			else if (windowIndex >= 0)
 			{
 				// Window
-				hideTaskbarCheckBox.Enabled = false;
 				captureState.WindowHandle = processHandleList[windowIndex];
 			}
 			else
 			{
 				// Screen
-				hideTaskbarCheckBox.Enabled = true;
-
 				if (Screen.AllScreens.Length > 1 && areaComboBox.SelectedIndex == numberOfScreens - 1)
 				{
 					// All screens
-					hideTaskbarCheckBox.Enabled = false;
 					captureState.Target = CaptureState.CaptureTarget.AllScreens;
 				}
 				else
 				{
 					// Single screen
-					hideTaskbarCheckBox.Enabled = true;
 					captureState.Screen = Screen.AllScreens[areaComboBox.SelectedIndex];
 				}
+			}
+
+			hideTaskbarCheckBox.Enabled = captureState.HideTaskbarSupported;
+			if (captureState.HideTaskbarSupported)
+			{
+				captureState.HideTaskbar = hideTaskbarCheckBox.Checked;
 			}
 		}
 
@@ -487,10 +487,11 @@ namespace DiscordAudioStream
 		{
 			SettingsForm settingsBox = new SettingsForm(darkMode, captureState);
 			settingsBox.Owner = this;
-			if (this.TopMost)
-			{
-				settingsBox.TopMost = true;
-			}
+			settingsBox.CaptureMethodChanged += RefreshAreaInfo;
+
+			// If this window is topmost, settings is too
+			if (TopMost) settingsBox.TopMost = true;
+			
 			settingsBox.ShowDialog();
 		}
 
