@@ -45,7 +45,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			// Capturing a window
 			switch (state.WindowMethod)
 			{
-				case CaptureState.WindowCaptureMethod.DirectX:
+				case CaptureState.WindowCaptureMethod.Windows10:
 					return new Win10WindowCapture(state.WindowHandle, state.CapturingCursor);
 
 				case CaptureState.WindowCaptureMethod.BitBlt:
@@ -64,7 +64,10 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			// Capturing a screen
 			switch (state.ScreenMethod)
 			{
-				case CaptureState.ScreenCaptureMethod.DirectX:
+				case CaptureState.ScreenCaptureMethod.DXGIDuplication:
+					return new DuplicationMonitorCapture(state.Screen, state.CapturingCursor);
+
+				case CaptureState.ScreenCaptureMethod.Windows10:
 					return new Win10MonitorCapture(state.Screen, state.CapturingCursor);
 				
 				case CaptureState.ScreenCaptureMethod.BitBlt:

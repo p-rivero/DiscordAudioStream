@@ -39,14 +39,6 @@ namespace DiscordAudioStream
 		protected override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);
-			try
-			{
-				screens[index].ReleaseFrame();
-			}
-			catch (SharpDX.SharpDXException)
-			{
-				int i = 5;
-			}
 		}
 
 		public override Bitmap CaptureFrame()

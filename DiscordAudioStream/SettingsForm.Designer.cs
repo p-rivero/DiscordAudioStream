@@ -178,7 +178,8 @@
 			this.fullscreenMethodComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.fullscreenMethodComboBox.FormattingEnabled = true;
 			this.fullscreenMethodComboBox.Items.AddRange(new object[] {
-            "DirectX",
+            "DXGI Duplication",
+            "Windows 10",
             "BitBlt"});
 			this.fullscreenMethodComboBox.Location = new System.Drawing.Point(81, 22);
 			this.fullscreenMethodComboBox.Name = "fullscreenMethodComboBox";
@@ -201,7 +202,7 @@
 			this.windowMethodComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.windowMethodComboBox.FormattingEnabled = true;
 			this.windowMethodComboBox.Items.AddRange(new object[] {
-            "DirectX",
+            "Windows 10",
             "BitBlt",
             "PrintWindow"});
 			this.windowMethodComboBox.Location = new System.Drawing.Point(81, 52);

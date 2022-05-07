@@ -7,13 +7,14 @@ namespace DiscordAudioStream.ScreenCapture
 	{
 		public enum WindowCaptureMethod
 		{
-			DirectX,
+			Windows10,
 			BitBlt,
 			PrintScreen
 		}
 		public enum ScreenCaptureMethod
 		{
-			DirectX,
+			DXGIDuplication,
+			Windows10,
 			BitBlt
 		}
 		public enum CaptureTarget
