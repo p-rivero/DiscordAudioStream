@@ -6,11 +6,11 @@ using Windows.Graphics.Capture;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
-	public class DXMonitorCapture : CaptureSource
+	public class Win10MonitorCapture : CaptureSource
 	{
-		private readonly DXCapture dxCapture;
+		private readonly Win10Capture winCapture;
 
-		public DXMonitorCapture(Screen monitor, bool captureCursor)
+		public Win10MonitorCapture(Screen monitor, bool captureCursor)
 		{
 			// Get the handle of the screen
 			// Screen.GetHashCode() is implemented as "return (int)hmonitor;"
@@ -18,18 +18,23 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			IntPtr hMon = new IntPtr(handle);
 
 			GraphicsCaptureItem item = CaptureHelper.CreateItemForMonitor(hMon);
-			dxCapture = new DXCapture(item, captureCursor);
+			winCapture = new Win10Capture(item, captureCursor);
 		}
 
 		public override Bitmap CaptureFrame()
 		{
-			return dxCapture.CaptureFrame();
+			return winCapture.CaptureFrame();
 		}
 
 		protected override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);
-			dxCapture.Dispose();
+			winCapture.Dispose();
+		}
+
+		private Rectangle Test()
+		{
+			return new Rectangle(0, 0, 1440*16/9, 1440);
 		}
 	}
 }

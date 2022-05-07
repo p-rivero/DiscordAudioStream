@@ -82,11 +82,12 @@
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltCustomAreaCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltMultiMonitorCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\CaptureSourceFactory.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Helpers\BitmapHelper.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\PrintWindow\PrintWindowCore.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltWindowCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltMonitorCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\CursorPainter.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\DXCapture.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Win10Capture.cs" />
     <Compile Include="CustomComponents\DarkThemeGroupBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -111,8 +112,8 @@
     </Compile>
     <Compile Include="DLLs.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\DXMonitorCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\DXWindowCapture.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Win10MonitorCapture.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Win10WindowCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\CaptureSource.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\MeasureTime.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\PrintWindow\PrintWindowCapture.cs" />

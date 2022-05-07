@@ -6,17 +6,17 @@ using Windows.Graphics.Capture;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
-	public class DXWindowCapture : WindowCapture
+	public class Win10WindowCapture : WindowCapture
 	{
-		private readonly DXCapture dxCapture;
+		private readonly Win10Capture winCapture;
 		private readonly IntPtr windowHandle;
 
-		public DXWindowCapture(IntPtr hWnd, bool captureCursor)
+		public Win10WindowCapture(IntPtr hWnd, bool captureCursor)
 		{
 			windowHandle = hWnd;
 
 			GraphicsCaptureItem item = CaptureHelper.CreateItemForWindow(windowHandle);
-			dxCapture = new DXCapture(item, captureCursor);
+			winCapture = new Win10Capture(item, captureCursor);
 		}
 
 		public override Bitmap CaptureFrame()
@@ -24,9 +24,9 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			Bitmap result = null;
 			while (result == null)
 			{
-				// dxCapture.CaptureFrame will block the thread until it gets a frame. 
+				// winCapture.CaptureFrame will block the thread until it gets a frame. 
 				// If the operation does not succeed in 0.5 seconds, check if the window is still open
-				Task task = Task.Run(() => result = dxCapture.CaptureFrame());
+				Task task = Task.Run(() => result = winCapture.CaptureFrame());
 				if (!task.Wait(TimeSpan.FromMilliseconds(500)))
 				{
 					// GetWindowArea will throw an exception if the window has been closed, but not if it's minimized
@@ -39,7 +39,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		protected override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);
-			dxCapture.Dispose();
+			winCapture.Dispose();
 		}
 	}
 }
