@@ -76,10 +76,7 @@ namespace DiscordAudioStream
 			{
 				size.Width = (int)(Math.Max(160, size.Width) * scaleMultiplier);
 				size.Height = (int)(Math.Max(160, size.Height) * scaleMultiplier);
-				BeginInvoke(new Action(() =>
-				{
-					previewBox.Size = size;
-				}));
+				BeginInvoke(new Action(() => previewBox.Size = size));
 			}
 		}
 

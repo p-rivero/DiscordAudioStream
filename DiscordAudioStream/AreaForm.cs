@@ -29,7 +29,8 @@ namespace DiscordAudioStream
 
 		private void resizeTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			Invoke((MethodInvoker)(() => {
+			Invoke((MethodInvoker)(() =>
+			{
 				Point curPos = PointToClient(Cursor.Position);
 
 				int newWidth = startSize.Width + curPos.X - startPos.X;

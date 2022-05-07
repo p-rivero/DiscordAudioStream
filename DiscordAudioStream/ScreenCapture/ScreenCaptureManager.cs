@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 namespace DiscordAudioStream.ScreenCapture
@@ -85,10 +85,26 @@ namespace DiscordAudioStream.ScreenCapture
 		private void UpdateState()
 		{
 			ICaptureSource oldSource = currentSource;
-			// TODO: If an exception is thrown, fallback to another method
-			currentSource = CaptureSourceFactory.Build(captureState);
-			// Dispose after switching to avoid data races
-			oldSource?.Dispose();
+			try
+			{
+				currentSource = CaptureSourceFactory.Build(captureState);
+				// Dispose after switching to avoid data races
+				oldSource?.Dispose();
+			}
+			catch
+			{
+				if (oldSource != null)
+				{
+					// We already have a valid source, do not call Dispose and just show warning
+					string msg = "Unable to display this item.\n";
+					msg += "If the problem persists, consider changing the capture method in Settings > Capture";
+					MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+				// We do not have a valid source, fallback to the safest methods
+				captureState.ScreenMethod = CaptureState.ScreenCaptureMethod.BitBlt;
+				captureState.WindowMethod = CaptureState.WindowCaptureMethod.BitBlt;
+			}
 		}
 
 		private void EnqueueFrame()

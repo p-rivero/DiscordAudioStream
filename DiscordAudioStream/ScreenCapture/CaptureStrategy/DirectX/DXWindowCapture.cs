@@ -26,9 +26,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			{
 				// dxCapture.CaptureFrame will block the thread until it gets a frame. 
 				// If the operation does not succeed in 0.5 seconds, check if the window is still open
-				var task = Task.Run(() => {
-					result = dxCapture.CaptureFrame();
-				});
+				Task task = Task.Run(() => result = dxCapture.CaptureFrame());
 				if (!task.Wait(TimeSpan.FromMilliseconds(500)))
 				{
 					// GetWindowArea will throw an exception if the window has been closed, but not if it's minimized
