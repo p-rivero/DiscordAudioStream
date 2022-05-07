@@ -4,12 +4,12 @@ using System.Drawing;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
-	internal class BitBltCapture : ICaptureSource
+	internal class BitBltCapture : CaptureSource
 	{
 		public delegate Rectangle CaptureAreaRectDelegate();
 		public CaptureAreaRectDelegate CaptureAreaRect;
 
-		public Bitmap CaptureFrame()
+		public override Bitmap CaptureFrame()
 		{
 			if (CaptureAreaRect == null)
 			{
@@ -21,31 +21,19 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 			// Capture screen
 			IntPtr hdcSrc = User32.GetWindowDC(User32.GetDesktopWindow());
-			IntPtr hdcDest = GDI32.CreateCompatibleDC(hdcSrc);
-			IntPtr hBitmap = GDI32.CreateCompatibleBitmap(hdcSrc, area.Width, area.Height);
-			GDI32.SelectObject(hdcDest, hBitmap);
-			GDI32.BitBlt(hdcDest, 0, 0, area.Width, area.Height, hdcSrc, area.X, area.Y, GDI32.RasterOps.SRCCOPY);
+			IntPtr hdcDest = Gdi32.CreateCompatibleDC(hdcSrc);
+			IntPtr hBitmap = Gdi32.CreateCompatibleBitmap(hdcSrc, area.Width, area.Height);
+			Gdi32.SelectObject(hdcDest, hBitmap);
+			Gdi32.BitBlt(hdcDest, 0, 0, area.Width, area.Height, hdcSrc, area.X, area.Y, Gdi32.RasterOps.SRCCOPY);
 
 			Bitmap result = Image.FromHbitmap(hBitmap);
 
 			// Cleanup
 			User32.ReleaseDC(User32.GetDesktopWindow(), hdcSrc);
-			GDI32.DeleteDC(hdcDest);
-			GDI32.DeleteObject(hBitmap);
+			Gdi32.DeleteDC(hdcDest);
+			Gdi32.DeleteObject(hBitmap);
 
 			return result;
 		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			// Nothing to clean up
-		}
-
 	}
 }

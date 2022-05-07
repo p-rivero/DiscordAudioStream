@@ -5,7 +5,7 @@ using System.Security;
 
 namespace DLLs
 {
-	static class GDI32
+	static class Gdi32
 	{
 		public enum RasterOps : uint
 		{
@@ -46,26 +46,26 @@ namespace DLLs
 	static class User32
 	{
 		[StructLayout(LayoutKind.Sequential)]
-		public struct POINTAPI
+		public struct PointApi
 		{
 			public int x;
 			public int y;
 		}
 		[StructLayout(LayoutKind.Sequential)]
-		public struct CURSORINFO
+		public struct CursorInfo
 		{
 			public Int32 cbSize;
 			public Int32 flags;
 			public IntPtr hCursor;
-			public POINTAPI ptScreenPos;
+			public PointApi ptScreenPos;
 
-			public static CURSORINFO Init()
+			public static CursorInfo Init()
 			{
-				return new CURSORINFO { cbSize = Marshal.SizeOf(typeof(CURSORINFO)) };
+				return new CursorInfo { cbSize = Marshal.SizeOf(typeof(CursorInfo)) };
 			}
 		}
 		[StructLayout(LayoutKind.Sequential)]
-		public struct RECT
+		public struct Rect
 		{
 			private int left;
 			private int top;
@@ -92,7 +92,7 @@ namespace DLLs
 				get { return right - left; }
 				set { right = value + left; }
 			}
-			public RECT(int x, int y, int width, int height)
+			public Rect(int x, int y, int width, int height)
 			{
 				left = x;
 				top = y;
@@ -139,7 +139,7 @@ namespace DLLs
 			public int SizeOfData;
 		}
 		[StructLayout(LayoutKind.Sequential)]
-		public struct ICONINFO
+		public struct IconInfo
 		{
 			public bool fIcon;
 			public int xHotspot;
@@ -181,9 +181,9 @@ namespace DLLs
 		[DllImport("user32.dll")]
 		public static extern bool DrawIconEx(IntPtr hdc, int xLeft, int yTop, IntPtr hIcon, int cxWidth, int cyWidth, uint istepIfAniCur, IntPtr hbrFlickerFreeDraw, uint diFlags);
 		[DllImport("user32.dll")]
-		public static extern bool GetCursorInfo(ref CURSORINFO pci);
+		public static extern bool GetCursorInfo(ref CursorInfo pci);
 		[DllImport("user32.dll")]
-		public static extern bool GetIconInfo(IntPtr hIcon, out ICONINFO piconinfo);
+		public static extern bool GetIconInfo(IntPtr hIcon, out IconInfo piconinfo);
 		[DllImport("user32.dll")]
 		public static extern bool SetProcessDPIAware();
 		[DllImport("user32.dll")]
@@ -195,7 +195,7 @@ namespace DLLs
 		[DllImport("user32.dll")]
 		public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 		[DllImport("user32.dll")]
-		public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+		public static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
 		[DllImport("user32.dll")]
 		public static extern bool PrintWindow(IntPtr hWnd, IntPtr hdcBlt, int nFlags);
 		[DllImport("user32.dll")]
@@ -213,7 +213,7 @@ namespace DLLs
 		[DllImport("user32.dll")]
 		public static extern bool SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttribData data);
 		[DllImport("user32.dll")]
-		public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+		public static extern bool GetClientRect(IntPtr hWnd, out Rect lpRect);
 		[DllImport("user32.dll", SetLastError = true)]
 		public static extern bool SetProcessDpiAwarenessContext(int value);
 	}
@@ -222,11 +222,11 @@ namespace DLLs
 	{
 		[SecurityCritical]
 		[DllImport("ntdll.dll", SetLastError = true)]
-		internal static extern bool RtlGetVersion(ref OSVERSIONINFOEX versionInfo);
+		internal static extern bool RtlGetVersion(ref OsVersionInfoEx versionInfo);
 		[StructLayout(LayoutKind.Sequential)]
-		internal struct OSVERSIONINFOEX
+		internal struct OsVersionInfoEx
 		{
-			// The OSVersionInfoSize field must be set to Marshal.SizeOf(typeof(OSVERSIONINFOEX))
+			// The OSVersionInfoSize field must be set to Marshal.SizeOf(typeof(OsVersionInfoEx))
 			internal int OSVersionInfoSize;
 			internal int MajorVersion;
 			internal int MinorVersion;
@@ -240,9 +240,9 @@ namespace DLLs
 			internal byte ProductType;
 			internal byte Reserved;
 
-			public static OSVERSIONINFOEX Init()
+			public static OsVersionInfoEx Init()
 			{
-				return new OSVERSIONINFOEX { OSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX)) };
+				return new OsVersionInfoEx { OSVersionInfoSize = Marshal.SizeOf(typeof(OsVersionInfoEx)) };
 			}
 		}
 	}
@@ -272,16 +272,16 @@ namespace DLLs
 		[DllImport("dwmapi.dll")]
 		private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out bool pvAttribute, int cbAttribute);
 		[DllImport("dwmapi.dll")]
-		private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out User32.RECT pvAttribute, int cbAttribute);
+		private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out User32.Rect pvAttribute, int cbAttribute);
 
 		public static bool GetBoolAttr(IntPtr hwnd, DwmWindowAttribute attribute)
 		{
 			DwmGetWindowAttribute(hwnd, (int)attribute, out bool pvAttribute, Marshal.SizeOf(typeof(bool)));
 			return pvAttribute;
 		}
-		public static User32.RECT GetRectAttr(IntPtr hwnd, DwmWindowAttribute attribute)
+		public static User32.Rect GetRectAttr(IntPtr hwnd, DwmWindowAttribute attribute)
 		{
-			DwmGetWindowAttribute(hwnd, (int)attribute, out User32.RECT pvAttribute, Marshal.SizeOf(typeof(User32.RECT)));
+			DwmGetWindowAttribute(hwnd, (int)attribute, out User32.Rect pvAttribute, Marshal.SizeOf(typeof(User32.Rect)));
 			return pvAttribute;
 		}
 	}

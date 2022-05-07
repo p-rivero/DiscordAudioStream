@@ -6,7 +6,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
 	public class BitBltWindowCapture : WindowCapture
 	{
-		private readonly ICaptureSource capture;
+		private readonly CaptureSource capture;
 		private readonly IntPtr windowHandle;
 
 		public BitBltWindowCapture(IntPtr hWnd, bool captureCursor)

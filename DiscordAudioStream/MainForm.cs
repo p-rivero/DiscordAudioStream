@@ -451,7 +451,7 @@ namespace DiscordAudioStream
 
 		private void volumeMixerButton_Click(object sender, EventArgs e)
 		{
-			var osVersionInfo = Ntdll.OSVERSIONINFOEX.Init();
+			var osVersionInfo = Ntdll.OsVersionInfoEx.Init();
 			Ntdll.RtlGetVersion(ref osVersionInfo);
 
 			if (osVersionInfo.MajorVersion >= 10)
@@ -468,7 +468,7 @@ namespace DiscordAudioStream
 
 		private void soundDevicesButton_Click(object sender, EventArgs e)
 		{
-			var osVersionInfo = Ntdll.OSVERSIONINFOEX.Init();
+			var osVersionInfo = Ntdll.OsVersionInfoEx.Init();
 			Ntdll.RtlGetVersion(ref osVersionInfo);
 
 			if (osVersionInfo.MajorVersion >= 10 && osVersionInfo.BuildNumber >= 17063)

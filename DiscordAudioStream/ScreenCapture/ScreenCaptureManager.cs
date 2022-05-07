@@ -24,7 +24,7 @@ namespace DiscordAudioStream.ScreenCapture
 		private readonly Thread captureThread;
 		private readonly CaptureState captureState;
 		private static readonly ConcurrentQueue<Bitmap> frameQueue = new ConcurrentQueue<Bitmap>();
-		private ICaptureSource currentSource = null;
+		private CaptureSource currentSource = null;
 
 		public ScreenCaptureManager(CaptureState captureState)
 		{
@@ -84,7 +84,7 @@ namespace DiscordAudioStream.ScreenCapture
 
 		private void UpdateState()
 		{
-			ICaptureSource oldSource = currentSource;
+			CaptureSource oldSource = currentSource;
 			try
 			{
 				currentSource = CaptureSourceFactory.Build(captureState);

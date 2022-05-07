@@ -4,9 +4,9 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
 	public static class CaptureSourceFactory
 	{
-		public static ICaptureSource Build(CaptureState state)
+		public static CaptureSource Build(CaptureState state)
 		{
-			ICaptureSource result = null;
+			CaptureSource result = null;
 
 			if (state.Target == CaptureState.CaptureTarget.Window)
 			{
@@ -40,7 +40,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			return result;
 		}
 
-		private static ICaptureSource WindowSource(CaptureState state)
+		private static CaptureSource WindowSource(CaptureState state)
 		{
 			// Capturing a window
 			switch (state.WindowMethod)
@@ -59,7 +59,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			}
 		}
 		
-		private static ICaptureSource ScreenSource(CaptureState state)
+		private static CaptureSource ScreenSource(CaptureState state)
 		{
 			// Capturing a screen
 			switch (state.ScreenMethod)

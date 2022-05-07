@@ -31,7 +31,7 @@ namespace CustomComponents
 
         public static bool IsDarkTheme()
         {
-            var osVersionInfo = Ntdll.OSVERSIONINFOEX.Init();
+            var osVersionInfo = Ntdll.OsVersionInfoEx.Init();
             Ntdll.RtlGetVersion(ref osVersionInfo);
 
             if (osVersionInfo.MajorVersion < 10)

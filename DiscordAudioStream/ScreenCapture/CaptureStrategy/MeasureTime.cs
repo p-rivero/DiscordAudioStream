@@ -3,16 +3,16 @@ using System.Drawing;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
-	public class MeasureTime : ICaptureSource
+	public class MeasureTime : CaptureSource
 	{
-		private readonly ICaptureSource capture;
+		private readonly CaptureSource capture;
 
-		public MeasureTime(ICaptureSource capture)
+		public MeasureTime(CaptureSource capture)
 		{
 			this.capture = capture;
 		}
 
-		public Bitmap CaptureFrame()
+		public override Bitmap CaptureFrame()
 		{
 			var watch = System.Diagnostics.Stopwatch.StartNew();
 			Bitmap bmp = capture.CaptureFrame();
@@ -20,14 +20,9 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			return bmp;
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
+			base.Dispose(disposing);
 			capture.Dispose();
 		}
 	}

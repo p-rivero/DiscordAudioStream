@@ -6,7 +6,7 @@ using Windows.Graphics.Capture;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
-	public class DXMonitorCapture : ICaptureSource
+	public class DXMonitorCapture : CaptureSource
 	{
 		private readonly DXCapture dxCapture;
 
@@ -21,19 +21,14 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			dxCapture = new DXCapture(item, captureCursor);
 		}
 
-		public Bitmap CaptureFrame()
+		public override Bitmap CaptureFrame()
 		{
 			return dxCapture.CaptureFrame();
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
+			base.Dispose(disposing);
 			dxCapture.Dispose();
 		}
 	}

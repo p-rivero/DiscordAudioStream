@@ -113,7 +113,7 @@
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\DirectX\DXMonitorCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\DirectX\DXWindowCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\ICaptureSource.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\CaptureSource.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\MeasureTime.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\PrintWindow\PrintWindowCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\WindowCapture.cs" />

@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
-	public class BitBltMultimonitorCapture : ICaptureSource
+	public class BitBltMultimonitorCapture : CaptureSource
 	{
-		private readonly ICaptureSource capture;
+		private readonly CaptureSource capture;
 		private readonly Rectangle virtualScreenRectangle = SystemInformation.VirtualScreen;
 
 		public BitBltMultimonitorCapture(bool captureCursor)
@@ -26,19 +26,14 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			}
 		}
 
-		public Bitmap CaptureFrame()
+		public override Bitmap CaptureFrame()
 		{
 			return capture.CaptureFrame();
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
+			base.Dispose(disposing);
 			capture.Dispose();
 		}
 

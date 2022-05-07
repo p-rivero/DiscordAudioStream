@@ -5,17 +5,17 @@ using System.Drawing;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
-	public class CursorPainter : ICaptureSource
+	public class CursorPainter : CaptureSource
 	{
 		public delegate Rectangle CaptureAreaRectDelegate();
 
 
 		// Get the cursor size only once at the start
 		private int cursorSize = -1;
-		private readonly ICaptureSource source;
+		private readonly CaptureSource source;
 		private CaptureAreaRectDelegate captureAreaRect;
 
-		public CursorPainter(ICaptureSource source)
+		public CursorPainter(CaptureSource source)
 		{
 			this.source = source;
 		}
@@ -32,7 +32,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			}
 		}
 
-		public Bitmap CaptureFrame()
+		public override Bitmap CaptureFrame()
 		{
 			if (captureAreaRect == null)
 			{
@@ -42,21 +42,16 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			return PaintCursor(bmp, captureAreaRect().Location);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
+			base.Dispose(disposing);
 			source.Dispose();
 		}
 
 
 		private Bitmap PaintCursor(Bitmap src, Point originPos)
 		{
-			User32.CURSORINFO pci = User32.CURSORINFO.Init();
+			User32.CursorInfo pci = User32.CursorInfo.Init();
 
 			if (!User32.GetCursorInfo(ref pci) || pci.flags != User32.CURSOR_SHOWING)
 			{
@@ -65,7 +60,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			}
 
 			// Get the cursor hotspot
-			User32.GetIconInfo(pci.hCursor, out User32.ICONINFO iconInfo);
+			User32.GetIconInfo(pci.hCursor, out User32.IconInfo iconInfo);
 
 			// Screen coordinates where the cursor has to be drawn (compensate for hotspot)
 			Point cursorPos = new Point(pci.ptScreenPos.x - iconInfo.xHotspot, pci.ptScreenPos.y - iconInfo.yHotspot);
@@ -87,8 +82,8 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			}
 
 			// Clean up
-			GDI32.DeleteObject(iconInfo.hbmMask);
-			GDI32.DeleteObject(iconInfo.hbmColor);
+			Gdi32.DeleteObject(iconInfo.hbmMask);
+			Gdi32.DeleteObject(iconInfo.hbmColor);
 			
 			return src;
 		}
