@@ -82,7 +82,9 @@
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltCustomAreaCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltMultiMonitorCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\CaptureSourceFactory.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\DuplicationCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Helpers\BitmapHelper.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\DuplicationMonitorCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\PrintWindow\PrintWindowCore.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltWindowCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltMonitorCapture.cs" />
