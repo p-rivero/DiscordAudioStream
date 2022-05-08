@@ -20,14 +20,14 @@ namespace DiscordAudioStream
 		private SizeInt32 lastSize;
 
 		private static readonly IDirect3DDevice device = Direct3D11Helper.CreateDevice();
-		private static readonly SharpDX.Direct3D11.Device d3dDevice = Direct3D11Helper.CreateSharpDXDevice(device);
+		private static readonly Device d3dDevice = Direct3D11Helper.CreateSharpDXDevice(device);
 
 		public Win10Capture(GraphicsCaptureItem item, bool captureCursor)
 		{
 			framePool = Direct3D11CaptureFramePool.Create(
 				device,
 				DirectXPixelFormat.B8G8R8A8UIntNormalized,
-				2,
+				1,
 				item.Size);
 			session = framePool.CreateCaptureSession(item);
 
@@ -71,7 +71,7 @@ namespace DiscordAudioStream
 
 				// Need to recreate the framePool on the UI thread
 				InvokeOnUI(new Action(() =>
-					framePool.Recreate(device, DirectXPixelFormat.B8G8R8A8UIntNormalized, 2, frame.ContentSize)
+					framePool.Recreate(device, DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, frame.ContentSize)
 				));
 			}
 

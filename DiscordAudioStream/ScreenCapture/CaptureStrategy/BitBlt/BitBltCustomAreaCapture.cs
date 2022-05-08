@@ -8,12 +8,23 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 	{
 		private readonly CaptureSource capture;
 		private static readonly AreaForm areaForm = new AreaForm();
+		// If true, disposing of a BitBltCustomAreaCapture will not hide the form
+		private static bool disableHide = false;
 
 		public BitBltCustomAreaCapture(bool captureCursor)
 		{
 			var bitBlt = new BitBltCapture();
-			// Display red rectangle for selecting area
-			areaForm.Show();
+
+			if (areaForm.Visible)
+			{
+				// The red rectangle was visible before creating the source, it should remain visible after
+				disableHide = true;
+			}
+			else
+			{
+				// Display red rectangle for selecting area
+				areaForm.Show();
+			}
 
 			bitBlt.CaptureAreaRect += GetCustomArea;
 
@@ -38,7 +49,9 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			base.Dispose(disposing);
 			capture.Dispose();
-			areaForm.Hide();
+			// Hide areaForm only if disableHide is false
+			if (disableHide) disableHide = false;
+			else areaForm.Hide();
 		}
 
 		private Rectangle GetCustomArea()

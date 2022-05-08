@@ -16,7 +16,8 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			var watch = System.Diagnostics.Stopwatch.StartNew();
 			Bitmap bmp = capture.CaptureFrame();
-			Console.WriteLine("Capture using " + capture.GetType().Name + ": " + watch.ElapsedMilliseconds + " ms");
+			long elapsed_ms = watch.ElapsedMilliseconds;
+			Console.WriteLine("Capture using " + capture.GetType().Name + ": " + elapsed_ms + " ms");
 			return bmp;
 		}
 

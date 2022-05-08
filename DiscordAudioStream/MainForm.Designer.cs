@@ -279,9 +279,9 @@
 			this.scaleComboBox.FormattingEnabled = true;
 			this.scaleComboBox.IntegralHeight = false;
 			this.scaleComboBox.Items.AddRange(new object[] {
-            "Full resolution",
-            "50% resolution",
-            "25% Resolution"});
+            "Full window size",
+            "50% window size",
+            "25% window size"});
 			this.scaleComboBox.Location = new System.Drawing.Point(73, 49);
 			this.scaleComboBox.Name = "scaleComboBox";
 			this.scaleComboBox.Size = new System.Drawing.Size(261, 24);

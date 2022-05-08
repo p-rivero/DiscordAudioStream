@@ -1,7 +1,7 @@
 ﻿using DLLs;
-using Microsoft.Win32;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
@@ -9,9 +9,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 	{
 		public delegate Rectangle CaptureAreaRectDelegate();
 
-
-		// Get the cursor size only once at the start
-		private int cursorSize = -1;
 		private readonly CaptureSource source;
 		private CaptureAreaRectDelegate captureAreaRect;
 
@@ -69,34 +66,33 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			cursorPos.X -= originPos.X;
 			cursorPos.Y -= originPos.Y;
 
-			if (cursorPos.X < 0 || cursorPos.Y < 0 || cursorPos.X > src.Width || cursorPos.Y > src.Height)
+			// Draw the cursor only if it's inside the bounds
+			if (cursorPos.X >= 0 && cursorPos.Y >= 0 && cursorPos.X <= src.Width && cursorPos.Y <= src.Height)
 			{
-				// Invalid cursorpos. Do not paint the cursor
-				return src;
-			}
-
-			// Draw the cursor
-			using (Graphics g = Graphics.FromImage(src))
-			{
-				int cursorSz = GetCursorSize();
-				User32.DrawIconEx(g.GetHdc(), cursorPos.X, cursorPos.Y, pci.hCursor, cursorSz, cursorSz, 0, IntPtr.Zero, User32.DI_NORMAL);
+				Bitmap curBmp = BitmapFromCursor(iconInfo);
+				using (Graphics g = Graphics.FromImage(src))
+				{
+					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+					g.DrawImage(curBmp, cursorPos);
+				}
 			}
 
 			// Clean up
 			Gdi32.DeleteObject(iconInfo.hbmMask);
 			Gdi32.DeleteObject(iconInfo.hbmColor);
-			
+
 			return src;
 		}
 
-		private int GetCursorSize()
+		private Bitmap BitmapFromCursor(in User32.IconInfo iconInfo)
 		{
-			if (cursorSize == -1)
-			{
-				string scale = Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Accessibility", "CursorSize", 1).ToString();
-				cursorSize = 32 + (int.Parse(scale) - 1) * 16;
-			}
-			return cursorSize;
+			Bitmap bmp = Image.FromHbitmap(iconInfo.hbmColor);
+			// Move data pointer (bmData.Scan0) from bmp to dstBitmap
+			BitmapData bmData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
+			Bitmap dstBitmap = new Bitmap(bmData.Width, bmData.Height, bmData.Stride, PixelFormat.Format32bppArgb, bmData.Scan0);
+			bmp.UnlockBits(bmData);
+
+			return new Bitmap(dstBitmap);
 		}
 	}
 }
