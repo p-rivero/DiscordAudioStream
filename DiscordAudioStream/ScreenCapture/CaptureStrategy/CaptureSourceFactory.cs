@@ -1,4 +1,8 @@
-﻿using System;
+﻿
+// Uncomment the following line to print the time it took to capture the frame
+//#define PRINT_TIME
+
+using System;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
@@ -33,8 +37,9 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			}
 
 
-			#if DEBUG_TIME
-			result = new MeasureTime(result);
+			// If PRINT_TIME is defined and the project is compiled in Debug mode, measure the time
+			#if (PRINT_TIME && DEBUG)
+				result = new MeasureTime(result);
 			#endif
 
 			return result;

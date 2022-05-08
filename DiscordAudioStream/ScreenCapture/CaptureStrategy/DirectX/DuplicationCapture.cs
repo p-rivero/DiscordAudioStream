@@ -11,6 +11,7 @@ namespace DiscordAudioStream
 	{
 		private static readonly SharpDX.Direct3D11.Device d3dDevice = new SharpDX.Direct3D11.Device(Adapter);
 		private static readonly OutputDuplication[] screens = InitScreens();
+		private static readonly Bitmap[] cachedThumbnails = new Bitmap[screens.Length];
 
 		// Index of the selected screen to capture
 		private readonly int index;
@@ -45,14 +46,33 @@ namespace DiscordAudioStream
 
 		public override Bitmap CaptureFrame()
 		{
-			// Try to get duplicated frame
-			screens[index].AcquireNextFrame(-1, out _, out SharpDX.DXGI.Resource screenResource);
-			using (Texture2D texture = screenResource.QueryInterface<Texture2D>())
+			try
 			{
-				Bitmap bmp = BitmapHelper.CreateFromTexture2D(texture, d3dDevice);
-				screens[index].ReleaseFrame();
-				screenResource.Dispose();
-				return bmp;
+				// Try to get duplicated frame in 100 ms
+				screens[index].AcquireNextFrame(100, out _, out SharpDX.DXGI.Resource screenResource);
+				// Success, delete old thumbnail
+				cachedThumbnails[index]?.Dispose();
+				// Convert captured frame to Bitmap
+				using (Texture2D texture = screenResource.QueryInterface<Texture2D>())
+				{
+					Bitmap bmp = BitmapHelper.CreateFromTexture2D(texture, d3dDevice);
+					screenResource.Dispose();
+					screens[index].ReleaseFrame();
+					// Store thumbnail
+					cachedThumbnails[index] = (Bitmap)bmp.Clone();
+					return bmp;
+				}
+			}
+			catch
+			{
+				if (cachedThumbnails[index] == null)
+				{
+					// AcquireNextFrame failed on the very first frame and we don't have a cache yet.
+					// This should never happen, but return null just to be sure
+					return null;
+				}
+				// Return cached thumbnail
+				return (Bitmap)cachedThumbnails[index].Clone();
 			}
 		}
 	}
