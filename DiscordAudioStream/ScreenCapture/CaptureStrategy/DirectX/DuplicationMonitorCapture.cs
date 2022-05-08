@@ -28,7 +28,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 		private int IndexOf(Screen screen)
 		{
-			var adapter = new Factory1().GetAdapter(0);
+			var adapter = DuplicationCapture.Adapter;
 			for (int i = 0; i < adapter.Outputs.Length; i++)
 			{
 				if (adapter.Outputs[i].Description.DeviceName == screen.DeviceName)

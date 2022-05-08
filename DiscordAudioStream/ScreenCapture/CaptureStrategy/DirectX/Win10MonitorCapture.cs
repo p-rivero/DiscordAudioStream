@@ -31,10 +31,5 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			base.Dispose(disposing);
 			winCapture.Dispose();
 		}
-
-		private Rectangle Test()
-		{
-			return new Rectangle(0, 0, 1440*16/9, 1440);
-		}
 	}
 }

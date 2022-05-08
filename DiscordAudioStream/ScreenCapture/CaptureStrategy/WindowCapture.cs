@@ -22,7 +22,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			// as well as the title bar for applications with a defined client area
 			int yOffset = frame.Height - clientRect.Height;
 
-			return new Rectangle(frame.X + 1, frame.Y + yOffset, clientRect.Width, clientRect.Height);
+			return new Rectangle(frame.left + 1, frame.top + yOffset, clientRect.Width, clientRect.Height);
 		}
 	}
 }

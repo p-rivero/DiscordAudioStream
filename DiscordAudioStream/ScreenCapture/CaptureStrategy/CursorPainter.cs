@@ -39,6 +39,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				throw new ArgumentException("Attempting to paint cursor without setting CaptureAreaRect");
 			}
 			Bitmap bmp = source.CaptureFrame();
+			if (bmp == null) return null;
 			return PaintCursor(bmp, captureAreaRect().Location);
 		}
 

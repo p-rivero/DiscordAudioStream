@@ -67,21 +67,11 @@ namespace DLLs
 		[StructLayout(LayoutKind.Sequential)]
 		public struct Rect
 		{
-			private int left;
-			private int top;
+			public readonly int left;
+			public readonly int top;
 			private int right;
 			private int bottom;
 
-			public int X
-			{
-				get { return left; }
-				set { left = value; }
-			}
-			public int Y
-			{
-				get { return top; }
-				set { top = value; }
-			}
 			public int Height
 			{
 				get { return bottom - top; }

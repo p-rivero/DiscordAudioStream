@@ -9,25 +9,31 @@ namespace DiscordAudioStream
 
 	internal class DuplicationCapture : CaptureSource
 	{
-		private static readonly OutputDuplication[] screens;
-		private static readonly SharpDX.Direct3D11.Device d3dDevice;
+		private static readonly SharpDX.Direct3D11.Device d3dDevice = new SharpDX.Direct3D11.Device(Adapter);
+		private static readonly OutputDuplication[] screens = InitScreens();
 
 		// Index of the selected screen to capture
 		private readonly int index;
 
-		static DuplicationCapture()
+		static OutputDuplication[] InitScreens()
 		{
-			// Get adapter for GPU 0
-			var adapter = new Factory1().GetAdapter(0);
-			// Get device from adapter
-			d3dDevice = new SharpDX.Direct3D11.Device(adapter);
-
+			var adapter = Adapter;
 			// Iterate adapter.Outputs and create OutputDuplication on each
-			screens = new OutputDuplication[adapter.Outputs.Length];
-			for (int i = 0; i < screens.Length; i++)
+			var result = new OutputDuplication[adapter.Outputs.Length];
+			for (int i = 0; i < result.Length; i++)
 			{
 				Output1 o = adapter.Outputs[i].QueryInterface<Output1>();
-				screens[i] = o.DuplicateOutput(d3dDevice);
+				result[i] = o.DuplicateOutput(d3dDevice);
+			}
+			return result;
+		}
+
+		internal static Adapter Adapter
+		{
+			get
+			{
+				// Get adapter for GPU 0
+				return new Factory1().GetAdapter(0);
 			}
 		}
 
@@ -36,10 +42,6 @@ namespace DiscordAudioStream
 			this.index = index;
 		}
 
-		protected override void Dispose(bool disposing)
-		{
-			base.Dispose(disposing);
-		}
 
 		public override Bitmap CaptureFrame()
 		{
