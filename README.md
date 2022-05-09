@@ -6,7 +6,7 @@ Made out of necessity and continuous frustration. Built with WinForms (C#).
 
 
 <p align="center">
-    <img alt="Logo" src="docs/readme/logo-100.png">
+    <img alt="Logo" src="docs/img/logo-100.png">
 </p>
 <p align="center">
     <a href="https://github.com/p-rivero/DiscordAudioStream/releases">
@@ -56,18 +56,18 @@ Unfortunately, GPLv3 forces any derivative work to also be licensed under GPLv3,
 # How do I use it?
 
 First, download the program from the [GitHub releases page](https://github.com/p-rivero/DiscordAudioStream/releases). You should be able to execute it directly without installing anything.
-  
+
 The following steps depend on what you want to do.
 
----
-
-**Stream the entire desktop with audio:**
+<details>
+<summary><b>Stream the entire desktop with audio</b></summary>
+<br>
 
 1. Decide for which programs you want to actually share the audio.
 
     **Tip:** your answer should never be *"all of them"*. You should, at least, exclude Discord (otherwise, the viewers of your stream will hear themselves).
     
-2. Open the volume mixer. You can do this from the utility by using `Ctrl+V` or clicking the mixer icon: ![Volume mixer icon](docs/readme/mixer-button.png).
+2. Open the volume mixer. You can do this from the utility by using `Ctrl+V` or clicking the mixer icon: ![Volume mixer icon - Light theme](docs/img/mixer-light.png#gh-light-mode-only)![Volume mixer icon - Dark theme](docs/img/mixer-dark.png#gh-dark-mode-only).
 
 3. *For each* of the programs whose audio you want to share, change its *output* device from "Default" to another device (that you are not currently using). For example, if you have Steam installed you should have a virtual audio device called "Steam Streaming Speakers" that you can use (unless you are using it for other purposes).
 
@@ -75,7 +75,7 @@ The following steps depend on what you want to do.
     - Don't worry if you stop hearing the audio from the programs you are sharing. Later you will be able to hear them again.
     - Make sure that there are no other programs outputting audio to the device you selected. Everything that gets output to this device will be shared.
 
-    ![Change audio device in volume mixer](docs/readme/audio-device.png)
+    ![Change audio device in volume mixer](docs/img/audio-device.png)
 
 4. In the *Audio capture input* dropdown, select the (previously unused) audio device that you have chosen in step 3.
 
@@ -93,13 +93,16 @@ The following steps depend on what you want to do.
     - Keep in mind that if you minimize the window that was created in step 7, your Discord stream will probably be paused. You may want to hide this window behind other windows, without minimizing it.
 
 
-    ![Video and audio dropdowns](docs/readme/dropdowns.png)
-    
----
+    ![Video and audio dropdowns](docs/img/dropdowns.png)
 
-**Stream to Discord using OBS:**
+</details>
+<br>
 
-First, follow steps 1-4 above.
+<details>
+<summary><b>Stream to Discord using OBS</b></summary>
+<br>
+
+First, follow steps 1-4 above (expand the "Stream the entire desktop with audio" dropdown).
 
 > **Important:** the program for which you want to share the audio **is NOT** OBS (OBS doesn't actually output any audio). Instead, you must identify which programs you are recording and share their audio (change their output device) separately.
 > 
@@ -125,12 +128,13 @@ Now follow this steps:
     - **Very important:** remember to restore the output device of your programs to "Default". Otherwise, you won't be able to hear their audio.
     - Keep in mind that if you minimize the window that was created in step 7, your Discord stream will probably be paused. You may want to hide this window behind other windows, without minimizing it.
 
+</details>
+<br>
+
 ---
 
-## Common issues:
+## Changing the capture method
 
-**When capturing a window, I only get a black screen:** Make sure you are on Windows 8.1 or later. You can also switch to another capture method in the Settings menu (press `Ctrl+,` or click the Settings button ![Settings icon](docs/readme/settings-button.png)).
+You can change which API is used for capturing video by going to Settings ![Settings icon - Light theme](docs/img/settings-light.png#gh-light-mode-only)![Settings icon - Dark theme](docs/img/settings-dark.png#gh-dark-mode-only) > Capture.
 
-**The captured window is flickering:** In some cases, the experimental capture method (active by default) can cause noticeable flickering. You can switch to another capture method in the Settings menu (press `Ctrl+,` or click the Settings button ![Settings icon](docs/readme/settings-button.png)).
-
-**My issue is not listed here:** Please let me know in the [issues section](https://github.com/p-rivero/DiscordAudioStream/issues).
+Read [this document](/docs/CaptureMethods.md) for more information about the pros and cons of each method. 
