@@ -13,7 +13,7 @@ namespace DiscordAudioStream
 		{
 			if (darkMode)
 			{
-				this.HandleCreated += new EventHandler(DarkThemeManager.formHandleCreated);
+				this.HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
 			}
 
 			InitializeComponent();

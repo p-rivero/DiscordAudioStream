@@ -24,7 +24,7 @@ namespace CustomComponents
         public static readonly Color PressedColor = Color.FromArgb(140, 140, 140);
 
 
-        public static void formHandleCreated(object sender, EventArgs e)
+        public static void FormHandleCreated(object sender, EventArgs e)
         {
             EnableDarkTitlebar((sender as Form).Handle, dark: true);
         }
