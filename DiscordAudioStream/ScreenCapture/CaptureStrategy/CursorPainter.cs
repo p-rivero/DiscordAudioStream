@@ -10,34 +10,23 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		public delegate Rectangle CaptureAreaRectDelegate();
 
 		private readonly CaptureSource source;
-		private CaptureAreaRectDelegate captureAreaRect;
 
 		public CursorPainter(CaptureSource source)
 		{
 			this.source = source;
 		}
 
-		public CaptureAreaRectDelegate CaptureAreaRect
-		{
-			get
-			{
-				return captureAreaRect;
-			}
-			set
-			{
-				captureAreaRect = value ?? throw new ArgumentNullException("value");
-			}
-		}
+		public CaptureAreaRectDelegate CaptureAreaRect { get; set; }
 
 		public override Bitmap CaptureFrame()
 		{
-			if (captureAreaRect == null)
+			if (CaptureAreaRect == null)
 			{
 				throw new ArgumentException("Attempting to paint cursor without setting CaptureAreaRect");
 			}
 			Bitmap bmp = source.CaptureFrame();
 			if (bmp == null) return null;
-			return PaintCursor(bmp, captureAreaRect().Location);
+			return PaintCursor(bmp, CaptureAreaRect().Location);
 		}
 
 		protected override void Dispose(bool disposing)
