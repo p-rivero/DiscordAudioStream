@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace DiscordAudioStream
+namespace DiscordAudioStream.ScreenCapture
 {
     public class ProcessHandleList
 	{

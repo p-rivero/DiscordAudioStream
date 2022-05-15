@@ -1,4 +1,5 @@
-﻿using DiscordAudioStream.ScreenCapture;
+﻿using DiscordAudioStream.AudioCapture;
+using DiscordAudioStream.ScreenCapture;
 using DLLs;
 using System;
 using System.Collections.Generic;

@@ -9,11 +9,11 @@ using Windows.Graphics.Capture;
 using Windows.Graphics.DirectX;
 using Windows.Graphics.DirectX.Direct3D11;
 
-namespace DiscordAudioStream
+namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
 	// DirectX capture using Windows.Graphics.Capture
 
-	internal class Win10Capture : CaptureSource
+	public class Win10Capture : CaptureSource
 	{
 		private readonly Direct3D11CaptureFramePool framePool;
 		private readonly GraphicsCaptureSession session;

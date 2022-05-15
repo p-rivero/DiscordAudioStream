@@ -3,11 +3,11 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using System.Drawing;
 
-namespace DiscordAudioStream
+namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
 	// DirectX capture using Windows.Graphics.Capture
 
-	internal class DuplicationCapture : CaptureSource
+	public class DuplicationCapture : CaptureSource
 	{
 		private static readonly SharpDX.Direct3D11.Device d3dDevice = new SharpDX.Direct3D11.Device(Adapter);
 		private static readonly OutputDuplication[] screens = InitScreens();

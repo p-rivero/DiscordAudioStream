@@ -4,7 +4,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace DiscordAudioStream
+namespace DiscordAudioStream.ScreenCapture
 {
 	public static class BitmapHelper
 	{

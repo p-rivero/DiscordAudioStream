@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
-	internal class BitBltCapture : CaptureSource
+	public class BitBltCapture : CaptureSource
 	{
 		public delegate Rectangle CaptureAreaRectDelegate();
 		public CaptureAreaRectDelegate CaptureAreaRect;
