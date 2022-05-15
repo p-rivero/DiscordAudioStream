@@ -14,6 +14,7 @@ This is the recommended full-screen method if you are using Windows 8 or Windows
 
 - If "Capture cursor" is enabled, the cursor is painted using the CPU. This can make it slightly slower than `Windows 10`, but in most cases it should not be noticeable.
 - Might cause problems when using more than 1 GPU (not tested)
+- Requires Windows 8 or higher.
 
 
 ## Windows 10
@@ -55,7 +56,7 @@ This is the recommended window capture method if you are using Windows 11 or Win
 
 - GPU-accelerated (fast)
 - Stable
-- Can capture windows that partially outside the screen or occluded by other windows (it cannot capture minimized windows).
+- Can capture windows that are partially outside the screen or occluded by other windows (it cannot capture minimized windows).
 
 **Cons:**
 
@@ -71,7 +72,7 @@ Use this method if you are using Windows 8.1 (or Windows 10 if you don't want a 
 
 **Pros:**
 
-- Can capture windows that partially outside the screen or occluded by other windows (it cannot capture minimized windows).
+- Can capture windows that are partially outside the screen or occluded by other windows (it cannot capture minimized windows).
 
 **Cons:**
 
