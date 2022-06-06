@@ -73,6 +73,7 @@
       <DependentUpon>AreaForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AudioPlayback.cs" />
+    <Compile Include="Helpers\Logger.cs" />
     <Compile Include="MainController.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -113,7 +114,7 @@
     <Compile Include="CustomComponents\DarkThemeToolStrip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DLLs.cs" />
+    <Compile Include="Helpers\DLLs.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Win10MonitorCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Win10WindowCapture.cs" />
