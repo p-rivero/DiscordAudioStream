@@ -240,7 +240,7 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(6, 37);
+			this.label1.Location = new System.Drawing.Point(6, 34);
 			this.label1.Margin = new System.Windows.Forms.Padding(3);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(120, 15);
@@ -250,7 +250,7 @@
 			// outputLogCheckbox
 			// 
 			this.outputLogCheckbox.AutoSize = true;
-			this.outputLogCheckbox.Location = new System.Drawing.Point(9, 12);
+			this.outputLogCheckbox.Location = new System.Drawing.Point(9, 9);
 			this.outputLogCheckbox.Name = "outputLogCheckbox";
 			this.outputLogCheckbox.Size = new System.Drawing.Size(103, 19);
 			this.outputLogCheckbox.TabIndex = 6;

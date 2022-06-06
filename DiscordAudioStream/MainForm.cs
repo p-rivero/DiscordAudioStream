@@ -24,10 +24,7 @@ namespace DiscordAudioStream
 			controller = new MainController(this);
 
 			this.darkMode = darkMode;
-			if (darkMode)
-			{
-				this.HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
-			}
+			if (darkMode) HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
 
 			InitializeComponent();
 			previewBox.Visible = true;

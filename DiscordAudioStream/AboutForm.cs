@@ -11,30 +11,23 @@ namespace DiscordAudioStream
 	{
 		public AboutForm(bool darkMode)
 		{
-			if (darkMode)
-			{
-				this.HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
-			}
+			if (darkMode) HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
 
 			InitializeComponent();
 
 			string fullVer = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 			int lastDotIndex = fullVer.LastIndexOf('.');
-			versionLabel.Text = String.Format("Version: {0}", fullVer.Substring(0, lastDotIndex));
+			versionLabel.Text = string.Format("Version: {0} ({1} bit)", fullVer.Substring(0, lastDotIndex), 8*IntPtr.Size);
 
-			if (IntPtr.Size == 4)
-			{
-				versionLabel.Text += " (32 bit)";
-			}
-			else if (IntPtr.Size == 8)
-			{
-				versionLabel.Text += " (64 bit)";
-			}
+			ApplyDarkTheme(darkMode);
+		}
 
+		private void ApplyDarkTheme(bool darkMode)
+		{
 			if (darkMode)
 			{
-				this.BackColor = DarkThemeManager.DarkBackColor;
-				this.ForeColor = Color.White;
+				BackColor = DarkThemeManager.DarkBackColor;
+				ForeColor = Color.White;
 			}
 
 			updatesLink.LinkColor = DarkThemeManager.AccentColor;
@@ -48,6 +41,10 @@ namespace DiscordAudioStream
 			infoGroup.SetDarkMode(darkMode);
 			pagesGroup.SetDarkMode(darkMode);
 		}
+
+
+		// Events
+
 
 		private void projectLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
@@ -66,10 +63,7 @@ namespace DiscordAudioStream
 
 		private void AboutForm_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Escape)
-			{
-				this.Close();
-			}
+			if (e.KeyCode == Keys.Escape) Close();
 		}
 
 		private void licenseLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

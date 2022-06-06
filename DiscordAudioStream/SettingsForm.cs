@@ -19,17 +19,17 @@ namespace DiscordAudioStream
 		}
 		private readonly CaptureState captureState;
 
-		public SettingsForm(bool darkMode, CaptureState state)
+		public SettingsForm(bool darkMode, CaptureState captureState)
 		{
 			// Store capture state in order to change ScreenMethod or WindowMethod
-			this.captureState = state;
+			this.captureState = captureState;
 
 			// Enable dark titlebar
 			if (darkMode) HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
 
 			InitializeComponent();
 
-			ApplyDarkMode(darkMode);
+			ApplyDarkTheme(darkMode);
 
 			Theme theme = (Theme) Properties.Settings.Default.Theme;
 			systemThemeRadio.Checked = (theme == Theme.SYSTEM_DEFAULT);
@@ -40,16 +40,16 @@ namespace DiscordAudioStream
 
 			outputLogCheckbox.Checked = Properties.Settings.Default.OutputLogFile;
 
-			windowMethodComboBox.SelectedIndex = (int) state.WindowMethod;
-			fullscreenMethodComboBox.SelectedIndex = (int) state.ScreenMethod;
+			windowMethodComboBox.SelectedIndex = (int) captureState.WindowMethod;
+			fullscreenMethodComboBox.SelectedIndex = (int) captureState.ScreenMethod;
 		}
 
-		private void ApplyDarkMode(bool darkMode)
+		private void ApplyDarkTheme(bool darkMode)
 		{
 			if (darkMode)
 			{
-				this.BackColor = DarkThemeManager.DarkBackColor;
-				this.ForeColor = Color.White;
+				BackColor = DarkThemeManager.DarkBackColor;
+				ForeColor = Color.White;
 
 				settingsTabs.BackTabColor = DarkThemeManager.DarkBackColor;
 				settingsTabs.BorderColor = DarkThemeManager.DarkSecondColor;
