@@ -27,7 +27,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
 			this.settingsTabs = new CustomComponents.DarkThemeTabControl();
 			this.themePage = new System.Windows.Forms.TabPage();
 			this.restartLabel = new System.Windows.Forms.Label();
@@ -41,14 +40,16 @@
 			this.fullscreenMethodLabel = new System.Windows.Forms.Label();
 			this.windowMethodComboBox = new CustomComponents.DarkThemeComboBox();
 			this.autoExitCheckbox = new CustomComponents.DarkThemeCheckBox();
-			this.audioPage = new System.Windows.Forms.TabPage();
-			this.winSoundBtn = new System.Windows.Forms.Button();
-			this.mixerBtn = new System.Windows.Forms.Button();
+			this.debugPage = new System.Windows.Forms.TabPage();
+			this.label1 = new System.Windows.Forms.Label();
+			this.outputLogCheckbox = new CustomComponents.DarkThemeCheckBox();
+			this.audioDevicesLink = new System.Windows.Forms.LinkLabel();
+			this.classicVolumeMixerLink = new System.Windows.Forms.LinkLabel();
 			this.settingsTabs.SuspendLayout();
 			this.themePage.SuspendLayout();
 			this.capturePage.SuspendLayout();
 			this.captureMethodGroup.SuspendLayout();
-			this.audioPage.SuspendLayout();
+			this.debugPage.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// settingsTabs
@@ -61,7 +62,7 @@
 			this.settingsTabs.ClosingMessage = null;
 			this.settingsTabs.Controls.Add(this.themePage);
 			this.settingsTabs.Controls.Add(this.capturePage);
-			this.settingsTabs.Controls.Add(this.audioPage);
+			this.settingsTabs.Controls.Add(this.debugPage);
 			this.settingsTabs.DraggableTabs = false;
 			this.settingsTabs.HeaderColor = System.Drawing.SystemColors.ControlLight;
 			this.settingsTabs.HorizontalLineColor = System.Drawing.Color.Transparent;
@@ -222,51 +223,64 @@
 			this.autoExitCheckbox.UseVisualStyleBackColor = true;
 			this.autoExitCheckbox.CheckedChanged += new System.EventHandler(this.autoExitCheckbox_CheckedChanged);
 			// 
-			// audioPage
+			// debugPage
 			// 
-			this.audioPage.BackColor = System.Drawing.Color.White;
-			this.audioPage.Controls.Add(this.winSoundBtn);
-			this.audioPage.Controls.Add(this.mixerBtn);
-			this.audioPage.Location = new System.Drawing.Point(4, 20);
-			this.audioPage.Margin = new System.Windows.Forms.Padding(0);
-			this.audioPage.Name = "audioPage";
-			this.audioPage.Size = new System.Drawing.Size(248, 134);
-			this.audioPage.TabIndex = 2;
-			this.audioPage.Text = "Audio";
+			this.debugPage.BackColor = System.Drawing.Color.White;
+			this.debugPage.Controls.Add(this.label1);
+			this.debugPage.Controls.Add(this.outputLogCheckbox);
+			this.debugPage.Controls.Add(this.audioDevicesLink);
+			this.debugPage.Controls.Add(this.classicVolumeMixerLink);
+			this.debugPage.Location = new System.Drawing.Point(4, 20);
+			this.debugPage.Margin = new System.Windows.Forms.Padding(0);
+			this.debugPage.Name = "debugPage";
+			this.debugPage.Size = new System.Drawing.Size(248, 134);
+			this.debugPage.TabIndex = 2;
+			this.debugPage.Text = "Debug";
 			// 
-			// winSoundBtn
+			// label1
 			// 
-			this.winSoundBtn.BackColor = System.Drawing.SystemColors.ControlLight;
-			this.winSoundBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-			this.winSoundBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.winSoundBtn.Image = ((System.Drawing.Image)(resources.GetObject("winSoundBtn.Image")));
-			this.winSoundBtn.Location = new System.Drawing.Point(9, 58);
-			this.winSoundBtn.Margin = new System.Windows.Forms.Padding(0, 9, 0, 0);
-			this.winSoundBtn.Name = "winSoundBtn";
-			this.winSoundBtn.Size = new System.Drawing.Size(230, 40);
-			this.winSoundBtn.TabIndex = 3;
-			this.winSoundBtn.Text = " Manage audio devices";
-			this.winSoundBtn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.winSoundBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-			this.winSoundBtn.UseVisualStyleBackColor = false;
-			this.winSoundBtn.Click += new System.EventHandler(this.winSoundBtn_Click);
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(6, 37);
+			this.label1.Margin = new System.Windows.Forms.Padding(3);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(120, 15);
+			this.label1.TabIndex = 39;
+			this.label1.Text = "* App restart required";
 			// 
-			// mixerBtn
+			// outputLogCheckbox
 			// 
-			this.mixerBtn.BackColor = System.Drawing.SystemColors.ControlLight;
-			this.mixerBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-			this.mixerBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mixerBtn.Image = ((System.Drawing.Image)(resources.GetObject("mixerBtn.Image")));
-			this.mixerBtn.Location = new System.Drawing.Point(9, 9);
-			this.mixerBtn.Margin = new System.Windows.Forms.Padding(0, 9, 0, 0);
-			this.mixerBtn.Name = "mixerBtn";
-			this.mixerBtn.Size = new System.Drawing.Size(230, 40);
-			this.mixerBtn.TabIndex = 2;
-			this.mixerBtn.Text = " Open classic volume mixer";
-			this.mixerBtn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.mixerBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-			this.mixerBtn.UseVisualStyleBackColor = false;
-			this.mixerBtn.Click += new System.EventHandler(this.mixerBtn_Click);
+			this.outputLogCheckbox.AutoSize = true;
+			this.outputLogCheckbox.Location = new System.Drawing.Point(9, 12);
+			this.outputLogCheckbox.Name = "outputLogCheckbox";
+			this.outputLogCheckbox.Size = new System.Drawing.Size(103, 19);
+			this.outputLogCheckbox.TabIndex = 6;
+			this.outputLogCheckbox.Text = "Output log file";
+			this.outputLogCheckbox.UseVisualStyleBackColor = true;
+			this.outputLogCheckbox.CheckedChanged += new System.EventHandler(this.outputLogCheckbox_CheckedChanged);
+			// 
+			// audioDevicesLink
+			// 
+			this.audioDevicesLink.AutoSize = true;
+			this.audioDevicesLink.Location = new System.Drawing.Point(6, 102);
+			this.audioDevicesLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
+			this.audioDevicesLink.Name = "audioDevicesLink";
+			this.audioDevicesLink.Size = new System.Drawing.Size(125, 15);
+			this.audioDevicesLink.TabIndex = 5;
+			this.audioDevicesLink.TabStop = true;
+			this.audioDevicesLink.Text = "Manage audio devices";
+			this.audioDevicesLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.audioDevicesLink_LinkClicked);
+			// 
+			// classicVolumeMixerLink
+			// 
+			this.classicVolumeMixerLink.AutoSize = true;
+			this.classicVolumeMixerLink.Location = new System.Drawing.Point(6, 75);
+			this.classicVolumeMixerLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
+			this.classicVolumeMixerLink.Name = "classicVolumeMixerLink";
+			this.classicVolumeMixerLink.Size = new System.Drawing.Size(149, 15);
+			this.classicVolumeMixerLink.TabIndex = 4;
+			this.classicVolumeMixerLink.TabStop = true;
+			this.classicVolumeMixerLink.Text = "Open classic volume mixer";
+			this.classicVolumeMixerLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.classicVolumeMixerLink_LinkClicked);
 			// 
 			// SettingsForm
 			// 
@@ -293,16 +307,15 @@
 			this.capturePage.PerformLayout();
 			this.captureMethodGroup.ResumeLayout(false);
 			this.captureMethodGroup.PerformLayout();
-			this.audioPage.ResumeLayout(false);
+			this.debugPage.ResumeLayout(false);
+			this.debugPage.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
 
         #endregion
 
-        private System.Windows.Forms.TabPage audioPage;
-        private System.Windows.Forms.Button winSoundBtn;
-        private System.Windows.Forms.Button mixerBtn;
+        private System.Windows.Forms.TabPage debugPage;
         private System.Windows.Forms.TabPage themePage;
         private System.Windows.Forms.Label restartLabel;
         private CustomComponents.DarkThemeRadioButton systemThemeRadio;
@@ -316,5 +329,9 @@
 		private CustomComponents.DarkThemeComboBox fullscreenMethodComboBox;
 		private CustomComponents.DarkThemeComboBox windowMethodComboBox;
 		private CustomComponents.DarkThemeGroupBox captureMethodGroup;
+		private System.Windows.Forms.LinkLabel audioDevicesLink;
+		private System.Windows.Forms.LinkLabel classicVolumeMixerLink;
+		private CustomComponents.DarkThemeCheckBox outputLogCheckbox;
+		private System.Windows.Forms.Label label1;
 	}
 }

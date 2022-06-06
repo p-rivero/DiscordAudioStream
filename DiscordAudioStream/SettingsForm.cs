@@ -11,19 +11,41 @@ namespace DiscordAudioStream
 		public delegate void CaptureMethodChangedDelegate();
 		public event CaptureMethodChangedDelegate CaptureMethodChanged;
 
+		private enum Theme
+		{
+			SYSTEM_DEFAULT = 0,
+			LIGHT = 1,
+			DARK = 2
+		}
 		private readonly CaptureState captureState;
 
 		public SettingsForm(bool darkMode, CaptureState state)
 		{
+			// Store capture state in order to change ScreenMethod or WindowMethod
 			this.captureState = state;
 
-			if (darkMode)
-			{
-				this.HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
-			}
+			// Enable dark titlebar
+			if (darkMode) HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
 
 			InitializeComponent();
 
+			ApplyDarkMode(darkMode);
+
+			Theme theme = (Theme) Properties.Settings.Default.Theme;
+			systemThemeRadio.Checked = (theme == Theme.SYSTEM_DEFAULT);
+			lightThemeRadio.Checked = (theme == Theme.LIGHT);
+			darkThemeRadio.Checked = (theme == Theme.DARK);
+
+			autoExitCheckbox.Checked = Properties.Settings.Default.AutoExit;
+
+			outputLogCheckbox.Checked = Properties.Settings.Default.OutputLogFile;
+
+			windowMethodComboBox.SelectedIndex = (int) state.WindowMethod;
+			fullscreenMethodComboBox.SelectedIndex = (int) state.ScreenMethod;
+		}
+
+		private void ApplyDarkMode(bool darkMode)
+		{
 			if (darkMode)
 			{
 				this.BackColor = DarkThemeManager.DarkBackColor;
@@ -34,11 +56,6 @@ namespace DiscordAudioStream
 				settingsTabs.HeaderColor = DarkThemeManager.DarkSecondColor;
 				settingsTabs.TextColor = Color.White;
 				settingsTabs.HorizontalLineColor = Color.Transparent;
-
-				mixerBtn.BackColor = DarkThemeManager.DarkSecondColor;
-				mixerBtn.Image = Properties.Resources.white_mixer;
-				winSoundBtn.BackColor = DarkThemeManager.DarkSecondColor;
-				winSoundBtn.Image = Properties.Resources.white_speaker;
 			}
 
 			settingsTabs.ActiveColor = DarkThemeManager.AccentColor;
@@ -49,40 +66,24 @@ namespace DiscordAudioStream
 			captureMethodGroup.SetDarkMode(darkMode);
 			windowMethodComboBox.SetDarkMode(darkMode);
 			fullscreenMethodComboBox.SetDarkMode(darkMode);
-
-			int theme = Properties.Settings.Default.Theme;
-			if (theme == 0)
-			{
-				systemThemeRadio.Checked = true;
-			}
-			else if (theme == 1)
-			{
-				lightThemeRadio.Checked = true;
-			}
-			else
-			{
-				darkThemeRadio.Checked = true;
-			}
-
-			autoExitCheckbox.Checked = Properties.Settings.Default.AutoExit;
-
-			windowMethodComboBox.SelectedIndex = (int) state.WindowMethod;
-			fullscreenMethodComboBox.SelectedIndex = (int) state.ScreenMethod;
+			classicVolumeMixerLink.LinkColor = DarkThemeManager.AccentColor;
+			audioDevicesLink.LinkColor = DarkThemeManager.AccentColor;
 		}
+
+
+		// Events
+
 
 		private void SettingsForm_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Escape)
-			{
-				this.Close();
-			}
+			if (e.KeyCode == Keys.Escape) Close();
 		}
 
 		private void systemThemeRadio_CheckedChanged(object sender, EventArgs e)
 		{
 			if (systemThemeRadio.Checked)
 			{
-				Properties.Settings.Default.Theme = 0;
+				Properties.Settings.Default.Theme = (int) Theme.SYSTEM_DEFAULT;
 				Properties.Settings.Default.Save();
 			}
 		}
@@ -91,7 +92,7 @@ namespace DiscordAudioStream
 		{
 			if (lightThemeRadio.Checked)
 			{
-				Properties.Settings.Default.Theme = 1;
+				Properties.Settings.Default.Theme = (int) Theme.LIGHT;
 				Properties.Settings.Default.Save();
 			}
 		}
@@ -100,18 +101,18 @@ namespace DiscordAudioStream
 		{
 			if (darkThemeRadio.Checked)
 			{
-				Properties.Settings.Default.Theme = 2;
+				Properties.Settings.Default.Theme = (int) Theme.DARK;
 				Properties.Settings.Default.Save();
 			}
 		}
 
-		private void mixerBtn_Click(object sender, EventArgs e)
+		private void classicVolumeMixerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			var cplPath = System.IO.Path.Combine(Environment.SystemDirectory, "sndvol.exe");
 			System.Diagnostics.Process.Start(cplPath);
 		}
 
-		private void winSoundBtn_Click(object sender, EventArgs e)
+		private void audioDevicesLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			var cplPath = System.IO.Path.Combine(Environment.SystemDirectory, "control.exe");
 			System.Diagnostics.Process.Start(cplPath, "/name Microsoft.Sound");
@@ -120,6 +121,12 @@ namespace DiscordAudioStream
 		private void autoExitCheckbox_CheckedChanged(object sender, EventArgs e)
 		{
 			Properties.Settings.Default.AutoExit = autoExitCheckbox.Checked;
+			Properties.Settings.Default.Save();
+		}
+
+		private void outputLogCheckbox_CheckedChanged(object sender, EventArgs e)
+		{
+			Properties.Settings.Default.OutputLogFile = outputLogCheckbox.Checked;
 			Properties.Settings.Default.Save();
 		}
 
