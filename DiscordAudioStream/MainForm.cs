@@ -169,6 +169,11 @@ namespace DiscordAudioStream
 		{
 			Invoke(new Action(() =>
 			{
+				if (IsDisposed)
+				{
+					Logger.Log("Attempting to update preview after disposing: ignore");
+					return;
+				};
 				previewBox.Image?.Dispose();
 				previewBox.Image = newImage;
 			}));
