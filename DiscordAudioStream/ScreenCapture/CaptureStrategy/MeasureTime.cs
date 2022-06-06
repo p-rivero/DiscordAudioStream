@@ -10,6 +10,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		public MeasureTime(CaptureSource capture)
 		{
 			this.capture = capture;
+			Logger.Log("Instantiating MeasureTime source (wrapping {0})", capture.GetType().Name);
 		}
 
 		public override Bitmap CaptureFrame()

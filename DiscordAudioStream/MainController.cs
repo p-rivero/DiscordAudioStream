@@ -46,6 +46,8 @@ namespace DiscordAudioStream
 				Stopwatch stopwatch = new Stopwatch();
 				const int INTERVAL_MS = 1000 / ScreenCaptureManager.TARGET_FRAMERATE;
 				Size oldSize = new Size(0, 0);
+				Logger.Log("\nStarting Draw thread. Target framerate: {0} FPS ({1} ms)",
+					ScreenCaptureManager.TARGET_FRAMERATE, INTERVAL_MS);
 
 				while (true)
 				{
@@ -67,9 +69,10 @@ namespace DiscordAudioStream
 						// Display captured frame
 						form.UpdatePreview(next);
 					}
-					catch (InvalidOperationException)
+					catch (InvalidOperationException e)
 					{
 						// Form is closing
+						Logger.Log("InvalidOperationException in draw thread: {0}", e.Message);
 						return;
 					}
 					stopwatch.Stop();
@@ -97,6 +100,7 @@ namespace DiscordAudioStream
 			}
 			else
 			{
+				Logger.Log("\nClose button pressed, stopping program.");
 				screenCapture?.Stop();
 				User32.UnregisterHotKey(form.Handle, 0);
 			}
@@ -247,6 +251,7 @@ namespace DiscordAudioStream
 
 		internal void StartStream()
 		{
+			Logger.Log("\nSTART STREAM");
 			if (form.AudioIndex == 0)
 			{
 				DialogResult r = MessageBox.Show("No audio source selected, continue anyways?", "Warning",
@@ -271,6 +276,7 @@ namespace DiscordAudioStream
 
 		private void EndStream()
 		{
+			Logger.Log("\nEND STREAM");
 			form.EnableStreamingUI(false);
 			streamEnabled = false;
 			if (audioPlayback != null)

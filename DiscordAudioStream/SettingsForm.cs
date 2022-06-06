@@ -21,6 +21,8 @@ namespace DiscordAudioStream
 
 		public SettingsForm(bool darkMode, CaptureState captureState)
 		{
+			Logger.Log("\nInitializing SettingsForm. darkMode={0}", darkMode);
+
 			// Store capture state in order to change ScreenMethod or WindowMethod
 			this.captureState = captureState;
 
@@ -85,6 +87,7 @@ namespace DiscordAudioStream
 			{
 				Properties.Settings.Default.Theme = (int) Theme.SYSTEM_DEFAULT;
 				Properties.Settings.Default.Save();
+				Logger.Log("\nChange settings: Theme={0}", Properties.Settings.Default.Theme);
 			}
 		}
 
@@ -94,6 +97,7 @@ namespace DiscordAudioStream
 			{
 				Properties.Settings.Default.Theme = (int) Theme.LIGHT;
 				Properties.Settings.Default.Save();
+				Logger.Log("\nChange settings: Theme={0}", Properties.Settings.Default.Theme);
 			}
 		}
 
@@ -103,6 +107,7 @@ namespace DiscordAudioStream
 			{
 				Properties.Settings.Default.Theme = (int) Theme.DARK;
 				Properties.Settings.Default.Save();
+				Logger.Log("\nChange settings: Theme={0}", Properties.Settings.Default.Theme);
 			}
 		}
 
@@ -122,12 +127,14 @@ namespace DiscordAudioStream
 		{
 			Properties.Settings.Default.AutoExit = autoExitCheckbox.Checked;
 			Properties.Settings.Default.Save();
+			Logger.Log("\nChange settings: AutoExit={0}", Properties.Settings.Default.AutoExit);
 		}
 
 		private void outputLogCheckbox_CheckedChanged(object sender, EventArgs e)
 		{
 			Properties.Settings.Default.OutputLogFile = outputLogCheckbox.Checked;
 			Properties.Settings.Default.Save();
+			Logger.Log("\nChange settings: OutputLogFile={0}", Properties.Settings.Default.OutputLogFile);
 		}
 
 		private void fullscreenMethodComboBox_SelectedIndexChanged(object sender, EventArgs e)

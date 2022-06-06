@@ -46,10 +46,13 @@ namespace DiscordAudioStream.ScreenCapture
 					}
 					catch (ThreadAbortException)
 					{
+						Logger.Log("\nAborting capture due to ThreadAbortException.");
 						break;
 					}
-					catch (Exception)
+					catch (Exception e)
 					{
+						Logger.Log("\nAborting capture due to exception.");
+						Logger.Log("Exception:\n{1}\n{0}\n{1}", e, "==================================");
 						CaptureAborted?.Invoke();
 					}
 					stopwatch.Stop();
@@ -84,23 +87,31 @@ namespace DiscordAudioStream.ScreenCapture
 
 		private void UpdateState()
 		{
-			CaptureSource oldSource = currentSource;
 			try
 			{
+				CaptureSource oldSource = currentSource;
 				currentSource = CaptureSourceFactory.Build(captureState);
 				// Dispose after switching to avoid data races
 				oldSource?.Dispose();
+
+				Logger.Log("Changed current source to {0}", currentSource.GetType().Name);
 			}
-			catch
+			catch (Exception e)
 			{
-				if (oldSource != null)
+				if (currentSource != null)
 				{
+					Logger.Log("\nCANNOT INSTANTIATE NEW SOURCE. Returning to old source ({0}).", currentSource.GetType().Name);
+					Logger.Log("Exception:\n{1}\n{0}\n{1}", e, "==================================");
+
 					// We already have a valid source, do not call Dispose and just show warning
 					string msg = "Unable to display this item.\n";
 					msg += "If the problem persists, consider changing the capture method in Settings > Capture";
 					MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
+
+				Logger.Log("\nCANNOT INSTANTIATE FIRST SOURCE. Changing capture methods to BitBlt.");
+				Logger.Log("Exception:\n{1}\n{0}\n{1}", e, "==================================");
 				// We do not have a valid source, fallback to the safest methods
 				captureState.ScreenMethod = CaptureState.ScreenCaptureMethod.BitBlt;
 				captureState.WindowMethod = CaptureState.WindowCaptureMethod.BitBlt;

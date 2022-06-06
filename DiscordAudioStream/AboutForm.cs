@@ -11,6 +11,8 @@ namespace DiscordAudioStream
 	{
 		public AboutForm(bool darkMode)
 		{
+			Logger.Log("\nInitializing AboutForm. darkMode={0}", darkMode);
+
 			if (darkMode) HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
 
 			InitializeComponent();

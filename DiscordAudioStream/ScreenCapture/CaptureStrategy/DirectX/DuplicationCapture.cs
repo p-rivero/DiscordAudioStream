@@ -69,6 +69,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				{
 					// AcquireNextFrame failed on the very first frame and we don't have a cache yet.
 					// This should never happen, but return null just to be sure
+					Logger.Log("AcquireNextFrame: Failed to get the first frame");
 					return null;
 				}
 				// Return cached thumbnail

@@ -1,5 +1,4 @@
 ﻿using Composition.WindowsRuntimeHelpers;
-using DiscordAudioStream.ScreenCapture.CaptureStrategy;
 using SharpDX.Direct3D11;
 using System;
 using System.Drawing;

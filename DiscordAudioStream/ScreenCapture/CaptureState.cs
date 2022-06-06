@@ -43,9 +43,12 @@ namespace DiscordAudioStream.ScreenCapture
 			get { return capturingCursor; }
 			set
 			{
-				bool oldValue = capturingCursor;
+				if (capturingCursor == value) return; // No changes
+
+				Logger.Log("\nChanging CaptureState... (CapturingCursor = {0})", value);
 				capturingCursor = value;
-				if (oldValue != value) StateChanged?.Invoke();
+				StateChanged?.Invoke();
+				Logger.Log("Done changing CaptureState. CapturingCursor = {0}", value);
 			}
 		}
 		
@@ -55,9 +58,12 @@ namespace DiscordAudioStream.ScreenCapture
 			get { return hideTaskbar; }
 			set
 			{
-				bool oldValue = hideTaskbar;
+				if (hideTaskbar == value) return; // No changes
+
+				Logger.Log("\nChanging CaptureState... (HideTaskbar = {0})", value);
 				hideTaskbar = value;
-				if (oldValue != value) StateChanged?.Invoke();
+				StateChanged?.Invoke();
+				Logger.Log("Done changing CaptureState. HideTaskbar = {0}", value);
 			}
 		}
 
@@ -93,9 +99,13 @@ namespace DiscordAudioStream.ScreenCapture
 				{
 					throw new ArgumentException("Don't set the capture target to Invalid");
 				}
+				if (captureTarget == value) return; // No changes
+
+				Logger.Log("\nChanging CaptureState... (Target = {0})", value);
 				CaptureTarget oldValue = captureTarget;
 				captureTarget = value;
 				if (oldValue != value) StateChanged?.Invoke();
+				Logger.Log("Done changing CaptureState. Target = {0}", value);
 			}
 		}
 
@@ -116,15 +126,14 @@ namespace DiscordAudioStream.ScreenCapture
 				{
 					throw new ArgumentException("Trying to set WindowHandle to IntPtr.Zero");
 				}
-				// Remove screen (if any)
-				screen = null;
-				// Set new handle
-				IntPtr oldValue = hWnd;
+				if (hWnd == value && captureTarget == CaptureTarget.Window) return; // No changes
+
+				Logger.Log("\nChanging CaptureState... (WindowHandle = {0})", value);
 				hWnd = value;
-				// Update Target
-				CaptureTarget oldTarget = captureTarget;
 				captureTarget = CaptureTarget.Window;
-				if (oldValue != value || oldTarget != CaptureTarget.Window) StateChanged?.Invoke();
+				screen = null; // Remove screen (if any)
+				StateChanged?.Invoke();
+				Logger.Log("Done changing CaptureState. WindowHandle = {0}", value);
 			}
 		}
 
@@ -145,15 +154,14 @@ namespace DiscordAudioStream.ScreenCapture
 				{
 					throw new ArgumentNullException("value");
 				}
-				// Remove window handle (if any)
-				hWnd = IntPtr.Zero;
-				// Set new screen
-				Screen oldValue = screen;
+				if (screen == value && captureTarget == CaptureTarget.Screen) return; // No changes
+
+				Logger.Log("\nChanging CaptureState... (Screen = {0})", value);
 				screen = value;
-				// Update Target
-				CaptureTarget oldTarget = captureTarget;
 				captureTarget = CaptureTarget.Screen;
-				if (oldValue != value || oldTarget != CaptureTarget.Screen) StateChanged?.Invoke();
+				hWnd = IntPtr.Zero; // Remove window handle (if any)
+				StateChanged?.Invoke();
+				Logger.Log("Done changing CaptureState. Screen = {0}", value.DeviceName);
 			}
 		}
 
@@ -169,9 +177,11 @@ namespace DiscordAudioStream.ScreenCapture
 				WindowCaptureMethod oldValue = WindowMethod;
 				if (oldValue != value)
 				{
+					Logger.Log("\nChanging CaptureState... (WindowMethod = {0})", value);
 					Properties.Settings.Default.CaptureWindowMethod = (int)value;
 					Properties.Settings.Default.Save();
 					StateChanged?.Invoke();
+					Logger.Log("Done changing CaptureState. WindowMethod = {0}", value);
 				}
 			}
 		}
@@ -188,9 +198,11 @@ namespace DiscordAudioStream.ScreenCapture
 				ScreenCaptureMethod oldValue = ScreenMethod;
 				if (oldValue != value)
 				{
+					Logger.Log("\nChanging CaptureState... ScreenMethod = {0}", value);
 					Properties.Settings.Default.CaptureScreenMethod = (int)value;
 					Properties.Settings.Default.Save();
 					StateChanged?.Invoke();
+					Logger.Log("Done changing CaptureState. ScreenMethod = {0}", value);
 				}
 			}
 		}

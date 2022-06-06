@@ -21,6 +21,8 @@ namespace DiscordAudioStream
 		
 		public MainForm(bool darkMode)
 		{
+			Logger.Log("\nInitializing MainForm. darkMode={0}", darkMode);
+
 			controller = new MainController(this);
 
 			this.darkMode = darkMode;
@@ -43,7 +45,8 @@ namespace DiscordAudioStream
 			}
 			catch (ArgumentOutOfRangeException)
 			{
-				// Number of screen may have changed
+				// Number of screens may have changed
+				Logger.Log("ArgumentOutOfRangeException caught, number of screens may have changed.");
 				VideoIndex = 0;
 			}
 
@@ -297,6 +300,7 @@ namespace DiscordAudioStream
 			TopMost = onTopBtn.Checked;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S4036", Justification = "This ms-settings URI is safe")]
 		private void volumeMixerButton_Click(object sender, EventArgs e)
 		{
 			var osVersionInfo = Ntdll.OsVersionInfoEx.Init();
@@ -314,6 +318,7 @@ namespace DiscordAudioStream
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S4036", Justification = "This ms-settings URI is safe")]
 		private void soundDevicesButton_Click(object sender, EventArgs e)
 		{
 			var osVersionInfo = Ntdll.OsVersionInfoEx.Init();
