@@ -69,10 +69,10 @@ namespace DiscordAudioStream
 						// Display captured frame
 						form.UpdatePreview(next);
 					}
-					catch (InvalidOperationException e)
+					catch (InvalidOperationException)
 					{
 						// Form is closing
-						Logger.Log("InvalidOperationException in draw thread: {0}", e.Message);
+						Logger.Log("Form is closing, stop Draw thread");
 						return;
 					}
 					stopwatch.Stop();
@@ -85,6 +85,7 @@ namespace DiscordAudioStream
 				}
 			});
 			drawThread.IsBackground = true;
+			drawThread.Name = "Draw Thread";
 			drawThread.Start();
 		}
 
@@ -251,7 +252,6 @@ namespace DiscordAudioStream
 
 		internal void StartStream()
 		{
-			Logger.Log("\nSTART STREAM");
 			if (form.AudioIndex == 0)
 			{
 				DialogResult r = MessageBox.Show("No audio source selected, continue anyways?", "Warning",
@@ -259,9 +259,12 @@ namespace DiscordAudioStream
 
 				if (r == DialogResult.No)
 					return;
+
+				Logger.Log("\nSTART STREAM (Without audio)");
 			}
 			else
 			{
+				Logger.Log("\nSTART STREAM (With audio)");
 				// Skip "None"
 				audioPlayback = new AudioPlayback(form.AudioIndex - 1);
 				audioPlayback.Start();

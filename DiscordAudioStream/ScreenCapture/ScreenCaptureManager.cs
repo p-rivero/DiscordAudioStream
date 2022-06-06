@@ -35,6 +35,9 @@ namespace DiscordAudioStream.ScreenCapture
 			UpdateState();
 			captureThread = new Thread(() =>
 			{
+				Logger.Log("\nStarting Capture thread. Target framerate: {0} FPS ({1} ms)",
+					TARGET_FRAMERATE, INTERVAL_MS);
+
 				Stopwatch stopwatch = new Stopwatch();
 
 				while (true)
@@ -65,6 +68,7 @@ namespace DiscordAudioStream.ScreenCapture
 				}
 			});
 			captureThread.IsBackground = true;
+			captureThread.Name = "Capture Thread";
 			captureThread.Start();
 		}
 

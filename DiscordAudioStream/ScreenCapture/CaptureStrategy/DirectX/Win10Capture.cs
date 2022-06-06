@@ -59,7 +59,15 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			// Poll until we get a frame
 			Direct3D11CaptureFrame frame = null;
-			while (frame == null) frame = framePool.TryGetNextFrame();
+			try
+			{
+				while (frame == null) frame = framePool.TryGetNextFrame();
+			}
+			catch (ObjectDisposedException)
+			{
+				// Another thread called Dispose(). Do nothing and return
+				return null;
+			}
 			int width = frame.ContentSize.Width;
 			int height = frame.ContentSize.Height;
 

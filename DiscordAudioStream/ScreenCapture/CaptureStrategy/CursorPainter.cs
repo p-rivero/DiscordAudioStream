@@ -47,8 +47,12 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				return src;
 			}
 
-			// Get the cursor hotspot
-			User32.GetIconInfo(pci.hCursor, out User32.IconInfo iconInfo);
+			// Get the cursor hotspot and icon
+			if (!User32.GetIconInfo(pci.hCursor, out User32.IconInfo iconInfo) || iconInfo.hbmColor == IntPtr.Zero)
+			{
+				// GetIconInfo failed, or the cursor has no color bitmap. Do not paint the cursor
+				return src;
+			}
 
 			// Screen coordinates where the cursor has to be drawn (compensate for hotspot)
 			Point cursorPos = new Point(pci.ptScreenPos.x - iconInfo.xHotspot, pci.ptScreenPos.y - iconInfo.yHotspot);
