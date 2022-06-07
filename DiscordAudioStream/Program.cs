@@ -12,7 +12,8 @@ namespace DiscordAudioStream
 		[STAThread]
 		static void Main(string[] args)
 		{
-			Logger.Log("Started Main method. {0} arguments: [{1}]", args.Length, string.Join(",", args));
+			Logger.Log("Started Main method. Arguments: [{0}] (size={1})", string.Join(",", args), args.Length);
+			Logger.Log("OS Version: {0}", Environment.OSVersion);
 
 			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
 			User32.SetProcessDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);

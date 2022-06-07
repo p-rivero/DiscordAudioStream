@@ -138,3 +138,18 @@ Now follow this steps:
 You can change which API is used for capturing video by going to Settings ![Settings icon - Light theme](docs/img/settings-light.png#gh-light-mode-only)![Settings icon - Dark theme](docs/img/settings-dark.png#gh-dark-mode-only) > Capture.
 
 Read [this document](/docs/CaptureMethods.md) for more information about the pros and cons of each method. 
+
+## Reporting a bug/crash
+
+If the program crashes, it will attempt to generate a trace file called `DiscordAudioStream_stack_trace.txt`. This file will be located in the same folder as your executable (`DiscordAudioStream.exe`).
+Create a [new issue](https://github.com/p-rivero/DiscordAudioStream/issues/new) and make sure to attach your trace file to help me solve your crash more easily.
+
+If the stack trace is not generated automatically, go to Settings ![Settings icon - Light theme](docs/img/settings-light.png#gh-light-mode-only)![Settings icon - Dark theme](docs/img/settings-dark.png#gh-dark-mode-only) > Debug and enable *Output log file*.
+Close and reopen the program for this change to take effect.
+
+When this option is active, your actions inside the program are logged to a file called `DiscordAudioStream_log.txt` (also located in the same folder as the executable).
+Reproduce the crash (with the least number of steps, if possible) and send me the log file to help me locate the source of the crash. 
+
+> **Privacy notice:** The logged information may include your Windows version, the resolution of your screen(s) and the name of the audio devices you are using. For privacy reasons, the titles/names of your opened windows/programs are **NOT** logged. The captured video/audio is **NOT** logged either. 
+> 
+> The logs never leave your computer unless you send them to me on GitHub, so feel free to read them before sending them and manually remove any unwanted information.

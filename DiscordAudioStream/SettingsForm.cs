@@ -81,13 +81,12 @@ namespace DiscordAudioStream
 			if (e.KeyCode == Keys.Escape) Close();
 		}
 
+
 		private void systemThemeRadio_CheckedChanged(object sender, EventArgs e)
 		{
 			if (systemThemeRadio.Checked)
 			{
-				Properties.Settings.Default.Theme = (int) Theme.SYSTEM_DEFAULT;
-				Properties.Settings.Default.Save();
-				Logger.Log("\nChange settings: Theme={0}", Properties.Settings.Default.Theme);
+				ChangeTheme(Theme.SYSTEM_DEFAULT);
 			}
 		}
 
@@ -95,21 +94,28 @@ namespace DiscordAudioStream
 		{
 			if (lightThemeRadio.Checked)
 			{
-				Properties.Settings.Default.Theme = (int) Theme.LIGHT;
-				Properties.Settings.Default.Save();
-				Logger.Log("\nChange settings: Theme={0}", Properties.Settings.Default.Theme);
-			}
+				ChangeTheme(Theme.LIGHT);
+			} 
 		}
 
 		private void darkThemeRadio_CheckedChanged(object sender, EventArgs e)
 		{
 			if (darkThemeRadio.Checked)
 			{
-				Properties.Settings.Default.Theme = (int) Theme.DARK;
-				Properties.Settings.Default.Save();
-				Logger.Log("\nChange settings: Theme={0}", Properties.Settings.Default.Theme);
+				ChangeTheme(Theme.DARK);
 			}
 		}
+
+		private void ChangeTheme(Theme theme)
+		{
+			// Nothing changed
+			if (Properties.Settings.Default.Theme == (int)theme) return;
+
+			Properties.Settings.Default.Theme = (int)theme;
+			Properties.Settings.Default.Save();
+			Logger.Log("\nChange settings: Theme={0}", Properties.Settings.Default.Theme);
+		}
+
 
 		private void classicVolumeMixerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
@@ -125,6 +131,9 @@ namespace DiscordAudioStream
 
 		private void autoExitCheckbox_CheckedChanged(object sender, EventArgs e)
 		{
+			// Nothing changed
+			if (Properties.Settings.Default.AutoExit == autoExitCheckbox.Checked) return;
+
 			Properties.Settings.Default.AutoExit = autoExitCheckbox.Checked;
 			Properties.Settings.Default.Save();
 			Logger.Log("\nChange settings: AutoExit={0}", Properties.Settings.Default.AutoExit);
@@ -132,6 +141,9 @@ namespace DiscordAudioStream
 
 		private void outputLogCheckbox_CheckedChanged(object sender, EventArgs e)
 		{
+			// Nothing changed
+			if (Properties.Settings.Default.OutputLogFile == outputLogCheckbox.Checked) return;
+
 			Properties.Settings.Default.OutputLogFile = outputLogCheckbox.Checked;
 			Properties.Settings.Default.Save();
 			Logger.Log("\nChange settings: OutputLogFile={0}", Properties.Settings.Default.OutputLogFile);
