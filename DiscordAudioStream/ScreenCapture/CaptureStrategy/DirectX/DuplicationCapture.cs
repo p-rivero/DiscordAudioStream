@@ -64,17 +64,23 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 					return bmp;
 				}
 			}
-			catch
+			catch (SharpDX.SharpDXException)
 			{
 				if (cachedThumbnails[index] == null)
 				{
 					// AcquireNextFrame failed on the very first frame and we don't have a cache yet.
 					// This should never happen, but return null just to be sure
-					Logger.Log("AcquireNextFrame: Failed to get the first frame!");
+					Logger.Log("\nAcquireNextFrame: Failed to get the first frame!");
 					return null;
 				}
 				// Return cached thumbnail
 				return CloneThumbnail();
+			}
+			catch (Exception e)
+			{
+				Logger.Log("\n{0} while capturing frame.", e.GetType().Name);
+				Logger.Log(e);
+				throw;
 			}
 		}
 

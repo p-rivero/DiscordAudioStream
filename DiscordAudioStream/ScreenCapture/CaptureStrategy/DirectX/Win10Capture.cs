@@ -30,9 +30,10 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				item.Size);
 			session = framePool.CreateCaptureSession(item);
 
-			// Attempt to disable yellow capture border. This method is only avaiable from Windows 10, version 2104
+			// Attempt to disable yellow capture border. This method is only avaiable from Windows 11
 			if (ApiInformation.IsPropertyPresent("Windows.Graphics.Capture.GraphicsCaptureSession", "IsBorderRequired"))
 			{
+				Logger.Log("Attempting to disable yellow border...");
 				// This must be done in a separate method, otherwise a MethodNotFound will be thrown before any code can be executed
 				DisableBorder(session);
 			}
