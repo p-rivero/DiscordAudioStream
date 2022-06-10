@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
-	// DirectX capture using Windows.Graphics.Capture
+	// DirectX capture using the Desktop Duplication API
 
 	public class DuplicationCapture : CaptureSource
 	{
@@ -50,15 +50,16 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			{
 				// Try to get duplicated frame in 100 ms
 				screens[index].AcquireNextFrame(100, out _, out SharpDX.DXGI.Resource screenResource);
-				// Success, delete old thumbnail
-				cachedThumbnails[index]?.Dispose();
-				// Convert captured frame to Bitmap
+				// Success: convert captured frame to Bitmap
 				using (Texture2D texture = screenResource.QueryInterface<Texture2D>())
 				{
 					Bitmap bmp = BitmapHelper.CreateFromTexture2D(texture, d3dDevice);
 					screenResource.Dispose();
+					// Done processing this frame
 					screens[index].ReleaseFrame();
-					// Store thumbnail
+
+					// Delete old thumbnail and store new captured frame
+					cachedThumbnails[index]?.Dispose();
 					cachedThumbnails[index] = (Bitmap)bmp.Clone();
 					return bmp;
 				}
@@ -69,7 +70,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				{
 					// AcquireNextFrame failed on the very first frame and we don't have a cache yet.
 					// This should never happen, but return null just to be sure
-					Logger.Log("AcquireNextFrame: Failed to get the first frame");
+					Logger.Log("AcquireNextFrame: Failed to get the first frame!");
 					return null;
 				}
 				// Return cached thumbnail
@@ -83,13 +84,32 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			{
 				return (Bitmap)cachedThumbnails[index].Clone();
 			}
+			catch (ArgumentException)
+			{
+				Logger.Log("\nArgument exception while cloning cached thumbnail!");
+				Logger.Log("The thumbnail has probably been disposed.");
+				LogBitmapParams();
+			}
 			catch (Exception e)
 			{
-				Logger.Log("\nException while cloning cached thumbnail!");
-				Logger.Log("Bitmap size: {0}", cachedThumbnails[index].Size);
+				Logger.Log("\n{0} while cloning cached thumbnail.", e.GetType().Name);
+				LogBitmapParams();
+			}
+			return null;
+		}
+
+		private void LogBitmapParams()
+		{
+			Logger.Log("Attempting to log bitmap params...");
+			try
+			{
+				Logger.Log("Format: {0}", cachedThumbnails[index].PixelFormat);
+				Logger.Log("Size: {0}", cachedThumbnails[index].Size);
 				Logger.Log("Flags: {0}", cachedThumbnails[index].Flags);
-				Logger.Log(e);
-				throw;
+			}
+			catch (Exception e)
+			{
+				Logger.Log("Could not read bitmap ({0}).", e.GetType().Name);
 			}
 		}
 	}
