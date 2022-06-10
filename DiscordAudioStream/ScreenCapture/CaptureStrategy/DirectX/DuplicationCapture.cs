@@ -1,6 +1,6 @@
-﻿using DiscordAudioStream.ScreenCapture.CaptureStrategy;
-using SharpDX.Direct3D11;
+﻿using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+using System;
 using System.Drawing;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
@@ -73,7 +73,23 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 					return null;
 				}
 				// Return cached thumbnail
+				return CloneThumbnail();
+			}
+		}
+
+		private Bitmap CloneThumbnail()
+		{
+			try
+			{
 				return (Bitmap)cachedThumbnails[index].Clone();
+			}
+			catch (Exception e)
+			{
+				Logger.Log("\nException while cloning cached thumbnail!");
+				Logger.Log("Bitmap size: {0}", cachedThumbnails[index].Size);
+				Logger.Log("Flags: {0}", cachedThumbnails[index].Flags);
+				Logger.Log(e);
+				throw;
 			}
 		}
 	}

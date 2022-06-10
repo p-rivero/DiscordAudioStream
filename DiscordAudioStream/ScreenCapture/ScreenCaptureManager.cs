@@ -55,7 +55,7 @@ namespace DiscordAudioStream.ScreenCapture
 					catch (Exception e)
 					{
 						Logger.Log("\nAborting capture due to exception.");
-						Logger.Log("Exception:\n{1}\n{0}\n{1}", e, "==================================");
+						Logger.Log(e);
 						CaptureAborted?.Invoke();
 					}
 					stopwatch.Stop();
@@ -105,7 +105,7 @@ namespace DiscordAudioStream.ScreenCapture
 				if (currentSource != null)
 				{
 					Logger.Log("\nCANNOT INSTANTIATE NEW SOURCE. Returning to old source ({0}).", currentSource.GetType().Name);
-					Logger.Log("Exception:\n{1}\n{0}\n{1}", e, "==================================");
+					Logger.Log(e);
 
 					// We already have a valid source, do not call Dispose and just show warning
 					string msg = "Unable to display this item.\n";
@@ -115,7 +115,7 @@ namespace DiscordAudioStream.ScreenCapture
 				}
 
 				Logger.Log("\nCANNOT INSTANTIATE FIRST SOURCE. Changing capture methods to BitBlt.");
-				Logger.Log("Exception:\n{1}\n{0}\n{1}", e, "==================================");
+				Logger.Log(e);
 				// We do not have a valid source, fallback to the safest methods
 				captureState.ScreenMethod = CaptureState.ScreenCaptureMethod.BitBlt;
 				captureState.WindowMethod = CaptureState.WindowCaptureMethod.BitBlt;

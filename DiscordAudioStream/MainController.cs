@@ -72,7 +72,7 @@ namespace DiscordAudioStream
 					catch (InvalidOperationException)
 					{
 						// Form is closing
-						Logger.Log("Form is closing, stop Draw thread");
+						Logger.Log("Form is closing, stop Draw thread.");
 						return;
 					}
 					stopwatch.Stop();
@@ -298,7 +298,11 @@ namespace DiscordAudioStream
 				if (!streamEnabled) return;
 
 				EndStream();
-				if (Properties.Settings.Default.AutoExit) form.Close();
+				if (Properties.Settings.Default.AutoExit)
+				{
+					Logger.Log("\nAutoExit was enabled, closing form.");
+					form.Close();
+				}
 			}));
 		}
 

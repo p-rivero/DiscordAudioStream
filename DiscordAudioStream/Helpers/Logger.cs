@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace DiscordAudioStream
@@ -22,6 +23,11 @@ namespace DiscordAudioStream
 		public static void Log(string format, params object[] args)
 		{
 			Trace.WriteLine(string.Format(format, args));
+		}
+
+		public static void Log(Exception e)
+		{
+			Log("Exception:\n{1}\n{0}\n{1}", e, "==================================");
 		}
 	}
 }
