@@ -9,6 +9,12 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 	public class DuplicationCapture : CaptureSource
 	{
+		// https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values
+		private const int E_ACCESSDENIED = unchecked((int)0x80070005);
+		// https://docs.microsoft.com/en-us/windows/win32/direct3ddxgi/dxgi-error
+		private const int DXGI_ERROR_ACCESS_LOST   = unchecked((int)0x887A0026);
+		private const int DXGI_ERROR_WAIT_TIMEOUT  = unchecked((int)0x887A0027);
+
 		private static readonly SharpDX.Direct3D11.Device d3dDevice = new SharpDX.Direct3D11.Device(Adapter);
 		private static readonly OutputDuplication[] screens = InitScreens();
 		private static readonly Bitmap[] cachedThumbnails = new Bitmap[screens.Length];
@@ -16,7 +22,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		// Index of the selected screen to capture
 		private readonly int index;
 
-		static OutputDuplication[] InitScreens()
+		private static OutputDuplication[] InitScreens()
 		{
 			var adapter = Adapter;
 			// Iterate adapter.Outputs and create OutputDuplication on each
@@ -27,6 +33,28 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				result[i] = o.DuplicateOutput(d3dDevice);
 			}
 			return result;
+		}
+		private static void RefreshScreen(int screenIndex)
+		{
+			try
+			{
+				// Release the old screen
+				screens[screenIndex]?.Dispose();
+				// Get the new output
+				Output1 o = Adapter.Outputs[screenIndex].QueryInterface<Output1>();
+				screens[screenIndex] = o.DuplicateOutput(d3dDevice);
+			}
+			catch (SharpDX.SharpDXException e)
+			{
+				if (e.HResult == E_ACCESSDENIED)
+				{
+					// Could not read resource, do nothing and attempt to refresh on the next frame
+					Logger.Log("Access denied! Screen was not refreshed.");
+					return;
+				}
+				// Otherwise, don't catch the exception
+				throw;
+			}
 		}
 
 		internal static Adapter Adapter
@@ -48,6 +76,14 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			try
 			{
+				// If RefreshScreen failed, the screen may be disposed after switching capture methods
+				if (screens[index].IsDisposed)
+				{
+					Logger.Log("\nScreen was disposed, attempting to refresh OutputDuplication...");
+					RefreshScreen(index);
+					return null;
+				}
+				
 				// Try to get duplicated frame in 100 ms
 				screens[index].AcquireNextFrame(100, out _, out SharpDX.DXGI.Resource screenResource);
 				// Success: convert captured frame to Bitmap
@@ -64,17 +100,27 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 					return bmp;
 				}
 			}
-			catch (SharpDX.SharpDXException)
+			catch (SharpDX.SharpDXException e)
 			{
-				if (cachedThumbnails[index] == null)
+				if (e.HResult == DXGI_ERROR_WAIT_TIMEOUT)
 				{
-					// AcquireNextFrame failed on the very first frame and we don't have a cache yet.
-					// This should never happen, but return null just to be sure
-					Logger.Log("\nAcquireNextFrame: Failed to get the first frame!");
-					return null;
+					// The screen does not have new content. Return cached thumbnail
+					return CloneThumbnail();
 				}
-				// Return cached thumbnail
-				return CloneThumbnail();
+				else if (e.HResult == DXGI_ERROR_ACCESS_LOST)
+				{
+					// The desktop duplication interface is invalid. Release the OutputDuplication and create a new one
+					Logger.Log("\nAccess lost, attempting to refresh OutputDuplication...");
+					RefreshScreen(index);
+					return CloneThumbnail();
+				}
+				else
+				{
+					Logger.Log("\nSharpDXException while capturing frame.");
+					Logger.Log("HResult = {0}", e.HResult);
+					Logger.Log(e);
+					throw;
+				}
 			}
 			catch (Exception e)
 			{
@@ -86,6 +132,14 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 		private Bitmap CloneThumbnail()
 		{
+			if (cachedThumbnails[index] == null)
+			{
+				// AcquireNextFrame failed on the very first frame and we don't have a cache yet.
+				// This should never happen, but return null just to be safe
+				Logger.Log("\nAcquireNextFrame: Failed to get the first frame!");
+				return null;
+			}
+
 			try
 			{
 				return (Bitmap)cachedThumbnails[index].Clone();

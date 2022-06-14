@@ -98,8 +98,16 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				// No open form, execute on this thread
 				action.Invoke();
 			}
-			// Execute on the UI thread
-			System.Windows.Forms.Application.OpenForms[0].Invoke(action);
+			try
+			{
+				// Execute on the UI thread
+				System.Windows.Forms.Application.OpenForms[0].Invoke(action);
+			}
+			catch (ObjectDisposedException)
+			{
+				// When switching from another capture method, the first frame may throw an error.
+				Logger.Log("\nCould not invoke action on UI thread, ignoring.");
+			}
 		}
 	}
 }

@@ -130,7 +130,7 @@ namespace DiscordAudioStream.ScreenCapture
 			if (frameQueue.Count > LIMIT_QUEUE_SZ)
 			{
 				frameQueue.TryDequeue(out Bitmap b);
-				b.Dispose();
+				b?.Dispose();
 			}
 		}
 	}
