@@ -67,7 +67,7 @@ namespace DiscordAudioStream
 						}
 
 						// Display captured frame
-						form.UpdatePreview(next);
+						form.UpdatePreview(next, streamEnabled);
 					}
 					catch (InvalidOperationException)
 					{

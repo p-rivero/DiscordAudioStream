@@ -165,7 +165,7 @@ namespace DiscordAudioStream
 			}
 		}
 
-		internal void UpdatePreview(Bitmap newImage)
+		internal void UpdatePreview(Bitmap newImage, bool forceRefresh)
 		{
 			Invoke(new Action(() =>
 			{
@@ -176,6 +176,11 @@ namespace DiscordAudioStream
 				}
 				previewBox.Image?.Dispose();
 				previewBox.Image = newImage;
+
+				if (forceRefresh)
+				{
+					User32.PrintWindow(Handle, IntPtr.Zero, 0);
+				}
 			}));
 		}
 

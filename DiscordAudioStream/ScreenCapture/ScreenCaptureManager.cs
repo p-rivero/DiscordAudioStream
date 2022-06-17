@@ -14,7 +14,7 @@ namespace DiscordAudioStream.ScreenCapture
 		public event CaptureAbortDelegate CaptureAborted;
 
 		// Framerate limit
-		public const int TARGET_FRAMERATE = 60;
+		public const int TARGET_FRAMERATE = 30;
 
 		// Number of frames that are stored in the queue
 		private const int LIMIT_QUEUE_SZ = 3;
