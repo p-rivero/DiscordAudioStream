@@ -50,17 +50,17 @@ namespace DiscordAudioStream
 
 		private void projectLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start(Properties.Resources.ProjectLinkUrl);
+			Process.Start(Properties.Resources.URL_ProjectLink);
 		}
 
 		private void issuesLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start(Properties.Resources.IssuesLinkUrl);
+			Process.Start(Properties.Resources.URL_IssuesLink);
 		}
 
 		private void updatesLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start(Properties.Resources.UpdatesLinkUrl);
+			Process.Start(Properties.Resources.URL_UpdatesLink);
 		}
 
 		private void AboutForm_KeyDown(object sender, KeyEventArgs e)
@@ -70,22 +70,22 @@ namespace DiscordAudioStream
 
 		private void licenseLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start(Properties.Resources.LicenseLinkUrl);
+			Process.Start(Properties.Resources.URL_LicenseLink);
 		}
 
 		private void moduleArtLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start(Properties.Resources.ModuleArtLinkUrl);
+			Process.Start(Properties.Resources.URL_ModuleArtLink);
 		}
 
 		private void screenRecorderLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start(Properties.Resources.ScreenRecorderLinkUrl);
+			Process.Start(Properties.Resources.URL_ScreenRecorderLink);
 		}
 
 		private void authorLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start(Properties.Resources.AuthorLinkUrl);
+			Process.Start(Properties.Resources.URL_AuthorLink);
 		}
 	}
 }

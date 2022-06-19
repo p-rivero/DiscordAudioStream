@@ -46,15 +46,15 @@ namespace DiscordAudioStream
 			fullscreenMethodComboBox.SelectedIndex = (int) captureState.ScreenMethod;
 
 			// Set tooltips
-			toolTip.SetToolTip(autoExitCheckbox, Properties.Resources.AutoExitTooltip);
-			toolTip.SetToolTip(captureFramerateLabel, Properties.Resources.CaptureFramerateTooltip);
-			toolTip.SetToolTip(captureFramerateComboBox, Properties.Resources.CaptureFramerateTooltip);
-			toolTip.SetToolTip(fullscreenMethodLabel, Properties.Resources.FullscreenMethodTooltip);
-			toolTip.SetToolTip(fullscreenMethodComboBox, Properties.Resources.FullscreenMethodTooltip);
-			toolTip.SetToolTip(windowMethodLabel, Properties.Resources.WindowMethodTooltip);
-			toolTip.SetToolTip(windowMethodComboBox, Properties.Resources.WindowMethodTooltip);
-			toolTip.SetToolTip(outputLogCheckbox, Properties.Resources.OutputLogTooltip);
-			toolTip.SetToolTip(offscreenDrawCheckbox, Properties.Resources.OffscreenDrawTooltip);
+			toolTip.SetToolTip(autoExitCheckbox, Properties.Resources.Tooltip_AutoExit);
+			toolTip.SetToolTip(captureFramerateLabel, Properties.Resources.Tooltip_CaptureFramerate);
+			toolTip.SetToolTip(captureFramerateComboBox, Properties.Resources.Tooltip_CaptureFramerate);
+			toolTip.SetToolTip(fullscreenMethodLabel, Properties.Resources.Tooltip_FullscreenMethod);
+			toolTip.SetToolTip(fullscreenMethodComboBox, Properties.Resources.Tooltip_FullscreenMethod);
+			toolTip.SetToolTip(windowMethodLabel, Properties.Resources.Tooltip_WindowMethod);
+			toolTip.SetToolTip(windowMethodComboBox, Properties.Resources.Tooltip_WindowMethod);
+			toolTip.SetToolTip(outputLogCheckbox, Properties.Resources.Tooltip_OutputLog);
+			toolTip.SetToolTip(offscreenDrawCheckbox, Properties.Resources.Tooltip_OffscreenDraw);
 		}
 
 		private void ApplyDarkTheme(bool darkMode)

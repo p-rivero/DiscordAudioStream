@@ -163,47 +163,47 @@
   <data name="SharpDX_DXGI" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\sharpdx.dxgi.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="AuthorLinkUrl" xml:space="preserve">
+  <data name="URL_AuthorLink" xml:space="preserve">
     <value>https://github.com/p-rivero</value>
   </data>
-  <data name="IssuesLinkUrl" xml:space="preserve">
+  <data name="URL_IssuesLink" xml:space="preserve">
     <value>https://github.com/p-rivero/DiscordAudioStream/issues</value>
   </data>
-  <data name="LicenseLinkUrl" xml:space="preserve">
+  <data name="URL_LicenseLink" xml:space="preserve">
     <value>https://github.com/p-rivero/DiscordAudioStream/blob/master/LICENSE</value>
   </data>
-  <data name="ModuleArtLinkUrl" xml:space="preserve">
+  <data name="URL_ModuleArtLink" xml:space="preserve">
     <value>https://github.com/ModuleArt</value>
   </data>
-  <data name="ProjectLinkUrl" xml:space="preserve">
+  <data name="URL_ProjectLink" xml:space="preserve">
     <value>https://github.com/p-rivero/DiscordAudioStream</value>
   </data>
-  <data name="ScreenRecorderLinkUrl" xml:space="preserve">
+  <data name="URL_ScreenRecorderLink" xml:space="preserve">
     <value>https://github.com/ModuleArt/quick-screen-recorder</value>
   </data>
-  <data name="UpdatesLinkUrl" xml:space="preserve">
+  <data name="URL_UpdatesLink" xml:space="preserve">
     <value>https://github.com/p-rivero/DiscordAudioStream/releases</value>
   </data>
-  <data name="AutoExitTooltip" xml:space="preserve">
+  <data name="Tooltip_AutoExit" xml:space="preserve">
     <value>When streaming a specific window, if the window is closed, this program will also close.
 This will trigger the Discord stream to end automatically.</value>
   </data>
-  <data name="CaptureFramerateTooltip" xml:space="preserve">
+  <data name="Tooltip_CaptureFramerate" xml:space="preserve">
     <value>Framerate cap for captured video. Keep in mind that users without
 Discord Nitro cannot stream video at more than 30 FPS.</value>
   </data>
-  <data name="FullscreenMethodTooltip" xml:space="preserve">
+  <data name="Tooltip_FullscreenMethod" xml:space="preserve">
     <value>Capture method when capturing an entire monitor (see docs/CaptureMethods.md).</value>
   </data>
-  <data name="OffscreenDrawTooltip" xml:space="preserve">
+  <data name="Tooltip_OffscreenDraw" xml:space="preserve">
     <value>Ensure the video is streamed correctly, even if the DiscordAudioStream window is partially off-screen.
 May increase CPU usage (and can make the window unresponsive in high frame rates).</value>
   </data>
-  <data name="OutputLogTooltip" xml:space="preserve">
+  <data name="Tooltip_OutputLog" xml:space="preserve">
     <value>Log most actions taken inside the program to help find bugs and crashes.
 The log is written to a file called DiscordAudioStream_log.txt (see readme).</value>
   </data>
-  <data name="WindowMethodTooltip" xml:space="preserve">
+  <data name="Tooltip_WindowMethod" xml:space="preserve">
     <value>Capture method when capturing a specific window (see docs/CaptureMethods.md).</value>
   </data>
 </root>

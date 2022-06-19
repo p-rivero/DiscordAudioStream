@@ -61,71 +61,6 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/p-rivero.
-        /// </summary>
-        internal static string AuthorLinkUrl {
-            get {
-                return ResourceManager.GetString("AuthorLinkUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to When streaming a specific window, if the window is closed, this program will also close.
-        ///This will trigger the Discord stream to end automatically..
-        /// </summary>
-        internal static string AutoExitTooltip {
-            get {
-                return ResourceManager.GetString("AutoExitTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Framerate cap for captured video. Keep in mind that users without
-        ///Discord Nitro cannot stream video at more than 30 FPS..
-        /// </summary>
-        internal static string CaptureFramerateTooltip {
-            get {
-                return ResourceManager.GetString("CaptureFramerateTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Capture method when capturing an entire monitor (see docs/CaptureMethods.md)..
-        /// </summary>
-        internal static string FullscreenMethodTooltip {
-            get {
-                return ResourceManager.GetString("FullscreenMethodTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream/issues.
-        /// </summary>
-        internal static string IssuesLinkUrl {
-            get {
-                return ResourceManager.GetString("IssuesLinkUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream/blob/master/LICENSE.
-        /// </summary>
-        internal static string LicenseLinkUrl {
-            get {
-                return ResourceManager.GetString("LicenseLinkUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://github.com/ModuleArt.
-        /// </summary>
-        internal static string ModuleArtLinkUrl {
-            get {
-                return ResourceManager.GetString("ModuleArtLinkUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap move {
@@ -146,50 +81,12 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ensure the video is streamed correctly, even if the DiscordAudioStream window is partially off-screen.
-        ///May increase CPU usage (and can make the window unresponsive in high frame rates)..
-        /// </summary>
-        internal static string OffscreenDrawTooltip {
-            get {
-                return ResourceManager.GetString("OffscreenDrawTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Log most actions taken inside the program to help find bugs and crashes.
-        ///The log is written to a file called DiscordAudioStream_log.txt (see readme)..
-        /// </summary>
-        internal static string OutputLogTooltip {
-            get {
-                return ResourceManager.GetString("OutputLogTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream.
-        /// </summary>
-        internal static string ProjectLinkUrl {
-            get {
-                return ResourceManager.GetString("ProjectLinkUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap resize {
             get {
                 object obj = ResourceManager.GetObject("resize", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://github.com/ModuleArt/quick-screen-recorder.
-        /// </summary>
-        internal static string ScreenRecorderLinkUrl {
-            get {
-                return ResourceManager.GetString("ScreenRecorderLinkUrl", resourceCulture);
             }
         }
         
@@ -224,11 +121,123 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When streaming a specific window, if the window is closed, this program will also close.
+        ///This will trigger the Discord stream to end automatically..
+        /// </summary>
+        internal static string Tooltip_AutoExit {
+            get {
+                return ResourceManager.GetString("Tooltip_AutoExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Framerate cap for captured video. Keep in mind that users without
+        ///Discord Nitro cannot stream video at more than 30 FPS..
+        /// </summary>
+        internal static string Tooltip_CaptureFramerate {
+            get {
+                return ResourceManager.GetString("Tooltip_CaptureFramerate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Capture method when capturing an entire monitor (see docs/CaptureMethods.md)..
+        /// </summary>
+        internal static string Tooltip_FullscreenMethod {
+            get {
+                return ResourceManager.GetString("Tooltip_FullscreenMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ensure the video is streamed correctly, even if the DiscordAudioStream window is partially off-screen.
+        ///May increase CPU usage (and can make the window unresponsive in high frame rates)..
+        /// </summary>
+        internal static string Tooltip_OffscreenDraw {
+            get {
+                return ResourceManager.GetString("Tooltip_OffscreenDraw", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log most actions taken inside the program to help find bugs and crashes.
+        ///The log is written to a file called DiscordAudioStream_log.txt (see readme)..
+        /// </summary>
+        internal static string Tooltip_OutputLog {
+            get {
+                return ResourceManager.GetString("Tooltip_OutputLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Capture method when capturing a specific window (see docs/CaptureMethods.md)..
+        /// </summary>
+        internal static string Tooltip_WindowMethod {
+            get {
+                return ResourceManager.GetString("Tooltip_WindowMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/p-rivero.
+        /// </summary>
+        internal static string URL_AuthorLink {
+            get {
+                return ResourceManager.GetString("URL_AuthorLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream/issues.
+        /// </summary>
+        internal static string URL_IssuesLink {
+            get {
+                return ResourceManager.GetString("URL_IssuesLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream/blob/master/LICENSE.
+        /// </summary>
+        internal static string URL_LicenseLink {
+            get {
+                return ResourceManager.GetString("URL_LicenseLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/ModuleArt.
+        /// </summary>
+        internal static string URL_ModuleArtLink {
+            get {
+                return ResourceManager.GetString("URL_ModuleArtLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream.
+        /// </summary>
+        internal static string URL_ProjectLink {
+            get {
+                return ResourceManager.GetString("URL_ProjectLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/ModuleArt/quick-screen-recorder.
+        /// </summary>
+        internal static string URL_ScreenRecorderLink {
+            get {
+                return ResourceManager.GetString("URL_ScreenRecorderLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream/releases.
         /// </summary>
-        internal static string UpdatesLinkUrl {
+        internal static string URL_UpdatesLink {
             get {
-                return ResourceManager.GetString("UpdatesLinkUrl", resourceCulture);
+                return ResourceManager.GetString("URL_UpdatesLink", resourceCulture);
             }
         }
         
@@ -319,15 +328,6 @@ namespace DiscordAudioStream.Properties {
             get {
                 object obj = ResourceManager.GetObject("white_stop", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Capture method when capturing a specific window (see docs/CaptureMethods.md)..
-        /// </summary>
-        internal static string WindowMethodTooltip {
-            get {
-                return ResourceManager.GetString("WindowMethodTooltip", resourceCulture);
             }
         }
     }
