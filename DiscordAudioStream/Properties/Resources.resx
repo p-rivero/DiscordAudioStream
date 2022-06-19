@@ -184,4 +184,26 @@
   <data name="UpdatesLinkUrl" xml:space="preserve">
     <value>https://github.com/p-rivero/DiscordAudioStream/releases</value>
   </data>
+  <data name="AutoExitTooltip" xml:space="preserve">
+    <value>When streaming a specific window, if the window is closed, this program will also close.
+This will trigger the Discord stream to end automatically.</value>
+  </data>
+  <data name="CaptureFramerateTooltip" xml:space="preserve">
+    <value>Framerate cap for captured video. Keep in mind that users without
+Discord Nitro cannot stream video at more than 30 FPS.</value>
+  </data>
+  <data name="FullscreenMethodTooltip" xml:space="preserve">
+    <value>Capture method when capturing an entire monitor (see docs/CaptureMethods.md).</value>
+  </data>
+  <data name="OffscreenDrawTooltip" xml:space="preserve">
+    <value>Ensure the video is streamed correctly, even if the DiscordAudioStream window is partially off-screen.
+May increase CPU usage (and can make the window unresponsive in high frame rates).</value>
+  </data>
+  <data name="OutputLogTooltip" xml:space="preserve">
+    <value>Log most actions taken inside the program to help find bugs and crashes.
+The log is written to a file called DiscordAudioStream_log.txt (see readme).</value>
+  </data>
+  <data name="WindowMethodTooltip" xml:space="preserve">
+    <value>Capture method when capturing a specific window (see docs/CaptureMethods.md).</value>
+  </data>
 </root>

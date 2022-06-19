@@ -70,6 +70,35 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When streaming a specific window, if the window is closed, this program will also close.
+        ///This will trigger the Discord stream to end automatically..
+        /// </summary>
+        internal static string AutoExitTooltip {
+            get {
+                return ResourceManager.GetString("AutoExitTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Framerate cap for captured video. Keep in mind that users without
+        ///Discord Nitro cannot stream video at more than 30 FPS..
+        /// </summary>
+        internal static string CaptureFramerateTooltip {
+            get {
+                return ResourceManager.GetString("CaptureFramerateTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Capture method when capturing an entire monitor (see docs/CaptureMethods.md)..
+        /// </summary>
+        internal static string FullscreenMethodTooltip {
+            get {
+                return ResourceManager.GetString("FullscreenMethodTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream/issues.
         /// </summary>
         internal static string IssuesLinkUrl {
@@ -113,6 +142,26 @@ namespace DiscordAudioStream.Properties {
             get {
                 object obj = ResourceManager.GetObject("NAudio", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ensure the video is streamed correctly, even if the DiscordAudioStream window is partially off-screen.
+        ///May increase CPU usage (and can make the window unresponsive in high frame rates)..
+        /// </summary>
+        internal static string OffscreenDrawTooltip {
+            get {
+                return ResourceManager.GetString("OffscreenDrawTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log most actions taken inside the program to help find bugs and crashes.
+        ///The log is written to a file called DiscordAudioStream_log.txt (see readme)..
+        /// </summary>
+        internal static string OutputLogTooltip {
+            get {
+                return ResourceManager.GetString("OutputLogTooltip", resourceCulture);
             }
         }
         
@@ -270,6 +319,15 @@ namespace DiscordAudioStream.Properties {
             get {
                 object obj = ResourceManager.GetObject("white_stop", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Capture method when capturing a specific window (see docs/CaptureMethods.md)..
+        /// </summary>
+        internal static string WindowMethodTooltip {
+            get {
+                return ResourceManager.GetString("WindowMethodTooltip", resourceCulture);
             }
         }
     }

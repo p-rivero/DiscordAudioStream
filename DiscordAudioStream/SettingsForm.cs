@@ -44,6 +44,17 @@ namespace DiscordAudioStream
 
 			windowMethodComboBox.SelectedIndex = (int) captureState.WindowMethod;
 			fullscreenMethodComboBox.SelectedIndex = (int) captureState.ScreenMethod;
+
+			// Set tooltips
+			toolTip.SetToolTip(autoExitCheckbox, Properties.Resources.AutoExitTooltip);
+			toolTip.SetToolTip(captureFramerateLabel, Properties.Resources.CaptureFramerateTooltip);
+			toolTip.SetToolTip(captureFramerateComboBox, Properties.Resources.CaptureFramerateTooltip);
+			toolTip.SetToolTip(fullscreenMethodLabel, Properties.Resources.FullscreenMethodTooltip);
+			toolTip.SetToolTip(fullscreenMethodComboBox, Properties.Resources.FullscreenMethodTooltip);
+			toolTip.SetToolTip(windowMethodLabel, Properties.Resources.WindowMethodTooltip);
+			toolTip.SetToolTip(windowMethodComboBox, Properties.Resources.WindowMethodTooltip);
+			toolTip.SetToolTip(outputLogCheckbox, Properties.Resources.OutputLogTooltip);
+			toolTip.SetToolTip(offscreenDrawCheckbox, Properties.Resources.OffscreenDrawTooltip);
 		}
 
 		private void ApplyDarkTheme(bool darkMode)
