@@ -1,41 +1,30 @@
-name: Build
+name: Code analysis
 on:
   push:
     branches:
       - master
+      - dev
   pull_request:
     types: [opened, synchronize, reopened]
+    branches:
+      - master
+      - dev
 jobs:
-  build:
-    name: Build
+  analyze:
+    name: CodeQL + SonarCloud
     runs-on: windows-latest
     steps:
+      
+      # Prepare project
+      
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          
       - name: Set up JDK 11
         uses: actions/setup-java@v1
         with:
           java-version: 1.11
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v1
-        with:
-          path: ~\sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache SonarCloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v1
-        with:
-          path: .\.sonar\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
-      - name: Install SonarCloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: powershell
-        run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
           
       - name: Setup MSBuild Path
         uses: microsoft/setup-msbuild@v1.1
@@ -45,6 +34,34 @@ jobs:
 
       - name: Restore NuGet Packages
         run: nuget restore DiscordAudioStream.sln
+        
+      
+      # Install SonarCloud scanner
+      
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      
+      - name: Cache SonarCloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v1
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+      
+      - name: Install SonarCloud scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      
+      
+      # SonarCloud scan
           
       - name: Build and analyze
         env:
@@ -55,3 +72,17 @@ jobs:
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"p-rivero_DiscordAudioStream" /o:"p-rivero" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           msbuild DiscordAudioStream.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      
+      
+      # CodeQL scan
+      
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: csharp
+      
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+      
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
