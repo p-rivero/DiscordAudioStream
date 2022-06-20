@@ -13,13 +13,11 @@ namespace DiscordAudioStream.ScreenCapture
 		public delegate void CaptureAbortDelegate();
 		public event CaptureAbortDelegate CaptureAborted;
 
-		// Framerate limit
-		public const int TARGET_FRAMERATE = 30;
+		// Control framerate limit
+		public int CaptureIntervalMs { get; private set; } = 0;
 
 		// Number of frames that are stored in the queue
 		private const int LIMIT_QUEUE_SZ = 3;
-		// Wait time between frames
-		private const int INTERVAL_MS = 1000/ TARGET_FRAMERATE;
 
 		private readonly Thread captureThread;
 		private readonly CaptureState captureState;
@@ -32,11 +30,40 @@ namespace DiscordAudioStream.ScreenCapture
 			captureState.StateChanged += UpdateState;
 
 			// Start capture
+			RefreshFramerate();
 			UpdateState();
-			captureThread = new Thread(() =>
+			captureThread = CreateCaptureThread();
+			captureThread.Start();
+		}
+
+		// Return the next frame, if it exists (null otherwise)
+		public static Bitmap GetNextFrame()
+		{
+			bool success = frameQueue.TryDequeue(out Bitmap frame);
+
+			if (success) return frame;
+			return null;
+		}
+
+		public void RefreshFramerate()
+		{
+			CaptureIntervalMs = 1000 / Properties.Settings.Default.CaptureFramerate;
+		}
+
+		public void Stop()
+		{
+			captureThread.Abort();
+			currentSource?.Dispose();
+		}
+
+
+
+		private Thread CreateCaptureThread()
+		{
+			Thread newThread = new Thread(() =>
 			{
-				Logger.Log("\nStarting Capture thread. Target framerate: {0} FPS ({1} ms)",
-					TARGET_FRAMERATE, INTERVAL_MS);
+				Logger.Log("\nCreating Capture thread. Target framerate: {0} FPS ({1} ms)",
+					Properties.Settings.Default.CaptureFramerate, CaptureIntervalMs);
 
 				Stopwatch stopwatch = new Stopwatch();
 
@@ -60,34 +87,17 @@ namespace DiscordAudioStream.ScreenCapture
 					}
 					stopwatch.Stop();
 
-					int wait = INTERVAL_MS - (int)stopwatch.ElapsedMilliseconds;
+					int wait = CaptureIntervalMs - (int)stopwatch.ElapsedMilliseconds;
 					if (wait > 0)
 					{
 						Thread.Sleep(wait);
 					}
 				}
 			});
-			captureThread.IsBackground = true;
-			captureThread.Name = "Capture Thread";
-			captureThread.Start();
+			newThread.IsBackground = true;
+			newThread.Name = "Capture Thread";
+			return newThread;
 		}
-
-		// Return the next frame, if it exists (null otherwise)
-		public static Bitmap GetNextFrame()
-		{
-			bool success = frameQueue.TryDequeue(out Bitmap frame);
-
-			if (success) return frame;
-			return null;
-		}
-
-		public void Stop()
-		{
-			captureThread.Abort();
-			currentSource?.Dispose();
-		}
-
-
 
 		private void UpdateState()
 		{

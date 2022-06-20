@@ -201,7 +201,8 @@ May increase CPU usage (and can make the window unresponsive in high frame rates
   </data>
   <data name="Tooltip_OutputLog" xml:space="preserve">
     <value>Log most actions taken inside the program to help find bugs and crashes.
-The log is written to a file called DiscordAudioStream_log.txt (see readme).</value>
+The log is written to a file called DiscordAudioStream_log.txt (see readme).
+App restart required.</value>
   </data>
   <data name="Tooltip_WindowMethod" xml:space="preserve">
     <value>Capture method when capturing a specific window (see docs/CaptureMethods.md).</value>

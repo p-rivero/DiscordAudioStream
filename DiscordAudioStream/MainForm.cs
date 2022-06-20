@@ -179,6 +179,9 @@ namespace DiscordAudioStream
 
 				if (forceRefresh)
 				{
+					// Windows only refreshes the part of the window that is shown to the user. Therefore, if this
+					// window is partially off-screen, it won't be streamed correctly in Discord.
+					// Use PrintWindow to send a WM_PRINT to our own window handle, forcing a complete redraw.
 					User32.PrintWindow(Handle, IntPtr.Zero, 0);
 				}
 			}));

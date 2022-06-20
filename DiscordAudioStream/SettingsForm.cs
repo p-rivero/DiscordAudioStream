@@ -8,14 +8,21 @@ namespace DiscordAudioStream
 {
 	partial class SettingsForm : Form
 	{
-		public delegate void CaptureMethodChangedDelegate();
-		public event CaptureMethodChangedDelegate CaptureMethodChanged;
+		public delegate void SettingChangedDelegate();
+		public event SettingChangedDelegate CaptureMethodChanged;
+		public event SettingChangedDelegate FramerateChanged;
 
 		private enum Theme
 		{
 			SYSTEM_DEFAULT = 0,
 			LIGHT = 1,
 			DARK = 2
+		}
+		private enum FrameRates
+		{
+			FPS_15 = 15,
+			FPS_30 = 30,
+			FPS_60 = 60
 		}
 		private readonly CaptureState captureState;
 
@@ -33,6 +40,8 @@ namespace DiscordAudioStream
 
 			ApplyDarkTheme(darkMode);
 
+			// Set default values
+
 			Theme theme = (Theme) Properties.Settings.Default.Theme;
 			systemThemeRadio.Checked = (theme == Theme.SYSTEM_DEFAULT);
 			lightThemeRadio.Checked = (theme == Theme.LIGHT);
@@ -42,8 +51,14 @@ namespace DiscordAudioStream
 
 			outputLogCheckbox.Checked = Properties.Settings.Default.OutputLogFile;
 
+			offscreenDrawCheckbox.Checked = Properties.Settings.Default.OffscreenDraw;
+
 			windowMethodComboBox.SelectedIndex = (int) captureState.WindowMethod;
 			fullscreenMethodComboBox.SelectedIndex = (int) captureState.ScreenMethod;
+
+			FrameRates selectedFramerate = (FrameRates)Properties.Settings.Default.CaptureFramerate;
+			Array allFramerates = Enum.GetValues(typeof(FrameRates));
+			captureFramerateComboBox.SelectedIndex = Array.IndexOf(allFramerates, selectedFramerate);
 
 			// Set tooltips
 			toolTip.SetToolTip(autoExitCheckbox, Properties.Resources.Tooltip_AutoExit);
@@ -170,6 +185,31 @@ namespace DiscordAudioStream
 		{
 			captureState.WindowMethod = (CaptureState.WindowCaptureMethod) windowMethodComboBox.SelectedIndex;
 			CaptureMethodChanged?.Invoke();
+		}
+
+		private void captureFramerateComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			Array allFramerates = Enum.GetValues(typeof(FrameRates));
+			FrameRates selectedFramerate = (FrameRates)allFramerates.GetValue(captureFramerateComboBox.SelectedIndex);
+
+			// Nothing changed
+			if (Properties.Settings.Default.CaptureFramerate == (int)selectedFramerate) return;
+
+			Properties.Settings.Default.CaptureFramerate = (int)selectedFramerate;
+			Properties.Settings.Default.Save();
+			Logger.Log("\nChange settings: CaptureFramerate={0}", selectedFramerate);
+
+			FramerateChanged?.Invoke();
+		}
+
+		private void offscreenDrawCheckbox_CheckedChanged(object sender, EventArgs e)
+		{
+			// Nothing changed
+			if (Properties.Settings.Default.OffscreenDraw == offscreenDrawCheckbox.Checked) return;
+
+			Properties.Settings.Default.OffscreenDraw = offscreenDrawCheckbox.Checked;
+			Properties.Settings.Default.Save();
+			Logger.Log("\nChange settings: OffscreenDraw={0}", Properties.Settings.Default.OffscreenDraw);
 		}
 	}
 }

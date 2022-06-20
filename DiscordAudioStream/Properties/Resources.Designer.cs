@@ -161,7 +161,8 @@ namespace DiscordAudioStream.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Log most actions taken inside the program to help find bugs and crashes.
-        ///The log is written to a file called DiscordAudioStream_log.txt (see readme)..
+        ///The log is written to a file called DiscordAudioStream_log.txt (see readme).
+        ///App restart required..
         /// </summary>
         internal static string Tooltip_OutputLog {
             get {

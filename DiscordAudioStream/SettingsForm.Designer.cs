@@ -46,7 +46,6 @@
 			this.lightThemeRadio = new CustomComponents.DarkThemeRadioButton();
 			this.debugPage = new System.Windows.Forms.TabPage();
 			this.offscreenDrawCheckbox = new CustomComponents.DarkThemeCheckBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.outputLogCheckbox = new CustomComponents.DarkThemeCheckBox();
 			this.audioDevicesLink = new System.Windows.Forms.LinkLabel();
 			this.classicVolumeMixerLink = new System.Windows.Forms.LinkLabel();
@@ -111,6 +110,7 @@
 			this.captureFramerateComboBox.Name = "captureFramerateComboBox";
 			this.captureFramerateComboBox.Size = new System.Drawing.Size(108, 24);
 			this.captureFramerateComboBox.TabIndex = 7;
+			this.captureFramerateComboBox.SelectedIndexChanged += new System.EventHandler(this.captureFramerateComboBox_SelectedIndexChanged);
 			// 
 			// captureMethodGroup
 			// 
@@ -257,7 +257,6 @@
 			// 
 			this.debugPage.BackColor = System.Drawing.Color.White;
 			this.debugPage.Controls.Add(this.offscreenDrawCheckbox);
-			this.debugPage.Controls.Add(this.label1);
 			this.debugPage.Controls.Add(this.outputLogCheckbox);
 			this.debugPage.Controls.Add(this.audioDevicesLink);
 			this.debugPage.Controls.Add(this.classicVolumeMixerLink);
@@ -277,16 +276,7 @@
 			this.offscreenDrawCheckbox.TabIndex = 40;
 			this.offscreenDrawCheckbox.Text = "Force screen redraw";
 			this.offscreenDrawCheckbox.UseVisualStyleBackColor = true;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(6, 59);
-			this.label1.Margin = new System.Windows.Forms.Padding(3);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(120, 15);
-			this.label1.TabIndex = 39;
-			this.label1.Text = "* App restart required";
+			this.offscreenDrawCheckbox.CheckedChanged += new System.EventHandler(this.offscreenDrawCheckbox_CheckedChanged);
 			// 
 			// outputLogCheckbox
 			// 
@@ -302,7 +292,7 @@
 			// audioDevicesLink
 			// 
 			this.audioDevicesLink.AutoSize = true;
-			this.audioDevicesLink.Location = new System.Drawing.Point(6, 128);
+			this.audioDevicesLink.Location = new System.Drawing.Point(6, 102);
 			this.audioDevicesLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
 			this.audioDevicesLink.Name = "audioDevicesLink";
 			this.audioDevicesLink.Size = new System.Drawing.Size(125, 15);
@@ -314,7 +304,7 @@
 			// classicVolumeMixerLink
 			// 
 			this.classicVolumeMixerLink.AutoSize = true;
-			this.classicVolumeMixerLink.Location = new System.Drawing.Point(6, 101);
+			this.classicVolumeMixerLink.Location = new System.Drawing.Point(6, 75);
 			this.classicVolumeMixerLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
 			this.classicVolumeMixerLink.Name = "classicVolumeMixerLink";
 			this.classicVolumeMixerLink.Size = new System.Drawing.Size(149, 15);
@@ -373,7 +363,6 @@
 		private System.Windows.Forms.LinkLabel audioDevicesLink;
 		private System.Windows.Forms.LinkLabel classicVolumeMixerLink;
 		private CustomComponents.DarkThemeCheckBox outputLogCheckbox;
-		private System.Windows.Forms.Label label1;
 		private CustomComponents.DarkThemeComboBox captureFramerateComboBox;
 		private System.Windows.Forms.Label captureFramerateLabel;
 		private CustomComponents.DarkThemeCheckBox offscreenDrawCheckbox;

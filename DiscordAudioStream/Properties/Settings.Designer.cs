@@ -154,5 +154,29 @@ namespace DiscordAudioStream.Properties {
                 this["OutputLogFile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool OffscreenDraw {
+            get {
+                return ((bool)(this["OffscreenDraw"]));
+            }
+            set {
+                this["OffscreenDraw"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int CaptureFramerate {
+            get {
+                return ((int)(this["CaptureFramerate"]));
+            }
+            set {
+                this["CaptureFramerate"] = value;
+            }
+        }
     }
 }

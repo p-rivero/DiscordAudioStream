@@ -15,6 +15,7 @@ namespace DiscordAudioStream
 		private readonly MainForm form;
 
 		private bool streamEnabled = false;
+		private bool forceRefresh = false;
 		private double scaleMultiplier = 1;
 		private int numberOfScreens = -1;
 
@@ -41,51 +42,7 @@ namespace DiscordAudioStream
 			screenCapture = new ScreenCaptureManager(captureState);
 			screenCapture.CaptureAborted += AbortCapture;
 
-			Thread drawThread = new Thread(() =>
-			{
-				Stopwatch stopwatch = new Stopwatch();
-				const int INTERVAL_MS = 1000 / ScreenCaptureManager.TARGET_FRAMERATE;
-				Size oldSize = new Size(0, 0);
-				Logger.Log("\nStarting Draw thread. Target framerate: {0} FPS ({1} ms)",
-					ScreenCaptureManager.TARGET_FRAMERATE, INTERVAL_MS);
-
-				while (true)
-				{
-					stopwatch.Restart();
-					try
-					{
-						Bitmap next = ScreenCaptureManager.GetNextFrame();
-
-						// Continue iterating until GetNextFrame() doesn't return null
-						if (next == null) continue;
-
-						// Detect size changes
-						if (next.Size != oldSize)
-						{
-							oldSize = next.Size;
-							SetPreviewSize(next.Size);
-						}
-
-						// Display captured frame
-						form.UpdatePreview(next, streamEnabled);
-					}
-					catch (InvalidOperationException)
-					{
-						// Form is closing
-						Logger.Log("Form is closing, stop Draw thread.");
-						return;
-					}
-					stopwatch.Stop();
-
-					int wait = INTERVAL_MS - (int)stopwatch.ElapsedMilliseconds;
-					if (wait > 0)
-					{
-						Thread.Sleep(wait);
-					}
-				}
-			});
-			drawThread.IsBackground = true;
-			drawThread.Name = "Draw Thread";
+			Thread drawThread = CreateDrawThread();
 			drawThread.Start();
 		}
 
@@ -158,6 +115,57 @@ namespace DiscordAudioStream
 				// The selected method allows hiding taskbar, see if checkbox is checked
 				captureState.HideTaskbar = form.HideTaskbar;
 			}
+		}
+
+		private Thread CreateDrawThread()
+		{
+			Thread newThread = new Thread(() =>
+			{
+				Logger.Log("\nCreating Draw thread. Target framerate: {0} FPS ({1} ms)", 
+					Properties.Settings.Default.CaptureFramerate, screenCapture.CaptureIntervalMs);
+
+				Stopwatch stopwatch = new Stopwatch();
+				Size oldSize = new Size(0, 0);
+
+				while (true)
+				{
+					stopwatch.Restart();
+					try
+					{
+						Bitmap next = ScreenCaptureManager.GetNextFrame();
+
+						// Continue iterating until GetNextFrame() doesn't return null
+						if (next == null) continue;
+
+						// Detect size changes
+						if (next.Size != oldSize)
+						{
+							oldSize = next.Size;
+							SetPreviewSize(next.Size);
+						}
+
+						// Display captured frame
+						// Refresh if the stream has started and "Force screen redraw" is enabled
+						form.UpdatePreview(next, streamEnabled && forceRefresh);
+					}
+					catch (InvalidOperationException)
+					{
+						// Form is closing
+						Logger.Log("Form is closing, stop Draw thread.");
+						return;
+					}
+					stopwatch.Stop();
+
+					int wait = screenCapture.CaptureIntervalMs - (int)stopwatch.ElapsedMilliseconds;
+					if (wait > 0)
+					{
+						Thread.Sleep(wait);
+					}
+				}
+			});
+			newThread.IsBackground = true;
+			newThread.Name = "Draw Thread";
+			return newThread;
 		}
 
 
@@ -271,6 +279,8 @@ namespace DiscordAudioStream
 			}
 
 			form.EnableStreamingUI(true);
+			// Reading Properties.Settings can be slow, set flag once at the start of the stream
+			forceRefresh = Properties.Settings.Default.OffscreenDraw;
 			streamEnabled = true;
 
 			// Show preview at full size
@@ -311,6 +321,7 @@ namespace DiscordAudioStream
 			SettingsForm settingsBox = new SettingsForm(darkMode, captureState);
 			settingsBox.Owner = form;
 			settingsBox.CaptureMethodChanged += RefreshAreaInfo;
+			settingsBox.FramerateChanged += screenCapture.RefreshFramerate;
 
 			// If this window is topmost, settings is too
 			if (form.TopMost) settingsBox.TopMost = true;
