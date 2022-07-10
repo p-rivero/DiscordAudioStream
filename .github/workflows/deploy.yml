@@ -24,6 +24,9 @@ jobs:
     - name: Restore NuGet Packages
       run: nuget restore DiscordAudioStream.sln
       
+    - name: Generate Build ID
+      run: (Get-Content .\DiscordAudioStream\BuildId.cs) -replace '__BUILD_ID__', (Get-Date -UFormat %s -Millisecond 0) | Out-File .\DiscordAudioStream\BuildId.cs
+      
     - name: Build
       run: msbuild DiscordAudioStream.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
       
