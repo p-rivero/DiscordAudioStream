@@ -256,6 +256,16 @@ namespace DLLs
 			CLOAK,
 			CLOAKED,
 			FREEZE_REPRESENTATION,
+			PASSIVE_UPDATE_MODE,
+			USE_HOSTBACKDROPBRUSH,
+			USE_IMMERSIVE_DARK_MODE_OLD = 19,
+			USE_IMMERSIVE_DARK_MODE = 20,
+			WINDOW_CORNER_PREFERENCE = 33,
+			BORDER_COLOR,
+			CAPTION_COLOR,
+			TEXT_COLOR,
+			VISIBLE_FRAME_BORDER_THICKNESS,
+			SYSTEMBACKDROP_TYPE,
 			LAST
 		}
 
@@ -263,6 +273,8 @@ namespace DLLs
 		private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out bool pvAttribute, int cbAttribute);
 		[DllImport("dwmapi.dll")]
 		private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out User32.Rect pvAttribute, int cbAttribute);
+		[DllImport("dwmapi.dll")]
+		private static extern int DwmSetWindowAttribute(IntPtr hwnd, DwmWindowAttribute attr, ref int attrValue, int attrSize);
 
 		public static bool GetBoolAttr(IntPtr hwnd, DwmWindowAttribute attribute)
 		{
@@ -273,6 +285,11 @@ namespace DLLs
 		{
 			DwmGetWindowAttribute(hwnd, (int)attribute, out User32.Rect pvAttribute, Marshal.SizeOf(typeof(User32.Rect)));
 			return pvAttribute;
+		}
+		public static void SetBoolAttr(IntPtr hwnd, DwmWindowAttribute attribute, bool value)
+		{
+			int intVal = value ? 1 : 0;
+			Dwmapi.DwmSetWindowAttribute(hwnd, attribute, ref intVal, Marshal.SizeOf(typeof(int)));
 		}
 	}
 
