@@ -262,8 +262,15 @@ namespace DiscordAudioStream
 		{
 			if (form.AudioIndex == 0)
 			{
-				DialogResult r = MessageBox.Show("No audio source selected, continue anyways?", "Warning",
-					MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+				// No audio device selected, show warning
+				DialogResult r = MessageBox.Show(
+					"No audio source selected, continue anyways?",
+					"Warning",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Question,
+					// The second button ("No") is the default option
+					MessageBoxDefaultButton.Button2
+				);
 
 				if (r == DialogResult.No)
 					return;
@@ -281,6 +288,7 @@ namespace DiscordAudioStream
 			form.EnableStreamingUI(true);
 			// Reading Properties.Settings can be slow, set flag once at the start of the stream
 			forceRefresh = Properties.Settings.Default.OffscreenDraw;
+			Logger.Log("Force screen redraw: " + forceRefresh);
 			streamEnabled = true;
 
 			// Show preview at full size
