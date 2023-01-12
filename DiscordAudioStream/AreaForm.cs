@@ -13,6 +13,7 @@ namespace DiscordAudioStream
 
 		private Point startPos;
 		private Size startSize;
+		private bool showMarker;
 
 		private readonly System.Timers.Timer resizeTimer = new System.Timers.Timer();
 
@@ -25,6 +26,12 @@ namespace DiscordAudioStream
 
 			resizeTimer.Elapsed += new ElapsedEventHandler(resizeTimer_Elapsed);
 			resizeTimer.Interval = 30;
+		}
+
+		public void OnAreaFormShow()
+		{
+			SetButtonsVisible(true);
+			showMarker = true;
 		}
 
 		private void resizeTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -44,10 +51,13 @@ namespace DiscordAudioStream
 				Height = newHeight;
 			}));
 		}
-
+		
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Red, ButtonBorderStyle.Solid);
+			if (showMarker)
+			{
+				ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Red, ButtonBorderStyle.Solid);
+			}
 		}
 
 		private void AreaForm_MouseDown(object sender, MouseEventArgs e)
@@ -63,6 +73,35 @@ namespace DiscordAudioStream
 			startPos = PointToClient(Cursor.Position);
 			startSize = Size;
 			resizeTimer.Start();
+		}
+
+		private void lockBtn_Click(object sender, EventArgs e)
+		{
+			// If the user has not seen the warning, display it
+			if (!Properties.Settings.Default.SeenLockAreaDiag)
+			{
+				DialogResult r = MessageBox.Show(
+					"This will hide the red area marker and you won't be able to move it anymore. " +
+					"To show the red marker again, change the capture to anything else and then back to \"Custom area\".\n" +
+					"This message won't be shown again.",
+					"Lock area",
+					MessageBoxButtons.OKCancel,
+					MessageBoxIcon.Information,
+					// The second button ("Cancel") is the default option
+					MessageBoxDefaultButton.Button2
+				);
+				if (r == DialogResult.Cancel)
+					return;
+				Properties.Settings.Default.SeenLockAreaDiag = true;
+				Properties.Settings.Default.Save();
+				Logger.Log("Set SeenLockAreaDiag = true");
+			}
+			Logger.Log("Locking area");
+			showMarker = false;
+			// Hide buttons
+			SetButtonsVisible(false);
+			// Redraw (lack of) red rectangle
+			Refresh();
 		}
 
 		private void AreaForm_MouseUp(object sender, MouseEventArgs e)
@@ -96,18 +135,22 @@ namespace DiscordAudioStream
 
 		private void AreaForm_Deactivate(object sender, EventArgs e)
 		{
-			dragBtn.Visible = false;
-			moveBtn.Visible = false;
-			titleBtn.Visible = false;
+			SetButtonsVisible(false);
 		}
 
 		private void AreaForm_MouseEnter(object sender, EventArgs e)
 		{
-			dragBtn.Visible = true;
-			moveBtn.Visible = true;
-			titleBtn.Visible = true;
+			SetButtonsVisible(true);
+		}
+
+		private void SetButtonsVisible(bool visible)
+		{
+			dragBtn.Visible = visible;
+			moveBtn.Visible = visible;
+			titleBtn.Visible = visible;
+			lockBtn.Visible = visible;
 			// Activate form so that AreaForm_Deactivate is called when we click somewhere
-			Activate();
+			if (visible) Activate();
 		}
 	}
 }

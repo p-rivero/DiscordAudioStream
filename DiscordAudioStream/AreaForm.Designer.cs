@@ -31,8 +31,10 @@
 			this.titleBtn = new System.Windows.Forms.Button();
 			this.dragBtn = new System.Windows.Forms.PictureBox();
 			this.moveBtn = new System.Windows.Forms.PictureBox();
+			this.lockBtn = new System.Windows.Forms.PictureBox();
 			((System.ComponentModel.ISupportInitialize)(this.dragBtn)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.moveBtn)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.lockBtn)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// titleBtn
@@ -78,11 +80,25 @@
 			this.moveBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AreaForm_MouseDown);
 			this.moveBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AreaForm_MouseUp);
 			// 
+			// lockBtn
+			// 
+			this.lockBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lockBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+			this.lockBtn.BackgroundImage = global::DiscordAudioStream.Properties.Resources._lock;
+			this.lockBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this.lockBtn.Location = new System.Drawing.Point(12, 252);
+			this.lockBtn.Name = "lockBtn";
+			this.lockBtn.Size = new System.Drawing.Size(56, 56);
+			this.lockBtn.TabIndex = 5;
+			this.lockBtn.TabStop = false;
+			this.lockBtn.Click += new System.EventHandler(this.lockBtn_Click);
+			// 
 			// AreaForm
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.BackColor = System.Drawing.Color.MediumBlue;
 			this.ClientSize = new System.Drawing.Size(480, 320);
+			this.Controls.Add(this.lockBtn);
 			this.Controls.Add(this.moveBtn);
 			this.Controls.Add(this.dragBtn);
 			this.Controls.Add(this.titleBtn);
@@ -102,6 +118,7 @@
 			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AreaForm_MouseUp);
 			((System.ComponentModel.ISupportInitialize)(this.dragBtn)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.moveBtn)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.lockBtn)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -110,5 +127,6 @@
 		private System.Windows.Forms.Button titleBtn;
         private System.Windows.Forms.PictureBox dragBtn;
 		private System.Windows.Forms.PictureBox moveBtn;
+		private System.Windows.Forms.PictureBox lockBtn;
 	}
 }

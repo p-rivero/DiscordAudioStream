@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="resources\imgs\lock.png" />
     <Content Include="resources\SharpDX.Direct3D11.dll" />
     <Content Include="resources\SharpDX.dll" />
     <Content Include="resources\SharpDX.DXGI.dll" />

@@ -49,6 +49,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			if (areaForm.Visible) disableHide = true;
 
 			areaForm.Show();
+			areaForm.OnAreaFormShow();
 		}
 		private static void HideAreaForm()
 		{
