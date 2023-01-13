@@ -103,7 +103,7 @@
 			this.Controls.Add(this.dragBtn);
 			this.Controls.Add(this.titleBtn);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-			this.MinimumSize = new System.Drawing.Size(160, 160);
+			this.MinimumSize = new System.Drawing.Size(204, 160);
 			this.Name = "AreaForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

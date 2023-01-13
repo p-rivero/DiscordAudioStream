@@ -28,8 +28,9 @@ namespace DiscordAudioStream
 			resizeTimer.Interval = 30;
 		}
 
-		public void OnAreaFormShow()
+		new public void Show()
 		{
+			base.Show();
 			SetButtonsVisible(true);
 			showMarker = true;
 		}
