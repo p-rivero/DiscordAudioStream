@@ -199,6 +199,15 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream/blob/master/docs/CaptureMethods.md.
+        /// </summary>
+        internal static string URL_CaptureMethodsInfoLink {
+            get {
+                return ResourceManager.GetString("URL_CaptureMethodsInfoLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/p-rivero/DiscordAudioStream/issues.
         /// </summary>
         internal static string URL_IssuesLink {

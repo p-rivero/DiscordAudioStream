@@ -212,5 +212,10 @@ namespace DiscordAudioStream
 			Properties.Settings.Default.Save();
 			Logger.Log("\nChange settings: OffscreenDraw={0}", Properties.Settings.Default.OffscreenDraw);
 		}
+
+		private void SettingsForm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			System.Diagnostics.Process.Start(Properties.Resources.URL_CaptureMethodsInfoLink);
+		}
 	}
 }

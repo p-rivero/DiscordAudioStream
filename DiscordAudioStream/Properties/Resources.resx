@@ -210,4 +210,7 @@ This will trigger the Discord stream to end automatically.</value>
   <data name="lock" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\imgs\lock.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="URL_CaptureMethodsInfoLink" xml:space="preserve">
+    <value>https://github.com/p-rivero/DiscordAudioStream/blob/master/docs/CaptureMethods.md</value>
+  </data>
 </root>
