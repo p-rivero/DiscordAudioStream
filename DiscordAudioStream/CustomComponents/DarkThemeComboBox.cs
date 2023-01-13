@@ -92,7 +92,7 @@ namespace CustomComponents
                 bool useWhite = (!darkMode && (e.State & DrawItemState.Selected) == DrawItemState.Selected);
                 object item = Items[e.Index];
 
-                if (item is ItemWithSeparator)
+                if (item is ItemWithSeparator && e.Bounds.Height > ItemHeight)
                 {
                     Brush brush = new SolidBrush(e.BackColor);
                     Rectangle bounds = e.Bounds;
