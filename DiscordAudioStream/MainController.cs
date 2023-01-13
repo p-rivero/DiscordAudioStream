@@ -279,9 +279,29 @@ namespace DiscordAudioStream
 			}
 			else
 			{
+				int deviceIndex = form.AudioIndex - 1;
+				if (deviceIndex == AudioPlayback.GetDefaultDeviceIndex())
+				{
+					// No audio device selected, show warning
+					DialogResult r = MessageBox.Show(
+						"The captured audio device is the same as the output device of DiscordAudioStream.\n" +
+						"This will cause an audio loop, which may result in echo or very loud sounds. Continue anyways?",
+						"Warning",
+						MessageBoxButtons.OKCancel,
+						MessageBoxIcon.Warning,
+						// The second button ("Cancel") is the default option
+						MessageBoxDefaultButton.Button2
+					);
+
+					if (r == DialogResult.Cancel)
+						return;
+
+					Logger.Log("\nDEFAULT DEVICE CAPTURED (Audio loop)");
+				}
+				
 				Logger.Log("\nSTART STREAM (With audio)");
 				// Skip "None"
-				audioPlayback = new AudioPlayback(form.AudioIndex - 1);
+				audioPlayback = new AudioPlayback(deviceIndex);
 				audioPlayback.Start();
 			}
 

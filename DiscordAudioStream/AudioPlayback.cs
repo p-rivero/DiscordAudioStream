@@ -55,6 +55,25 @@ namespace DiscordAudioStream.AudioCapture
 			return names;
 		}
 
+		public static int GetDefaultDeviceIndex()
+		{
+			if (audioDevices == null)
+			{
+				throw new InvalidOperationException("Must call RefreshDevices() before trying to get the default index");
+			}
+			MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
+			if (!enumerator.HasDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia))
+				return -1;
+			
+			string defaultDeviceId = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).ID;
+			for (int i = 0; i < audioDevices.Count; i++)
+			{
+				if (audioDevices[i].ID == defaultDeviceId)
+					return i;
+			}
+			return -1;
+		}
+
 		public void Start()
 		{
 			output.PlaybackStopped += StoppedHandler;
