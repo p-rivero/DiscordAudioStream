@@ -33,6 +33,22 @@ namespace DiscordAudioStream
 			base.Show();
 			SetButtonsVisible(true);
 			showMarker = true;
+			// Restore saved position
+			if (Properties.Settings.Default.AreaForm_Size != Size.Empty)
+			{
+				Location = Properties.Settings.Default.AreaForm_Position;
+				Size = Properties.Settings.Default.AreaForm_Size;
+				// Screen size may have changed since last time
+				EnsureWithinBounds();
+			}
+		}
+		new public void Hide()
+		{
+			// Save position
+			Properties.Settings.Default.AreaForm_Position = Location;
+			Properties.Settings.Default.AreaForm_Size = Size;
+			Properties.Settings.Default.Save();
+			base.Hide();
 		}
 
 		private void resizeTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -125,10 +141,17 @@ namespace DiscordAudioStream
 		// Called when the form stops moving
 		private void AreaForm_ResizeEnd(object sender, EventArgs e)
 		{
+			EnsureWithinBounds();
+		}
+
+		private void EnsureWithinBounds()
+		{
+			// Adjust size if needed
+			Height = Math.Min(Height, bounds.Height);
+			Width = Math.Min(Width, bounds.Width);
 			// Clip to top-left corner
 			Left = Math.Max(this.Left, bounds.Left);
 			Top = Math.Max(this.Top, bounds.Top);
-
 			// Clip to bottom-right corner
 			Left = Math.Min(this.Left, bounds.Right - this.Width);
 			Top = Math.Min(this.Top, bounds.Bottom - this.Height);

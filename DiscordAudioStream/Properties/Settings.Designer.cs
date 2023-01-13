@@ -190,5 +190,29 @@ namespace DiscordAudioStream.Properties {
                 this["SeenLockAreaDiag"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point AreaForm_Position {
+            get {
+                return ((global::System.Drawing.Point)(this["AreaForm_Position"]));
+            }
+            set {
+                this["AreaForm_Position"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Size AreaForm_Size {
+            get {
+                return ((global::System.Drawing.Size)(this["AreaForm_Size"]));
+            }
+            set {
+                this["AreaForm_Size"] = value;
+            }
+        }
     }
 }
