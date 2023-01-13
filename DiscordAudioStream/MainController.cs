@@ -374,8 +374,8 @@ namespace DiscordAudioStream
 
 			RefreshAreaInfo();
 
-			// Do not save settings for Custom Area or Window
-			if (index < numberOfScreens)
+			// Do not save settings for Windows (only screen or Custom area)
+			if (index <= numberOfScreens)
 			{
 				Properties.Settings.Default.AreaIndex = index;
 				Properties.Settings.Default.Save();
