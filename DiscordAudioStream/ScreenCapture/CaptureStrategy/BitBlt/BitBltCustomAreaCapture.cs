@@ -7,7 +7,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 	public class BitBltCustomAreaCapture : CaptureSource
 	{
 		private readonly CaptureSource capture;
-		private static readonly AreaForm areaForm = new AreaForm();
+		private static AreaForm areaForm = new AreaForm();
 		// If true, disposing of a BitBltCustomAreaCapture will not hide the form
 		private static bool disableHide = false;
 
@@ -45,10 +45,19 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 		private static void ShowAreaForm()
 		{
-			// If the red rectangle was visible before creating the source, it should remain visible after
-			if (areaForm.Visible) disableHide = true;
-
-			areaForm.Show();
+			try
+			{
+				// If the red rectangle was visible before creating the source, it should remain visible after
+				if (areaForm.Visible) disableHide = true;
+				areaForm.Show();
+			}
+			catch (ObjectDisposedException)
+			{
+				// This occurs when the AreaForm window is closed by another source. Create a new one.
+				Logger.Log("Custom area window was killed. Creating a new one...");
+				areaForm = new AreaForm();
+				areaForm.Show();
+			}
 		}
 		private static void HideAreaForm()
 		{
