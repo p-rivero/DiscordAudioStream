@@ -102,7 +102,7 @@ namespace DiscordAudioStream
 			get { return inputDeviceComboBox.SelectedIndex; }
 		}
 
-		internal void SetAudioElements(IEnumerable<string> elements)
+		internal void SetAudioElements(IEnumerable<string> elements, int defaultIndex)
 		{
 			inputDeviceComboBox.Items.Clear();
 
@@ -111,7 +111,7 @@ namespace DiscordAudioStream
 				inputDeviceComboBox.Items.Add(element);
 			}
 
-			inputDeviceComboBox.SelectedIndex = 0;
+			inputDeviceComboBox.SelectedIndex = defaultIndex;
 		}
 
 		internal bool HideTaskbar

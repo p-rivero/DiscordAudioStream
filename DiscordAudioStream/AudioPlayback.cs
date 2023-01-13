@@ -30,6 +30,10 @@ namespace DiscordAudioStream.AudioCapture
 			audioSource.DataAvailable += AudioSource_DataAvailable;
 
 			Logger.Log("Started audio device: {0}", device);
+			
+			Logger.Log("Saving audio device ID: {0}", device.ID);
+			Properties.Settings.Default.AudioDeviceID = device.ID;
+			Properties.Settings.Default.Save();
 
 			// Output (to default audio device)
 			output = new DirectSoundOut(DESIRED_LATENCY_MS);
@@ -55,6 +59,7 @@ namespace DiscordAudioStream.AudioCapture
 			return names;
 		}
 
+		// Returns the index of the default audio output device
 		public static int GetDefaultDeviceIndex()
 		{
 			if (audioDevices == null)
@@ -69,6 +74,22 @@ namespace DiscordAudioStream.AudioCapture
 			for (int i = 0; i < audioDevices.Count; i++)
 			{
 				if (audioDevices[i].ID == defaultDeviceId)
+					return i;
+			}
+			return -1;
+		}
+
+		// Returns the index of the last device that was used, or -1 if none
+		public static int GetLastDeviceIndex()
+		{
+			if (audioDevices == null)
+			{
+				throw new InvalidOperationException("Must call RefreshDevices() before trying to get the last device index");
+			}
+			string lastDeviceId = Properties.Settings.Default.AudioDeviceID;
+			for (int i = 0; i < audioDevices.Count; i++)
+			{
+				if (audioDevices[i].ID == lastDeviceId)
 					return i;
 			}
 			return -1;

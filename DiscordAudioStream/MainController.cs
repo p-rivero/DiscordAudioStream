@@ -253,8 +253,9 @@ namespace DiscordAudioStream
 			{
 				elements.Add(device);
 			}
-			
-			form.SetAudioElements(elements);
+
+			int defaultIndex = AudioPlayback.GetLastDeviceIndex() + 1; // Add 1 for "None" element
+			form.SetAudioElements(elements, defaultIndex);
 		}
 
 
@@ -276,6 +277,9 @@ namespace DiscordAudioStream
 					return;
 
 				Logger.Log("\nSTART STREAM (Without audio)");
+				// Clear the stored last used audio device
+				Properties.Settings.Default.AudioDeviceID = "";
+				Properties.Settings.Default.Save();
 			}
 			else
 			{

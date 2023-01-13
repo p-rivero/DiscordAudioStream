@@ -214,5 +214,17 @@ namespace DiscordAudioStream.Properties {
                 this["AreaForm_Size"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AudioDeviceID {
+            get {
+                return ((string)(this["AudioDeviceID"]));
+            }
+            set {
+                this["AudioDeviceID"] = value;
+            }
+        }
     }
 }
