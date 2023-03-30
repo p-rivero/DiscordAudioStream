@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
@@ -98,7 +99,24 @@ namespace DiscordAudioStream.AudioCapture
 		public void Start()
 		{
 			output.PlaybackStopped += StoppedHandler;
-			audioSource.StartRecording();
+			try
+			{
+				audioSource.StartRecording();
+			}
+			catch (COMException e)
+			{
+				Logger.Log("COMException while starting audio device:\n{0}", e);
+				if ((uint)e.ErrorCode == 0x8889000A)
+				{
+					throw new InvalidOperationException("The selected audio device is already in use by another application. Please select a different device.");
+				}
+				else throw;
+			}
+			catch (Exception)
+			{
+				output.PlaybackStopped -= StoppedHandler;
+				throw;
+			}
 			output.Play();
 		}
 

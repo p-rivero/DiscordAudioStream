@@ -306,7 +306,21 @@ namespace DiscordAudioStream
 				Logger.Log("\nSTART STREAM (With audio)");
 				// Skip "None"
 				audioPlayback = new AudioPlayback(deviceIndex);
-				audioPlayback.Start();
+				try
+				{
+					audioPlayback.Start();
+				}
+				catch (InvalidOperationException e)
+				{
+					MessageBox.Show(
+						e.Message,
+						"Unable to capture the audio device",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error,
+						MessageBoxDefaultButton.Button1
+					);
+					return;
+				}
 			}
 
 			form.EnableStreamingUI(true);
