@@ -181,6 +181,16 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Audio capture dropdown will also show audio input devices (microphones, capture cards). The prefix [IN] is added to those devices.
+        ///Select this option if you need to use an audio capture card and you know what you are doing..
+        /// </summary>
+        internal static string Tooltip_ShowAudioInputs {
+            get {
+                return ResourceManager.GetString("Tooltip_ShowAudioInputs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Capture method when capturing a specific window (see docs/CaptureMethods.md)..
         /// </summary>
         internal static string Tooltip_WindowMethod {

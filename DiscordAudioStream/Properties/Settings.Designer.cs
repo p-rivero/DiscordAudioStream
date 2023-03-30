@@ -226,5 +226,17 @@ namespace DiscordAudioStream.Properties {
                 this["AudioDeviceID"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowAudioInputs {
+            get {
+                return ((bool)(this["ShowAudioInputs"]));
+            }
+            set {
+                this["ShowAudioInputs"] = value;
+            }
+        }
     }
 }

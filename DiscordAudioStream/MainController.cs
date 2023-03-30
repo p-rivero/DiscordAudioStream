@@ -368,6 +368,7 @@ namespace DiscordAudioStream
 			settingsBox.Owner = form;
 			settingsBox.CaptureMethodChanged += RefreshAreaInfo;
 			settingsBox.FramerateChanged += screenCapture.RefreshFramerate;
+			settingsBox.ShowAudioInputsChanged += RefreshAudioDevices;
 
 			// If this window is topmost, settings is too
 			if (form.TopMost) settingsBox.TopMost = true;

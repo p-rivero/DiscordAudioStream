@@ -45,6 +45,7 @@
 			this.darkThemeRadio = new CustomComponents.DarkThemeRadioButton();
 			this.lightThemeRadio = new CustomComponents.DarkThemeRadioButton();
 			this.debugPage = new System.Windows.Forms.TabPage();
+			this.showAudioInputsCheckbox = new CustomComponents.DarkThemeCheckBox();
 			this.offscreenDrawCheckbox = new CustomComponents.DarkThemeCheckBox();
 			this.outputLogCheckbox = new CustomComponents.DarkThemeCheckBox();
 			this.audioDevicesLink = new System.Windows.Forms.LinkLabel();
@@ -256,6 +257,7 @@
 			// debugPage
 			// 
 			this.debugPage.BackColor = System.Drawing.Color.White;
+			this.debugPage.Controls.Add(this.showAudioInputsCheckbox);
 			this.debugPage.Controls.Add(this.offscreenDrawCheckbox);
 			this.debugPage.Controls.Add(this.outputLogCheckbox);
 			this.debugPage.Controls.Add(this.audioDevicesLink);
@@ -266,6 +268,17 @@
 			this.debugPage.Size = new System.Drawing.Size(248, 163);
 			this.debugPage.TabIndex = 2;
 			this.debugPage.Text = "Debug";
+			// 
+			// showAudioInputsCheckbox
+			// 
+			this.showAudioInputsCheckbox.AutoSize = true;
+			this.showAudioInputsCheckbox.Location = new System.Drawing.Point(9, 59);
+			this.showAudioInputsCheckbox.Name = "showAudioInputsCheckbox";
+			this.showAudioInputsCheckbox.Size = new System.Drawing.Size(161, 19);
+			this.showAudioInputsCheckbox.TabIndex = 41;
+			this.showAudioInputsCheckbox.Text = "Show audio input devices";
+			this.showAudioInputsCheckbox.UseVisualStyleBackColor = true;
+			this.showAudioInputsCheckbox.CheckedChanged += new System.EventHandler(this.showAudioInputsCheckbox_CheckedChanged);
 			// 
 			// offscreenDrawCheckbox
 			// 
@@ -292,7 +305,7 @@
 			// audioDevicesLink
 			// 
 			this.audioDevicesLink.AutoSize = true;
-			this.audioDevicesLink.Location = new System.Drawing.Point(6, 102);
+			this.audioDevicesLink.Location = new System.Drawing.Point(6, 117);
 			this.audioDevicesLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
 			this.audioDevicesLink.Name = "audioDevicesLink";
 			this.audioDevicesLink.Size = new System.Drawing.Size(125, 15);
@@ -304,7 +317,7 @@
 			// classicVolumeMixerLink
 			// 
 			this.classicVolumeMixerLink.AutoSize = true;
-			this.classicVolumeMixerLink.Location = new System.Drawing.Point(6, 75);
+			this.classicVolumeMixerLink.Location = new System.Drawing.Point(6, 90);
 			this.classicVolumeMixerLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
 			this.classicVolumeMixerLink.Name = "classicVolumeMixerLink";
 			this.classicVolumeMixerLink.Size = new System.Drawing.Size(149, 15);
@@ -369,5 +382,6 @@
 		private System.Windows.Forms.Label captureFramerateLabel;
 		private CustomComponents.DarkThemeCheckBox offscreenDrawCheckbox;
 		private System.Windows.Forms.ToolTip toolTip;
+		private CustomComponents.DarkThemeCheckBox showAudioInputsCheckbox;
 	}
 }

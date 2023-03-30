@@ -11,6 +11,7 @@ namespace DiscordAudioStream
 		public delegate void SettingChangedDelegate();
 		public event SettingChangedDelegate CaptureMethodChanged;
 		public event SettingChangedDelegate FramerateChanged;
+		public event SettingChangedDelegate ShowAudioInputsChanged;
 
 		private enum Theme
 		{
@@ -53,6 +54,8 @@ namespace DiscordAudioStream
 
 			offscreenDrawCheckbox.Checked = Properties.Settings.Default.OffscreenDraw;
 
+			showAudioInputsCheckbox.Checked = Properties.Settings.Default.ShowAudioInputs;
+
 			windowMethodComboBox.SelectedIndex = (int) captureState.WindowMethod;
 			fullscreenMethodComboBox.SelectedIndex = (int) captureState.ScreenMethod;
 
@@ -70,6 +73,7 @@ namespace DiscordAudioStream
 			toolTip.SetToolTip(windowMethodComboBox, Properties.Resources.Tooltip_WindowMethod);
 			toolTip.SetToolTip(outputLogCheckbox, Properties.Resources.Tooltip_OutputLog);
 			toolTip.SetToolTip(offscreenDrawCheckbox, Properties.Resources.Tooltip_OffscreenDraw);
+			toolTip.SetToolTip(showAudioInputsCheckbox, Properties.Resources.Tooltip_ShowAudioInputs);
 		}
 
 		private void ApplyDarkTheme(bool darkMode)
@@ -216,6 +220,18 @@ namespace DiscordAudioStream
 		private void SettingsForm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			System.Diagnostics.Process.Start(Properties.Resources.URL_CaptureMethodsInfoLink);
+		}
+
+		private void showAudioInputsCheckbox_CheckedChanged(object sender, EventArgs e)
+		{
+			// Nothing changed
+			if (Properties.Settings.Default.ShowAudioInputs == showAudioInputsCheckbox.Checked) return;
+
+			Properties.Settings.Default.ShowAudioInputs = showAudioInputsCheckbox.Checked;
+			Properties.Settings.Default.Save();
+			Logger.Log("\nChange settings: ShowAudioInputs={0}", Properties.Settings.Default.ShowAudioInputs);
+
+			ShowAudioInputsChanged?.Invoke();
 		}
 	}
 }

@@ -25,9 +25,17 @@ namespace DiscordAudioStream.AudioCapture
 				throw new ArgumentOutOfRangeException("deviceIndex");
 			}
 
-			// Input (from programs outputting to selected device)
 			MMDevice device = audioDevices[deviceIndex];
-			audioSource = new WasapiLoopbackCapture(device);
+			if (device.DataFlow == DataFlow.Render)
+			{
+				// Input from programs outputting to selected device
+				audioSource = new WasapiLoopbackCapture(device);
+			}
+			else
+			{
+				// Input from microphone
+				audioSource = new WasapiCapture(device);
+			}
 			audioSource.DataAvailable += AudioSource_DataAvailable;
 
 			Logger.Log("Started audio device: {0}", device);
@@ -49,13 +57,16 @@ namespace DiscordAudioStream.AudioCapture
 		public static string[] RefreshDevices()
 		{
 			MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
-			audioDevices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+			DataFlow flow = Properties.Settings.Default.ShowAudioInputs ? DataFlow.All : DataFlow.Render;
+			audioDevices = enumerator.EnumerateAudioEndPoints(flow, DeviceState.Active);
 
 			string[] names = new string[audioDevices.Count];
 
 			for (int i = 0; i < audioDevices.Count; i++)
 			{
 				names[i] = audioDevices[i].DeviceFriendlyName;
+				// Add [IN] prefix to input devices (microphones and capture cards)
+				if (audioDevices[i].DataFlow == DataFlow.Capture) names[i] = "[IN] " + names[i];
 			}
 			return names;
 		}
