@@ -10,8 +10,12 @@ Made out of necessity and continuous frustration. Built with WinForms (C#).
 </p>
 <p align="center">
     <a href="https://github.com/p-rivero/DiscordAudioStream/releases">
-        <img alt="Releases" src="https://img.shields.io/github/downloads/p-rivero/DiscordAudioStream/latest/total">
+        <img alt="Total downloads" src="https://img.shields.io/github/downloads/p-rivero/DiscordAudioStream/total?label=total%20downloads">
     </a>
+    <a href="https://github.com/p-rivero/DiscordAudioStream/releases">
+        <img alt="Downloads of latest release" src="https://img.shields.io/github/downloads/p-rivero/DiscordAudioStream/latest/total?label=downloads%20(latest%20release)">
+    </a>
+    <br>
     <a href="https://github.com/p-rivero/DiscordAudioStream/issues">
         <img alt="Issues" src="https://img.shields.io/github/issues/p-rivero/DiscordAudioStream">
     </a>
