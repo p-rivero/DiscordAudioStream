@@ -35,12 +35,12 @@ If you use Discord regularly, you may be used to screen-sharing (streaming) a sp
 
 Similarly, you may be an advanced user who wants to step up your Discord streams by using OBS. While you can stream the OBS video output easily, it's not possible to stream the audio without configuring an advanced audio setup.
 
-If any of these are true, this utility may be for you.
+If any of these are true, this tool may be for you.
 
 
 ## Does it only work for Discord?
 
-Not at all, you can use this utility with any video conferencing software that allows screen-sharing a specific window.
+Not at all, you can use this tool with any video conferencing software that allows screen-sharing a specific window.
 
 However, keep in mind that this utility has been built and tested only for Discord, so some of the steps below will be different and you may encounter errors.
 
@@ -71,7 +71,9 @@ The following steps depend on what you want to do.
 
     **Tip:** your answer should never be *"all of them"*. You should, at least, exclude Discord (otherwise, the viewers of your stream will hear themselves).
     
-2. Open the volume mixer. You can do this from the utility by using `Ctrl+V` or clicking the mixer icon: ![Volume mixer icon - Light theme](docs/img/mixer-light.png#gh-light-mode-only)![Volume mixer icon - Dark theme](docs/img/mixer-dark.png#gh-dark-mode-only).
+    > **Update:** Discord now seems to create 2 outputs: one for the call audio (voices of the call members) and another for the media audio (videos sent in a text channel). This means that you are now able to stream the Discord window (for example, to group watch videos from a text channel) without the viewers hearing themselves. You need to determine which of the 2 outputs is the media audio and only share that one (do not include the call audio).
+    
+2. Open the volume mixer. You can do this from the DiscordAudioStream window by using `Ctrl+V` or clicking the mixer icon: ![Volume mixer icon - Light theme](docs/img/mixer-light.png#gh-light-mode-only)![Volume mixer icon - Dark theme](docs/img/mixer-dark.png#gh-dark-mode-only).
 
 3. *For each* of the programs whose audio you want to share, change its *output* device from "Default" to another device (that you are not currently using). For example, if you have Steam installed you should have a virtual audio device called "Steam Streaming Speakers" that you can use (unless you are using it for other purposes).
 
@@ -79,6 +81,21 @@ The following steps depend on what you want to do.
     - Don't worry if you stop hearing the audio from the programs you are sharing. Later you will be able to hear them again.
     - Make sure that there are no other programs outputting audio to the device you selected. Everything that gets output to this device will be shared.
 
+    <br>
+    <details>
+    <summary>I want to use an audio capture card</summary>
+        Capture cards and microphones are audio input devices, but DiscordAudioStream only shows output devices by default. Open DiscordAudioStream settings > Debug and enable "Show audio input devices". You should now see your capture cards and microphones in the audio capture dropdown with the <code>[IN]</code> prefix.
+        <br>
+        Keep in mind that Discord already shares your microphone when you enter a call, so you don't need to capture it in DiscordAudioStream.
+    </details>
+    <br>
+    <details>
+    <summary>I don't have any unused audio device!</summary>
+        You can use <a href="https://vb-audio.com/Cable/">VB-CABLE</a>, which creates 2 virtual audio devices: <code>CABLE Input</code> (virtual output device) and <code>CABLE Output</code> (virtual microphone). Set the output of the programs you want to capture to <code>CABLE Input</code> and try to capture <code>VB-Audio Virtual Cable</code> in DiscordAudioStream (see step 4 below).
+        <br>
+        When you start capturing the audio in step 7, you may encounter an error. If this happens, you will need to open DiscordAudioStream settings > Debug and enable "Show audio input devices". Go to the audio capture dropdown and capture <code>[IN] VB-Audio Virtual Cable</code> instead.
+    </details>
+    <br>
     ![Change audio device in volume mixer](docs/img/audio-device.png)
 
 4. In the *Audio capture input* dropdown, select the (previously unused) audio device that you have chosen in step 3.
@@ -91,7 +108,7 @@ The following steps depend on what you want to do.
 
 8. In Discord, select "Share Your Screen". This will show a list of open windows. Select the window called "Discord Audio Stream" (the one that was created in step 7).
 
-9. You are now sharing your screen with the audio from the selected programs. When you are done, you can close the utility.
+9. You are now sharing your screen with the audio from the selected programs. When you are done, you can close DiscordAudioStream.
 
     - **Very important:** remember to restore the output device of your programs to "Default". Otherwise, you won't be able to hear their audio.
     - Keep in mind that if you minimize the window that was created in step 7, your Discord stream will probably be paused. You may want to hide this window behind other windows, without minimizing it.
@@ -121,13 +138,13 @@ Now follow this steps:
 
 5. In OBS, right-click the preview and select "Windowed Projector (Preview)". This will create a new window. You can now minimize OBS (but not the preview window). You may want to make this window slightly bigger, in order to improve video quality.
 
-6. Open the Discord Audio Stream utility (this program). In the *Video capture area* dropdown, select the window "Windowed Projector (Preview)" (the one that was created in step 5).
+6. Open DiscordAudioStream (this program). In the *Video capture area* dropdown, select the window "Windowed Projector (Preview)" (the one that was created in step 5).
 
 7. Click the *Start Stream* button. This will create a new window. You should now be able to hear the audio from the programs you stopped hearing in step 3.
 
 8. In Discord, select "Share Your Screen". This will show a list of open windows. Select the window called "Discord Audio Stream" (the one that was created in step 7).
 
-9. You are now sharing your OBS composition with the audio from the selected programs. When you are done, you can close the utility.
+9. You are now sharing your OBS composition with the audio from the selected programs. When you are done, you can close DiscordAudioStream.
 
     - **Very important:** remember to restore the output device of your programs to "Default". Otherwise, you won't be able to hear their audio.
     - Keep in mind that if you minimize the window that was created in step 7, your Discord stream will probably be paused. You may want to hide this window behind other windows, without minimizing it.
