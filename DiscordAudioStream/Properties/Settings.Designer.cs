@@ -238,5 +238,29 @@ namespace DiscordAudioStream.Properties {
                 this["ShowAudioInputs"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point AudioMeterForm_Position {
+            get {
+                return ((global::System.Drawing.Point)(this["AudioMeterForm_Position"]));
+            }
+            set {
+                this["AudioMeterForm_Position"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Size AudioMeterForm_Size {
+            get {
+                return ((global::System.Drawing.Size)(this["AudioMeterForm_Size"]));
+            }
+            set {
+                this["AudioMeterForm_Size"] = value;
+            }
+        }
     }
 }

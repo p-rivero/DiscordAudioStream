@@ -24,6 +24,7 @@ namespace DiscordAudioStream
 		private readonly CaptureState captureState = new CaptureState();
 
 		private AudioPlayback audioPlayback = null;
+		private AudioMeterForm currentMeterForm = null;
 
 
 		public MainController(MainForm owner)
@@ -308,6 +309,7 @@ namespace DiscordAudioStream
 				audioPlayback = new AudioPlayback(deviceIndex);
 				try
 				{
+					audioPlayback.AudioLevelChanged += AudioPlayback_AudioLevelChanged;
 					audioPlayback.Start();
 				}
 				catch (InvalidOperationException e)
@@ -369,10 +371,7 @@ namespace DiscordAudioStream
 			settingsBox.CaptureMethodChanged += RefreshAreaInfo;
 			settingsBox.FramerateChanged += screenCapture.RefreshFramerate;
 			settingsBox.ShowAudioInputsChanged += RefreshAudioDevices;
-
-			// If this window is topmost, settings is too
 			if (form.TopMost) settingsBox.TopMost = true;
-
 			settingsBox.ShowDialog();
 		}
 
@@ -380,11 +379,33 @@ namespace DiscordAudioStream
 		{
 			AboutForm aboutBox = new AboutForm(darkMode);
 			aboutBox.Owner = form;
-			if (form.TopMost)
-			{
-				aboutBox.TopMost = true;
-			}
+			if (form.TopMost) aboutBox.TopMost = true;
 			aboutBox.ShowDialog();
+		}
+		
+		internal void ShowAudioMeterForm(bool darkMode)
+		{
+			if (currentMeterForm == null || currentMeterForm.IsDisposed)
+			{
+				currentMeterForm = new AudioMeterForm(darkMode);
+				currentMeterForm.Owner = form;
+			}
+			if (form.TopMost) currentMeterForm.TopMost = true;
+			currentMeterForm.Show();
+		}
+		internal void HideAudioMeterForm()
+		{
+			if (currentMeterForm != null && !currentMeterForm.IsDisposed)
+			{
+				currentMeterForm.Hide();
+			}
+		}
+		private void AudioPlayback_AudioLevelChanged(float level)
+		{
+			if (currentMeterForm != null && !currentMeterForm.IsDisposed)
+			{
+				currentMeterForm.AudioLevel = level;
+			}
 		}
 
 		internal void SetVideoIndex(int index)

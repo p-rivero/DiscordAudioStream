@@ -155,6 +155,7 @@ namespace DiscordAudioStream
 				// If we start streaming, override previewBtn and enable the previewBox
 				DisplayPreview(true);
 				previewBox.Location = new Point(0, 0);
+				controller.ShowAudioMeterForm(darkMode);
 			}
 			else
 			{
@@ -162,6 +163,7 @@ namespace DiscordAudioStream
 				previewBox.Size = defaultPreviewSize;
 				previewBox.Location = defaultPreviewLocation;
 				CenterToScreen();
+				controller.HideAudioMeterForm();
 			}
 		}
 

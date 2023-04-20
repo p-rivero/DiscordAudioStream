@@ -72,6 +72,12 @@
     <Compile Include="AreaForm.Designer.cs">
       <DependentUpon>AreaForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AudioMeterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AudioMeterForm.Designer.cs">
+      <DependentUpon>AudioMeterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="AudioPlayback.cs" />
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="MainController.cs" />
@@ -146,6 +152,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AreaForm.resx">
       <DependentUpon>AreaForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AudioMeterForm.resx">
+      <DependentUpon>AudioMeterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
@@ -7,10 +9,15 @@ namespace DiscordAudioStream.AudioCapture
 {
 	class AudioPlayback
 	{
+		public delegate void AudioLevelChangedDelegate(float audioLevel);
+		public event AudioLevelChangedDelegate AudioLevelChanged;
+
+		private const int DESIRED_LATENCY_MS = 50;
+
 		private readonly IWaveIn audioSource;
 		private readonly DirectSoundOut output;
 		private readonly BufferedWaveProvider outputProvider;
-		private const int DESIRED_LATENCY_MS = 50;
+		private CancellationTokenSource audioMeterCancel;
 
 		private static MMDeviceCollection audioDevices = null;
 
@@ -52,6 +59,10 @@ namespace DiscordAudioStream.AudioCapture
 			outputProvider.BufferDuration = TimeSpan.FromSeconds(2);
 
 			output.Init(outputProvider);
+
+			// Start a periodic timer to update the audio meter, discard the result
+			audioMeterCancel = new CancellationTokenSource();
+			_ = UpdateAudioMeter(TimeSpan.FromMilliseconds(10), audioMeterCancel.Token, device);
 		}
 
 		public static string[] RefreshDevices()
@@ -109,7 +120,7 @@ namespace DiscordAudioStream.AudioCapture
 
 		public void Start()
 		{
-			output.PlaybackStopped += StoppedHandler;
+			output.PlaybackStopped += Output_StoppedHandler;
 			try
 			{
 				audioSource.StartRecording();
@@ -125,7 +136,7 @@ namespace DiscordAudioStream.AudioCapture
 			}
 			catch (Exception)
 			{
-				output.PlaybackStopped -= StoppedHandler;
+				output.PlaybackStopped -= Output_StoppedHandler;
 				throw;
 			}
 			output.Play();
@@ -133,10 +144,10 @@ namespace DiscordAudioStream.AudioCapture
 
 		public void Stop()
 		{
-			// Remove the handler before stopping manually
-			output.PlaybackStopped -= StoppedHandler;
-
+			audioMeterCancel.Cancel();
 			audioSource.StopRecording();
+			// Remove the handler before stopping manually
+			output.PlaybackStopped -= Output_StoppedHandler;
 			output.Stop();
 		}
 
@@ -146,11 +157,22 @@ namespace DiscordAudioStream.AudioCapture
 			outputProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
 		}
 
-		private void StoppedHandler(object sender, StoppedEventArgs e)
+		private void Output_StoppedHandler(object sender, StoppedEventArgs e)
 		{
 			// In some cases, streaming to Discord will cause DirectSoundOut to throw an
 			// exception and stop. If that happens, just resume playback
 			output.Play();
+		}
+
+		
+		private async Task UpdateAudioMeter(TimeSpan interval, CancellationToken token, MMDevice device)
+		{
+			while (!token.IsCancellationRequested)
+			{
+				float peak = device.AudioMeterInformation.MasterPeakValue;
+				AudioLevelChanged?.Invoke(peak);
+				await Task.Delay(interval, token);
+			}
 		}
 	}
 }
