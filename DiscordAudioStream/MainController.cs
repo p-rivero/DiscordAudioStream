@@ -400,11 +400,11 @@ namespace DiscordAudioStream
 				currentMeterForm.Hide();
 			}
 		}
-		private void AudioPlayback_AudioLevelChanged(float level)
+		private void AudioPlayback_AudioLevelChanged(float left, float right)
 		{
 			if (currentMeterForm != null && !currentMeterForm.IsDisposed)
 			{
-				currentMeterForm.AudioLevel = level;
+				currentMeterForm.SetLevels(left, right);
 			}
 		}
 

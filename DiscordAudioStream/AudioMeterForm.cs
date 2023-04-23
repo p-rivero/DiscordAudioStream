@@ -30,16 +30,10 @@ namespace DiscordAudioStream
 		}
 
 
-		public float AudioLevel
+		public void SetLevels(float left, float right)
 		{
-			get
-			{
-				return volumeMeter.Amplitude;
-			}
-			set
-			{
-				volumeMeter.Amplitude = value;
-			}
+			volumeMeterLeft.Amplitude = left;
+			volumeMeterRight.Amplitude = right;
 		}
 
 

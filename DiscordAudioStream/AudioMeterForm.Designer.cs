@@ -28,43 +28,110 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.volumeMeter = new NAudio.Gui.VolumeMeter();
+			this.volumeMeterLeft = new NAudio.Gui.VolumeMeter();
+			this.volumeMeterRight = new NAudio.Gui.VolumeMeter();
+			this.dbLabel60 = new System.Windows.Forms.Label();
+			this.rightLabel = new System.Windows.Forms.Label();
+			this.leftLabel = new System.Windows.Forms.Label();
+			this.dbLabel0 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
-			// volumeMeter
+			// volumeMeterLeft
 			// 
-			this.volumeMeter.Amplitude = 0F;
-			this.volumeMeter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.volumeMeter.ForeColor = System.Drawing.Color.DarkGreen;
-			this.volumeMeter.Location = new System.Drawing.Point(12, 12);
-			this.volumeMeter.MaxDb = 0F;
-			this.volumeMeter.MinDb = -60F;
-			this.volumeMeter.Name = "volumeMeter";
-			this.volumeMeter.Size = new System.Drawing.Size(120, 237);
-			this.volumeMeter.TabIndex = 1;
-			this.volumeMeter.Text = "Audio level";
+			this.volumeMeterLeft.Amplitude = 0F;
+			this.volumeMeterLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+			this.volumeMeterLeft.ForeColor = System.Drawing.Color.DarkGreen;
+			this.volumeMeterLeft.Location = new System.Drawing.Point(47, 12);
+			this.volumeMeterLeft.MaxDb = 0F;
+			this.volumeMeterLeft.MinDb = -60F;
+			this.volumeMeterLeft.Name = "volumeMeterLeft";
+			this.volumeMeterLeft.Size = new System.Drawing.Size(20, 222);
+			this.volumeMeterLeft.TabIndex = 1;
+			this.volumeMeterLeft.Text = "Audio level";
+			// 
+			// volumeMeterRight
+			// 
+			this.volumeMeterRight.Amplitude = 0F;
+			this.volumeMeterRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+			this.volumeMeterRight.ForeColor = System.Drawing.Color.DarkGreen;
+			this.volumeMeterRight.Location = new System.Drawing.Point(77, 12);
+			this.volumeMeterRight.MaxDb = 0F;
+			this.volumeMeterRight.MinDb = -60F;
+			this.volumeMeterRight.Name = "volumeMeterRight";
+			this.volumeMeterRight.Size = new System.Drawing.Size(20, 222);
+			this.volumeMeterRight.TabIndex = 2;
+			this.volumeMeterRight.Text = "Audio level";
+			// 
+			// dbLabel60
+			// 
+			this.dbLabel60.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+			this.dbLabel60.AutoSize = true;
+			this.dbLabel60.Location = new System.Drawing.Point(103, 226);
+			this.dbLabel60.Name = "dbLabel60";
+			this.dbLabel60.Size = new System.Drawing.Size(22, 13);
+			this.dbLabel60.TabIndex = 3;
+			this.dbLabel60.Text = "-60";
+			// 
+			// rightLabel
+			// 
+			this.rightLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+			this.rightLabel.AutoSize = true;
+			this.rightLabel.Location = new System.Drawing.Point(79, 239);
+			this.rightLabel.Name = "rightLabel";
+			this.rightLabel.Size = new System.Drawing.Size(15, 13);
+			this.rightLabel.TabIndex = 4;
+			this.rightLabel.Text = "R";
+			// 
+			// leftLabel
+			// 
+			this.leftLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+			this.leftLabel.AutoSize = true;
+			this.leftLabel.Location = new System.Drawing.Point(50, 239);
+			this.leftLabel.Name = "leftLabel";
+			this.leftLabel.Size = new System.Drawing.Size(13, 13);
+			this.leftLabel.TabIndex = 5;
+			this.leftLabel.Text = "L";
+			// 
+			// dbLabel0
+			// 
+			this.dbLabel0.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.dbLabel0.AutoSize = true;
+			this.dbLabel0.Location = new System.Drawing.Point(109, 8);
+			this.dbLabel0.Name = "dbLabel0";
+			this.dbLabel0.Size = new System.Drawing.Size(13, 13);
+			this.dbLabel0.TabIndex = 6;
+			this.dbLabel0.Text = "0";
 			// 
 			// AudioMeterForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(144, 261);
-			this.Controls.Add(this.volumeMeter);
+			this.Controls.Add(this.dbLabel0);
+			this.Controls.Add(this.leftLabel);
+			this.Controls.Add(this.rightLabel);
+			this.Controls.Add(this.dbLabel60);
+			this.Controls.Add(this.volumeMeterRight);
+			this.Controls.Add(this.volumeMeterLeft);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			this.MaximumSize = new System.Drawing.Size(160, 9999);
-			this.MinimumSize = new System.Drawing.Size(60, 100);
+			this.MinimumSize = new System.Drawing.Size(80, 100);
 			this.Name = "AudioMeterForm";
 			this.ShowIcon = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Audio Meter";
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
 		#endregion
 
-		private NAudio.Gui.VolumeMeter volumeMeter;
+		private NAudio.Gui.VolumeMeter volumeMeterLeft;
+		private NAudio.Gui.VolumeMeter volumeMeterRight;
+		private System.Windows.Forms.Label dbLabel60;
+		private System.Windows.Forms.Label rightLabel;
+		private System.Windows.Forms.Label leftLabel;
+		private System.Windows.Forms.Label dbLabel0;
 	}
 }

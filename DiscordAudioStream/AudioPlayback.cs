@@ -9,7 +9,7 @@ namespace DiscordAudioStream.AudioCapture
 {
 	class AudioPlayback
 	{
-		public delegate void AudioLevelChangedDelegate(float audioLevel);
+		public delegate void AudioLevelChangedDelegate(float left, float right);
 		public event AudioLevelChangedDelegate AudioLevelChanged;
 
 		private const int DESIRED_LATENCY_MS = 50;
@@ -169,8 +169,14 @@ namespace DiscordAudioStream.AudioCapture
 		{
 			while (!token.IsCancellationRequested)
 			{
-				float peak = device.AudioMeterInformation.MasterPeakValue;
-				AudioLevelChanged?.Invoke(peak);
+				int numChannels = device.AudioMeterInformation.PeakValues.Count;
+				float left = (numChannels >= 2) ?
+					device.AudioMeterInformation.PeakValues[0] : 
+					device.AudioMeterInformation.MasterPeakValue;
+				float right = (numChannels >= 2) ?
+					device.AudioMeterInformation.PeakValues[1] :
+					device.AudioMeterInformation.MasterPeakValue;
+				AudioLevelChanged?.Invoke(left, right);
 				await Task.Delay(interval, token);
 			}
 		}
