@@ -26,8 +26,6 @@ namespace DiscordAudioStream
 				BackColor = DarkThemeManager.DarkBackColor;
 				ForeColor = Color.White;
 			}
-			volumeMeterLeft.SetDarkMode(darkMode);
-			volumeMeterRight.SetDarkMode(darkMode);
 		}
 
 
@@ -51,6 +49,8 @@ namespace DiscordAudioStream
 				Location = Properties.Settings.Default.AudioMeterForm_Position;
 				Size = Properties.Settings.Default.AudioMeterForm_Size;
 			}
+			volumeMeterText.SetWindowWidth(Width);
+			volumeMeterText2.SetWindowWidth(Width);
 		}
 		
 		new public void Hide()
@@ -67,6 +67,13 @@ namespace DiscordAudioStream
 			Properties.Settings.Default.AudioMeterForm_Position = Location;
 			Properties.Settings.Default.AudioMeterForm_Size = Size;
 			Properties.Settings.Default.Save();
+		}
+
+		protected override void OnResize(EventArgs pe)
+		{
+			base.OnResize(pe);
+			volumeMeterText.SetWindowWidth(Width);
+			volumeMeterText2.SetWindowWidth(Width);
 		}
 	}
 }

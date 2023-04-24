@@ -79,7 +79,10 @@
       <DependentUpon>AudioMeterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AudioPlayback.cs" />
-    <Compile Include="CustomComponents\CustomAudioMeter.cs">
+    <Compile Include="CustomComponents\AudioMeter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomComponents\AudioMeterText.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Helpers\Logger.cs" />

@@ -29,23 +29,13 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AudioMeterForm));
-			this.dbLabel60 = new System.Windows.Forms.Label();
 			this.rightLabel = new System.Windows.Forms.Label();
 			this.leftLabel = new System.Windows.Forms.Label();
-			this.dbLabel0 = new System.Windows.Forms.Label();
-			this.volumeMeterRight = new CustomComponents.CustomAudioMeter();
-			this.volumeMeterLeft = new CustomComponents.CustomAudioMeter();
+			this.volumeMeterText2 = new CustomComponents.AudioMeterText();
+			this.volumeMeterText = new CustomComponents.AudioMeterText();
+			this.volumeMeterRight = new CustomComponents.AudioMeter();
+			this.volumeMeterLeft = new CustomComponents.AudioMeter();
 			this.SuspendLayout();
-			// 
-			// dbLabel60
-			// 
-			this.dbLabel60.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-			this.dbLabel60.AutoSize = true;
-			this.dbLabel60.Location = new System.Drawing.Point(103, 276);
-			this.dbLabel60.Name = "dbLabel60";
-			this.dbLabel60.Size = new System.Drawing.Size(38, 13);
-			this.dbLabel60.TabIndex = 3;
-			this.dbLabel60.Text = "-60 dB";
 			// 
 			// rightLabel
 			// 
@@ -67,15 +57,24 @@
 			this.leftLabel.TabIndex = 5;
 			this.leftLabel.Text = "L";
 			// 
-			// dbLabel0
+			// volumeMeterText2
 			// 
-			this.dbLabel0.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.dbLabel0.AutoSize = true;
-			this.dbLabel0.Location = new System.Drawing.Point(103, 9);
-			this.dbLabel0.Name = "dbLabel0";
-			this.dbLabel0.Size = new System.Drawing.Size(29, 13);
-			this.dbLabel0.TabIndex = 6;
-			this.dbLabel0.Text = "0 dB";
+			this.volumeMeterText2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+			this.volumeMeterText2.Location = new System.Drawing.Point(-7, 2);
+			this.volumeMeterText2.Name = "volumeMeterText2";
+			this.volumeMeterText2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.volumeMeterText2.Size = new System.Drawing.Size(52, 309);
+			this.volumeMeterText2.TabIndex = 8;
+			this.volumeMeterText2.Text = "audioMeterText1";
+			// 
+			// volumeMeterText
+			// 
+			this.volumeMeterText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+			this.volumeMeterText.Location = new System.Drawing.Point(99, 2);
+			this.volumeMeterText.Name = "volumeMeterText";
+			this.volumeMeterText.Size = new System.Drawing.Size(52, 309);
+			this.volumeMeterText.TabIndex = 7;
+			this.volumeMeterText.Text = "audioMeterText1";
 			// 
 			// volumeMeterRight
 			// 
@@ -108,15 +107,15 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(144, 311);
-			this.Controls.Add(this.dbLabel0);
+			this.Controls.Add(this.volumeMeterText2);
+			this.Controls.Add(this.volumeMeterText);
 			this.Controls.Add(this.leftLabel);
 			this.Controls.Add(this.rightLabel);
-			this.Controls.Add(this.dbLabel60);
 			this.Controls.Add(this.volumeMeterRight);
 			this.Controls.Add(this.volumeMeterLeft);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximumSize = new System.Drawing.Size(160, 9999);
+			this.MaximumSize = new System.Drawing.Size(180, 9999);
 			this.MinimumSize = new System.Drawing.Size(80, 150);
 			this.Name = "AudioMeterForm";
 			this.ShowIcon = false;
@@ -129,11 +128,11 @@
 
 		#endregion
 
-		private CustomComponents.CustomAudioMeter volumeMeterLeft;
-		private CustomComponents.CustomAudioMeter volumeMeterRight;
-		private System.Windows.Forms.Label dbLabel60;
+		private CustomComponents.AudioMeter volumeMeterLeft;
+		private CustomComponents.AudioMeter volumeMeterRight;
 		private System.Windows.Forms.Label rightLabel;
 		private System.Windows.Forms.Label leftLabel;
-		private System.Windows.Forms.Label dbLabel0;
+		private CustomComponents.AudioMeterText volumeMeterText;
+		private CustomComponents.AudioMeterText volumeMeterText2;
 	}
 }
