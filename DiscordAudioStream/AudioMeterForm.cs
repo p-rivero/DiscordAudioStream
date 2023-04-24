@@ -69,9 +69,9 @@ namespace DiscordAudioStream
 			Properties.Settings.Default.Save();
 		}
 
-		protected override void OnResize(EventArgs pe)
+		protected override void OnResize(EventArgs e)
 		{
-			base.OnResize(pe);
+			base.OnResize(e);
 			volumeMeterText.SetWindowWidth(Width);
 			volumeMeterText2.SetWindowWidth(Width);
 		}

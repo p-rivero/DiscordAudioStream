@@ -16,27 +16,27 @@ namespace CustomComponents
 			if (refresh) Refresh();
 		}
 
-		protected override void OnResize(EventArgs pe)
+		protected override void OnResize(EventArgs e)
 		{
-			base.OnResize(pe);
+			base.OnResize(e);
 			Refresh();
 		}
 
 
-		protected override void OnPaint(PaintEventArgs pe)
+		protected override void OnPaint(PaintEventArgs e)
 		{
-			pe.Graphics.Clear(BackColor);
+			e.Graphics.Clear(BackColor);
 			
-			DrawMeterLine(pe.Graphics, "0", 0f);
-			DrawMeterLine(pe.Graphics, "-20", 0.3333f);
-			DrawMeterLine(pe.Graphics, "-40", 0.6667f);
-			DrawMeterLine(pe.Graphics, "-60", 1f);
+			DrawMeterLine(e.Graphics, "0", 0f);
+			DrawMeterLine(e.Graphics, "-20", 0.3333f);
+			DrawMeterLine(e.Graphics, "-40", 0.6667f);
+			DrawMeterLine(e.Graphics, "-60", 1f);
 
 			if (Height > 500)
 			{
-				DrawMeterLine(pe.Graphics, "-10", 0.1667f);
-				DrawMeterLine(pe.Graphics, "-30", 0.5f);
-				DrawMeterLine(pe.Graphics, "-50", 0.8333f);
+				DrawMeterLine(e.Graphics, "-10", 0.1667f);
+				DrawMeterLine(e.Graphics, "-30", 0.5f);
+				DrawMeterLine(e.Graphics, "-50", 0.8333f);
 			}
 		}
 		

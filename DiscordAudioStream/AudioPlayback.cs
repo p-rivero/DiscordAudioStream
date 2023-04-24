@@ -17,7 +17,7 @@ namespace DiscordAudioStream.AudioCapture
 		private readonly IWaveIn audioSource;
 		private readonly DirectSoundOut output;
 		private readonly BufferedWaveProvider outputProvider;
-		private CancellationTokenSource audioMeterCancel;
+		private readonly CancellationTokenSource audioMeterCancel;
 
 		private static MMDeviceCollection audioDevices = null;
 
