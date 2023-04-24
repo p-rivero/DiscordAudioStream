@@ -33,6 +33,8 @@ namespace DiscordAudioStream
 		{
 			volumeMeterLeft.Amplitude = left;
 			volumeMeterRight.Amplitude = right;
+			volumeMeterRight.Refresh();
+			volumeMeterLeft.Refresh();
 		}
 
 

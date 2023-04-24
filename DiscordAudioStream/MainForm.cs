@@ -167,8 +167,11 @@ namespace DiscordAudioStream
 			}
 		}
 
-		internal void UpdatePreview(Bitmap newImage, bool forceRefresh)
+		internal void UpdatePreview(Bitmap newImage, bool forceRefresh, IntPtr handle)
 		{
+			// This method is called in a worker thread, redraw the previewBox in the UI thread.
+			// If needed, triger a full redraw of the form, but do it in the worker thread to reduce
+			// the load on the UI thread.
 			Invoke(new Action(() =>
 			{
 				if (IsDisposed)
@@ -178,15 +181,14 @@ namespace DiscordAudioStream
 				}
 				previewBox.Image?.Dispose();
 				previewBox.Image = newImage;
-
-				if (forceRefresh)
-				{
-					// Windows only refreshes the part of the window that is shown to the user. Therefore, if this
-					// window is partially off-screen, it won't be streamed correctly in Discord.
-					// Use PrintWindow to send a WM_PRINT to our own window handle, forcing a complete redraw.
-					User32.PrintWindow(Handle, IntPtr.Zero, 0);
-				}
 			}));
+			if (forceRefresh)
+			{
+				// Windows only refreshes the part of the window that is shown to the user. Therefore, if this
+				// window is partially off-screen, it won't be streamed correctly in Discord.
+				// Use PrintWindow to send a WM_PRINT to our own window handle, forcing a complete redraw.
+				User32.PrintWindow(handle, IntPtr.Zero, 0);
+			}
 		}
 
 

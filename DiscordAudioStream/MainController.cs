@@ -120,6 +120,8 @@ namespace DiscordAudioStream
 
 		private Thread CreateDrawThread()
 		{
+			// Get the handle now, since we cannot get it from inside the thread
+			IntPtr formHandle = form.Handle;
 			Thread newThread = new Thread(() =>
 			{
 				Logger.Log("\nCreating Draw thread. Target framerate: {0} FPS ({1} ms)", 
@@ -147,7 +149,7 @@ namespace DiscordAudioStream
 
 						// Display captured frame
 						// Refresh if the stream has started and "Force screen redraw" is enabled
-						form.UpdatePreview(next, streamEnabled && forceRefresh);
+						form.UpdatePreview(next, streamEnabled && forceRefresh, formHandle);
 					}
 					catch (InvalidOperationException)
 					{
