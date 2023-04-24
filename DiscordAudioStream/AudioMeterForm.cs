@@ -26,7 +26,8 @@ namespace DiscordAudioStream
 				BackColor = DarkThemeManager.DarkBackColor;
 				ForeColor = Color.White;
 			}
-			// TODO
+			volumeMeterLeft.SetDarkMode(darkMode);
+			volumeMeterRight.SetDarkMode(darkMode);
 		}
 
 

@@ -79,6 +79,9 @@
       <DependentUpon>AudioMeterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AudioPlayback.cs" />
+    <Compile Include="CustomComponents\CustomAudioMeter.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="MainController.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
