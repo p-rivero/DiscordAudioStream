@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace CustomComponents
 {
-	public class CustomAudioMeter : NAudio.Gui.VolumeMeter
+	public class AudioMeter : NAudio.Gui.VolumeMeter
 	{
 		private const double BACKGROUND_PERCENT = 0.2;
 		private const int BACKGROUND_COLOR_INACTIVE = unchecked((int) 0xff225561);
@@ -24,28 +24,10 @@ namespace CustomComponents
 		private const int CLIPPING_COLOR_INACTIVE = unchecked((int) 0xff5c2222);
 		private const int CLIPPING_COLOR_ACTIVE = unchecked((int) 0xffce0606);
 
-		private bool darkMode;
-
-		public CustomAudioMeter()
-		{
-			if (darkMode)
-			{
-				SetStyle(ControlStyles.UserPaint, value: true);
-				SetStyle(ControlStyles.AllPaintingInWmPaint, value: true);
-			}
-		}
-
-		public void SetDarkMode(bool dark)
-		{
-			darkMode = dark;
-		}
-
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
 			// Draw an audio meter, see https://github.com/p-rivero/DiscordAudioStream/issues/15
-
-			Brush foregroundBrush = new SolidBrush(darkMode ? Color.White : Color.Black);
 
 			double db = 20.0 * Math.Log10(Amplitude);
 			db = Math.Min(db, MaxDb);
@@ -60,10 +42,6 @@ namespace CustomComponents
 			DrawMeterSegment(pe.Graphics, percent, SPEAKING_PERCENT, LOUD_PERCENT, LOUD_COLOR_ACTIVE, LOUD_COLOR_INACTIVE);
 			// Clipping volume
 			DrawMeterSegment(pe.Graphics, percent, LOUD_PERCENT, CLIPPING_PERCENT, CLIPPING_COLOR_ACTIVE, CLIPPING_COLOR_INACTIVE);
-
-			//int num4 = base.Height - 2;
-			//num4 = (int)((double)num4 * percent);
-			//pe.Graphics.FillRectangle(foregroundBrush, 1, base.Height - 1 - num4, Width - 2, num4);
 		}
 
 		private void DrawMeterSegment(Graphics g, double meterPercent, double segmentStart, double segmentEnd, int active, int inactive)
