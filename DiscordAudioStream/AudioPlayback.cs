@@ -75,7 +75,7 @@ namespace DiscordAudioStream.AudioCapture
 
 			for (int i = 0; i < audioDevices.Count; i++)
 			{
-				names[i] = audioDevices[i].DeviceFriendlyName;
+				names[i] = audioDevices[i].FriendlyName;
 				// Add [IN] prefix to input devices (microphones and capture cards)
 				if (audioDevices[i].DataFlow == DataFlow.Capture) names[i] = "[IN] " + names[i];
 			}

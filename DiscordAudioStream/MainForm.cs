@@ -207,9 +207,6 @@ namespace DiscordAudioStream
 				soundDevicesButton.Image = Properties.Resources.white_speaker;
 				settingsBtn.Image = Properties.Resources.white_settings;
 				previewBtn.Image = Properties.Resources.white_preview;
-
-				refreshAudioBtn.BackColor = DarkThemeManager.DarkSecondColor;
-				refreshAudioBtn.Image = Properties.Resources.white_refresh;
 			}
 
 			videoGroup.SetDarkMode(darkMode);
@@ -397,11 +394,6 @@ namespace DiscordAudioStream
 		private void captureCursorCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			controller.SetCapturingCursor(captureCursorCheckBox.Checked);
-		}
-
-		private void refreshBtn_Click(object sender, EventArgs e)
-		{
-			controller.RefreshAudioDevices();
 		}
 	}
 }

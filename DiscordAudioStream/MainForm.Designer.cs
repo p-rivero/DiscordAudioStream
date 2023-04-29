@@ -44,7 +44,6 @@
 			this.settingsBtn = new System.Windows.Forms.ToolStripButton();
 			this.aboutBtn = new System.Windows.Forms.ToolStripButton();
 			this.audioGroup = new CustomComponents.DarkThemeGroupBox();
-			this.refreshAudioBtn = new System.Windows.Forms.Button();
 			this.inputDeviceComboBox = new CustomComponents.DarkThemeComboBox();
 			this.inputDeviceLabel = new System.Windows.Forms.Label();
 			this.videoGroup = new CustomComponents.DarkThemeGroupBox();
@@ -197,7 +196,6 @@
 			// 
 			// audioGroup
 			// 
-			this.audioGroup.Controls.Add(this.refreshAudioBtn);
 			this.audioGroup.Controls.Add(this.inputDeviceComboBox);
 			this.audioGroup.Controls.Add(this.inputDeviceLabel);
 			this.audioGroup.Location = new System.Drawing.Point(9, 173);
@@ -207,20 +205,6 @@
 			this.audioGroup.TabIndex = 16;
 			this.audioGroup.TabStop = false;
 			this.audioGroup.Text = "Audio capture";
-			// 
-			// refreshAudioBtn
-			// 
-			this.refreshAudioBtn.BackColor = System.Drawing.SystemColors.ControlLight;
-			this.refreshAudioBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-			this.refreshAudioBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.refreshAudioBtn.Image = ((System.Drawing.Image)(resources.GetObject("refreshAudioBtn.Image")));
-			this.refreshAudioBtn.Location = new System.Drawing.Point(311, 22);
-			this.refreshAudioBtn.Margin = new System.Windows.Forms.Padding(0);
-			this.refreshAudioBtn.Name = "refreshAudioBtn";
-			this.refreshAudioBtn.Size = new System.Drawing.Size(23, 23);
-			this.refreshAudioBtn.TabIndex = 18;
-			this.refreshAudioBtn.UseVisualStyleBackColor = false;
-			this.refreshAudioBtn.Click += new System.EventHandler(this.refreshBtn_Click);
 			// 
 			// inputDeviceComboBox
 			// 
@@ -233,15 +217,15 @@
 			this.inputDeviceComboBox.Items.AddRange(new object[] {
             "None",
             "System sounds (Soundcard)"});
-			this.inputDeviceComboBox.Location = new System.Drawing.Point(73, 22);
+			this.inputDeviceComboBox.Location = new System.Drawing.Point(55, 22);
 			this.inputDeviceComboBox.Name = "inputDeviceComboBox";
-			this.inputDeviceComboBox.Size = new System.Drawing.Size(231, 24);
+			this.inputDeviceComboBox.Size = new System.Drawing.Size(279, 24);
 			this.inputDeviceComboBox.TabIndex = 17;
 			// 
 			// inputDeviceLabel
 			// 
 			this.inputDeviceLabel.AutoSize = true;
-			this.inputDeviceLabel.Location = new System.Drawing.Point(29, 26);
+			this.inputDeviceLabel.Location = new System.Drawing.Point(11, 26);
 			this.inputDeviceLabel.Name = "inputDeviceLabel";
 			this.inputDeviceLabel.Size = new System.Drawing.Size(38, 15);
 			this.inputDeviceLabel.TabIndex = 26;
@@ -266,7 +250,7 @@
 			// scaleLabel
 			// 
 			this.scaleLabel.AutoSize = true;
-			this.scaleLabel.Location = new System.Drawing.Point(30, 52);
+			this.scaleLabel.Location = new System.Drawing.Point(12, 52);
 			this.scaleLabel.Name = "scaleLabel";
 			this.scaleLabel.Size = new System.Drawing.Size(37, 15);
 			this.scaleLabel.TabIndex = 24;
@@ -282,9 +266,9 @@
             "Full window size",
             "50% window size",
             "25% window size"});
-			this.scaleComboBox.Location = new System.Drawing.Point(73, 49);
+			this.scaleComboBox.Location = new System.Drawing.Point(55, 49);
 			this.scaleComboBox.Name = "scaleComboBox";
-			this.scaleComboBox.Size = new System.Drawing.Size(261, 24);
+			this.scaleComboBox.Size = new System.Drawing.Size(279, 24);
 			this.scaleComboBox.TabIndex = 23;
 			this.scaleComboBox.SelectedIndexChanged += new System.EventHandler(this.scaleComboBox_SelectedIndexChanged);
 			// 
@@ -305,9 +289,9 @@
 			this.areaComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.areaComboBox.FormattingEnabled = true;
 			this.areaComboBox.IntegralHeight = false;
-			this.areaComboBox.Location = new System.Drawing.Point(73, 19);
+			this.areaComboBox.Location = new System.Drawing.Point(55, 19);
 			this.areaComboBox.Name = "areaComboBox";
-			this.areaComboBox.Size = new System.Drawing.Size(261, 24);
+			this.areaComboBox.Size = new System.Drawing.Size(279, 24);
 			this.areaComboBox.TabIndex = 8;
 			this.areaComboBox.DropDown += new System.EventHandler(this.areaComboBox_DropDown);
 			this.areaComboBox.SelectedIndexChanged += new System.EventHandler(this.areaComboBox_SelectedIndexChanged);
@@ -327,7 +311,7 @@
 			// areaLabel
 			// 
 			this.areaLabel.AutoSize = true;
-			this.areaLabel.Location = new System.Drawing.Point(33, 23);
+			this.areaLabel.Location = new System.Drawing.Point(15, 23);
 			this.areaLabel.Name = "areaLabel";
 			this.areaLabel.Size = new System.Drawing.Size(34, 15);
 			this.areaLabel.TabIndex = 18;
@@ -376,7 +360,6 @@
 		private System.Windows.Forms.Timer updateTimer;
 		private CustomComponents.DarkThemeComboBox areaComboBox;
 		private CustomComponents.DarkThemeComboBox inputDeviceComboBox;
-		private System.Windows.Forms.Button refreshAudioBtn;
 		private CustomComponents.DarkThemeToolStrip toolStrip;
 		private System.Windows.Forms.ToolStripButton onTopBtn;
 		private System.Windows.Forms.ToolStripButton aboutBtn;
