@@ -167,6 +167,8 @@ namespace DiscordAudioStream
 				previewBox.Location = new Point(0, 0);
 				controller.ShowAudioMeterForm(darkMode);
 				this.Text = Properties.Settings.Default.StreamTitle;
+				previewBox.ContextMenuStrip = streamContextMenu;
+				showAudioMeterToolStripMenuItem.Checked = Properties.Settings.Default.ShowAudioMeter;
 			}
 			else
 			{
@@ -176,6 +178,7 @@ namespace DiscordAudioStream
 				CenterToScreen();
 				controller.HideAudioMeterForm();
 				this.Text = "Discord Audio Stream";
+				previewBox.ContextMenuStrip = null;
 			}
 		}
 
@@ -201,6 +204,11 @@ namespace DiscordAudioStream
 				// Use PrintWindow to send a WM_PRINT to our own window handle, forcing a complete redraw.
 				User32.PrintWindow(handle, IntPtr.Zero, 0);
 			}
+		}
+
+		internal void AudioMeterClosed()
+		{
+			showAudioMeterToolStripMenuItem.Checked = false;
 		}
 
 
@@ -412,6 +420,23 @@ namespace DiscordAudioStream
 		private void captureCursorCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			controller.SetCapturingCursor(captureCursorCheckBox.Checked);
+		}
+
+		private void showAudioMeterToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			bool show = !showAudioMeterToolStripMenuItem.Checked;
+
+			showAudioMeterToolStripMenuItem.Checked = show;
+			Properties.Settings.Default.ShowAudioMeter = show;
+			Properties.Settings.Default.Save();
+
+			if (show) controller.ShowAudioMeterForm(darkMode);
+			else controller.HideAudioMeterForm();
+		}
+
+		private void stopStreamToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			controller.Stop();
 		}
 	}
 }

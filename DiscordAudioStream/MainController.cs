@@ -394,10 +394,14 @@ namespace DiscordAudioStream
 				// Disabled by the user
 				return;
 			}
-			if (currentMeterForm == null || currentMeterForm.IsDisposed)
+			if (currentMeterForm == null)
 			{
 				currentMeterForm = new AudioMeterForm(darkMode);
 				currentMeterForm.Owner = form;
+				currentMeterForm.FormClosed += (sender, e) => {
+					currentMeterForm = null;
+					form.AudioMeterClosed();
+				};
 			}
 			if (form.TopMost) currentMeterForm.TopMost = true;
 			currentMeterForm.Show();
@@ -405,14 +409,14 @@ namespace DiscordAudioStream
 		}
 		internal void HideAudioMeterForm()
 		{
-			if (currentMeterForm != null && !currentMeterForm.IsDisposed)
+			if (currentMeterForm != null)
 			{
 				currentMeterForm.Hide();
 			}
 		}
 		private void AudioPlayback_AudioLevelChanged(float left, float right)
 		{
-			if (currentMeterForm != null && !currentMeterForm.IsDisposed)
+			if (currentMeterForm != null)
 			{
 				currentMeterForm.SetLevels(left, right);
 			}

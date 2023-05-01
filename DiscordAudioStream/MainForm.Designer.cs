@@ -30,7 +30,6 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.updateTimer = new System.Windows.Forms.Timer(this.components);
 			this.previewBox = new System.Windows.Forms.PictureBox();
 			this.startButton = new System.Windows.Forms.Button();
@@ -54,10 +53,15 @@
 			this.captureCursorCheckBox = new CustomComponents.DarkThemeCheckBox();
 			this.areaLabel = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.streamContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.showAudioMeterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.stopStreamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
 			this.toolStrip.SuspendLayout();
 			this.audioGroup.SuspendLayout();
 			this.videoGroup.SuspendLayout();
+			this.streamContextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// previewBox
@@ -318,6 +322,34 @@
 			this.areaLabel.TabIndex = 18;
 			this.areaLabel.Text = "Area:";
 			// 
+			// streamContextMenu
+			// 
+			this.streamContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showAudioMeterToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.stopStreamToolStripMenuItem});
+			this.streamContextMenu.Name = "contextMenu";
+			this.streamContextMenu.Size = new System.Drawing.Size(181, 76);
+			// 
+			// showAudioMeterToolStripMenuItem
+			// 
+			this.showAudioMeterToolStripMenuItem.Name = "showAudioMeterToolStripMenuItem";
+			this.showAudioMeterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.showAudioMeterToolStripMenuItem.Text = "Show audio meter";
+			this.showAudioMeterToolStripMenuItem.Click += new System.EventHandler(this.showAudioMeterToolStripMenuItem_Click);
+			// 
+			// stopStreamToolStripMenuItem
+			// 
+			this.stopStreamToolStripMenuItem.Name = "stopStreamToolStripMenuItem";
+			this.stopStreamToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.stopStreamToolStripMenuItem.Text = "Stop stream";
+			this.stopStreamToolStripMenuItem.Click += new System.EventHandler(this.stopStreamToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator3
+			// 
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -346,13 +378,13 @@
 			this.audioGroup.PerformLayout();
 			this.videoGroup.ResumeLayout(false);
 			this.videoGroup.PerformLayout();
+			this.streamContextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
 		}
 
 		#endregion
-		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
 		private System.Windows.Forms.Label areaLabel;
 		private CustomComponents.DarkThemeGroupBox videoGroup;
 		private CustomComponents.DarkThemeCheckBox captureCursorCheckBox;
@@ -376,6 +408,10 @@
         private System.Windows.Forms.ToolStripButton soundDevicesButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.ContextMenuStrip streamContextMenu;
+		private System.Windows.Forms.ToolStripMenuItem showAudioMeterToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem stopStreamToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 	}
 }
 
