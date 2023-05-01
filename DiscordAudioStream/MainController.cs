@@ -313,7 +313,7 @@ namespace DiscordAudioStream
 				audioPlayback = new AudioPlayback(deviceIndex);
 				try
 				{
-					audioPlayback.AudioLevelChanged += AudioPlayback_AudioLevelChanged;
+					audioPlayback.AudioLevelChanged += (left, right) => currentMeterForm?.SetLevels(left, right);
 					audioPlayback.Start();
 				}
 				catch (InvalidOperationException e)
@@ -412,13 +412,6 @@ namespace DiscordAudioStream
 			if (currentMeterForm != null)
 			{
 				currentMeterForm.Hide();
-			}
-		}
-		private void AudioPlayback_AudioLevelChanged(float left, float right)
-		{
-			if (currentMeterForm != null)
-			{
-				currentMeterForm.SetLevels(left, right);
 			}
 		}
 

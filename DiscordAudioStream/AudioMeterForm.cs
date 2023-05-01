@@ -14,7 +14,7 @@ namespace DiscordAudioStream
 			if (darkMode) HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
 
 			InitializeComponent();
-			FormClosing += AudioMeterForm_FormClosing;
+			FormClosing += (s, e) => StorePosition();
 
 			ApplyDarkTheme(darkMode);
 		}
@@ -47,7 +47,6 @@ namespace DiscordAudioStream
 			// Restore saved position
 			if (Properties.Settings.Default.AudioMeterForm_Size != Size.Empty)
 			{
-				Console.WriteLine("Restoring");
 				Location = Properties.Settings.Default.AudioMeterForm_Position;
 				Size = Properties.Settings.Default.AudioMeterForm_Size;
 			}
@@ -59,10 +58,6 @@ namespace DiscordAudioStream
 		{
 			StorePosition();
 			base.Hide();
-		}
-		private void AudioMeterForm_FormClosing(object sender, FormClosingEventArgs e)
-		{
-			StorePosition();
 		}
 		private void StorePosition()
 		{

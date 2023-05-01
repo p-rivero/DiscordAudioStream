@@ -22,34 +22,21 @@ namespace CustomComponents
             {
                 SetStyle(ControlStyles.UserPaint, value: true);
                 SetStyle(ControlStyles.AllPaintingInWmPaint, value: true);
-                base.MouseEnter += CustomCheckBox_MouseEnter;
-                base.MouseLeave += CustomCheckBox_MouseLeave;
-                base.MouseDown += CustomCheckBox_MouseDown;
-                base.MouseUp += CustomCheckBox_MouseUp;
+                base.MouseEnter += (s, e) => UpdateHovered(true);
+                base.MouseLeave += (s, e) => UpdateHovered(false);
+                base.MouseDown += (s, e) => UpdatePressed(true);
+                base.MouseUp += (s, e) => UpdatePressed(false);
             }
         }
 
-        private void CustomCheckBox_MouseUp(object sender, MouseEventArgs e)
+        private void UpdateHovered(bool value)
         {
-            pressed = false;
+            hovered = value;
             Refresh();
         }
-
-        private void CustomCheckBox_MouseDown(object sender, MouseEventArgs e)
+        private void UpdatePressed(bool value)
         {
-            pressed = true;
-            Refresh();
-        }
-
-        private void CustomCheckBox_MouseLeave(object sender, EventArgs e)
-        {
-            hovered = false;
-            Refresh();
-        }
-
-        private void CustomCheckBox_MouseEnter(object sender, EventArgs e)
-        {
-            hovered = true;
+            pressed = value;
             Refresh();
         }
 

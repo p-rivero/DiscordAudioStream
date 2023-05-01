@@ -24,7 +24,7 @@ namespace CustomComponents
             }
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S2094", Justification =
-			"This class cannot be an interface because it needs to be instaantiated as a sentinel")]
+            "This class cannot be an interface because it needs to be instaantiated as a sentinel")]
         public class Dummy
         {
         }
@@ -33,21 +33,17 @@ namespace CustomComponents
         {
             SetStyle(ControlStyles.UserPaint, true);
             base.DrawMode = DrawMode.OwnerDrawVariable;
-            base.MouseEnter += CustomComboBox_MouseEnter;
-            base.MouseLeave += CustomComboBox_MouseLeave;
+            base.MouseEnter += (s, e) =>
+            {
+                hovered = true;
+                Refresh();
+            };
+            base.MouseLeave += (s, e) =>
+            {
+                hovered = false;
+                Refresh();
+            };
             base.DrawItem += new DrawItemEventHandler(CustomDrawItem);
-        }
-
-        private void CustomComboBox_MouseLeave(object sender, EventArgs e)
-        {
-            hovered = false;
-            Refresh();
-        }
-
-        private void CustomComboBox_MouseEnter(object sender, EventArgs e)
-        {
-            hovered = true;
-            Refresh();
         }
 
         public void SetDarkMode(bool dark)
