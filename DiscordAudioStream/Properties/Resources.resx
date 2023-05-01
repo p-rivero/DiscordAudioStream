@@ -204,7 +204,7 @@ Discord Nitro cannot stream video at more than 30 FPS.</value>
     <value>https://github.com/ModuleArt</value>
   </data>
   <data name="Tooltip_AutoExit" xml:space="preserve">
-    <value>When streaming a specific window, if the window is closed, this program will also close.
+    <value>When streaming a specific window, if that window is closed, this program will also close.
 This will trigger the Discord stream to end automatically.</value>
   </data>
   <data name="lock" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -214,7 +214,8 @@ This will trigger the Discord stream to end automatically.</value>
     <value>https://github.com/p-rivero/DiscordAudioStream/blob/master/docs/CaptureMethods.md</value>
   </data>
   <data name="Tooltip_ShowAudioInputs" xml:space="preserve">
-    <value>The Audio capture dropdown will also show audio input devices (microphones, capture cards). The prefix [IN] is added to those devices.
+    <value>The Audio capture dropdown will also show audio input devices (microphones, capture cards). 
+The prefix [IN] is added to those devices.
 Select this option if you need to use an audio capture card and you know what you are doing.</value>
   </data>
   <data name="Tooltip_CaptureArea" xml:space="preserve">
@@ -242,5 +243,17 @@ If you want to use a capture card or a virtual microphone, enable input devices 
   <data name="Tooltip_StartStream" xml:space="preserve">
     <value>Start mirroring the captured video and audio | Ctrl+Enter
 Next you need to go to Discord, click "Share screen" and select the "Discord Audio Stream" window.</value>
+  </data>
+  <data name="Tooltip_ShowAudioMeter" xml:space="preserve">
+    <value>Display the audio levels of the captured device.
+This only takes effect once "Start Stream" is clicked.</value>
+  </data>
+  <data name="Tooltip_StreamTitle" xml:space="preserve">
+    <value>Change the window title when the stream is enabled.
+Discord shows you the title of the window you are streaming, but it is not shown to the viewers.
+Other VOIP apps may show this title to the viewers.</value>
+  </data>
+  <data name="Tooltip_WindowTheme" xml:space="preserve">
+    <value>Change between a light and a dark UI theme. The program will restart automatically.</value>
   </data>
 </root>

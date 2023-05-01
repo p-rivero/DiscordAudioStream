@@ -30,6 +30,12 @@
 			this.components = new System.ComponentModel.Container();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.settingsTabs = new CustomComponents.DarkThemeTabControl();
+			this.windowPage = new System.Windows.Forms.TabPage();
+			this.audioMeterCheckBox = new CustomComponents.DarkThemeCheckBox();
+			this.streamTitleBox = new CustomComponents.DarkThemeTextBox();
+			this.streamTitleLabel = new System.Windows.Forms.Label();
+			this.themeComboBox = new CustomComponents.DarkThemeComboBox();
+			this.themeLabel = new System.Windows.Forms.Label();
 			this.capturePage = new System.Windows.Forms.TabPage();
 			this.captureFramerateComboBox = new CustomComponents.DarkThemeComboBox();
 			this.captureMethodGroup = new CustomComponents.DarkThemeGroupBox();
@@ -39,11 +45,6 @@
 			this.windowMethodComboBox = new CustomComponents.DarkThemeComboBox();
 			this.captureFramerateLabel = new System.Windows.Forms.Label();
 			this.autoExitCheckbox = new CustomComponents.DarkThemeCheckBox();
-			this.themePage = new System.Windows.Forms.TabPage();
-			this.restartLabel = new System.Windows.Forms.Label();
-			this.systemThemeRadio = new CustomComponents.DarkThemeRadioButton();
-			this.darkThemeRadio = new CustomComponents.DarkThemeRadioButton();
-			this.lightThemeRadio = new CustomComponents.DarkThemeRadioButton();
 			this.debugPage = new System.Windows.Forms.TabPage();
 			this.showAudioInputsCheckbox = new CustomComponents.DarkThemeCheckBox();
 			this.offscreenDrawCheckbox = new CustomComponents.DarkThemeCheckBox();
@@ -51,9 +52,9 @@
 			this.audioDevicesLink = new System.Windows.Forms.LinkLabel();
 			this.classicVolumeMixerLink = new System.Windows.Forms.LinkLabel();
 			this.settingsTabs.SuspendLayout();
+			this.windowPage.SuspendLayout();
 			this.capturePage.SuspendLayout();
 			this.captureMethodGroup.SuspendLayout();
-			this.themePage.SuspendLayout();
 			this.debugPage.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -65,8 +66,8 @@
 			this.settingsTabs.BorderColor = System.Drawing.SystemColors.ControlLight;
 			this.settingsTabs.ClosingButtonColor = System.Drawing.Color.WhiteSmoke;
 			this.settingsTabs.ClosingMessage = null;
+			this.settingsTabs.Controls.Add(this.windowPage);
 			this.settingsTabs.Controls.Add(this.capturePage);
-			this.settingsTabs.Controls.Add(this.themePage);
 			this.settingsTabs.Controls.Add(this.debugPage);
 			this.settingsTabs.DraggableTabs = false;
 			this.settingsTabs.HeaderColor = System.Drawing.SystemColors.ControlLight;
@@ -82,6 +83,74 @@
 			this.settingsTabs.Size = new System.Drawing.Size(256, 187);
 			this.settingsTabs.TabIndex = 13;
 			this.settingsTabs.TextColor = System.Drawing.Color.Black;
+			// 
+			// windowPage
+			// 
+			this.windowPage.BackColor = System.Drawing.Color.White;
+			this.windowPage.Controls.Add(this.audioMeterCheckBox);
+			this.windowPage.Controls.Add(this.streamTitleBox);
+			this.windowPage.Controls.Add(this.streamTitleLabel);
+			this.windowPage.Controls.Add(this.themeComboBox);
+			this.windowPage.Controls.Add(this.themeLabel);
+			this.windowPage.Location = new System.Drawing.Point(4, 20);
+			this.windowPage.Margin = new System.Windows.Forms.Padding(0);
+			this.windowPage.Name = "windowPage";
+			this.windowPage.Padding = new System.Windows.Forms.Padding(3);
+			this.windowPage.Size = new System.Drawing.Size(248, 163);
+			this.windowPage.TabIndex = 0;
+			this.windowPage.Text = "Window";
+			// 
+			// audioMeterCheckBox
+			// 
+			this.audioMeterCheckBox.AutoSize = true;
+			this.audioMeterCheckBox.Location = new System.Drawing.Point(9, 86);
+			this.audioMeterCheckBox.Name = "audioMeterCheckBox";
+			this.audioMeterCheckBox.Size = new System.Drawing.Size(167, 19);
+			this.audioMeterCheckBox.TabIndex = 43;
+			this.audioMeterCheckBox.Text = "Show audio meter window";
+			this.audioMeterCheckBox.UseVisualStyleBackColor = true;
+			// 
+			// streamTitleBox
+			// 
+			this.streamTitleBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.streamTitleBox.Location = new System.Drawing.Point(100, 50);
+			this.streamTitleBox.MaxLength = 100;
+			this.streamTitleBox.Name = "streamTitleBox";
+			this.streamTitleBox.Size = new System.Drawing.Size(142, 23);
+			this.streamTitleBox.TabIndex = 42;
+			// 
+			// streamTitleLabel
+			// 
+			this.streamTitleLabel.AutoSize = true;
+			this.streamTitleLabel.Location = new System.Drawing.Point(6, 53);
+			this.streamTitleLabel.Name = "streamTitleLabel";
+			this.streamTitleLabel.Size = new System.Drawing.Size(70, 15);
+			this.streamTitleLabel.TabIndex = 41;
+			this.streamTitleLabel.Text = "Stream title:";
+			// 
+			// themeComboBox
+			// 
+			this.themeComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.themeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.themeComboBox.FormattingEnabled = true;
+			this.themeComboBox.Items.AddRange(new object[] {
+            "System default",
+            "Light theme",
+            "Dark theme"});
+			this.themeComboBox.Location = new System.Drawing.Point(100, 16);
+			this.themeComboBox.Name = "themeComboBox";
+			this.themeComboBox.Size = new System.Drawing.Size(142, 24);
+			this.themeComboBox.TabIndex = 40;
+			this.themeComboBox.SelectedIndexChanged += new System.EventHandler(this.themeComboBox_SelectedIndexChanged);
+			// 
+			// themeLabel
+			// 
+			this.themeLabel.AutoSize = true;
+			this.themeLabel.Location = new System.Drawing.Point(6, 19);
+			this.themeLabel.Name = "themeLabel";
+			this.themeLabel.Size = new System.Drawing.Size(46, 15);
+			this.themeLabel.TabIndex = 39;
+			this.themeLabel.Text = "Theme:";
 			// 
 			// capturePage
 			// 
@@ -194,66 +263,6 @@
 			this.autoExitCheckbox.UseVisualStyleBackColor = true;
 			this.autoExitCheckbox.CheckedChanged += new System.EventHandler(this.autoExitCheckbox_CheckedChanged);
 			// 
-			// themePage
-			// 
-			this.themePage.BackColor = System.Drawing.Color.White;
-			this.themePage.Controls.Add(this.restartLabel);
-			this.themePage.Controls.Add(this.systemThemeRadio);
-			this.themePage.Controls.Add(this.darkThemeRadio);
-			this.themePage.Controls.Add(this.lightThemeRadio);
-			this.themePage.Location = new System.Drawing.Point(4, 20);
-			this.themePage.Margin = new System.Windows.Forms.Padding(0);
-			this.themePage.Name = "themePage";
-			this.themePage.Padding = new System.Windows.Forms.Padding(3);
-			this.themePage.Size = new System.Drawing.Size(248, 163);
-			this.themePage.TabIndex = 0;
-			this.themePage.Text = "Theme";
-			// 
-			// restartLabel
-			// 
-			this.restartLabel.AutoSize = true;
-			this.restartLabel.Location = new System.Drawing.Point(6, 96);
-			this.restartLabel.Margin = new System.Windows.Forms.Padding(3);
-			this.restartLabel.Name = "restartLabel";
-			this.restartLabel.Size = new System.Drawing.Size(120, 15);
-			this.restartLabel.TabIndex = 38;
-			this.restartLabel.Text = "* App restart required";
-			// 
-			// systemThemeRadio
-			// 
-			this.systemThemeRadio.Checked = true;
-			this.systemThemeRadio.Location = new System.Drawing.Point(9, 9);
-			this.systemThemeRadio.Margin = new System.Windows.Forms.Padding(9);
-			this.systemThemeRadio.Name = "systemThemeRadio";
-			this.systemThemeRadio.Size = new System.Drawing.Size(123, 19);
-			this.systemThemeRadio.TabIndex = 0;
-			this.systemThemeRadio.TabStop = true;
-			this.systemThemeRadio.Text = "Use system setting";
-			this.systemThemeRadio.UseVisualStyleBackColor = true;
-			this.systemThemeRadio.CheckedChanged += new System.EventHandler(this.systemThemeRadio_CheckedChanged);
-			// 
-			// darkThemeRadio
-			// 
-			this.darkThemeRadio.Location = new System.Drawing.Point(9, 65);
-			this.darkThemeRadio.Margin = new System.Windows.Forms.Padding(9, 0, 9, 9);
-			this.darkThemeRadio.Name = "darkThemeRadio";
-			this.darkThemeRadio.Size = new System.Drawing.Size(49, 19);
-			this.darkThemeRadio.TabIndex = 2;
-			this.darkThemeRadio.Text = "Dark";
-			this.darkThemeRadio.UseVisualStyleBackColor = true;
-			this.darkThemeRadio.CheckedChanged += new System.EventHandler(this.darkThemeRadio_CheckedChanged);
-			// 
-			// lightThemeRadio
-			// 
-			this.lightThemeRadio.Location = new System.Drawing.Point(9, 37);
-			this.lightThemeRadio.Margin = new System.Windows.Forms.Padding(9, 0, 9, 9);
-			this.lightThemeRadio.Name = "lightThemeRadio";
-			this.lightThemeRadio.Size = new System.Drawing.Size(52, 19);
-			this.lightThemeRadio.TabIndex = 1;
-			this.lightThemeRadio.Text = "Light";
-			this.lightThemeRadio.UseVisualStyleBackColor = true;
-			this.lightThemeRadio.CheckedChanged += new System.EventHandler(this.lightThemeRadio_CheckedChanged);
-			// 
 			// debugPage
 			// 
 			this.debugPage.BackColor = System.Drawing.Color.White;
@@ -347,29 +356,25 @@
 			this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.SettingsForm_HelpButtonClicked);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SettingsForm_KeyDown);
 			this.settingsTabs.ResumeLayout(false);
+			this.windowPage.ResumeLayout(false);
+			this.windowPage.PerformLayout();
 			this.capturePage.ResumeLayout(false);
 			this.capturePage.PerformLayout();
 			this.captureMethodGroup.ResumeLayout(false);
 			this.captureMethodGroup.PerformLayout();
-			this.themePage.ResumeLayout(false);
-			this.themePage.PerformLayout();
 			this.debugPage.ResumeLayout(false);
 			this.debugPage.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
 
-        #endregion
+		#endregion
 
-        private System.Windows.Forms.TabPage debugPage;
-        private System.Windows.Forms.TabPage themePage;
-        private System.Windows.Forms.Label restartLabel;
-        private CustomComponents.DarkThemeRadioButton systemThemeRadio;
-        private CustomComponents.DarkThemeRadioButton darkThemeRadio;
-        private CustomComponents.DarkThemeRadioButton lightThemeRadio;
-        private CustomComponents.DarkThemeTabControl settingsTabs;
-        private System.Windows.Forms.TabPage capturePage;
-        private CustomComponents.DarkThemeCheckBox autoExitCheckbox;
+		private System.Windows.Forms.TabPage debugPage;
+		private System.Windows.Forms.TabPage windowPage;
+		private CustomComponents.DarkThemeTabControl settingsTabs;
+		private System.Windows.Forms.TabPage capturePage;
+		private CustomComponents.DarkThemeCheckBox autoExitCheckbox;
 		private System.Windows.Forms.Label fullscreenMethodLabel;
 		private System.Windows.Forms.Label windowMethodLabel;
 		private CustomComponents.DarkThemeComboBox fullscreenMethodComboBox;
@@ -383,5 +388,10 @@
 		private CustomComponents.DarkThemeCheckBox offscreenDrawCheckbox;
 		private System.Windows.Forms.ToolTip toolTip;
 		private CustomComponents.DarkThemeCheckBox showAudioInputsCheckbox;
+		private System.Windows.Forms.Label themeLabel;
+		private CustomComponents.DarkThemeComboBox themeComboBox;
+		private System.Windows.Forms.Label streamTitleLabel;
+		private CustomComponents.DarkThemeTextBox streamTitleBox;
+		private CustomComponents.DarkThemeCheckBox audioMeterCheckBox;
 	}
 }

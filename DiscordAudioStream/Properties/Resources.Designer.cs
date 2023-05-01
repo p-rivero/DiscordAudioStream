@@ -142,7 +142,7 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When streaming a specific window, if the window is closed, this program will also close.
+        ///   Looks up a localized string similar to When streaming a specific window, if that window is closed, this program will also close.
         ///This will trigger the Discord stream to end automatically..
         /// </summary>
         internal static string Tooltip_AutoExit {
@@ -223,12 +223,23 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Audio capture dropdown will also show audio input devices (microphones, capture cards). The prefix [IN] is added to those devices.
+        ///   Looks up a localized string similar to The Audio capture dropdown will also show audio input devices (microphones, capture cards). 
+        ///The prefix [IN] is added to those devices.
         ///Select this option if you need to use an audio capture card and you know what you are doing..
         /// </summary>
         internal static string Tooltip_ShowAudioInputs {
             get {
                 return ResourceManager.GetString("Tooltip_ShowAudioInputs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display the audio levels of the captured device.
+        ///This only takes effect once &quot;Start Stream&quot; is clicked..
+        /// </summary>
+        internal static string Tooltip_ShowAudioMeter {
+            get {
+                return ResourceManager.GetString("Tooltip_ShowAudioMeter", resourceCulture);
             }
         }
         
@@ -239,6 +250,17 @@ namespace DiscordAudioStream.Properties {
         internal static string Tooltip_StartStream {
             get {
                 return ResourceManager.GetString("Tooltip_StartStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change the window title when the stream is enabled.
+        ///Discord shows you the title of the window you are streaming, but it is not shown to the viewers.
+        ///Other VOIP apps may show this title to the viewers..
+        /// </summary>
+        internal static string Tooltip_StreamTitle {
+            get {
+                return ResourceManager.GetString("Tooltip_StreamTitle", resourceCulture);
             }
         }
         
@@ -258,6 +280,15 @@ namespace DiscordAudioStream.Properties {
         internal static string Tooltip_WindowMethod {
             get {
                 return ResourceManager.GetString("Tooltip_WindowMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change between a light and a dark UI theme. The program will restart automatically..
+        /// </summary>
+        internal static string Tooltip_WindowTheme {
+            get {
+                return ResourceManager.GetString("Tooltip_WindowTheme", resourceCulture);
             }
         }
         

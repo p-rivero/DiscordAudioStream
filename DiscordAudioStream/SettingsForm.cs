@@ -13,12 +13,6 @@ namespace DiscordAudioStream
 		public event SettingChangedDelegate FramerateChanged;
 		public event SettingChangedDelegate ShowAudioInputsChanged;
 
-		private enum Theme
-		{
-			SYSTEM_DEFAULT = 0,
-			LIGHT = 1,
-			DARK = 2
-		}
 		private enum FrameRates
 		{
 			FPS_15 = 15,
@@ -43,10 +37,7 @@ namespace DiscordAudioStream
 
 			// Set default values
 
-			Theme theme = (Theme) Properties.Settings.Default.Theme;
-			systemThemeRadio.Checked = (theme == Theme.SYSTEM_DEFAULT);
-			lightThemeRadio.Checked = (theme == Theme.LIGHT);
-			darkThemeRadio.Checked = (theme == Theme.DARK);
+			themeComboBox.SelectedIndex = Properties.Settings.Default.Theme;
 
 			autoExitCheckbox.Checked = Properties.Settings.Default.AutoExit;
 
@@ -74,6 +65,11 @@ namespace DiscordAudioStream
 			toolTip.SetToolTip(outputLogCheckbox, Properties.Resources.Tooltip_OutputLog);
 			toolTip.SetToolTip(offscreenDrawCheckbox, Properties.Resources.Tooltip_OffscreenDraw);
 			toolTip.SetToolTip(showAudioInputsCheckbox, Properties.Resources.Tooltip_ShowAudioInputs);
+			toolTip.SetToolTip(themeLabel, Properties.Resources.Tooltip_WindowTheme);
+			toolTip.SetToolTip(themeComboBox, Properties.Resources.Tooltip_WindowTheme);
+			toolTip.SetToolTip(streamTitleLabel, Properties.Resources.Tooltip_StreamTitle);
+			toolTip.SetToolTip(streamTitleBox, Properties.Resources.Tooltip_StreamTitle);
+			toolTip.SetToolTip(audioMeterCheckBox, Properties.Resources.Tooltip_ShowAudioMeter);
 		}
 
 		private void ApplyDarkTheme(bool darkMode)
@@ -92,13 +88,12 @@ namespace DiscordAudioStream
 
 			settingsTabs.ActiveColor = DarkThemeManager.AccentColor;
 
-			systemThemeRadio.SetDarkMode(darkMode);
-			darkThemeRadio.SetDarkMode(darkMode);
-			lightThemeRadio.SetDarkMode(darkMode);
 			captureMethodGroup.SetDarkMode(darkMode);
 			windowMethodComboBox.SetDarkMode(darkMode);
 			fullscreenMethodComboBox.SetDarkMode(darkMode);
 			captureFramerateComboBox.SetDarkMode(darkMode);
+			themeComboBox.SetDarkMode(darkMode);
+			streamTitleBox.SetDarkMode(darkMode);
 			classicVolumeMixerLink.LinkColor = DarkThemeManager.AccentColor;
 			audioDevicesLink.LinkColor = DarkThemeManager.AccentColor;
 		}
@@ -112,39 +107,18 @@ namespace DiscordAudioStream
 			if (e.KeyCode == Keys.Escape) Close();
 		}
 
-
-		private void systemThemeRadio_CheckedChanged(object sender, EventArgs e)
+		private void themeComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (systemThemeRadio.Checked)
-			{
-				ChangeTheme(Theme.SYSTEM_DEFAULT);
-			}
-		}
-
-		private void lightThemeRadio_CheckedChanged(object sender, EventArgs e)
-		{
-			if (lightThemeRadio.Checked)
-			{
-				ChangeTheme(Theme.LIGHT);
-			} 
-		}
-
-		private void darkThemeRadio_CheckedChanged(object sender, EventArgs e)
-		{
-			if (darkThemeRadio.Checked)
-			{
-				ChangeTheme(Theme.DARK);
-			}
-		}
-
-		private void ChangeTheme(Theme theme)
-		{
+			int theme = themeComboBox.SelectedIndex;
 			// Nothing changed
-			if (Properties.Settings.Default.Theme == (int)theme) return;
+			if (Properties.Settings.Default.Theme == theme) return;
 
-			Properties.Settings.Default.Theme = (int)theme;
+			Properties.Settings.Default.Theme = theme;
 			Properties.Settings.Default.Save();
-			Logger.Log("\nChange settings: Theme={0}", Properties.Settings.Default.Theme);
+			Logger.Log("\nChange settings: Theme={0}. Restarting...", Properties.Settings.Default.Theme);
+			
+			Application.Restart();
+			Environment.Exit(0);
 		}
 
 

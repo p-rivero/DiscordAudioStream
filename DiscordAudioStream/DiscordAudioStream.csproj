@@ -85,6 +85,9 @@
     <Compile Include="CustomComponents\AudioMeterText.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CustomComponents\DarkThemeTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="MainController.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
