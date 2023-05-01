@@ -50,17 +50,17 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			// Capturing a window
 			switch (state.WindowMethod)
 			{
-				case CaptureState.WindowCaptureMethod.Windows10:
-					return new Win10WindowCapture(state.WindowHandle, state.CapturingCursor);
+			case CaptureState.WindowCaptureMethod.Windows10:
+				return new Win10WindowCapture(state.WindowHandle, state.CapturingCursor);
 
-				case CaptureState.WindowCaptureMethod.BitBlt:
-					return new BitBltWindowCapture(state.WindowHandle, state.CapturingCursor);
+			case CaptureState.WindowCaptureMethod.BitBlt:
+				return new BitBltWindowCapture(state.WindowHandle, state.CapturingCursor);
 
-				case CaptureState.WindowCaptureMethod.PrintScreen:
-					return new PrintWindowCapture(state.WindowHandle, state.CapturingCursor);
+			case CaptureState.WindowCaptureMethod.PrintScreen:
+				return new PrintWindowCapture(state.WindowHandle, state.CapturingCursor);
 
-				default:
-					throw new ArgumentException("Invalid WindowCaptureMethod");
+			default:
+				throw new ArgumentException("Invalid WindowCaptureMethod");
 			}
 		}
 		
@@ -69,17 +69,17 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			// Capturing a screen
 			switch (state.ScreenMethod)
 			{
-				case CaptureState.ScreenCaptureMethod.DXGIDuplication:
-					return new DuplicationMonitorCapture(state.Screen, state.CapturingCursor);
+			case CaptureState.ScreenCaptureMethod.DXGIDuplication:
+				return new DuplicationMonitorCapture(state.Screen, state.CapturingCursor);
 
-				case CaptureState.ScreenCaptureMethod.Windows10:
-					return new Win10MonitorCapture(state.Screen, state.CapturingCursor);
-				
-				case CaptureState.ScreenCaptureMethod.BitBlt:
-					return new BitBltMonitorCapture(state.Screen, state.CapturingCursor, state.HideTaskbar);
+			case CaptureState.ScreenCaptureMethod.Windows10:
+				return new Win10MonitorCapture(state.Screen, state.CapturingCursor);
+			
+			case CaptureState.ScreenCaptureMethod.BitBlt:
+				return new BitBltMonitorCapture(state.Screen, state.CapturingCursor, state.HideTaskbar);
 
-				default:
-					throw new ArgumentException("Invalid ScreenCaptureMethod");
+			default:
+				throw new ArgumentException("Invalid ScreenCaptureMethod");
 			}
 		}
 	}

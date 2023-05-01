@@ -267,32 +267,35 @@ namespace DiscordAudioStream
 		{
 			if (e.Control)
 			{
-				if (e.KeyCode == Keys.P)
+				switch (e.KeyCode)
 				{
+				case Keys.P:
 					previewBtn.PerformClick();
-				}
-				else if (e.KeyCode == Keys.T)
-				{
+					break;
+				case Keys.T:
 					onTopBtn.PerformClick();
-				}
-				else if (e.KeyCode == Keys.Oemcomma)
-				{
+					break;
+				case Keys.Oemcomma:
 					settingsBtn.PerformClick();
-				}
-				else if (e.KeyCode == Keys.V)
-				{
+					break;
+				case Keys.V:
 					volumeMixerButton.PerformClick();
-				}
-				else if (e.KeyCode == Keys.A)
-				{
+					break;
+				case Keys.A:
 					soundDevicesButton.PerformClick();
+					break;
 				}
 			}
 			else
 			{
-				if (e.KeyCode == Keys.F1)
+				switch (e.KeyCode)
 				{
+				case Keys.F1:
 					aboutBtn.PerformClick();
+					break;
+				case Keys.Escape:
+					if (controller.IsStreaming) controller.Stop();
+					break;
 				}
 			}
 		}

@@ -33,6 +33,8 @@ namespace DiscordAudioStream
 			processHandleList = ProcessHandleList.Refresh();
 		}
 
+		public bool IsStreaming { get => streamEnabled; }
+
 		internal void Init()
 		{
 			RefreshAreaInfo();
@@ -394,6 +396,7 @@ namespace DiscordAudioStream
 			}
 			if (form.TopMost) currentMeterForm.TopMost = true;
 			currentMeterForm.Show();
+			form.Focus();
 		}
 		internal void HideAudioMeterForm()
 		{
