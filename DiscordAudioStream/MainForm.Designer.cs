@@ -53,6 +53,7 @@
 			this.areaComboBox = new CustomComponents.DarkThemeComboBox();
 			this.captureCursorCheckBox = new CustomComponents.DarkThemeCheckBox();
 			this.areaLabel = new System.Windows.Forms.Label();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
 			this.toolStrip.SuspendLayout();
 			this.audioGroup.SuspendLayout();
@@ -374,6 +375,7 @@
         private System.Windows.Forms.ToolStripButton volumeMixerButton;
         private System.Windows.Forms.ToolStripButton soundDevicesButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-    }
+		private System.Windows.Forms.ToolTip toolTip;
+	}
 }
 

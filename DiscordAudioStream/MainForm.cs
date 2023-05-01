@@ -57,6 +57,16 @@ namespace DiscordAudioStream
 			scaleComboBox.SelectedIndex = Properties.Settings.Default.ScaleIndex;
 
 			ApplyDarkTheme(darkMode);
+
+			toolTip.SetToolTip(captureCursorCheckBox, Properties.Resources.Tooltip_CaptureCursor);
+			toolTip.SetToolTip(hideTaskbarCheckBox, Properties.Resources.Tooltip_HideTaskbar);
+			toolTip.SetToolTip(areaComboBox, Properties.Resources.Tooltip_CaptureArea);
+			toolTip.SetToolTip(areaLabel, Properties.Resources.Tooltip_CaptureArea);
+			toolTip.SetToolTip(scaleComboBox, Properties.Resources.Tooltip_VideoScale);
+			toolTip.SetToolTip(scaleLabel, Properties.Resources.Tooltip_VideoScale);
+			toolTip.SetToolTip(inputDeviceComboBox, Properties.Resources.Tooltip_AudioSource);
+			toolTip.SetToolTip(inputDeviceLabel, Properties.Resources.Tooltip_AudioSource);
+			toolTip.SetToolTip(startButton, Properties.Resources.Tooltip_StartStream);
 		}
 
 		// INTERNAL METHODS (called from controller)
@@ -283,6 +293,9 @@ namespace DiscordAudioStream
 					break;
 				case Keys.A:
 					soundDevicesButton.PerformClick();
+					break;
+				case Keys.Enter:
+					if (!controller.IsStreaming) controller.StartStream();
 					break;
 				}
 			}

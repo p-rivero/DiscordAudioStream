@@ -131,12 +131,44 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose the audio source (the audio device to listen).
+        ///Set the output of your target programs to an unused audio device, and then capture that device here.
+        ///If you want to use a capture card or a virtual microphone, enable input devices in Debug settings..
+        /// </summary>
+        internal static string Tooltip_AudioSource {
+            get {
+                return ResourceManager.GetString("Tooltip_AudioSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When streaming a specific window, if the window is closed, this program will also close.
         ///This will trigger the Discord stream to end automatically..
         /// </summary>
         internal static string Tooltip_AutoExit {
             get {
                 return ResourceManager.GetString("Tooltip_AutoExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose the video source (which window or screen is captured).
+        ///Video capture is always performed at full resolution..
+        /// </summary>
+        internal static string Tooltip_CaptureArea {
+            get {
+                return ResourceManager.GetString("Tooltip_CaptureArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display your cursor in the stream. 
+        ///If the viewers are seeing 2 cursors (or the cursor position is incorrect), Discord could be adding a second 
+        ///cursor on top of the one added by DiscordAudioStream..
+        /// </summary>
+        internal static string Tooltip_CaptureCursor {
+            get {
+                return ResourceManager.GetString("Tooltip_CaptureCursor", resourceCulture);
             }
         }
         
@@ -156,6 +188,16 @@ namespace DiscordAudioStream.Properties {
         internal static string Tooltip_FullscreenMethod {
             get {
                 return ResourceManager.GetString("Tooltip_FullscreenMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t show the taskbar at the bottom of the screen.
+        ///Only available when using the BitBlt fullscreen method..
+        /// </summary>
+        internal static string Tooltip_HideTaskbar {
+            get {
+                return ResourceManager.GetString("Tooltip_HideTaskbar", resourceCulture);
             }
         }
         
@@ -187,6 +229,26 @@ namespace DiscordAudioStream.Properties {
         internal static string Tooltip_ShowAudioInputs {
             get {
                 return ResourceManager.GetString("Tooltip_ShowAudioInputs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start mirroring the captured video and audio | Ctrl+Enter
+        ///Next you need to go to Discord, click &quot;Share screen&quot; and select the &quot;Discord Audio Stream&quot; window..
+        /// </summary>
+        internal static string Tooltip_StartStream {
+            get {
+                return ResourceManager.GetString("Tooltip_StartStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rescale the captured video to make the window size more manageable (especially when capturing fullscreen).
+        ///Warning: this can reduce the quality of the video streamed to Discord..
+        /// </summary>
+        internal static string Tooltip_VideoScale {
+            get {
+                return ResourceManager.GetString("Tooltip_VideoScale", resourceCulture);
             }
         }
         
