@@ -55,8 +55,8 @@
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.streamContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.showAudioMeterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.stopStreamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+			this.stopStreamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.previewBox)).BeginInit();
 			this.toolStrip.SuspendLayout();
 			this.audioGroup.SuspendLayout();
@@ -329,26 +329,26 @@
             this.toolStripSeparator3,
             this.stopStreamToolStripMenuItem});
 			this.streamContextMenu.Name = "contextMenu";
-			this.streamContextMenu.Size = new System.Drawing.Size(181, 76);
+			this.streamContextMenu.Size = new System.Drawing.Size(171, 54);
 			// 
 			// showAudioMeterToolStripMenuItem
 			// 
 			this.showAudioMeterToolStripMenuItem.Name = "showAudioMeterToolStripMenuItem";
-			this.showAudioMeterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.showAudioMeterToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
 			this.showAudioMeterToolStripMenuItem.Text = "Show audio meter";
 			this.showAudioMeterToolStripMenuItem.Click += new System.EventHandler(this.showAudioMeterToolStripMenuItem_Click);
-			// 
-			// stopStreamToolStripMenuItem
-			// 
-			this.stopStreamToolStripMenuItem.Name = "stopStreamToolStripMenuItem";
-			this.stopStreamToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.stopStreamToolStripMenuItem.Text = "Stop stream";
-			this.stopStreamToolStripMenuItem.Click += new System.EventHandler(this.stopStreamToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+			this.toolStripSeparator3.Size = new System.Drawing.Size(167, 6);
+			// 
+			// stopStreamToolStripMenuItem
+			// 
+			this.stopStreamToolStripMenuItem.Name = "stopStreamToolStripMenuItem";
+			this.stopStreamToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.stopStreamToolStripMenuItem.Text = "Stop stream";
+			this.stopStreamToolStripMenuItem.Click += new System.EventHandler(this.stopStreamToolStripMenuItem_Click);
 			// 
 			// MainForm
 			// 

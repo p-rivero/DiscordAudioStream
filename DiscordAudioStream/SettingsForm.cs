@@ -92,6 +92,12 @@ namespace DiscordAudioStream
 			captureFramerateComboBox.SetDarkMode(darkMode);
 			themeComboBox.SetDarkMode(darkMode);
 			streamTitleBox.SetDarkMode(darkMode);
+			autoExitCheckbox.SetDarkMode(darkMode);
+			outputLogCheckbox.SetDarkMode(darkMode);
+			offscreenDrawCheckbox.SetDarkMode(darkMode);
+			showAudioInputsCheckbox.SetDarkMode(darkMode);
+			audioMeterCheckBox.SetDarkMode(darkMode);
+
 			classicVolumeMixerLink.LinkColor = DarkThemeManager.AccentColor;
 			audioDevicesLink.LinkColor = DarkThemeManager.AccentColor;
 		}

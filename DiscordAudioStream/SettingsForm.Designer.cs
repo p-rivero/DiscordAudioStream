@@ -102,10 +102,9 @@
 			// 
 			// audioMeterCheckBox
 			// 
-			this.audioMeterCheckBox.AutoSize = true;
 			this.audioMeterCheckBox.Location = new System.Drawing.Point(9, 86);
 			this.audioMeterCheckBox.Name = "audioMeterCheckBox";
-			this.audioMeterCheckBox.Size = new System.Drawing.Size(167, 19);
+			this.audioMeterCheckBox.Size = new System.Drawing.Size(233, 19);
 			this.audioMeterCheckBox.TabIndex = 43;
 			this.audioMeterCheckBox.Text = "Show audio meter window";
 			this.audioMeterCheckBox.UseVisualStyleBackColor = true;
@@ -256,10 +255,9 @@
 			// 
 			// autoExitCheckbox
 			// 
-			this.autoExitCheckbox.AutoSize = true;
 			this.autoExitCheckbox.Location = new System.Drawing.Point(9, 9);
 			this.autoExitCheckbox.Name = "autoExitCheckbox";
-			this.autoExitCheckbox.Size = new System.Drawing.Size(207, 19);
+			this.autoExitCheckbox.Size = new System.Drawing.Size(233, 19);
 			this.autoExitCheckbox.TabIndex = 0;
 			this.autoExitCheckbox.Text = "Exit when captured window closes";
 			this.autoExitCheckbox.UseVisualStyleBackColor = true;
@@ -282,10 +280,9 @@
 			// 
 			// showAudioInputsCheckbox
 			// 
-			this.showAudioInputsCheckbox.AutoSize = true;
 			this.showAudioInputsCheckbox.Location = new System.Drawing.Point(9, 59);
 			this.showAudioInputsCheckbox.Name = "showAudioInputsCheckbox";
-			this.showAudioInputsCheckbox.Size = new System.Drawing.Size(161, 19);
+			this.showAudioInputsCheckbox.Size = new System.Drawing.Size(200, 19);
 			this.showAudioInputsCheckbox.TabIndex = 41;
 			this.showAudioInputsCheckbox.Text = "Show audio input devices";
 			this.showAudioInputsCheckbox.UseVisualStyleBackColor = true;
@@ -293,10 +290,9 @@
 			// 
 			// offscreenDrawCheckbox
 			// 
-			this.offscreenDrawCheckbox.AutoSize = true;
 			this.offscreenDrawCheckbox.Location = new System.Drawing.Point(9, 34);
 			this.offscreenDrawCheckbox.Name = "offscreenDrawCheckbox";
-			this.offscreenDrawCheckbox.Size = new System.Drawing.Size(131, 19);
+			this.offscreenDrawCheckbox.Size = new System.Drawing.Size(200, 19);
 			this.offscreenDrawCheckbox.TabIndex = 40;
 			this.offscreenDrawCheckbox.Text = "Force screen redraw";
 			this.offscreenDrawCheckbox.UseVisualStyleBackColor = true;
@@ -304,10 +300,9 @@
 			// 
 			// outputLogCheckbox
 			// 
-			this.outputLogCheckbox.AutoSize = true;
 			this.outputLogCheckbox.Location = new System.Drawing.Point(9, 9);
 			this.outputLogCheckbox.Name = "outputLogCheckbox";
-			this.outputLogCheckbox.Size = new System.Drawing.Size(103, 19);
+			this.outputLogCheckbox.Size = new System.Drawing.Size(200, 19);
 			this.outputLogCheckbox.TabIndex = 6;
 			this.outputLogCheckbox.Text = "Output log file";
 			this.outputLogCheckbox.UseVisualStyleBackColor = true;
