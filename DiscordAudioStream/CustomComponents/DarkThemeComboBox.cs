@@ -23,6 +23,8 @@ namespace CustomComponents
                 return text;
             }
         }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S2094", Justification =
+			"This class cannot be an interface because it needs to be instaantiated as a sentinel")]
         public class Dummy
         {
         }
