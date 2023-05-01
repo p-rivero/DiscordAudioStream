@@ -166,6 +166,7 @@ namespace DiscordAudioStream
 				DisplayPreview(true);
 				previewBox.Location = new Point(0, 0);
 				controller.ShowAudioMeterForm(darkMode);
+				this.Text = Properties.Settings.Default.StreamTitle;
 			}
 			else
 			{
@@ -174,6 +175,7 @@ namespace DiscordAudioStream
 				previewBox.Location = defaultPreviewLocation;
 				CenterToScreen();
 				controller.HideAudioMeterForm();
+				this.Text = "Discord Audio Stream";
 			}
 		}
 

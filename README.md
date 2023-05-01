@@ -108,6 +108,8 @@ The following steps depend on what you want to do.
 
 8. In Discord, select "Share Your Screen". This will show a list of open windows. Select the window called "Discord Audio Stream" (the one that was created in step 7).
 
+    - In DiscordAudioStream settings, you can change the *Stream title* (the default value is "Discord Audio Stream"). If you have changed this setting, select the window with the title you have chosen instead. Discord usually doesn't show this title to the viewers, so you can set it to something like "⚠️THIS WINDOW⚠️" to make finding the window easier.
+
 9. You are now sharing your screen with the audio from the selected programs. When you are done, you can close DiscordAudioStream.
 
     - **Very important:** remember to restore the output device of your programs to "Default". Otherwise, you won't be able to hear their audio.
@@ -143,6 +145,8 @@ Now follow this steps:
 7. Click the *Start Stream* button. This will create a new window. You should now be able to hear the audio from the programs you stopped hearing in step 3.
 
 8. In Discord, select "Share Your Screen". This will show a list of open windows. Select the window called "Discord Audio Stream" (the one that was created in step 7).
+
+    - In DiscordAudioStream settings, you can change the *Stream title* (the default value is "Discord Audio Stream"). If you have changed this setting, select the window with the title you have chosen instead. Discord usually doesn't show this title to the viewers, so you can set it to something like "⚠️THIS WINDOW⚠️" to make finding the window easier.
 
 9. You are now sharing your OBS composition with the audio from the selected programs. When you are done, you can close DiscordAudioStream.
 

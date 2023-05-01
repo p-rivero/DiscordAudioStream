@@ -38,14 +38,12 @@ namespace DiscordAudioStream
 			// Set default values
 
 			themeComboBox.SelectedIndex = Properties.Settings.Default.Theme;
-
 			autoExitCheckbox.Checked = Properties.Settings.Default.AutoExit;
-
 			outputLogCheckbox.Checked = Properties.Settings.Default.OutputLogFile;
-
 			offscreenDrawCheckbox.Checked = Properties.Settings.Default.OffscreenDraw;
-
 			showAudioInputsCheckbox.Checked = Properties.Settings.Default.ShowAudioInputs;
+			streamTitleBox.Text = Properties.Settings.Default.StreamTitle;
+			audioMeterCheckBox.Checked = Properties.Settings.Default.ShowAudioMeter;
 
 			windowMethodComboBox.SelectedIndex = (int) captureState.WindowMethod;
 			fullscreenMethodComboBox.SelectedIndex = (int) captureState.ScreenMethod;
@@ -206,6 +204,33 @@ namespace DiscordAudioStream
 			Logger.Log("\nChange settings: ShowAudioInputs={0}", Properties.Settings.Default.ShowAudioInputs);
 
 			ShowAudioInputsChanged?.Invoke();
+		}
+
+		private void streamTitleBox_TextChanged(object sender, EventArgs e)
+		{
+			// Nothing changed
+			if (Properties.Settings.Default.StreamTitle == streamTitleBox.Text) return;
+			try
+			{
+				Properties.Settings.Default.StreamTitle = streamTitleBox.Text;
+				Properties.Settings.Default.Save();
+				// Text could contain sensitive information, don't log it
+				Logger.Log("Stream title saved successfully");
+			} catch (ArgumentException ex) {
+				Logger.Log("Failed to save stream title: " + ex.Message);
+				// Saving could fail when auto-filling a character with many code points, like some emojis
+				// Once the character has been completely filled, saving should succeed
+			}
+		}
+
+		private void audioMeterCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			// Nothing changed
+			if (Properties.Settings.Default.StreamTitle == streamTitleBox.Text) return;
+			
+			Properties.Settings.Default.ShowAudioMeter = audioMeterCheckBox.Checked;
+			Properties.Settings.Default.Save();
+			Logger.Log("\nChange settings: ShowAudioMeter={0}", Properties.Settings.Default.ShowAudioMeter);
 		}
 	}
 }

@@ -62,5 +62,11 @@
     <Setting Name="AudioMeterForm_Size" Type="System.Drawing.Size" Scope="User">
       <Value Profile="(Default)">0, 0</Value>
     </Setting>
+    <Setting Name="ShowAudioMeter" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="StreamTitle" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Discord Audio Stream</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

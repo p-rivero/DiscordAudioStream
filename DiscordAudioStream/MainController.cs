@@ -389,6 +389,11 @@ namespace DiscordAudioStream
 		
 		internal void ShowAudioMeterForm(bool darkMode)
 		{
+			if (!Properties.Settings.Default.ShowAudioMeter)
+			{
+				// Disabled by the user
+				return;
+			}
 			if (currentMeterForm == null || currentMeterForm.IsDisposed)
 			{
 				currentMeterForm = new AudioMeterForm(darkMode);

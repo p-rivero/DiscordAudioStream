@@ -109,6 +109,7 @@
 			this.audioMeterCheckBox.TabIndex = 43;
 			this.audioMeterCheckBox.Text = "Show audio meter window";
 			this.audioMeterCheckBox.UseVisualStyleBackColor = true;
+			this.audioMeterCheckBox.CheckedChanged += new System.EventHandler(this.audioMeterCheckBox_CheckedChanged);
 			// 
 			// streamTitleBox
 			// 
@@ -118,6 +119,7 @@
 			this.streamTitleBox.Name = "streamTitleBox";
 			this.streamTitleBox.Size = new System.Drawing.Size(142, 23);
 			this.streamTitleBox.TabIndex = 42;
+			this.streamTitleBox.TextChanged += new System.EventHandler(this.streamTitleBox_TextChanged);
 			// 
 			// streamTitleLabel
 			// 
