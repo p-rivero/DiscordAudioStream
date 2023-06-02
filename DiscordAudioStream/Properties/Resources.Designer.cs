@@ -266,7 +266,7 @@ namespace DiscordAudioStream.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Rescale the captured video to make the window size more manageable (especially when capturing fullscreen).
-        ///Warning: this can reduce the quality of the video streamed to Discord..
+        ///Warning: this can reduce the quality of the streamed video. The default value (720p) is recommended..
         /// </summary>
         internal static string Tooltip_VideoScale {
             get {

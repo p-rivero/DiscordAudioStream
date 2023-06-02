@@ -231,10 +231,6 @@ cursor on top of the one added by DiscordAudioStream.</value>
     <value>Don't show the taskbar at the bottom of the screen.
 Only available when using the BitBlt fullscreen method.</value>
   </data>
-  <data name="Tooltip_VideoScale" xml:space="preserve">
-    <value>Rescale the captured video to make the window size more manageable (especially when capturing fullscreen).
-Warning: this can reduce the quality of the video streamed to Discord.</value>
-  </data>
   <data name="Tooltip_AudioSource" xml:space="preserve">
     <value>Choose the audio source (the audio device to listen).
 Set the output of your target programs to an unused audio device, and then capture that device here.
@@ -255,5 +251,9 @@ Other VOIP apps may show this title to the viewers.</value>
   </data>
   <data name="Tooltip_WindowTheme" xml:space="preserve">
     <value>Change between a light and a dark UI theme. The program will restart automatically.</value>
+  </data>
+  <data name="Tooltip_VideoScale" xml:space="preserve">
+    <value>Rescale the captured video to make the window size more manageable (especially when capturing fullscreen).
+Warning: this can reduce the quality of the streamed video. The default value (720p) is recommended.</value>
   </data>
 </root>

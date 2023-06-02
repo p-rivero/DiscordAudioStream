@@ -54,7 +54,7 @@ namespace DiscordAudioStream
 			DisplayPreview(previewBtn.Checked);
 
 			VideoIndex = Properties.Settings.Default.AreaIndex;
-			scaleComboBox.SelectedIndex = Properties.Settings.Default.ScaleIndex;
+			scaleComboBox.SelectedIndex = Math.Min(Properties.Settings.Default.ScaleIndex, scaleComboBox.Items.Count - 1);
 
 			ApplyDarkTheme(darkMode);
 

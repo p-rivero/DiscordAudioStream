@@ -16,12 +16,12 @@ namespace DiscordAudioStream
 
 		private bool streamEnabled = false;
 		private bool forceRefresh = false;
-		private double scaleMultiplier = 1;
 		private int numberOfScreens = -1;
 
 		private ScreenCaptureManager screenCapture;
 		private ProcessHandleList processHandleList;
 		private readonly CaptureState captureState = new CaptureState();
+		private readonly CaptureResizer captureResizer = new CaptureResizer();
 
 		private AudioPlayback audioPlayback = null;
 		private AudioMeterForm currentMeterForm = null;
@@ -75,8 +75,7 @@ namespace DiscordAudioStream
 		{
 			if (streamEnabled)
 			{
-				size.Width = (int)(Math.Max(160, size.Width) * scaleMultiplier);
-				size.Height = (int)(Math.Max(160, size.Height) * scaleMultiplier);
+				size = captureResizer.GetScaledSize(size);
 				form.SetPreviewUISize(size);
 			}
 		}
@@ -431,10 +430,7 @@ namespace DiscordAudioStream
 
 		internal void SetScaleIndex(int index)
 		{
-			if (index == 0) scaleMultiplier = 1;              // Original resolution
-			else if (index == 1) scaleMultiplier = Math.Sqrt(0.50); // 50% resolution
-			else if (index == 2) scaleMultiplier = Math.Sqrt(0.25); // 25% resolution
-			else throw new ArgumentException("Invalid index");
+			captureResizer.SetScaleMode((ScaleMode)index);
 
 			Properties.Settings.Default.ScaleIndex = index;
 			Properties.Settings.Default.Save();
