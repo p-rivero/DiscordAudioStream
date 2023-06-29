@@ -232,7 +232,7 @@ namespace DiscordAudioStream
 		private void audioMeterCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			// Nothing changed
-			if (Properties.Settings.Default.StreamTitle == streamTitleBox.Text) return;
+			if (Properties.Settings.Default.ShowAudioMeter == audioMeterCheckBox.Checked) return;
 			
 			Properties.Settings.Default.ShowAudioMeter = audioMeterCheckBox.Checked;
 			Properties.Settings.Default.Save();
