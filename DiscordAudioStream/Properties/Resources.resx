@@ -200,6 +200,9 @@ Discord Nitro cannot stream video at more than 30 FPS.</value>
   <data name="NAudio" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\NAudio.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Mono_Options" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\mono.options.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="URL_ModuleArtLink" xml:space="preserve">
     <value>https://github.com/ModuleArt</value>
   </data>
