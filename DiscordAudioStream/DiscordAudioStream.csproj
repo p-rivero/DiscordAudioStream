@@ -38,7 +38,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <ApplicationIcon>resources\imgs\logo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
@@ -203,7 +203,7 @@
     <None Include="resources\imgs\light\white-about.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="logo.ico" />
+    <Content Include="resources\imgs\logo.ico" />
     <None Include="resources\imgs\lock.png" />
     <Content Include="resources\SharpDX.Direct3D11.dll" />
     <Content Include="resources\SharpDX.dll" />
