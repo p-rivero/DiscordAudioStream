@@ -14,7 +14,8 @@ namespace DiscordAudioStream
 		{
 			ExceptionHandler.Register();
 			EmbeddedAssemblyResolver.Register();
-			
+			RedirectConsoleOutput();
+
 			Logger.Log("Started Main method. Arguments: [{0}] (size={1})", string.Join(",", args), args.Length);
 			Logger.Log("OS Version: {0}", Environment.OSVersion);
 			Logger.Log("Log ID: {0}", new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds());
@@ -55,6 +56,13 @@ namespace DiscordAudioStream
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			if (darkMode) Uxtheme.AllowDarkModeForApp(true);
+		}
+
+		private static void RedirectConsoleOutput()
+		{
+			Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
+			// Add newline to skip shell prompt
+			Console.WriteLine();
 		}
 	}
 }

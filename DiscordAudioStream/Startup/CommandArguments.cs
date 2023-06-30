@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Threading;
 using Mono.Options;
 
 namespace DiscordAudioStream
@@ -17,13 +19,13 @@ namespace DiscordAudioStream
 			{
 				{
 					"position=",
-					"Move the window to the given position coordinates. Format: 'position=x,y'\n"
-						+ "Example: --position=0,0 moves the window to the top-left edge of the main screen.",
+					"Move the window to the given {X,Y} coordinates.\n"
+						+ "--position=0,0 moves the window to the top-left edge of the main screen.",
 					v => position = ParsePoint(v)
 				},
 				{
 					"start",
-					"Start streaming immediately, using the previous settings. Ignores possible warnings.",
+					"Start streaming immediately, using the previous settings. All warnings are ignored.",
 					v => startStream = v != null
 				},
 				{
@@ -35,7 +37,11 @@ namespace DiscordAudioStream
 
 			try
 			{
-				options.Parse(args);
+				IEnumerable<string> extra = options.Parse(args);
+				foreach (string arg in extra)
+				{
+					Console.WriteLine("Warning: Unrecognized argument {0}", arg);
+				}
 			}
 			catch (OptionException e)
 			{
@@ -68,11 +74,11 @@ namespace DiscordAudioStream
 
 		private void PrintHelp(OptionSet options)
 		{
-			Console.WriteLine("Usage: DiscordAudioStream.exe [options]");
+			Console.WriteLine("Usage: {0} [options]", AppDomain.CurrentDomain.FriendlyName);
 			Console.WriteLine();
 			Console.WriteLine("Options:");
 			options.WriteOptionDescriptions(Console.Out);
-			Console.WriteLine("All options can be used in UNIX or Windows styles (-option, --option or /option)");
+			Console.WriteLine("All options support Unix and Windows styles (-option, --option or /option)");
 		}
 
 		static private Point ParsePoint(string str)

@@ -208,6 +208,14 @@ namespace DLLs
 		public static extern bool SetProcessDpiAwarenessContext(int value);
 	}
 
+	static class Kernel32
+	{
+		public const uint ATTACH_PARENT_PROCESS = 0x0ffffffff;
+
+		[DllImport("kernel32.dll", SetLastError = true)]
+		public static extern bool AttachConsole(uint dwProcessId);
+	}
+
 	static class Ntdll
 	{
 		[SecurityCritical]
@@ -300,5 +308,4 @@ namespace DLLs
 		[DllImport("uxtheme.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode, EntryPoint = "#135", ExactSpelling = true, SetLastError = true)]
 		public static extern bool AllowDarkModeForApp(bool allow);
 	}
-
 }
