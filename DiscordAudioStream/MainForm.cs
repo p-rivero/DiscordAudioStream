@@ -11,7 +11,6 @@ namespace DiscordAudioStream
 {
 	public partial class MainForm : Form
 	{
-		// Encapsulates all business logic in a controller and let the form handle only UI
 		private readonly MainController controller;
 
 		private readonly bool darkMode;
@@ -68,6 +67,8 @@ namespace DiscordAudioStream
 			toolTip.SetToolTip(inputDeviceLabel, Properties.Resources.Tooltip_AudioSource);
 			toolTip.SetToolTip(startButton, Properties.Resources.Tooltip_StartStream);
 		}
+
+		public MainController Controller => controller;
 
 		// INTERNAL METHODS (called from controller)
 
@@ -144,9 +145,14 @@ namespace DiscordAudioStream
 		{
 			BeginInvoke(new Action(() => previewBox.Size = newSize));
 		}
+		
 		internal Size TruePreviewSize
 		{
-			get { return previewBox.Image.Size; }
+			get
+			{
+				if (previewBox.Image == null) return new Size(0, 0);
+				return previewBox.Image.Size;
+			}
 		}
 
 		internal void EnableStreamingUI(bool streaming)
@@ -271,6 +277,7 @@ namespace DiscordAudioStream
 			onTopBtn.Checked = Properties.Settings.Default.AlwaysOnTop;
 			captureCursorCheckBox.Checked = Properties.Settings.Default.CaptureCursor;
 			hideTaskbarCheckBox.Checked = Properties.Settings.Default.HideTaskbar;
+			
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)

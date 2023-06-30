@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DiscordAudioStream
 {
-	internal class ConsoleArguments
+	internal class CommandArguments
 	{
-		public ConsoleArguments(string[] args)
+		public CommandArguments(string[] args)
 		{
 			// TODO
 		}
@@ -17,7 +13,7 @@ namespace DiscordAudioStream
 
 		public void ProcessArgs(MainController controller)
 		{
-
+			// TODO
 		}
 
 

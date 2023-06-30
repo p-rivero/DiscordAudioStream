@@ -17,7 +17,7 @@ namespace DiscordAudioStream
 			Logger.Log("Log ID: {0}", new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds());
 			Logger.Log("Build ID: " + BuildId.Id);
 
-			ConsoleArguments consoleArgs = new ConsoleArguments(args);
+			CommandArguments consoleArgs = new CommandArguments(args);
 
 			if (consoleArgs.ExitImmediately)
 			{
@@ -32,8 +32,8 @@ namespace DiscordAudioStream
 			EnableNativeStyles(darkMode);
 
 			MainForm mainForm = new MainForm(darkMode);
+			mainForm.Load += (sender, e) => consoleArgs.ProcessArgs(mainForm.Controller);
 			Application.Run(mainForm);
-			Console.WriteLine("Exiting Main method.");
 		}
 
 		private static bool IsDarkTheme()

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace DiscordAudioStream
 {
-	internal class MainController
+	public class MainController
 	{
 		private readonly MainForm form;
 
