@@ -17,6 +17,7 @@ namespace DiscordAudioStream
 		private bool streamEnabled = false;
 		private bool forceRefresh = false;
 		private int numberOfScreens = -1;
+		private Size lastCapturedFrameSize = new Size(0, 0);
 
 		private ScreenCaptureManager screenCapture;
 		private ProcessHandleList processHandleList;
@@ -73,6 +74,7 @@ namespace DiscordAudioStream
 
 		private void SetPreviewSize(Size size)
 		{
+			lastCapturedFrameSize = size;
 			if (streamEnabled)
 			{
 				size = captureResizer.GetScaledSize(size);
@@ -263,11 +265,31 @@ namespace DiscordAudioStream
 		}
 
 
-		internal void StartStream()
+		internal void StartStream(bool skipAudioWarning)
 		{
-			if (form.AudioIndex == 0)
+			try
 			{
-				// No audio device selected, show warning
+				if (form.AudioIndex > 0) StartStreamAudioRecording(form.AudioIndex - 1, skipAudioWarning);
+				else StartStreamWithoutAudio(skipAudioWarning);
+			}
+			catch (OperationCanceledException)
+			{
+				return;
+			}
+
+			form.EnableStreamingUI(true);
+			// Reading Properties.Settings can be slow, set flag once at the start of the stream
+			forceRefresh = Properties.Settings.Default.OffscreenDraw;
+			Logger.Log("Force screen redraw: " + forceRefresh);
+			streamEnabled = true;
+
+			SetPreviewSize(lastCapturedFrameSize);
+		}
+
+		private void StartStreamWithoutAudio(bool skipAudioWarning)
+		{
+			if (!skipAudioWarning)
+			{
 				DialogResult r = MessageBox.Show(
 					"No audio source selected, continue anyways?",
 					"Warning",
@@ -277,20 +299,21 @@ namespace DiscordAudioStream
 					MessageBoxDefaultButton.Button2
 				);
 
-				if (r == DialogResult.No)
-					return;
-
-				Logger.Log("\nSTART STREAM (Without audio)");
-				// Clear the stored last used audio device
-				Properties.Settings.Default.AudioDeviceID = "";
-				Properties.Settings.Default.Save();
+				if (r == DialogResult.No) throw new OperationCanceledException();
 			}
-			else
+
+			Logger.Log("\nSTART STREAM (Without audio)");
+			// Clear the stored last used audio device
+			Properties.Settings.Default.AudioDeviceID = "";
+			Properties.Settings.Default.Save();
+		}
+
+		private void StartStreamAudioRecording(int deviceIndex, bool skipAudioWarning)
+		{
+			if (deviceIndex == AudioPlayback.GetDefaultDeviceIndex())
 			{
-				int deviceIndex = form.AudioIndex - 1;
-				if (deviceIndex == AudioPlayback.GetDefaultDeviceIndex())
+				if (!skipAudioWarning)
 				{
-					// No audio device selected, show warning
 					DialogResult r = MessageBox.Show(
 						"The captured audio device is the same as the output device of DiscordAudioStream.\n" +
 						"This will cause an audio loop, which may result in echo or very loud sounds. Continue anyways?",
@@ -301,41 +324,31 @@ namespace DiscordAudioStream
 						MessageBoxDefaultButton.Button2
 					);
 
-					if (r == DialogResult.Cancel)
-						return;
+					if (r == DialogResult.Cancel) throw new OperationCanceledException();
+				}
 
-					Logger.Log("\nDEFAULT DEVICE CAPTURED (Audio loop)");
-				}
-				
-				Logger.Log("\nSTART STREAM (With audio)");
-				// Skip "None"
-				audioPlayback = new AudioPlayback(deviceIndex);
-				try
-				{
-					audioPlayback.AudioLevelChanged += (left, right) => currentMeterForm?.SetLevels(left, right);
-					audioPlayback.Start();
-				}
-				catch (InvalidOperationException e)
-				{
-					MessageBox.Show(
-						e.Message,
-						"Unable to capture the audio device",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error,
-						MessageBoxDefaultButton.Button1
-					);
-					return;
-				}
+				Logger.Log("\nDEFAULT DEVICE CAPTURED (Audio loop)");
 			}
 
-			form.EnableStreamingUI(true);
-			// Reading Properties.Settings can be slow, set flag once at the start of the stream
-			forceRefresh = Properties.Settings.Default.OffscreenDraw;
-			Logger.Log("Force screen redraw: " + forceRefresh);
-			streamEnabled = true;
-
-			// Show preview at full size
-			SetPreviewSize(form.TruePreviewSize);
+			Logger.Log("\nSTART STREAM (With audio)");
+			
+			audioPlayback = new AudioPlayback(deviceIndex);
+			audioPlayback.AudioLevelChanged += (left, right) => currentMeterForm?.SetLevels(left, right);
+			try
+			{
+				audioPlayback.Start();
+			}
+			catch (InvalidOperationException e)
+			{
+				MessageBox.Show(
+					e.Message,
+					"Unable to capture the audio device",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error,
+					MessageBoxDefaultButton.Button1
+				);
+				throw new OperationCanceledException();
+			}
 		}
 
 		private void EndStream()
@@ -448,6 +461,11 @@ namespace DiscordAudioStream
 			captureState.CapturingCursor = capturing;
 			Properties.Settings.Default.CaptureCursor = capturing;
 			Properties.Settings.Default.Save();
+		}
+
+		internal void MoveWindow(Point newPosition)
+		{
+			form.Location = newPosition;
 		}
 	}
 }

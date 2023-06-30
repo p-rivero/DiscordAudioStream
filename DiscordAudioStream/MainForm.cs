@@ -145,15 +145,6 @@ namespace DiscordAudioStream
 		{
 			BeginInvoke(new Action(() => previewBox.Size = newSize));
 		}
-		
-		internal Size TruePreviewSize
-		{
-			get
-			{
-				if (previewBox.Image == null) return new Size(0, 0);
-				return previewBox.Image.Size;
-			}
-		}
 
 		internal void EnableStreamingUI(bool streaming)
 		{
@@ -312,7 +303,7 @@ namespace DiscordAudioStream
 					soundDevicesButton.PerformClick();
 					break;
 				case Keys.Enter:
-					if (!controller.IsStreaming) controller.StartStream();
+					if (!controller.IsStreaming) controller.StartStream(false);
 					break;
 				}
 			}
@@ -395,7 +386,7 @@ namespace DiscordAudioStream
 
 		private void startButton_Click(object sender, EventArgs e)
 		{
-			controller.StartStream();
+			controller.StartStream(false);
 		}
 
 		private void areaComboBox_DropDown(object sender, EventArgs e)

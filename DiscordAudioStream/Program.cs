@@ -12,6 +12,9 @@ namespace DiscordAudioStream
 		[STAThread]
 		static void Main(string[] args)
 		{
+			ExceptionHandler.Register();
+			EmbeddedAssemblyResolver.Register();
+			
 			Logger.Log("Started Main method. Arguments: [{0}] (size={1})", string.Join(",", args), args.Length);
 			Logger.Log("OS Version: {0}", Environment.OSVersion);
 			Logger.Log("Log ID: {0}", new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds());
@@ -24,9 +27,6 @@ namespace DiscordAudioStream
 				Logger.Log("Exiting as requested by command line arguments.");
 				return;
 			}
-
-			ExceptionHandler.Register();
-			EmbeddedAssemblyResolver.Register();
 
 			bool darkMode = IsDarkTheme();
 			EnableNativeStyles(darkMode);

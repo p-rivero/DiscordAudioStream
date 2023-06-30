@@ -20,9 +20,14 @@ namespace DiscordAudioStream
 			}
 		}
 
+		public static void Log(string text)
+		{
+			Trace.WriteLine(text);
+		}
+		
 		public static void Log(string format, params object[] args)
 		{
-			Trace.WriteLine(string.Format(format, args));
+			Log(string.Format(format, args));
 		}
 
 		public static void Log(Exception e)
