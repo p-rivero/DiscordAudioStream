@@ -79,6 +79,7 @@
       <DependentUpon>AudioMeterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AudioPlayback.cs" />
+    <Compile Include="Startup\ConsoleArguments.cs" />
     <Compile Include="CustomComponents\AudioMeter.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -157,6 +158,8 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Startup\ExceptionHandler.cs" />
+    <Compile Include="Startup\EmbeddedAssemblyResolver.cs" />
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
