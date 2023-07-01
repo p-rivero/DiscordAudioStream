@@ -25,7 +25,7 @@ namespace DiscordAudioStream
 
 			if (consoleArgs.ExitImmediately)
 			{
-				Logger.Log("Exiting as requested by command line arguments.");
+				Logger.Log("\nExiting as requested by command line arguments.");
 				return;
 			}
 
@@ -45,9 +45,9 @@ namespace DiscordAudioStream
 				case 0:
 					return DarkThemeManager.IsDarkTheme();
 				case 1:
-					return true;
-				default:
 					return false;
+				default:
+					return true;
 			}
 		}
 
@@ -61,7 +61,9 @@ namespace DiscordAudioStream
 
 		private static void RedirectConsoleOutput()
 		{
-			Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
+			bool success = Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
+			if (!success) return;
+			
 			// Skip shell prompt
 			Console.WriteLine();
 			Console.WriteLine();
