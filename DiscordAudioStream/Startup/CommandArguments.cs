@@ -29,7 +29,7 @@ namespace DiscordAudioStream
 					v => startStream = v != null
 				},
 				{
-					"h|help", 
+					"h|help|?", 
 					"Show this message and exit",
 					v => showHelp = v != null
 				},
