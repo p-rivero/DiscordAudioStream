@@ -36,6 +36,7 @@ namespace DiscordAudioStream
 			mainForm.Load += (sender, e) => consoleArgs.ProcessArgs(mainForm.Controller);
 			Application.Run(mainForm);
 		}
+		
 
 		private static bool IsDarkTheme()
 		{
@@ -61,8 +62,12 @@ namespace DiscordAudioStream
 		private static void RedirectConsoleOutput()
 		{
 			Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
-			// Add newline to skip shell prompt
+			// Skip shell prompt
 			Console.WriteLine();
+			Console.WriteLine();
+
+			// Since we skipped the prompt, we need to trigger it manually
+			AppDomain.CurrentDomain.ProcessExit += (sender, e) => SendKeys.SendWait("{ENTER}");
 		}
 	}
 }

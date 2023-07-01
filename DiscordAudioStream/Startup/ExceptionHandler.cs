@@ -35,8 +35,8 @@ namespace DiscordAudioStream
 
 			WriteStackTrace(exception, tracePath);
 
-			string msg = string.Format("Unhandled exception: {0}\nCheck the generated trace file:\n{1}", exception.Message, tracePath);
-			MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			string msg = string.Format("Unhandled exception: {0}\nClick OK to open the generated trace file:\n{1}", exception.Message, tracePath);
+			MessageBox.Show(msg, "DiscordAudioStream Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
 			OpenFile(tracePath);
 			Application.Exit();
