@@ -269,7 +269,7 @@ namespace DiscordAudioStream
 		{
 			try
 			{
-				if (form.AudioIndex > 0) StartStreamAudioRecording(form.AudioIndex - 1, skipAudioWarning);
+				if (form.HasSomeAudioSource) StartStreamAudioRecording(form.AudioSourceIndex, skipAudioWarning);
 				else StartStreamWithoutAudio(skipAudioWarning);
 			}
 			catch (OperationCanceledException)
@@ -401,11 +401,11 @@ namespace DiscordAudioStream
 		
 		internal void ShowAudioMeterForm(bool darkMode)
 		{
-			if (!Properties.Settings.Default.ShowAudioMeter)
-			{
-				// Disabled by the user
-				return;
-			}
+			// Disabled by the user
+			if (!Properties.Settings.Default.ShowAudioMeter) return;
+			// No audio to display
+			if (!form.HasSomeAudioSource) return;
+			
 			if (currentMeterForm == null)
 			{
 				currentMeterForm = new AudioMeterForm(darkMode);

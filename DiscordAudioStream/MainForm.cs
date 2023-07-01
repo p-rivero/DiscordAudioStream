@@ -108,9 +108,13 @@ namespace DiscordAudioStream
 			}
 		}
 
-		internal int AudioIndex
+		internal bool HasSomeAudioSource
 		{
-			get { return inputDeviceComboBox.SelectedIndex; }
+			get => inputDeviceComboBox.SelectedIndex > 0;
+		}
+		internal int AudioSourceIndex
+		{
+			get => inputDeviceComboBox.SelectedIndex - 1;
 		}
 
 		internal void SetAudioElements(IEnumerable<string> elements, int defaultIndex)
@@ -165,7 +169,9 @@ namespace DiscordAudioStream
 				controller.ShowAudioMeterForm(darkMode);
 				this.Text = Properties.Settings.Default.StreamTitle;
 				previewBox.ContextMenuStrip = streamContextMenu;
-				showAudioMeterToolStripMenuItem.Checked = Properties.Settings.Default.ShowAudioMeter;
+				
+				showAudioMeterToolStripMenuItem.Enabled = HasSomeAudioSource;
+				showAudioMeterToolStripMenuItem.Checked = HasSomeAudioSource && Properties.Settings.Default.ShowAudioMeter;
 			}
 			else
 			{

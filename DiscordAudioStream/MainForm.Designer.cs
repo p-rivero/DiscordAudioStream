@@ -334,24 +334,24 @@
             this.toolStripSeparator3,
             this.stopStreamToolStripMenuItem});
 			this.streamContextMenu.Name = "contextMenu";
-			this.streamContextMenu.Size = new System.Drawing.Size(171, 54);
+			this.streamContextMenu.Size = new System.Drawing.Size(181, 76);
 			// 
 			// showAudioMeterToolStripMenuItem
 			// 
 			this.showAudioMeterToolStripMenuItem.Name = "showAudioMeterToolStripMenuItem";
-			this.showAudioMeterToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.showAudioMeterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.showAudioMeterToolStripMenuItem.Text = "Show audio meter";
 			this.showAudioMeterToolStripMenuItem.Click += new System.EventHandler(this.showAudioMeterToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(167, 6);
+			this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
 			// 
 			// stopStreamToolStripMenuItem
 			// 
 			this.stopStreamToolStripMenuItem.Name = "stopStreamToolStripMenuItem";
-			this.stopStreamToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.stopStreamToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.stopStreamToolStripMenuItem.Text = "Stop stream";
 			this.stopStreamToolStripMenuItem.Click += new System.EventHandler(this.stopStreamToolStripMenuItem_Click);
 			// 
