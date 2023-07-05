@@ -5,124 +5,135 @@ using System.Windows.Forms;
 
 namespace CustomComponents
 {
-    public class DarkThemeComboBox : ComboBox
-    {
-        private bool darkMode;
-        private bool hovered;
+	public class DarkThemeComboBox : ComboBox
+	{
+		private bool darkMode;
+		private bool hovered;
 
-        public class ItemWithSeparator
-        {
-            private readonly string text;
-            public ItemWithSeparator(string text)
-            {
-                this.text = text;
-            }
+		public class ItemWithSeparator
+		{
+			private readonly string text;
+			public ItemWithSeparator(string text)
+			{
+				this.text = text;
+			}
 
-            public override string ToString()
-            {
-                return text;
-            }
-        }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S2094", Justification =
-            "This class cannot be an interface because it needs to be instaantiated as a sentinel")]
-        public class Dummy
-        {
-        }
+			public override string ToString()
+			{
+				return text;
+			}
+		}
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S2094", Justification =
+			"This class cannot be an interface because it needs to be instantiated as a sentinel")]
+		public class Dummy
+		{
+		}
 
-        public DarkThemeComboBox()
-        {
-            SetStyle(ControlStyles.UserPaint, true);
-            base.DrawMode = DrawMode.OwnerDrawVariable;
-            base.MouseEnter += (s, e) =>
-            {
-                hovered = true;
-                Refresh();
-            };
-            base.MouseLeave += (s, e) =>
-            {
-                hovered = false;
-                Refresh();
-            };
-            base.DrawItem += new DrawItemEventHandler(CustomDrawItem);
-        }
+		public DarkThemeComboBox()
+		{
+			SetStyle(ControlStyles.UserPaint, true);
+			base.DrawMode = DrawMode.OwnerDrawVariable;
+			base.MouseEnter += (s, e) =>
+			{
+				hovered = true;
+				Refresh();
+			};
+			base.MouseLeave += (s, e) =>
+			{
+				hovered = false;
+				Refresh();
+			};
+			base.DrawItem += new DrawItemEventHandler(CustomDrawItem);
+		}
 
-        public void SetDarkMode(bool dark)
-        {
-            darkMode = dark;
-            if (dark)
-            {
-                BackColor = DarkThemeManager.DarkSecondColor;
-                ForeColor = Color.White;
-            }
-        }
+		public void SetDarkMode(bool dark)
+		{
+			darkMode = dark;
+			if (dark)
+			{
+				BackColor = DarkThemeManager.DarkSecondColor;
+				ForeColor = Color.White;
+			}
+		}
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            if (hovered)
-            {
-                if (darkMode) e.Graphics.FillRectangle(new SolidBrush(DarkThemeManager.DarkHoverColor), 0, 0, base.Width, base.Height - 2);
-                else e.Graphics.FillRectangle(new SolidBrush(DarkThemeManager.LightHoverColor), 0, 0, base.Width, base.Height - 2);
-            }
-            else
-            {
-                e.Graphics.FillRectangle(new SolidBrush(BackColor), 0, 0, base.Width, base.Height - 2);
-            }
+		public override int SelectedIndex
+		{
+			get => base.SelectedIndex;
+			set
+			{
+				if (value >= Items.Count) base.SelectedIndex = 0;
+				else base.SelectedIndex = value;
+			}
+		}
 
-            e.Graphics.TextRenderingHint = TextRenderingHint.SystemDefault;
-            e.Graphics.DrawString(Text, Font, new SolidBrush(ForeColor), 3f, 3f);
-            e.Graphics.FillRectangle(new SolidBrush(BackColor), base.Width - 18, 0, 18, base.Height);
-            e.Graphics.FillPolygon(new SolidBrush(ForeColor), new PointF[3]
-            {
-                new PointF(base.Width - 13, 10f),
-                new PointF(base.Width - 9, 14f),
-                new PointF(base.Width - 5, 10f)
-            });
 
-            Rectangle bounds = new Rectangle(base.ClientRectangle.X, base.ClientRectangle.Y, base.ClientRectangle.Width, base.ClientRectangle.Height - 1);
-            ControlPaint.DrawBorder(e.Graphics, bounds, DarkThemeManager.BorderColor, ButtonBorderStyle.Solid);
-            e.Graphics.DrawLine(new Pen(DarkThemeManager.BorderColor), base.Width - 18, 0, base.Width - 18, base.Height - 2);
-        }
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			if (hovered)
+			{
+				if (darkMode) e.Graphics.FillRectangle(new SolidBrush(DarkThemeManager.DarkHoverColor), 0, 0, base.Width, base.Height - 2);
+				else e.Graphics.FillRectangle(new SolidBrush(DarkThemeManager.LightHoverColor), 0, 0, base.Width, base.Height - 2);
+			}
+			else
+			{
+				e.Graphics.FillRectangle(new SolidBrush(BackColor), 0, 0, base.Width, base.Height - 2);
+			}
 
-        private void CustomDrawItem(object sender, DrawItemEventArgs e)
-        {
-            if (e.Index != -1)
-            {
-                bool useWhite = (!darkMode && (e.State & DrawItemState.Selected) == DrawItemState.Selected);
-                object item = Items[e.Index];
+			e.Graphics.TextRenderingHint = TextRenderingHint.SystemDefault;
+			e.Graphics.DrawString(Text, Font, new SolidBrush(ForeColor), 3f, 3f);
+			e.Graphics.FillRectangle(new SolidBrush(BackColor), base.Width - 18, 0, 18, base.Height);
+			e.Graphics.FillPolygon(new SolidBrush(ForeColor), new PointF[3]
+			{
+				new PointF(base.Width - 13, 10f),
+				new PointF(base.Width - 9, 14f),
+				new PointF(base.Width - 5, 10f)
+			});
 
-                if (item is ItemWithSeparator && e.Bounds.Height > ItemHeight)
-                {
-                    Brush brush = new SolidBrush(e.BackColor);
-                    Rectangle bounds = e.Bounds;
-                    bounds.Height -= ItemHeight;
-                    e.Graphics.FillRectangle(brush, bounds);
-                    brush.Dispose();
+			Rectangle bounds = new Rectangle(base.ClientRectangle.X, base.ClientRectangle.Y, base.ClientRectangle.Width, base.ClientRectangle.Height - 1);
+			ControlPaint.DrawBorder(e.Graphics, bounds, DarkThemeManager.BorderColor, ButtonBorderStyle.Solid);
+			e.Graphics.DrawLine(new Pen(DarkThemeManager.BorderColor), base.Width - 18, 0, base.Width - 18, base.Height - 2);
+		}
 
-                    float Y = e.Bounds.Bottom - ItemHeight/2;
-                    e.Graphics.DrawLine(new Pen(DarkThemeManager.BorderColor), e.Bounds.Left + 5, Y, e.Bounds.Right - 5, Y);
-                }
-                else
-                {
-                    e.DrawBackground();
-                }
+		private void CustomDrawItem(object sender, DrawItemEventArgs e)
+		{
+			if (e.Index != -1)
+			{
+				bool useWhite = (!darkMode && (e.State & DrawItemState.Selected) == DrawItemState.Selected);
+				object item = Items[e.Index];
 
-                Brush fgBrush = useWhite ? Brushes.White : new SolidBrush(ForeColor);
-                e.Graphics.DrawString(item.ToString(), Font, fgBrush, e.Bounds.X, e.Bounds.Y);
-            }
-            else
-            {
-                e.DrawBackground();
-            }
-        }
+				if (item is ItemWithSeparator && e.Bounds.Height > ItemHeight)
+				{
+					Brush brush = new SolidBrush(e.BackColor);
+					Rectangle bounds = e.Bounds;
+					bounds.Height -= ItemHeight;
+					e.Graphics.FillRectangle(brush, bounds);
+					brush.Dispose();
 
-        protected override void OnMeasureItem(MeasureItemEventArgs e)
-        {
-            if (Items[e.Index] is ItemWithSeparator)
-                e.ItemHeight += ItemHeight;
-            else if (Items[e.Index] is Dummy)
-                e.ItemHeight = 0;
+					float Y = e.Bounds.Bottom - ItemHeight/2;
+					e.Graphics.DrawLine(new Pen(DarkThemeManager.BorderColor), e.Bounds.Left + 5, Y, e.Bounds.Right - 5, Y);
+				}
+				else
+				{
+					e.DrawBackground();
+				}
 
-            base.OnMeasureItem(e);
-        }
-    }
+				Brush fgBrush = useWhite ? Brushes.White : new SolidBrush(ForeColor);
+				e.Graphics.DrawString(item.ToString(), Font, fgBrush, e.Bounds.X, e.Bounds.Y);
+			}
+			else
+			{
+				e.DrawBackground();
+			}
+		}
+
+		protected override void OnMeasureItem(MeasureItemEventArgs e)
+		{
+			if (Items[e.Index] is ItemWithSeparator)
+				e.ItemHeight += ItemHeight;
+			else if (Items[e.Index] is Dummy)
+				e.ItemHeight = 0;
+
+			base.OnMeasureItem(e);
+		}
+	}
 }
