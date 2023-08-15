@@ -18,12 +18,25 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		private const int DXGI_ERROR_ACCESS_LOST   = unchecked((int)0x887A0026);
 		private const int DXGI_ERROR_WAIT_TIMEOUT  = unchecked((int)0x887A0027);
 
+		private static OutputDuplication[] screens = null;
+		private static Bitmap[] cachedThumbnails = null;
 		private static readonly D3D11Device d3dDevice = new D3D11Device(Adapter);
-		private static readonly OutputDuplication[] screens = InitScreens();
-		private static readonly Bitmap[] cachedThumbnails = new Bitmap[screens.Length];
 
 		// Index of the selected screen to capture
 		private readonly int index;
+
+
+		public DuplicationCapture(int index)
+		{
+			this.index = index;
+			// Initialize static field manually, since InitScreens throws exceptions and we
+			// can't control when the static initializer is called
+			if (screens == null)
+			{
+				screens = InitScreens();
+				cachedThumbnails = new Bitmap[screens.Length];
+			}
+		}
 
 		private static OutputDuplication[] InitScreens()
 		{
@@ -67,11 +80,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				// Get adapter for GPU 0
 				return new Factory1().GetAdapter(0);
 			}
-		}
-
-		public DuplicationCapture(int index)
-		{
-			this.index = index;
 		}
 
 
