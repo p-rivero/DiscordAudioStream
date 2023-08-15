@@ -26,6 +26,8 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		private readonly int index;
 
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3010", Justification =
+			"We cannot control when static initializers are called, and we need InitScreens to be called here. See commit b5eb879")]
 		public DuplicationCapture(int index)
 		{
 			this.index = index;
