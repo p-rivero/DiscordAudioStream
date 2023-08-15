@@ -1,8 +1,6 @@
 ﻿using CustomComponents;
 using System;
 using System.Windows.Forms;
-using System.Reflection;
-using System.Resources;
 using DLLs;
 
 namespace DiscordAudioStream
@@ -53,10 +51,25 @@ namespace DiscordAudioStream
 
 		private static void EnableNativeStyles(bool darkMode)
 		{
-			User32.SetProcessDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+			EnableDpiAwareness();
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			if (darkMode) Uxtheme.AllowDarkModeForApp(true);
+			if (darkMode)
+			{
+				Uxtheme.AllowDarkModeForApp(true);
+			}
+		}
+
+		private static void EnableDpiAwareness()
+		{
+			try
+			{
+				User32.SetProcessDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+			}
+			catch (EntryPointNotFoundException)
+			{
+				Logger.Log("Failed to set DPI awareness context. This is normal on Windows 7.");
+			}
 		}
 
 		private static void RedirectConsoleOutput()
