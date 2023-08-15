@@ -1,7 +1,10 @@
-﻿using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using System;
+﻿using System;
 using System.Drawing;
+using SharpDX;
+using SharpDX.DXGI;
+using SharpDX.Direct3D11;
+using D3D11Device = SharpDX.Direct3D11.Device;
+using DXGIResource = SharpDX.DXGI.Resource;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
@@ -15,7 +18,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		private const int DXGI_ERROR_ACCESS_LOST   = unchecked((int)0x887A0026);
 		private const int DXGI_ERROR_WAIT_TIMEOUT  = unchecked((int)0x887A0027);
 
-		private static readonly SharpDX.Direct3D11.Device d3dDevice = new SharpDX.Direct3D11.Device(Adapter);
+		private static readonly D3D11Device d3dDevice = new D3D11Device(Adapter);
 		private static readonly OutputDuplication[] screens = InitScreens();
 		private static readonly Bitmap[] cachedThumbnails = new Bitmap[screens.Length];
 
@@ -44,7 +47,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				Output1 o = Adapter.Outputs[screenIndex].QueryInterface<Output1>();
 				screens[screenIndex] = o.DuplicateOutput(d3dDevice);
 			}
-			catch (SharpDX.SharpDXException e)
+			catch (SharpDXException e)
 			{
 				if (e.HResult == E_ACCESSDENIED)
 				{
@@ -85,7 +88,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				}
 				
 				// Try to get duplicated frame in 100 ms
-				screens[index].AcquireNextFrame(100, out _, out SharpDX.DXGI.Resource screenResource);
+				screens[index].AcquireNextFrame(100, out _, out DXGIResource screenResource);
 				// Success: convert captured frame to Bitmap
 				using (Texture2D texture = screenResource.QueryInterface<Texture2D>())
 				{
@@ -100,7 +103,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 					return bmp;
 				}
 			}
-			catch (SharpDX.SharpDXException e)
+			catch (SharpDXException e)
 			{
 				if (e.HResult == DXGI_ERROR_WAIT_TIMEOUT)
 				{

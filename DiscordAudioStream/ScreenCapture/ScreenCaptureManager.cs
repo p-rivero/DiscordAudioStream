@@ -60,7 +60,7 @@ namespace DiscordAudioStream.ScreenCapture
 
 		private Thread CreateCaptureThread()
 		{
-			Thread newThread = new Thread(() =>
+			return new Thread(() =>
 			{
 				Logger.Log("\nCreating Capture thread. Target framerate: {0} FPS ({1} ms)",
 					Properties.Settings.Default.CaptureFramerate, CaptureIntervalMs);
@@ -72,7 +72,7 @@ namespace DiscordAudioStream.ScreenCapture
 					stopwatch.Restart();
 					try
 					{
-						EnqueueFrame();
+						EnqueueFrame(currentSource.CaptureFrame());
 					}
 					catch (ThreadAbortException)
 					{
@@ -93,10 +93,11 @@ namespace DiscordAudioStream.ScreenCapture
 						Thread.Sleep(wait);
 					}
 				}
-			});
-			newThread.IsBackground = true;
-			newThread.Name = "Capture Thread";
-			return newThread;
+			})
+			{
+				IsBackground = true,
+				Name = "Capture Thread"
+			};
 		}
 
 		private void UpdateState()
@@ -132,9 +133,9 @@ namespace DiscordAudioStream.ScreenCapture
 			}
 		}
 
-		private void EnqueueFrame()
+		private void EnqueueFrame(Bitmap frame)
 		{
-			frameQueue.Enqueue(currentSource.CaptureFrame());
+			frameQueue.Enqueue(frame);
 
 			// Limit the size of frameQueue to LIMIT_QUEUE_SZ
 			if (frameQueue.Count > LIMIT_QUEUE_SZ)

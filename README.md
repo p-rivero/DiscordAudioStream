@@ -96,6 +96,7 @@ The following steps depend on what you want to do.
         When you start capturing the audio in step 7, you may encounter an error. If this happens, you will need to open DiscordAudioStream settings > Debug and enable "Show audio input devices". Go to the audio capture dropdown and capture <code>[IN] VB-Audio Virtual Cable</code> instead.
     </details>
     <br>
+    
     ![Change audio device in volume mixer](docs/img/audio-device.png)
 
 4. In the *Audio capture input* dropdown, select the (previously unused) audio device that you have chosen in step 3.

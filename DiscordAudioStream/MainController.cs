@@ -125,9 +125,10 @@ namespace DiscordAudioStream
 		{
 			// Get the handle now, since we cannot get it from inside the thread
 			IntPtr formHandle = form.Handle;
-			Thread newThread = new Thread(() =>
+			
+			return new Thread(() =>
 			{
-				Logger.Log("\nCreating Draw thread. Target framerate: {0} FPS ({1} ms)", 
+				Logger.Log("\nCreating Draw thread. Target framerate: {0} FPS ({1} ms)",
 					Properties.Settings.Default.CaptureFramerate, screenCapture.CaptureIntervalMs);
 
 				Stopwatch stopwatch = new Stopwatch();
@@ -168,10 +169,11 @@ namespace DiscordAudioStream
 						Thread.Sleep(wait);
 					}
 				}
-			});
-			newThread.IsBackground = true;
-			newThread.Name = "Draw Thread";
-			return newThread;
+			})
+			{
+				IsBackground = true,
+				Name = "Draw Thread"
+			};
 		}
 
 
