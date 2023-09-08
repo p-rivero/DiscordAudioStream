@@ -112,9 +112,6 @@
     <Compile Include="CustomComponents\DarkThemeGroupBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CustomComponents\DarkThemeNumericBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="CustomComponents\DarkThemeCheckBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -122,9 +119,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CustomComponents\DarkThemeManager.cs" />
-    <Compile Include="CustomComponents\DarkThemeRadioButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="CustomComponents\DarkThemeTabControl.cs">
       <SubType>Component</SubType>
     </Compile>

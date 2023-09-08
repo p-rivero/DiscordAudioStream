@@ -32,18 +32,18 @@ namespace CustomComponents
 		public DarkThemeComboBox()
 		{
 			SetStyle(ControlStyles.UserPaint, true);
-			base.DrawMode = DrawMode.OwnerDrawVariable;
-			base.MouseEnter += (s, e) =>
+			DrawMode = DrawMode.OwnerDrawVariable;
+			MouseEnter += (s, e) =>
 			{
 				hovered = true;
 				Refresh();
 			};
-			base.MouseLeave += (s, e) =>
+			MouseLeave += (s, e) =>
 			{
 				hovered = false;
 				Refresh();
 			};
-			base.DrawItem += new DrawItemEventHandler(CustomDrawItem);
+			DrawItem += new DrawItemEventHandler(CustomDrawItem);
 		}
 
 		public void SetDarkMode(bool dark)
@@ -69,60 +69,69 @@ namespace CustomComponents
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			if (hovered)
+			Color hoverColor = darkMode ? DarkThemeManager.DarkHoverColor : DarkThemeManager.LightHoverColor;
+			Color rectangleColor = hovered ? hoverColor : BackColor;
+			using (Brush brush = new SolidBrush(rectangleColor))
 			{
-				if (darkMode) e.Graphics.FillRectangle(new SolidBrush(DarkThemeManager.DarkHoverColor), 0, 0, base.Width, base.Height - 2);
-				else e.Graphics.FillRectangle(new SolidBrush(DarkThemeManager.LightHoverColor), 0, 0, base.Width, base.Height - 2);
-			}
-			else
-			{
-				e.Graphics.FillRectangle(new SolidBrush(BackColor), 0, 0, base.Width, base.Height - 2);
+				e.Graphics.FillRectangle(brush, 0, 0, Width, Height - 2);
 			}
 
 			e.Graphics.TextRenderingHint = TextRenderingHint.SystemDefault;
-			e.Graphics.DrawString(Text, Font, new SolidBrush(ForeColor), 3f, 3f);
-			e.Graphics.FillRectangle(new SolidBrush(BackColor), base.Width - 18, 0, 18, base.Height);
-			e.Graphics.FillPolygon(new SolidBrush(ForeColor), new PointF[3]
+			using (Brush foreground = new SolidBrush(ForeColor))
+			using (Brush background = new SolidBrush(BackColor))
 			{
-				new PointF(base.Width - 13, 10f),
-				new PointF(base.Width - 9, 14f),
-				new PointF(base.Width - 5, 10f)
-			});
+				e.Graphics.DrawString(Text, Font, foreground, 3f, 3f);
+				e.Graphics.FillRectangle(background, Width - 18, 0, 18, Height);
+				e.Graphics.FillPolygon(foreground, new PointF[3]
+				{
+					new PointF(Width - 13, 10f),
+					new PointF(Width - 9, 14f),
+					new PointF(Width - 5, 10f)
+				});
+			}
 
-			Rectangle bounds = new Rectangle(base.ClientRectangle.X, base.ClientRectangle.Y, base.ClientRectangle.Width, base.ClientRectangle.Height - 1);
+			Rectangle bounds = new Rectangle(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height - 1);
 			ControlPaint.DrawBorder(e.Graphics, bounds, DarkThemeManager.BorderColor, ButtonBorderStyle.Solid);
-			e.Graphics.DrawLine(new Pen(DarkThemeManager.BorderColor), base.Width - 18, 0, base.Width - 18, base.Height - 2);
+			using (Pen pen = new Pen(DarkThemeManager.BorderColor))
+			{
+				e.Graphics.DrawLine(pen, Width - 18, 0, Width - 18, Height - 2);
+			}
 		}
 
 		private void CustomDrawItem(object sender, DrawItemEventArgs e)
 		{
-			if (e.Index != -1)
+			if (e.Index == -1)
 			{
-				bool useWhite = (!darkMode && (e.State & DrawItemState.Selected) == DrawItemState.Selected);
-				object item = Items[e.Index];
+				e.DrawBackground();
+				return;
+			}
+			bool useWhite = (!darkMode && (e.State & DrawItemState.Selected) == DrawItemState.Selected);
+			object item = Items[e.Index];
 
-				if (item is ItemWithSeparator && e.Bounds.Height > ItemHeight)
+			if (item is ItemWithSeparator && e.Bounds.Height > ItemHeight)
+			{
+				Rectangle bounds = e.Bounds;
+				bounds.Height -= ItemHeight;
+				using (Brush brush = new SolidBrush(e.BackColor))
 				{
-					Brush brush = new SolidBrush(e.BackColor);
-					Rectangle bounds = e.Bounds;
-					bounds.Height -= ItemHeight;
 					e.Graphics.FillRectangle(brush, bounds);
-					brush.Dispose();
-
-					float Y = e.Bounds.Bottom - ItemHeight/2;
-					e.Graphics.DrawLine(new Pen(DarkThemeManager.BorderColor), e.Bounds.Left + 5, Y, e.Bounds.Right - 5, Y);
 				}
-				else
+
+				float y = e.Bounds.Bottom - ItemHeight/2;
+				using (Pen pen = new Pen(DarkThemeManager.BorderColor))
 				{
-					e.DrawBackground();
+					e.Graphics.DrawLine(pen, e.Bounds.Left + 5, y, e.Bounds.Right - 5, y);
 				}
-
-				Brush fgBrush = useWhite ? Brushes.White : new SolidBrush(ForeColor);
-				e.Graphics.DrawString(item.ToString(), Font, fgBrush, e.Bounds.X, e.Bounds.Y);
 			}
 			else
 			{
 				e.DrawBackground();
+			}
+
+			Color fgColor = useWhite ? Color.White : ForeColor;
+			using (Brush fgBrush = new SolidBrush(fgColor))
+			{
+				e.Graphics.DrawString(item.ToString(), Font, fgBrush, e.Bounds.X, e.Bounds.Y);
 			}
 		}
 

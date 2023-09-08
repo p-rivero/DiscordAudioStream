@@ -9,17 +9,10 @@ namespace CustomComponents
 		{
 			if (dark)
 			{
-				if (titlebar)
-				{
-					base.BackColor = DarkThemeManager.DarkMainColor;
-				}
-				else
-				{
-					base.BackColor = DarkThemeManager.DarkBackColor;
-				}
+				BackColor = titlebar ? DarkThemeManager.DarkMainColor : DarkThemeManager.DarkBackColor;
 			}
 
-			base.Renderer = new CustomToolStripSystemRenderer(dark);
+			Renderer = new CustomToolStripSystemRenderer(dark);
 		}
 	}
 
@@ -39,19 +32,20 @@ namespace CustomComponents
 
 		protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
 		{
-			if (!(e.Item as ToolStripButton).Checked) return;
-
-			if ((e.Item as ToolStripButton).Pressed)
+			ToolStripButton button = (ToolStripButton)e.Item;
+			if (!button.Checked)
 			{
-				if (darkMode) e.Graphics.FillRectangle(new SolidBrush(DarkThemeManager.DarkPaleColor), new Rectangle(1, 0, e.Item.Width - 1, e.Item.Height - 3));
-				else e.Graphics.FillRectangle(new SolidBrush(DarkThemeManager.LightPaleColor), new Rectangle(1, 0, e.Item.Width - 1, e.Item.Height - 3));
-				e.Graphics.DrawRectangle(new Pen(DarkThemeManager.AccentColor), new Rectangle(1, 0, e.Item.Width - 2, e.Item.Height - 3));
+				return;
 			}
-			else
+
+			int xOffset = button.Pressed ? 1 : 0;
+			Rectangle buttonArea = new Rectangle(xOffset, 0, e.Item.Width - 2, e.Item.Height - 3);
+			Color backColor = darkMode ? DarkThemeManager.DarkPaleColor : DarkThemeManager.LightPaleColor;
+			using (Brush backBrush = new SolidBrush(backColor))
+			using (Pen edgePen = new Pen(DarkThemeManager.AccentColor))
 			{
-				if (darkMode) e.Graphics.FillRectangle(new SolidBrush(DarkThemeManager.DarkPaleColor), new Rectangle(0, 0, e.Item.Width - 2, e.Item.Height - 3));
-				else e.Graphics.FillRectangle(new SolidBrush(DarkThemeManager.LightPaleColor), new Rectangle(0, 0, e.Item.Width - 2, e.Item.Height - 3));
-				e.Graphics.DrawRectangle(new Pen(DarkThemeManager.AccentColor), new Rectangle(0, 0, e.Item.Width - 2, e.Item.Height - 3));
+				e.Graphics.FillRectangle(backBrush, buttonArea);
+				e.Graphics.DrawRectangle(edgePen, buttonArea);
 			}
 		}
 	}

@@ -51,17 +51,20 @@ namespace CustomComponents
 			if (windowWidth < WIDTH_SHOW_TEXT) text = "";
 			else if (windowWidth > WIDTH_SHOW_DB) text += " dB";
 
-			if (RightToLeft == RightToLeft.Yes)
+			SizeF strSz = g.MeasureString(text, Font);
+			using (Brush fgBrush = new SolidBrush(ForeColor))
+			using (Pen fgPen = new Pen(ForeColor))
 			{
-				SizeF strSz = g.MeasureString(text, Font);
-				g.DrawString(text, Font, new SolidBrush(ForeColor), Width - strSz.Width - PADDING, y - strSz.Height/2);
-				g.DrawLine(new Pen(ForeColor, 2f), Width - LINE_LENGTH, y, Width, y);
-			}
-			else
-			{
-				SizeF strSz = g.MeasureString(text, Font);
-				g.DrawString(text, Font, new SolidBrush(ForeColor), PADDING, y - strSz.Height / 2);
-				g.DrawLine(new Pen(ForeColor, 2f), 0, y, LINE_LENGTH, y);
+				if (RightToLeft == RightToLeft.Yes)
+				{
+					g.DrawString(text, Font, fgBrush, Width - strSz.Width - PADDING, y - strSz.Height / 2);
+					g.DrawLine(fgPen, Width - LINE_LENGTH, y, Width, y);
+				}
+				else
+				{
+					g.DrawString(text, Font, fgBrush, PADDING, y - strSz.Height / 2);
+					g.DrawLine(fgPen, 0, y, LINE_LENGTH, y);
+				}
 			}
 		}
 

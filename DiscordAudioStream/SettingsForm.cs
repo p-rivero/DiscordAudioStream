@@ -81,7 +81,6 @@ namespace DiscordAudioStream
 				settingsTabs.BorderColor = DarkThemeManager.DarkSecondColor;
 				settingsTabs.HeaderColor = DarkThemeManager.DarkSecondColor;
 				settingsTabs.TextColor = Color.White;
-				settingsTabs.HorizontalLineColor = Color.Transparent;
 			}
 
 			settingsTabs.ActiveColor = DarkThemeManager.AccentColor;

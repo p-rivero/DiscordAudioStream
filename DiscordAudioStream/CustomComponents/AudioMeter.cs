@@ -44,28 +44,30 @@ namespace CustomComponents
 
 		private void DrawMeterSegment(Graphics g, double meterPercent, double segmentStart, double segmentEnd, int active, int inactive)
 		{
-			Brush colorActive = new SolidBrush(Color.FromArgb(active));
-			Brush colorInactive = new SolidBrush(Color.FromArgb(inactive));
-			int top = (int)((1 - segmentEnd) * Height) - 1;
-			if (meterPercent >= segmentEnd)
+			using (Brush colorActive = new SolidBrush(Color.FromArgb(active)))
+			using (Brush colorInactive = new SolidBrush(Color.FromArgb(inactive)))
 			{
-				// Segment is completely filled
-				int height = (int)Math.Round((segmentEnd - segmentStart) * Height) + 1;
-				g.FillRectangle(colorActive, 1, top, Width - 2, height);
-			}
-			else if (meterPercent <= segmentStart)
-			{
-				// Segment is completely empty
-				int height = (int)Math.Round((segmentEnd - segmentStart) * Height) + 1;
-				g.FillRectangle(colorInactive, 1, top, Width - 2, height);
-			}
-			else
-			{
-				int inactiveHeight = (int)Math.Round((segmentEnd - meterPercent) * Height) + 1;
-				int activeTop = top + inactiveHeight;
-				int activeHeight = (int)Math.Round((meterPercent - segmentStart) * Height) + 1;
-				g.FillRectangle(colorInactive, 1, top, Width - 2, inactiveHeight);
-				g.FillRectangle(colorActive, 1, activeTop, Width - 2, activeHeight);
+				int top = (int)((1 - segmentEnd) * Height) - 1;
+				if (meterPercent >= segmentEnd)
+				{
+					// Segment is completely filled
+					int height = (int)Math.Round((segmentEnd - segmentStart) * Height) + 1;
+					g.FillRectangle(colorActive, 1, top, Width - 2, height);
+				}
+				else if (meterPercent <= segmentStart)
+				{
+					// Segment is completely empty
+					int height = (int)Math.Round((segmentEnd - segmentStart) * Height) + 1;
+					g.FillRectangle(colorInactive, 1, top, Width - 2, height);
+				}
+				else
+				{
+					int inactiveHeight = (int)Math.Round((segmentEnd - meterPercent) * Height) + 1;
+					int activeTop = top + inactiveHeight;
+					int activeHeight = (int)Math.Round((meterPercent - segmentStart) * Height) + 1;
+					g.FillRectangle(colorInactive, 1, top, Width - 2, inactiveHeight);
+					g.FillRectangle(colorActive, 1, activeTop, Width - 2, activeHeight);
+				}
 			}
 		}
 	}

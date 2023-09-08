@@ -59,54 +59,52 @@ namespace CustomComponents
 			}
 			
 			pevent.Graphics.Clear(BackColor);
+			PaintSquare(pevent.Graphics);
+			PaintText(pevent.Graphics);
 
+			if (Checked)
+			{
+				PaintCheck(pevent.Graphics);
+			}
+		}
+
+		private void PaintSquare(Graphics g)
+		{
 			Color bgColor;
-			if (pressed)
+			if (pressed) bgColor = DarkThemeManager.PressedColor;
+			else if (hovered) bgColor = DarkThemeManager.DarkHoverColor;
+			else bgColor = DarkThemeManager.DarkSecondColor;
+			
+			int extraThickness = Focused ? 1 : 0;
+			int x = extraThickness;
+			int y = 2 + extraThickness;
+			int size = 12 - extraThickness;
+			using (Brush bgBrush = new SolidBrush(bgColor))
+			using (Pen edgePen = new Pen(DarkThemeManager.BorderColor, 1 + extraThickness))
 			{
-				bgColor = DarkThemeManager.PressedColor;
+				g.FillRectangle(bgBrush, x, y, size, size);
+				g.DrawRectangle(edgePen, x, y, size, size);
 			}
-			else if (hovered)
-			{
-				bgColor = DarkThemeManager.DarkHoverColor;
-			}
-			else
-			{
-				bgColor = DarkThemeManager.DarkSecondColor;
-			}
-			pevent.Graphics.FillRectangle(new SolidBrush(bgColor), new Rectangle(0, 2, 13, 13));
+		}
 
-			if (Focused)
+		private void PaintText(Graphics g)
+		{
+			g.TextRenderingHint = TextRenderingHint.SystemDefault;
+			Color textColor = Enabled ? ForeColor : DarkThemeManager.BorderColor;
+			using (Brush textBrush = new SolidBrush(textColor))
 			{
-				pevent.Graphics.DrawRectangle(new Pen(DarkThemeManager.BorderColor, 2f), new Rectangle(1, 3, 11, 11));
+				g.DrawString(darkText, Font, textBrush, 17f, 0f);
 			}
-			else
-			{
-				ControlPaint.DrawBorder(pevent.Graphics, new Rectangle(0, 2, 13, 13), DarkThemeManager.BorderColor, ButtonBorderStyle.Solid);
-			}
+		}
 
-			if (base.Checked)
+		private void PaintCheck(Graphics g)
+		{
+			g.SmoothingMode = SmoothingMode.AntiAlias;
+			Color checkColor = Enabled ? ForeColor : DarkThemeManager.BorderColor;
+			using (Pen checkPen = new Pen(checkColor, 2f))
 			{
-				pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-				if (base.Enabled)
-				{
-					pevent.Graphics.DrawLine(new Pen(ForeColor, 2f), 2, 7, 5, 10);
-					pevent.Graphics.DrawLine(new Pen(ForeColor, 2f), 5, 11, 12, 4);
-				}
-				else
-				{
-					pevent.Graphics.DrawLine(new Pen(DarkThemeManager.BorderColor, 2f), 2, 7, 5, 10);
-					pevent.Graphics.DrawLine(new Pen(DarkThemeManager.BorderColor, 2f), 5, 11, 12, 4);
-				}
-			}
-
-			pevent.Graphics.TextRenderingHint = TextRenderingHint.SystemDefault;
-			if (base.Enabled)
-			{
-				pevent.Graphics.DrawString(darkText, Font, new SolidBrush(ForeColor), 17f, 0f);
-			}
-			else
-			{
-				pevent.Graphics.DrawString(darkText, Font, new SolidBrush(DarkThemeManager.BorderColor), 17f, 0f);
+				g.DrawLine(checkPen, 2, 7, 5, 10);
+				g.DrawLine(checkPen, 5, 11, 12, 4);
 			}
 		}
 	}
