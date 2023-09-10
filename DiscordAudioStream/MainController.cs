@@ -217,35 +217,34 @@ namespace DiscordAudioStream
 
 		internal void RefreshScreens()
 		{
-			List<string> elements = new List<string>();
+			List<(string, bool)> elements = new List<(string, bool)>();
 
 			for (int i = 0; i < Screen.AllScreens.Length; i++)
 			{
 				Rectangle bounds = Screen.AllScreens[i].Bounds;
 				if (Screen.AllScreens[i].Primary)
 				{
-					elements.Add("Primary screen (" + bounds.Width + "x" + bounds.Height + ")");
+					elements.Add(("Primary screen (" + bounds.Width + "x" + bounds.Height + ")", false));
 				}
 				else
 				{
-					elements.Add("Screen " + (i + 1) + " (" + bounds.Width + "x" + bounds.Height + ")");
+					elements.Add(("Screen " + (i + 1) + " (" + bounds.Width + "x" + bounds.Height + ")", false));
 				}
 			}
 			if (Screen.AllScreens.Length > 1)
 			{
-				elements.Add("Everything");
+				elements.Add(("Everything", false));
 			}
 
 			numberOfScreens = elements.Count;
 
 			// Item with separator
-			elements.Add(null);
-			elements.Add("Custom area");
+			elements.Add(("Custom area", true));
 
 			processHandleList = ProcessHandleList.Refresh();
 			foreach (string window in processHandleList.Names)
 			{
-				elements.Add(window);
+				elements.Add((window, false));
 			}
 			
 			form.SetVideoItems(elements);

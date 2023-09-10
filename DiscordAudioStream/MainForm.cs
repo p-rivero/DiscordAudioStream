@@ -78,29 +78,23 @@ namespace DiscordAudioStream
 			set { areaComboBox.SelectedIndex = value; }
 		}
 
-		internal void SetVideoItems(IEnumerable<string> items)
+		internal void SetVideoItems(IEnumerable<(string, bool)> items)
 		{
 			areaComboBox.Items.Clear();
-			bool addSeparator = false;
 			int numSeparators = 0;
-			foreach (string item in items)
+			foreach (var (item, hasSeparator) in items)
 			{
-				// Use null to indicate that the next element has a separator
-				if (item == null)
+				if (hasSeparator)
 				{
-					addSeparator = true;
-				}
-				else if (addSeparator)
-				{
-					areaComboBox.Items.Add(new DarkThemeComboBox.ItemWithSeparator("Custom area"));
+					areaComboBox.Items.Add(new DarkThemeComboBox.ItemWithSeparator(item));
 					numSeparators++;
-					addSeparator = false;
 				}
 				else
 				{
 					areaComboBox.Items.Add(item);
 				}
 			}
+
 			// For each separator, we need to add a dummy element at the end
 			for (int i = 0; i < numSeparators; i++)
 			{
