@@ -48,9 +48,16 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			}
 
 			// Get the cursor hotspot and icon
-			if (!User32.GetIconInfo(pci.hCursor, out User32.IconInfo iconInfo) || iconInfo.hbmColor == IntPtr.Zero)
+			if (!User32.GetIconInfo(pci.hCursor, out User32.IconInfo iconInfo))
 			{
-				// GetIconInfo failed, or the cursor has no color bitmap. Do not paint the cursor
+				// GetIconInfo failed. Do not paint the cursor
+				return src;
+			}
+
+			if (iconInfo.hbmColor == IntPtr.Zero)
+			{
+				// The cursor has no color bitmap. Do not paint the cursor
+				CleanUpIconInfo(iconInfo);
 				return src;
 			}
 
@@ -71,22 +78,28 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				}
 			}
 
-			// Clean up
+			CleanUpIconInfo(iconInfo);
+			return src;
+		}
+
+		private void CleanUpIconInfo(User32.IconInfo iconInfo)
+		{
 			Gdi32.DeleteObject(iconInfo.hbmMask);
 			Gdi32.DeleteObject(iconInfo.hbmColor);
-
-			return src;
 		}
 
 		private Bitmap BitmapFromCursor(in User32.IconInfo iconInfo)
 		{
-			Bitmap bmp = Image.FromHbitmap(iconInfo.hbmColor);
-			// Move data pointer (bmData.Scan0) from bmp to dstBitmap
-			BitmapData bmData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
-			Bitmap dstBitmap = new Bitmap(bmData.Width, bmData.Height, bmData.Stride, PixelFormat.Format32bppArgb, bmData.Scan0);
-			bmp.UnlockBits(bmData);
+			using (Bitmap bmp = Image.FromHbitmap(iconInfo.hbmColor))
+			{
+				// Move data pointer (bmData.Scan0) from bmp to dstBitmap
+				BitmapData bmData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
+				Bitmap dstBitmap = new Bitmap(bmData.Width, bmData.Height, bmData.Stride, PixelFormat.Format32bppArgb, bmData.Scan0);
+				bmp.UnlockBits(bmData);
 
-			return new Bitmap(dstBitmap);
+				return new Bitmap(dstBitmap);
+			}
 		}
+
 	}
 }
