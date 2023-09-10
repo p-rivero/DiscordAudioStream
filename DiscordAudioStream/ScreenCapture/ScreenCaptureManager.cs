@@ -62,8 +62,9 @@ namespace DiscordAudioStream.ScreenCapture
 		{
 			return new Thread(() =>
 			{
-				Logger.Log("\nCreating Capture thread. Target framerate: {0} FPS ({1} ms)",
-					Properties.Settings.Default.CaptureFramerate, CaptureIntervalMs);
+				int fps = Properties.Settings.Default.CaptureFramerate;
+				Logger.EmptyLine();
+				Logger.Log($"Creating Capture thread. Target framerate: {fps} FPS ({CaptureIntervalMs} ms)");
 
 				Stopwatch stopwatch = new Stopwatch();
 
@@ -76,12 +77,14 @@ namespace DiscordAudioStream.ScreenCapture
 					}
 					catch (ThreadAbortException)
 					{
-						Logger.Log("\nAborting capture due to ThreadAbortException.");
+						Logger.EmptyLine();
+						Logger.Log("Aborting capture due to ThreadAbortException.");
 						break;
 					}
 					catch (Exception e)
 					{
-						Logger.Log("\nAborting capture due to exception.");
+						Logger.EmptyLine();
+						Logger.Log("Aborting capture due to exception.");
 						Logger.Log(e);
 						CaptureAborted?.Invoke();
 					}
@@ -109,23 +112,25 @@ namespace DiscordAudioStream.ScreenCapture
 				// Dispose after switching to avoid data races
 				oldSource?.Dispose();
 
-				Logger.Log("Changed current source to {0}", currentSource.GetType().Name);
+				Logger.Log("Changed current source to " + currentSource.GetType().Name);
 			}
 			catch (Exception e)
 			{
 				if (currentSource != null)
 				{
-					Logger.Log("\nCANNOT INSTANTIATE NEW SOURCE. Returning to old source ({0}).", currentSource.GetType().Name);
+					Logger.EmptyLine();
+					Logger.Log($"CANNOT INSTANTIATE NEW SOURCE. Returning to old source ({currentSource.GetType().Name}).");
 					Logger.Log(e);
 
 					// We already have a valid source, do not call Dispose and just show warning
-					string msg = "Unable to display this item.\n";
-					msg += "If the problem persists, consider changing the capture method in Settings > Capture";
+					string msg = "Unable to display this item.\n" +
+						"If the problem persists, consider changing the capture method in Settings > Capture";
 					MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
 
-				Logger.Log("\nCANNOT INSTANTIATE FIRST SOURCE. Changing capture methods to BitBlt.");
+				Logger.EmptyLine();
+				Logger.Log("CANNOT INSTANTIATE FIRST SOURCE. Changing capture methods to BitBlt.");
 				Logger.Log(e);
 				// We do not have a valid source, fallback to the safest methods
 				captureState.ScreenMethod = CaptureState.ScreenCaptureMethod.BitBlt;

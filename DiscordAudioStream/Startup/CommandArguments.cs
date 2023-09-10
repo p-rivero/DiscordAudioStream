@@ -40,7 +40,7 @@ namespace DiscordAudioStream
 				IEnumerable<string> extra = options.Parse(args);
 				foreach (string arg in extra)
 				{
-					Console.WriteLine("Warning: Unrecognized argument {0}", arg);
+					Console.WriteLine("Warning: Unrecognized argument " + arg);
 				}
 			}
 			catch (OptionException e)
@@ -74,7 +74,7 @@ namespace DiscordAudioStream
 
 		private void PrintHelp(OptionSet options)
 		{
-			Console.WriteLine("Usage: {0} [options]", AppDomain.CurrentDomain.FriendlyName);
+			Console.WriteLine($"Usage: {AppDomain.CurrentDomain.FriendlyName} [options]");
 			Console.WriteLine();
 			Console.WriteLine("Options:");
 			options.WriteOptionDescriptions(Console.Out);

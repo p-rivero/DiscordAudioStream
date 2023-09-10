@@ -11,15 +11,17 @@ namespace DiscordAudioStream
 	{
 		public AboutForm(bool darkMode)
 		{
-			Logger.Log("\nInitializing AboutForm. darkMode={0}", darkMode);
+			Logger.EmptyLine();
+			Logger.Log("Initializing AboutForm. darkMode = " + darkMode);
 
 			if (darkMode) HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
 
 			InitializeComponent();
 
-			string fullVer = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-			int lastDotIndex = fullVer.LastIndexOf('.');
-			versionLabel.Text = string.Format("Version: {0} ({1} bit)", fullVer.Substring(0, lastDotIndex), 8*IntPtr.Size);
+			string fullVer = Assembly.GetExecutingAssembly().GetName().Version.ToString(); // major.minor.build.revision
+			string version = fullVer.Substring(0, fullVer.LastIndexOf('.')); // major.minor.build
+			int bitness = Environment.Is64BitProcess ? 64 : 32;
+			versionLabel.Text = $"Version: {version} ({bitness} bit)";
 
 			ApplyDarkTheme(darkMode);
 		}

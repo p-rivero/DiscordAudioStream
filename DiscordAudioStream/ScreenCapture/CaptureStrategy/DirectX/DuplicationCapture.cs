@@ -92,7 +92,8 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				// If RefreshScreen failed, the screen may be disposed after switching capture methods
 				if (screens[index].IsDisposed)
 				{
-					Logger.Log("\nScreen was disposed, attempting to refresh OutputDuplication...");
+					Logger.EmptyLine();
+					Logger.Log("Screen was disposed, attempting to refresh OutputDuplication...");
 					RefreshScreen(index);
 					return null;
 				}
@@ -123,21 +124,24 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				else if (e.HResult == DXGI_ERROR_ACCESS_LOST)
 				{
 					// The desktop duplication interface is invalid. Release the OutputDuplication and create a new one
-					Logger.Log("\nAccess lost, attempting to refresh OutputDuplication...");
+					Logger.EmptyLine();
+					Logger.Log("Access lost, attempting to refresh OutputDuplication...");
 					RefreshScreen(index);
 					return CloneThumbnail();
 				}
 				else
 				{
-					Logger.Log("\nSharpDXException while capturing frame.");
-					Logger.Log("HResult = {0}", e.HResult);
+					Logger.EmptyLine();
+					Logger.Log("SharpDXException while capturing frame.");
+					Logger.Log("HResult = " + e.HResult);
 					Logger.Log(e);
 					throw;
 				}
 			}
 			catch (Exception e)
 			{
-				Logger.Log("\n{0} while capturing frame.", e.GetType().Name);
+				Logger.EmptyLine();
+				Logger.Log($"{e.GetType().Name} while capturing frame.");
 				Logger.Log(e);
 				throw;
 			}
@@ -149,7 +153,8 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			{
 				// AcquireNextFrame failed on the very first frame and we don't have a cache yet.
 				// This should never happen, but return null just to be safe
-				Logger.Log("\nAcquireNextFrame: Failed to get the first frame!");
+				Logger.EmptyLine();
+				Logger.Log("AcquireNextFrame: Failed to get the first frame!");
 				return null;
 			}
 
@@ -159,13 +164,14 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			}
 			catch (ArgumentException)
 			{
-				Logger.Log("\nArgument exception while cloning cached thumbnail!");
-				Logger.Log("The thumbnail has probably been disposed.");
+				Logger.EmptyLine();
+				Logger.Log("Argument exception while cloning cached thumbnail! The thumbnail has probably been disposed.");
 				LogBitmapParams();
 			}
 			catch (Exception e)
 			{
-				Logger.Log("\n{0} while cloning cached thumbnail.", e.GetType().Name);
+				Logger.EmptyLine();
+				Logger.Log($"{e.GetType().Name} while cloning cached thumbnail.");
 				LogBitmapParams();
 			}
 			return null;
@@ -176,13 +182,13 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			Logger.Log("Attempting to log bitmap params...");
 			try
 			{
-				Logger.Log("Format: {0}", cachedThumbnails[index].PixelFormat);
-				Logger.Log("Size: {0}", cachedThumbnails[index].Size);
-				Logger.Log("Flags: {0}", cachedThumbnails[index].Flags);
+				Logger.Log("Format: " + cachedThumbnails[index].PixelFormat);
+				Logger.Log("Size: " + cachedThumbnails[index].Size);
+				Logger.Log("Flags: " + cachedThumbnails[index].Flags);
 			}
 			catch (Exception e)
 			{
-				Logger.Log("Could not read bitmap ({0}).", e.GetType().Name);
+				Logger.Log($"Could not read bitmap ({e.GetType().Name})");
 			}
 		}
 	}

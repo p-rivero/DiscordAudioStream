@@ -45,10 +45,11 @@ namespace DiscordAudioStream.ScreenCapture
 			{
 				if (capturingCursor == value) return; // No changes
 
-				Logger.Log("\nChanging CaptureState... (CapturingCursor = {0})", value);
+				Logger.EmptyLine();
+				Logger.Log($"Changing CaptureState... (CapturingCursor = {value})");
 				capturingCursor = value;
 				StateChanged?.Invoke();
-				Logger.Log("Done changing CaptureState. CapturingCursor = {0}", value);
+				Logger.Log($"Done changing CaptureState. CapturingCursor = {value}");
 			}
 		}
 		
@@ -60,10 +61,11 @@ namespace DiscordAudioStream.ScreenCapture
 			{
 				if (hideTaskbar == value) return; // No changes
 
-				Logger.Log("\nChanging CaptureState... (HideTaskbar = {0})", value);
+				Logger.EmptyLine();
+				Logger.Log($"Changing CaptureState... (HideTaskbar = {value})");
 				hideTaskbar = value;
 				StateChanged?.Invoke();
-				Logger.Log("Done changing CaptureState. HideTaskbar = {0}", value);
+				Logger.Log($"Done changing CaptureState. HideTaskbar = {value}");
 			}
 		}
 
@@ -101,11 +103,12 @@ namespace DiscordAudioStream.ScreenCapture
 				}
 				if (captureTarget == value) return; // No changes
 
-				Logger.Log("\nChanging CaptureState... (Target = {0})", value);
+				Logger.EmptyLine();
+				Logger.Log($"Changing CaptureState... (Target = {value})");
 				CaptureTarget oldValue = captureTarget;
 				captureTarget = value;
 				if (oldValue != value) StateChanged?.Invoke();
-				Logger.Log("Done changing CaptureState. Target = {0}", value);
+				Logger.Log($"Done changing CaptureState. Target = {value}");
 			}
 		}
 
@@ -128,12 +131,13 @@ namespace DiscordAudioStream.ScreenCapture
 				}
 				if (hWnd == value && captureTarget == CaptureTarget.Window) return; // No changes
 
-				Logger.Log("\nChanging CaptureState... (WindowHandle = {0})", value);
+				Logger.EmptyLine();
+				Logger.Log($"Changing CaptureState... (WindowHandle = {value})");
 				hWnd = value;
 				captureTarget = CaptureTarget.Window;
 				screen = null; // Remove screen (if any)
 				StateChanged?.Invoke();
-				Logger.Log("Done changing CaptureState. WindowHandle = {0}", value);
+				Logger.Log($"Done changing CaptureState. WindowHandle = {value}");
 			}
 		}
 
@@ -156,12 +160,13 @@ namespace DiscordAudioStream.ScreenCapture
 				}
 				if (screen == value && captureTarget == CaptureTarget.Screen) return; // No changes
 
-				Logger.Log("\nChanging CaptureState... (Screen = {0})", value);
+				Logger.EmptyLine();
+				Logger.Log($"Changing CaptureState... (Screen = {value})");
 				screen = value;
 				captureTarget = CaptureTarget.Screen;
 				hWnd = IntPtr.Zero; // Remove window handle (if any)
 				StateChanged?.Invoke();
-				Logger.Log("Done changing CaptureState. Screen = {0}", value.DeviceName);
+				Logger.Log($"Done changing CaptureState. Screen = {value.DeviceName}");
 			}
 		}
 
@@ -177,11 +182,12 @@ namespace DiscordAudioStream.ScreenCapture
 				WindowCaptureMethod oldValue = WindowMethod;
 				if (oldValue != value)
 				{
-					Logger.Log("\nChanging CaptureState... (WindowMethod = {0})", value);
+					Logger.EmptyLine();
+					Logger.Log($"Changing CaptureState... (WindowMethod = {value})");
 					Properties.Settings.Default.CaptureWindowMethod = (int)value;
 					Properties.Settings.Default.Save();
 					StateChanged?.Invoke();
-					Logger.Log("Done changing CaptureState. WindowMethod = {0}", value);
+					Logger.Log($"Done changing CaptureState. WindowMethod = {value}");
 				}
 			}
 		}
@@ -198,11 +204,12 @@ namespace DiscordAudioStream.ScreenCapture
 				ScreenCaptureMethod oldValue = ScreenMethod;
 				if (oldValue != value)
 				{
-					Logger.Log("\nChanging CaptureState... ScreenMethod = {0}", value);
+					Logger.EmptyLine();
+					Logger.Log($"Changing CaptureState... ScreenMethod = {value}");
 					Properties.Settings.Default.CaptureScreenMethod = (int)value;
 					Properties.Settings.Default.Save();
 					StateChanged?.Invoke();
-					Logger.Log("Done changing CaptureState. ScreenMethod = {0}", value);
+					Logger.Log($"Done changing CaptureState. ScreenMethod = {value}");
 				}
 			}
 		}

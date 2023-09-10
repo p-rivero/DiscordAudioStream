@@ -9,8 +9,9 @@ namespace DiscordAudioStream
 	{
 		public AudioMeterForm(bool darkMode)
 		{
-			Logger.Log("\nInitializing AudioMeterForm. darkMode={0}", darkMode);
-
+			Logger.EmptyLine();
+			Logger.Log("Initializing AudioMeterForm. darkMode = " + darkMode);
+			
 			if (darkMode) HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
 
 			InitializeComponent();

@@ -8,6 +8,8 @@ namespace DiscordAudioStream
 	{
 		const string LOG_FILE_PATH = "DiscordAudioStream_log.txt";
 
+		private static readonly int START_TIME = Environment.TickCount;
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3963", Justification = 
 			"Cannot convert this static constructor into an inline initialization")]
 		static Logger()
@@ -22,25 +24,45 @@ namespace DiscordAudioStream
 				}
 				catch (IOException)
 				{
-					Console.WriteLine("Warning: The log file ({0}) is already in use.", LOG_FILE_PATH);
+					Console.WriteLine($"Warning: The log file ({LOG_FILE_PATH}) is already in use.");
 					Console.WriteLine("Logging will be disabled until the next launch.");
 				}
 			}
 		}
-
-		public static void Log(string text)
+		
+		public static void EmptyLine()
 		{
-			Trace.WriteLine(text);
+			Trace.WriteLine("");
 		}
 		
-		public static void Log(string format, params object[] args)
+		public static void Log(string text)
 		{
-			Log(string.Format(format, args));
+			LogImpl(text);
 		}
 
 		public static void Log(Exception e)
 		{
-			Log("Exception:\n{1}\n{0}\n{1}", e, "==================================");
+			string separator = new string('-', 40);
+			LogImpl($"Exception:\n{separator}\n{e}\n{separator}");
+		}
+
+
+		private static void LogImpl(string text)
+		{
+			Trace.WriteLine($"{GetTimestamp()}ms [{GetCallerName(3)}]\n    {text}");
+		}
+
+		private static string GetCallerName(int stackDepth)
+		{
+			StackTrace stackTrace = new StackTrace();
+			StackFrame frame = stackTrace.GetFrame(stackDepth);
+			System.Reflection.MethodBase method = frame.GetMethod();
+			return $"{method.DeclaringType.Name}.{method.Name}";
+		}
+
+		private static int GetTimestamp()
+		{
+			return Environment.TickCount - START_TIME;
 		}
 	}
 }

@@ -23,7 +23,8 @@ namespace DiscordAudioStream
 
 		public SettingsForm(bool darkMode, CaptureState captureState)
 		{
-			Logger.Log("\nInitializing SettingsForm. darkMode={0}", darkMode);
+			Logger.EmptyLine();
+			Logger.Log("Initializing SettingsForm. darkMode=" + darkMode);
 
 			// Store capture state in order to change ScreenMethod or WindowMethod
 			this.captureState = captureState;
@@ -118,7 +119,8 @@ namespace DiscordAudioStream
 
 			Properties.Settings.Default.Theme = theme;
 			Properties.Settings.Default.Save();
-			Logger.Log("\nChange settings: Theme={0}. Restarting...", Properties.Settings.Default.Theme);
+			Logger.EmptyLine();
+			Logger.Log($"Change settings: Theme={Properties.Settings.Default.Theme}. Restarting...");
 			
 			Application.Restart();
 			Environment.Exit(0);
@@ -144,7 +146,8 @@ namespace DiscordAudioStream
 
 			Properties.Settings.Default.AutoExit = autoExitCheckbox.Checked;
 			Properties.Settings.Default.Save();
-			Logger.Log("\nChange settings: AutoExit={0}", Properties.Settings.Default.AutoExit);
+			Logger.EmptyLine();
+			Logger.Log("Change settings: AutoExit=" + Properties.Settings.Default.AutoExit);
 		}
 
 		private void outputLogCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -154,7 +157,8 @@ namespace DiscordAudioStream
 
 			Properties.Settings.Default.OutputLogFile = outputLogCheckbox.Checked;
 			Properties.Settings.Default.Save();
-			Logger.Log("\nChange settings: OutputLogFile={0}", Properties.Settings.Default.OutputLogFile);
+			Logger.EmptyLine();
+			Logger.Log("Change settings: OutputLogFile=" + Properties.Settings.Default.OutputLogFile);
 		}
 
 		private void fullscreenMethodComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -179,7 +183,8 @@ namespace DiscordAudioStream
 
 			Properties.Settings.Default.CaptureFramerate = (int)selectedFramerate;
 			Properties.Settings.Default.Save();
-			Logger.Log("\nChange settings: CaptureFramerate={0}", selectedFramerate);
+			Logger.EmptyLine();
+			Logger.Log("Change settings: CaptureFramerate=" + selectedFramerate);
 
 			FramerateChanged?.Invoke();
 		}
@@ -191,7 +196,8 @@ namespace DiscordAudioStream
 
 			Properties.Settings.Default.OffscreenDraw = offscreenDrawCheckbox.Checked;
 			Properties.Settings.Default.Save();
-			Logger.Log("\nChange settings: OffscreenDraw={0}", Properties.Settings.Default.OffscreenDraw);
+			Logger.EmptyLine();
+			Logger.Log("Change settings: OffscreenDraw=" + Properties.Settings.Default.OffscreenDraw);
 		}
 
 		private void SettingsForm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
@@ -206,7 +212,8 @@ namespace DiscordAudioStream
 
 			Properties.Settings.Default.ShowAudioInputs = showAudioInputsCheckbox.Checked;
 			Properties.Settings.Default.Save();
-			Logger.Log("\nChange settings: ShowAudioInputs={0}", Properties.Settings.Default.ShowAudioInputs);
+			Logger.EmptyLine();
+			Logger.Log("Change settings: ShowAudioInputs=" + Properties.Settings.Default.ShowAudioInputs);
 
 			ShowAudioInputsChanged?.Invoke();
 		}
@@ -235,7 +242,8 @@ namespace DiscordAudioStream
 			
 			Properties.Settings.Default.ShowAudioMeter = audioMeterCheckBox.Checked;
 			Properties.Settings.Default.Save();
-			Logger.Log("\nChange settings: ShowAudioMeter={0}", Properties.Settings.Default.ShowAudioMeter);
+			Logger.EmptyLine();
+			Logger.Log("Change settings: ShowAudioMeter=" + Properties.Settings.Default.ShowAudioMeter);
 		}
 	}
 }

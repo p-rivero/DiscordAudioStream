@@ -62,7 +62,8 @@ namespace DiscordAudioStream
 			}
 			else
 			{
-				Logger.Log("\nClose button pressed, stopping program.");
+				Logger.EmptyLine();
+				Logger.Log("Close button pressed, stopping program.");
 				screenCapture?.Stop();
 				User32.UnregisterHotKey(form.Handle, 0);
 			}
@@ -128,8 +129,9 @@ namespace DiscordAudioStream
 			
 			return new Thread(() =>
 			{
-				Logger.Log("\nCreating Draw thread. Target framerate: {0} FPS ({1} ms)",
-					Properties.Settings.Default.CaptureFramerate, screenCapture.CaptureIntervalMs);
+				int fps = Properties.Settings.Default.CaptureFramerate;
+				Logger.EmptyLine();
+				Logger.Log($"Creating Draw thread. Target framerate: {fps} FPS ({screenCapture.CaptureIntervalMs} ms)");
 
 				Stopwatch stopwatch = new Stopwatch();
 				Size oldSize = new Size(0, 0);
@@ -303,7 +305,8 @@ namespace DiscordAudioStream
 				if (r == DialogResult.No) throw new OperationCanceledException();
 			}
 
-			Logger.Log("\nSTART STREAM (Without audio)");
+			Logger.EmptyLine();
+			Logger.Log("START STREAM (Without audio)");
 			// Clear the stored last used audio device
 			Properties.Settings.Default.AudioDeviceID = "";
 			Properties.Settings.Default.Save();
@@ -328,10 +331,12 @@ namespace DiscordAudioStream
 					if (r == DialogResult.Cancel) throw new OperationCanceledException();
 				}
 
-				Logger.Log("\nDEFAULT DEVICE CAPTURED (Audio loop)");
+				Logger.EmptyLine();
+				Logger.Log("DEFAULT DEVICE CAPTURED (Audio loop)");
 			}
 
-			Logger.Log("\nSTART STREAM (With audio)");
+			Logger.EmptyLine();
+			Logger.Log("START STREAM (With audio)");
 			
 			audioPlayback = new AudioPlayback(deviceIndex);
 			audioPlayback.AudioLevelChanged += (left, right) => currentMeterForm?.SetLevels(left, right);
@@ -354,7 +359,8 @@ namespace DiscordAudioStream
 
 		private void EndStream()
 		{
-			Logger.Log("\nEND STREAM");
+			Logger.EmptyLine();
+			Logger.Log("END STREAM");
 			form.EnableStreamingUI(false);
 			streamEnabled = false;
 			if (audioPlayback != null)
@@ -375,7 +381,8 @@ namespace DiscordAudioStream
 				EndStream();
 				if (Properties.Settings.Default.AutoExit)
 				{
-					Logger.Log("\nAutoExit was enabled, closing form.");
+					Logger.EmptyLine();
+					Logger.Log("AutoExit was enabled, closing form.");
 					form.Close();
 				}
 			}));

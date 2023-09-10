@@ -18,7 +18,7 @@ namespace DiscordAudioStream
 
 			if (dllName.EndsWith("_resources")) return null;
 
-			Logger.Log("Loading assembly: {0}", dllName);
+			Logger.Log("Loading assembly: " + dllName);
 
 			ResourceManager rm = new ResourceManager(MethodBase.GetCurrentMethod().DeclaringType.Namespace + ".Properties.Resources", Assembly.GetExecutingAssembly());
 

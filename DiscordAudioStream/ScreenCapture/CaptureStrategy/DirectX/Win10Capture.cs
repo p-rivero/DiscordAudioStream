@@ -106,7 +106,8 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			catch (ObjectDisposedException)
 			{
 				// When switching from another capture method, the first frame may throw an error.
-				Logger.Log("\nCould not invoke action on UI thread, ignoring.");
+				Logger.EmptyLine();
+				Logger.Log("Could not invoke action on UI thread, ignoring.");
 			}
 		}
 	}

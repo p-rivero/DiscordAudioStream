@@ -20,7 +20,8 @@ namespace DiscordAudioStream
 		
 		public MainForm(bool darkMode)
 		{
-			Logger.Log("\nInitializing MainForm. darkMode={0}", darkMode);
+			Logger.EmptyLine();
+			Logger.Log("Initializing MainForm. darkMode = " + darkMode);
 
 			controller = new MainController(this);
 

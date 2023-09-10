@@ -14,16 +14,17 @@ namespace DiscordAudioStream
 			EmbeddedAssemblyResolver.Register();
 			RedirectConsoleOutput();
 
-			Logger.Log("Started Main method. Arguments: [{0}] (size={1})", string.Join(",", args), args.Length);
-			Logger.Log("OS Version: {0}", Environment.OSVersion);
-			Logger.Log("Log ID: {0}", new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds());
+			Logger.Log($"Started Main method. Arguments: [{string.Join(",", args)}] (size={args.Length})");
+			Logger.Log("OS Version: " + Environment.OSVersion);
+			Logger.Log("Log ID: " + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds());
 			Logger.Log("Build ID: " + BuildId.Id);
 
 			CommandArguments consoleArgs = new CommandArguments(args);
 
 			if (consoleArgs.ExitImmediately)
 			{
-				Logger.Log("\nExiting as requested by command line arguments.");
+				Logger.EmptyLine();
+				Logger.Log("Exiting as requested by command line arguments.");
 				return;
 			}
 

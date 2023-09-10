@@ -10,7 +10,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		public MeasureTime(CaptureSource capture)
 		{
 			this.capture = capture;
-			Logger.Log("Instantiating MeasureTime source (wrapping {0})", capture.GetType().Name);
+			Logger.Log($"Instantiating MeasureTime source (wrapping {capture.GetType().Name})");
 		}
 
 		public override Bitmap CaptureFrame()
@@ -18,7 +18,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			var watch = System.Diagnostics.Stopwatch.StartNew();
 			Bitmap bmp = capture.CaptureFrame();
 			long elapsed_ms = watch.ElapsedMilliseconds;
-			Console.WriteLine("Capture using " + capture.GetType().Name + ": " + elapsed_ms + " ms");
+			Console.WriteLine($"Capture using {capture.GetType().Name}: {elapsed_ms} ms");
 			return bmp;
 		}
 

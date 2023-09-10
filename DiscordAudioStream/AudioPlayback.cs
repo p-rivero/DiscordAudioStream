@@ -45,9 +45,9 @@ namespace DiscordAudioStream.AudioCapture
 			}
 			audioSource.DataAvailable += AudioSource_DataAvailable;
 
-			Logger.Log("Started audio device: {0}", device);
+			Logger.Log("Started audio device: " + device);
 			
-			Logger.Log("Saving audio device ID: {0}", device.ID);
+			Logger.Log("Saving audio device ID: " + device.ID);
 			Properties.Settings.Default.AudioDeviceID = device.ID;
 			Properties.Settings.Default.Save();
 
@@ -127,7 +127,7 @@ namespace DiscordAudioStream.AudioCapture
 			}
 			catch (COMException e)
 			{
-				Logger.Log("COMException while starting audio device:\n{0}", e);
+				Logger.Log("COMException while starting audio device:\n" + e);
 				if ((uint)e.ErrorCode == 0x8889000A)
 				{
 					throw new InvalidOperationException("The selected audio device is already in use by another application. Please select a different device.");

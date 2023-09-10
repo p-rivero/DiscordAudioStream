@@ -14,7 +14,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		public CursorPainter(CaptureSource source)
 		{
 			this.source = source;
-			Logger.Log("Instantiating CursorPainter source (wrapping {0})", source.GetType().Name);
+			Logger.Log($"Instantiating CursorPainter source (wrapping {source.GetType().Name})");
 		}
 
 		public CaptureAreaRectDelegate CaptureAreaRect { get; set; }
