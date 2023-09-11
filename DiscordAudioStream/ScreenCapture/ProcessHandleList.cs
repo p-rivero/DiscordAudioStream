@@ -45,11 +45,9 @@ namespace DiscordAudioStream.ScreenCapture
 				// Ignore suspended Windows Store apps
 				try
 				{
-					if (Dwmapi.GetBoolAttr(hWnd, Dwmapi.DwmWindowAttribute.CLOAKED))
-					{
-						return true;
-					}
-				} catch (InvalidOperationException)
+					if (Dwmapi.GetBoolAttr(hWnd, Dwmapi.DwmWindowAttribute.CLOAKED)) return true;
+				}
+				catch (InvalidOperationException)
 				{
 					Logger.Log($"Cannot get property CLOAKED of window {hWnd}. This is normal on Windows 7.");
 				}
