@@ -286,18 +286,30 @@ namespace DLLs
 
 		public static bool GetBoolAttr(IntPtr hwnd, DwmWindowAttribute attribute)
 		{
-			DwmGetWindowAttribute(hwnd, (int)attribute, out bool pvAttribute, Marshal.SizeOf(typeof(bool)));
+			int result = DwmGetWindowAttribute(hwnd, (int)attribute, out bool pvAttribute, Marshal.SizeOf(typeof(bool)));
+			if (result != 0)
+			{
+				throw new InvalidOperationException($"DwmGetWindowAttribute returned 0x{result:X}");
+			}
 			return pvAttribute;
 		}
 		public static User32.Rect GetRectAttr(IntPtr hwnd, DwmWindowAttribute attribute)
 		{
-			DwmGetWindowAttribute(hwnd, (int)attribute, out User32.Rect pvAttribute, Marshal.SizeOf(typeof(User32.Rect)));
+			int result = DwmGetWindowAttribute(hwnd, (int)attribute, out User32.Rect pvAttribute, Marshal.SizeOf(typeof(User32.Rect)));
+			if (result != 0)
+			{
+				throw new InvalidOperationException($"DwmGetWindowAttribute returned 0x{result:X}");
+			}
 			return pvAttribute;
 		}
 		public static void SetBoolAttr(IntPtr hwnd, DwmWindowAttribute attribute, bool value)
 		{
 			int intVal = value ? 1 : 0;
-			Dwmapi.DwmSetWindowAttribute(hwnd, attribute, ref intVal, Marshal.SizeOf(typeof(int)));
+			int result = DwmSetWindowAttribute(hwnd, attribute, ref intVal, Marshal.SizeOf(typeof(int)));
+			if (result != 0)
+			{
+				throw new InvalidOperationException($"DwmSetWindowAttribute returned 0x{result:X}");
+			}
 		}
 	}
 

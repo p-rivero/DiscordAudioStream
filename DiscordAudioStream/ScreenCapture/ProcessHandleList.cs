@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DiscordAudioStream.ScreenCapture
 {
-    public class ProcessHandleList
+	public class ProcessHandleList
 	{
 
 		private readonly IntPtr[] handles = null;
@@ -25,7 +25,7 @@ namespace DiscordAudioStream.ScreenCapture
 			IntPtr shellWindow = User32.GetShellWindow();
 			Dictionary<IntPtr, string> windows = new Dictionary<IntPtr, string>();
 
-			User32.EnumWindows(delegate (IntPtr hWnd, IntPtr lParam)
+			User32.EnumWindows((hWnd, lParam) =>
 			{
 				// Called for each top-level window
 
@@ -43,8 +43,16 @@ namespace DiscordAudioStream.ScreenCapture
 				if (length == 0) return true;
 
 				// Ignore suspended Windows Store apps
-				if (Dwmapi.GetBoolAttr(hWnd, Dwmapi.DwmWindowAttribute.CLOAKED))
-					return true;
+				try
+				{
+					if (Dwmapi.GetBoolAttr(hWnd, Dwmapi.DwmWindowAttribute.CLOAKED))
+					{
+						return true;
+					}
+				} catch (InvalidOperationException)
+				{
+					Logger.Log($"Cannot get property CLOAKED of window {hWnd}. This is normal on Windows 7.");
+				}
 
 				StringBuilder builder = new StringBuilder(length);
 				User32.GetWindowText(hWnd, builder, length + 1);

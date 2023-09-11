@@ -47,9 +47,9 @@ namespace DiscordAudioStream
 			string callerName = GetCallerName();
 			if (!GroupWithPreviousLogs(timestamp, callerName))
 			{
-				Trace.WriteLine($"\n{timestamp}ms [{callerName}]");
+				Trace.WriteLine($"\r\n{timestamp}ms [{callerName}]");
 			}
-			Trace.WriteLine("    " + text);
+			Trace.WriteLine("    " + SanitizeText(text));
 			groupCallerName = callerName;
 			groupLastLogTime = timestamp;
 		}
@@ -91,6 +91,12 @@ namespace DiscordAudioStream
 		private static void ForceStartNewGroup()
 		{
 			groupCallerName = null;
+		}
+
+		private static string SanitizeText(string text)
+		{
+			// CRLF required for Windows 7 Notepad
+			return text.Replace("\n", "\r\n    ");
 		}
 	}
 }
