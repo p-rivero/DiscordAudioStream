@@ -22,9 +22,14 @@ namespace DiscordAudioStream
 		public AreaForm()
 		{
 			InitializeComponent();
-			this.bounds = SystemInformation.VirtualScreen;
 
-			resizeTimer.Elapsed += new ElapsedEventHandler(resizeTimer_Elapsed);
+			LocationChanged += (sender, e) => EnsureWithinBounds();
+			SizeChanged += (sender, e) => Refresh();
+			
+			// Assume the screen size won't change while the program is running
+			bounds = SystemInformation.VirtualScreen;
+
+			resizeTimer.Elapsed += new ElapsedEventHandler(ResizeTimerElapsed);
 			resizeTimer.Interval = 30;
 		}
 
@@ -51,7 +56,7 @@ namespace DiscordAudioStream
 			base.Hide();
 		}
 
-		private void resizeTimer_Elapsed(object sender, ElapsedEventArgs e)
+		private void ResizeTimerElapsed(object sender, ElapsedEventArgs e)
 		{
 			Invoke((MethodInvoker)(() =>
 			{
@@ -130,18 +135,6 @@ namespace DiscordAudioStream
 		{
 			Cursor.Current = Cursors.Default;
 			resizeTimer.Stop();
-		}
-
-		private void AreaForm_SizeChanged(object sender, EventArgs e)
-		{
-			// Redraw red rectangle
-			Refresh();
-		}
-
-		// Called when the form stops moving
-		private void AreaForm_ResizeEnd(object sender, EventArgs e)
-		{
-			EnsureWithinBounds();
 		}
 
 		private void EnsureWithinBounds()
