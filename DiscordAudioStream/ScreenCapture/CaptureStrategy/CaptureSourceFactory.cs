@@ -37,8 +37,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			}
 
 
-			// If PRINT_TIME is defined and the project is compiled in Debug mode, measure the time
-			#if (PRINT_TIME && DEBUG)
+			#if (PRINT_TIME)
 				result = new MeasureTime(result);
 			#endif
 
