@@ -97,7 +97,7 @@
 			// AreaForm
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.BackColor = System.Drawing.Color.MediumBlue;
+			this.BackColor = System.Drawing.Color.Lime;
 			this.ClientSize = new System.Drawing.Size(480, 320);
 			this.Controls.Add(this.lockBtn);
 			this.Controls.Add(this.moveBtn);
@@ -111,7 +111,7 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Recording area - Discord Audio Stream";
 			this.TopMost = true;
-			this.TransparencyKey = System.Drawing.Color.MediumBlue;
+			this.TransparencyKey = System.Drawing.Color.Lime;
 			this.Deactivate += new System.EventHandler(this.AreaForm_Deactivate);
 			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AreaForm_MouseDown);
 			this.MouseEnter += new System.EventHandler(this.AreaForm_MouseEnter);
