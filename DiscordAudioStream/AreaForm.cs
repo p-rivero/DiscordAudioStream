@@ -8,6 +8,8 @@ namespace DiscordAudioStream
 {
 	public partial class AreaForm : Form
 	{
+		public const int BORDER_WIDTH_PX = 2;
+
 		private const int WM_NCLBUTTONDOWN = 0xA1;
 		private const int HT_CAPTION = 0x2;
 
@@ -17,7 +19,7 @@ namespace DiscordAudioStream
 
 		private readonly System.Timers.Timer resizeTimer = new System.Timers.Timer();
 
-		private readonly Rectangle bounds;
+		private readonly Rectangle bounds = GetScreenBounds();
 
 		public AreaForm()
 		{
@@ -25,9 +27,6 @@ namespace DiscordAudioStream
 
 			LocationChanged += (sender, e) => EnsureWithinBounds();
 			SizeChanged += (sender, e) => Refresh();
-			
-			// Assume the screen size won't change while the program is running
-			bounds = SystemInformation.VirtualScreen;
 
 			resizeTimer.Elapsed += new ElapsedEventHandler(ResizeTimerElapsed);
 			resizeTimer.Interval = 30;
@@ -62,23 +61,25 @@ namespace DiscordAudioStream
 			{
 				Point curPos = PointToClient(Cursor.Position);
 
-				int newWidth = startSize.Width + curPos.X - startPos.X;
-				int newHeight = startSize.Height + curPos.Y - startPos.Y;
+				int targetWidth = startSize.Width + curPos.X - startPos.X;
+				int targetHeight = startSize.Height + curPos.Y - startPos.Y;
 
 				// Clip to bottom-right corner
-				newWidth = Math.Min(newWidth, bounds.Right - this.Left);
-				newHeight = Math.Min(newHeight, bounds.Bottom - this.Top);
-
-				Width = newWidth;
-				Height = newHeight;
+				Width = Math.Min(targetWidth, bounds.Right - this.Left);
+				Height = Math.Min(targetHeight, bounds.Bottom - this.Top);
 			}));
 		}
 		
 		protected override void OnPaint(PaintEventArgs e)
 		{
+			const int OFFSET = BORDER_WIDTH_PX / 2;
 			if (showMarker)
 			{
-				ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Red, ButtonBorderStyle.Solid);
+				Rectangle bounds = ClientRectangle;
+				using (Pen pen = new Pen(Color.Red, BORDER_WIDTH_PX))
+				{
+					e.Graphics.DrawRectangle(pen, bounds.X + OFFSET, bounds.Y + OFFSET, bounds.Width - BORDER_WIDTH_PX, bounds.Height - BORDER_WIDTH_PX);
+				}
 			}
 		}
 
@@ -143,11 +144,11 @@ namespace DiscordAudioStream
 			Height = Math.Min(Height, bounds.Height);
 			Width = Math.Min(Width, bounds.Width);
 			// Clip to top-left corner
-			Left = Math.Max(this.Left, bounds.Left);
-			Top = Math.Max(this.Top, bounds.Top);
+			Left = Math.Max(Left, bounds.Left);
+			Top = Math.Max(Top, bounds.Top);
 			// Clip to bottom-right corner
-			Left = Math.Min(this.Left, bounds.Right - this.Width);
-			Top = Math.Min(this.Top, bounds.Bottom - this.Height);
+			Left = Math.Min(Left, bounds.Right - Width);
+			Top = Math.Min(Top, bounds.Bottom - Height);
 		}
 
 		private void AreaForm_Deactivate(object sender, EventArgs e)
@@ -168,6 +169,25 @@ namespace DiscordAudioStream
 			lockBtn.Visible = visible;
 			// Activate form so that AreaForm_Deactivate is called when we click somewhere
 			if (visible) Activate();
+		}
+
+		private static Rectangle GetScreenBounds()
+		{
+			// Assume the screen size won't change while the program is running
+			Rectangle screen = SystemInformation.VirtualScreen;
+
+			// Allow moving out of bounds to compensate for red border
+			return new Rectangle(screen.X - BORDER_WIDTH_PX, screen.Y - BORDER_WIDTH_PX, 
+				screen.Width + 2 * BORDER_WIDTH_PX, screen.Height + 2 * BORDER_WIDTH_PX);
+		}
+
+		private void AreaForm_ResizeEnd(object sender, EventArgs e)
+		{
+			// Workaround for Windows not allowing users to move a window above the screen bounds
+			if (Top == 0)
+			{
+				Top = -BORDER_WIDTH_PX;
+			}
 		}
 	}
 }

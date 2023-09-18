@@ -113,6 +113,7 @@
 			this.TopMost = true;
 			this.TransparencyKey = System.Drawing.Color.Lime;
 			this.Deactivate += new System.EventHandler(this.AreaForm_Deactivate);
+			this.ResizeEnd += new System.EventHandler(this.AreaForm_ResizeEnd);
 			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AreaForm_MouseDown);
 			this.MouseEnter += new System.EventHandler(this.AreaForm_MouseEnter);
 			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AreaForm_MouseUp);

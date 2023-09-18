@@ -69,10 +69,11 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		private Rectangle GetCustomArea()
 		{
 			// Omit pixels of the red border
-			int left = areaForm.Left + 1;
-			int top = areaForm.Top + 1;
-			int width = areaForm.Width - 2;
-			int height = areaForm.Height - 2;
+			const int BORDER = AreaForm.BORDER_WIDTH_PX;
+			int left = areaForm.Left + BORDER;
+			int top = areaForm.Top + BORDER;
+			int width = areaForm.Width - 2 * BORDER;
+			int height = areaForm.Height - 2 * BORDER;
 
 			return new Rectangle(left, top, width, height);
 		}
