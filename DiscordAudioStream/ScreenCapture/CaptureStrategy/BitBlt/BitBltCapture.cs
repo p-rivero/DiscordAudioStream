@@ -49,8 +49,9 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			return Image.FromHbitmap(hBitmap, IntPtr.Zero);
 		}
 
-		public new void Dispose()
+		protected override void Dispose(bool disposing)
 		{
+			base.Dispose(disposing);
 			if (hBitmap != IntPtr.Zero)
 			{
 				Gdi32.DeleteObject(hBitmap);

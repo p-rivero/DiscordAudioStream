@@ -75,10 +75,10 @@ namespace DiscordAudioStream
 			const int OFFSET = BORDER_WIDTH_PX / 2;
 			if (showMarker)
 			{
-				Rectangle bounds = ClientRectangle;
+				Rectangle rect = ClientRectangle;
 				using (Pen pen = new Pen(Color.Red, BORDER_WIDTH_PX))
 				{
-					e.Graphics.DrawRectangle(pen, bounds.X + OFFSET, bounds.Y + OFFSET, bounds.Width - BORDER_WIDTH_PX, bounds.Height - BORDER_WIDTH_PX);
+					e.Graphics.DrawRectangle(pen, rect.X + OFFSET, rect.Y + OFFSET, rect.Width - BORDER_WIDTH_PX, rect.Height - BORDER_WIDTH_PX);
 				}
 			}
 		}
