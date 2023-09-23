@@ -31,36 +31,36 @@ namespace DiscordAudioStream.ScreenCapture
 		{
 			switch (mode)
 			{
-			case ScaleMode.Fixed720p:
-				constantScaleFactor = 0;
-				fixedHeight = 720;
-				fixedWidth = (uint)(fixedHeight * DISCORD_ASPECT_RATIO);
-				break;
-			case ScaleMode.Fixed1080p:
-				constantScaleFactor = 0;
-				fixedHeight = 1080;
-				fixedWidth = (uint)(fixedHeight * DISCORD_ASPECT_RATIO);
-				break;
-			case ScaleMode.Scale100:
-				constantScaleFactor = 1;
-				break;
-			case ScaleMode.Scale50:
-				constantScaleFactor = Math.Sqrt(0.5);
-				break;
-			case ScaleMode.Scale25:
-				constantScaleFactor = Math.Sqrt(0.25);
-				break;
-			case ScaleMode.Scale20:
-				constantScaleFactor = Math.Sqrt(0.2);
-				break;
-			case ScaleMode.Scale15:
-				constantScaleFactor = Math.Sqrt(0.15);
-				break;
-			case ScaleMode.Scale10:
-				constantScaleFactor = Math.Sqrt(0.1);
-				break;
-			default:
-				throw new ArgumentException("Unknown scale mode");
+				case ScaleMode.Fixed720p:
+					constantScaleFactor = 0;
+					fixedHeight = 720;
+					fixedWidth = (uint)(fixedHeight * DISCORD_ASPECT_RATIO);
+					break;
+				case ScaleMode.Fixed1080p:
+					constantScaleFactor = 0;
+					fixedHeight = 1080;
+					fixedWidth = (uint)(fixedHeight * DISCORD_ASPECT_RATIO);
+					break;
+				case ScaleMode.Scale100:
+					constantScaleFactor = 1;
+					break;
+				case ScaleMode.Scale50:
+					constantScaleFactor = Math.Sqrt(0.5);
+					break;
+				case ScaleMode.Scale25:
+					constantScaleFactor = Math.Sqrt(0.25);
+					break;
+				case ScaleMode.Scale20:
+					constantScaleFactor = Math.Sqrt(0.2);
+					break;
+				case ScaleMode.Scale15:
+					constantScaleFactor = Math.Sqrt(0.15);
+					break;
+				case ScaleMode.Scale10:
+					constantScaleFactor = Math.Sqrt(0.1);
+					break;
+				default:
+					throw new ArgumentException("Unknown scale mode");
 			}
 		}
 

@@ -288,36 +288,36 @@ namespace DiscordAudioStream
 			{
 				switch (e.KeyCode)
 				{
-				case Keys.P:
-					previewBtn.PerformClick();
-					break;
-				case Keys.T:
-					onTopBtn.PerformClick();
-					break;
-				case Keys.Oemcomma:
-					settingsBtn.PerformClick();
-					break;
-				case Keys.V:
-					volumeMixerButton.PerformClick();
-					break;
-				case Keys.A:
-					soundDevicesButton.PerformClick();
-					break;
-				case Keys.Enter:
-					if (!controller.IsStreaming) controller.StartStream(false);
-					break;
+					case Keys.P:
+						previewBtn.PerformClick();
+						break;
+					case Keys.T:
+						onTopBtn.PerformClick();
+						break;
+					case Keys.Oemcomma:
+						settingsBtn.PerformClick();
+						break;
+					case Keys.V:
+						volumeMixerButton.PerformClick();
+						break;
+					case Keys.A:
+						soundDevicesButton.PerformClick();
+						break;
+					case Keys.Enter:
+						if (!controller.IsStreaming) controller.StartStream(false);
+						break;
 				}
 			}
 			else
 			{
 				switch (e.KeyCode)
 				{
-				case Keys.F1:
-					aboutBtn.PerformClick();
-					break;
-				case Keys.Escape:
-					if (controller.IsStreaming) controller.Stop();
-					break;
+					case Keys.F1:
+						aboutBtn.PerformClick();
+						break;
+					case Keys.Escape:
+						if (controller.IsStreaming) controller.Stop();
+						break;
 				}
 			}
 		}
