@@ -1,8 +1,4 @@
-﻿
-// Uncomment the following line to print the time it took to capture the frame
-//#define PRINT_TIME
-
-using System;
+﻿using System;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
@@ -31,10 +27,10 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 					throw new ArgumentException("Invalid capture target");
 			}
 
-
-			#if (PRINT_TIME)
+			if (PrintFrameTime)
+			{
 				result = new MeasureTime(result);
-			#endif
+			}
 
 			return result;
 		}

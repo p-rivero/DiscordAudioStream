@@ -1,6 +1,7 @@
 ﻿using CustomComponents;
 using System;
 using System.Windows.Forms;
+using System.Linq;
 using DLLs;
 
 namespace DiscordAudioStream
@@ -14,7 +15,8 @@ namespace DiscordAudioStream
 			EmbeddedAssemblyResolver.Register();
 			RedirectConsoleOutput();
 
-			Logger.Log($"Started Main method. Arguments: [{string.Join(",", args)}] (size={args.Length})");
+			string argumentList = string.Join(", ", args.Select(a => $"'{a}'"));
+			Logger.Log($"Started Main method. Arguments: [{argumentList}]");
 			Logger.Log("OS Version: " + Environment.OSVersion);
 			Logger.Log("Log ID: " + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds());
 			Logger.Log("Build ID: " + BuildId.Id);
@@ -31,8 +33,9 @@ namespace DiscordAudioStream
 			bool darkMode = IsDarkTheme();
 			EnableNativeStyles(darkMode);
 
+			consoleArgs.ProcessArgsBeforeMainForm();
 			MainForm mainForm = new MainForm(darkMode);
-			mainForm.Load += (sender, e) => consoleArgs.ProcessArgs(mainForm.Controller);
+			mainForm.Load += (sender, e) => consoleArgs.ProcessArgsAfterMainForm(mainForm.Controller);
 			Application.Run(mainForm);
 		}
 		

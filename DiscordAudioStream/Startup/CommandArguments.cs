@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
+using DiscordAudioStream.ScreenCapture.CaptureStrategy;
 using Mono.Options;
 
 namespace DiscordAudioStream
@@ -10,7 +11,8 @@ namespace DiscordAudioStream
 	{
 		private Point? position = null;
 		private bool startStream = false;
-		
+		private bool printFps = false;
+
 		public CommandArguments(string[] args)
 		{
 			bool showHelp = false;
@@ -19,14 +21,19 @@ namespace DiscordAudioStream
 			{
 				{
 					"position=",
-					"Move the window to the given {X,Y} coordinates.\n"
-						+ "--position=0,0 moves the window to the top-left edge of the main screen.",
+					"Move the window to the given {X,Y} coordinates (can be negative).\n"
+						+ "--position=0,0 moves the window to the top-left edge of the MAIN screen.",
 					v => position = ParsePoint(v)
 				},
 				{
 					"start",
 					"Start streaming immediately, using the previous settings. All warnings are ignored.",
 					v => startStream = v != null
+				},
+				{
+					"fps",
+					"[Debug] Measure the time required to capture each frame and print it to console.",
+					v => printFps = v != null
 				},
 				{
 					"h|help|?", 
@@ -40,7 +47,7 @@ namespace DiscordAudioStream
 				IEnumerable<string> extra = options.Parse(args);
 				foreach (string arg in extra)
 				{
-					Console.WriteLine("Warning: Unrecognized argument " + arg);
+					Console.WriteLine($"Warning: Unrecognized argument '{arg}'");
 				}
 			}
 			catch (OptionException e)
@@ -61,12 +68,25 @@ namespace DiscordAudioStream
 		public bool ExitImmediately { get; private set; } = false;
 		
 
-		public void ProcessArgs(MainController controller)
+		public void ProcessArgsBeforeMainForm()
 		{
-			if (startStream) controller.StartStream(true);
-			
+			if (printFps)
+			{
+				Logger.Log("-fps flag used, printing FPS to console");
+				CaptureSourceFactory.PrintFrameTime = true;
+			}
+		}
+
+		public void ProcessArgsAfterMainForm(MainController controller)
+		{
+			if (startStream)
+			{
+				Logger.Log("-start flag used, starting stream");
+				controller.StartStream(true);
+			}
 			if (position.HasValue)
 			{
+				Logger.Log($"-position flag used, moving window to {position.Value}");
 				controller.MoveWindow(position.Value);
 			}
 		}
