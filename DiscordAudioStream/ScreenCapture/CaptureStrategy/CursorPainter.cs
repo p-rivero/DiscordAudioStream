@@ -10,6 +10,10 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		public delegate Rectangle CaptureAreaRectDelegate();
 
 		private readonly CaptureSource source;
+		
+		private IntPtr currentCursorHandle = IntPtr.Zero;
+		private Bitmap cursorBitmap = null;
+		private Point cursorHotspot = Point.Empty;
 
 		public CursorPainter(CaptureSource source)
 		{
@@ -34,6 +38,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			base.Dispose(disposing);
 			source.Dispose();
+			cursorBitmap?.Dispose();
 		}
 
 
@@ -47,22 +52,18 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				return src;
 			}
 
-			// Get the cursor hotspot and icon
-			if (!User32.GetIconInfo(pci.hCursor, out User32.IconInfo iconInfo))
+			if (currentCursorHandle != pci.hCursor)
 			{
-				// GetIconInfo failed. Do not paint the cursor
-				return src;
+				UpdateCursorBitmap(pci.hCursor);
+				currentCursorHandle = pci.hCursor;
 			}
-
-			if (iconInfo.hbmColor == IntPtr.Zero)
+			if (cursorBitmap == null)
 			{
-				// The cursor has no color bitmap. Do not paint the cursor
-				CleanUpIconInfo(iconInfo);
 				return src;
 			}
 
 			// Screen coordinates where the cursor has to be drawn (compensate for hotspot)
-			Point cursorPos = new Point(pci.ptScreenPos.x - iconInfo.xHotspot, pci.ptScreenPos.y - iconInfo.yHotspot);
+			Point cursorPos = new Point(pci.ptScreenPos.x - cursorHotspot.X, pci.ptScreenPos.y - cursorHotspot.Y);
 			// Transform from screen coordinates (relative to main screen) to window coordinates (relative to captured area)
 			cursorPos.X -= originPos.X;
 			cursorPos.Y -= originPos.Y;
@@ -70,26 +71,34 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			// Draw the cursor only if it's inside the bounds
 			if (cursorPos.X >= 0 && cursorPos.Y >= 0 && cursorPos.X <= src.Width && cursorPos.Y <= src.Height)
 			{
-				Bitmap curBmp = BitmapFromCursor(iconInfo);
 				using (Graphics g = Graphics.FromImage(src))
 				{
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-					g.DrawImage(curBmp, cursorPos);
+					g.DrawImage(cursorBitmap, cursorPos);
 				}
 			}
 
-			CleanUpIconInfo(iconInfo);
 			return src;
 		}
 
-		private void CleanUpIconInfo(User32.IconInfo iconInfo)
+		private void UpdateCursorBitmap(IntPtr hCursor)
 		{
-			Gdi32.DeleteObject(iconInfo.hbmMask);
-			Gdi32.DeleteObject(iconInfo.hbmColor);
+			if (!User32.GetIconInfo(hCursor, out User32.IconInfo iconInfo))
+			{
+				return;
+			}
+			cursorBitmap?.Dispose();
+			cursorBitmap = BitmapFromCursor(iconInfo);
+			cursorHotspot = new Point(iconInfo.xHotspot, iconInfo.yHotspot);
+			CleanUpIconInfo(iconInfo);
 		}
 
 		private Bitmap BitmapFromCursor(in User32.IconInfo iconInfo)
 		{
+			if (iconInfo.hbmColor == IntPtr.Zero)
+			{
+				return null;
+			}
 			using (Bitmap bmp = Image.FromHbitmap(iconInfo.hbmColor))
 			{
 				// Move data pointer (bmData.Scan0) from bmp to dstBitmap
@@ -99,6 +108,12 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 				return new Bitmap(dstBitmap);
 			}
+		}
+
+		private void CleanUpIconInfo(User32.IconInfo iconInfo)
+		{
+			Gdi32.DeleteObject(iconInfo.hbmMask);
+			Gdi32.DeleteObject(iconInfo.hbmColor);
 		}
 
 	}
