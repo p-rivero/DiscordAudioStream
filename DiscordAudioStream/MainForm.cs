@@ -251,11 +251,8 @@ namespace DiscordAudioStream
 				newSize.Width = defaultWindowSize.Width - (defaultPreviewSize.Width + 10);
 				this.Size = newSize;
 
-				if (previewBox.Image != null)
-				{
-					previewBox.Image.Dispose();
-					previewBox.Image = null;
-				}
+				previewBox.Image?.Dispose();
+				previewBox.Image = null;
 			}
 		}
 

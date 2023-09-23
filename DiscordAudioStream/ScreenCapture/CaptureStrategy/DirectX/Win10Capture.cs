@@ -58,17 +58,13 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 		public override Bitmap CaptureFrame()
 		{
-			// Poll until we get a frame
-			Direct3D11CaptureFrame frame = null;
-			try
+			Direct3D11CaptureFrame frame = framePool.TryGetNextFrame();
+			if (frame == null)
 			{
-				while (frame == null) frame = framePool.TryGetNextFrame();
-			}
-			catch (ObjectDisposedException)
-			{
-				// Another thread called Dispose(). Do nothing and return
+				// No new content
 				return null;
 			}
+
 			int width = frame.ContentSize.Width;
 			int height = frame.ContentSize.Height;
 

@@ -143,8 +143,11 @@ namespace DiscordAudioStream
 					{
 						Bitmap next = ScreenCaptureManager.GetNextFrame();
 
-						// Continue iterating until GetNextFrame() doesn't return null
-						if (next == null) continue;
+						// No new data, keep displaying last frame
+						if (next == null)
+						{
+							continue;
+						}
 
 						// Detect size changes
 						if (next.Size != oldSize)
@@ -363,10 +366,7 @@ namespace DiscordAudioStream
 			Logger.Log("END STREAM");
 			form.EnableStreamingUI(false);
 			streamEnabled = false;
-			if (audioPlayback != null)
-			{
-				audioPlayback.Stop();
-			}
+			audioPlayback?.Stop();
 		}
 
 
@@ -429,10 +429,7 @@ namespace DiscordAudioStream
 		}
 		internal void HideAudioMeterForm()
 		{
-			if (currentMeterForm != null)
-			{
-				currentMeterForm.Hide();
-			}
+			currentMeterForm?.Hide();
 		}
 
 		internal void SetVideoIndex(int index)

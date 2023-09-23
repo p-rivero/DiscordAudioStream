@@ -21,23 +21,12 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 		public override Bitmap CaptureFrame()
 		{
-			Bitmap result = null;
-			// winCapture.CaptureFrame will block the thread until it gets a frame. 
-			// If the operation does not succeed in 0.5 seconds, check if the window is still open
-			bool success = false;
-			while (!success)
+			Bitmap result = winCapture.CaptureFrame();
+			if (result == null)
 			{
-				// The correct result of winCapture.CaptureFrame() may be null. Therefore,
-				// we need a separate success boolean instead of checking (result != null)
-				Task task = Task.Run(() => {
-					result = winCapture.CaptureFrame();
-					success = true;
-				});
-				if (!task.Wait(TimeSpan.FromMilliseconds(500)))
-				{
-					// GetWindowArea will throw an exception if the window has been closed, but not if it's minimized
-					WindowCapture.GetWindowArea(windowHandle);
-				}
+				// Check if the window has been closed or it just doesn't have new content
+				// GetWindowArea will throw an exception if the window has been closed, but not if it's minimized
+				GetWindowArea(windowHandle);
 			}
 			return result;
 		}

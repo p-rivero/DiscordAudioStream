@@ -23,6 +23,7 @@ namespace DiscordAudioStream.ScreenCapture
 		private readonly CaptureState captureState;
 		private static readonly ConcurrentQueue<Bitmap> frameQueue = new ConcurrentQueue<Bitmap>();
 		private CaptureSource currentSource = null;
+		private readonly object currentSourceLock = new object();
 
 		public ScreenCaptureManager(CaptureState captureState)
 		{
@@ -39,9 +40,10 @@ namespace DiscordAudioStream.ScreenCapture
 		// Return the next frame, if it exists (null otherwise)
 		public static Bitmap GetNextFrame()
 		{
-			bool success = frameQueue.TryDequeue(out Bitmap frame);
-
-			if (success) return frame;
+			if (frameQueue.TryDequeue(out Bitmap frame))
+			{
+				return frame;
+			}
 			return null;
 		}
 
@@ -52,8 +54,11 @@ namespace DiscordAudioStream.ScreenCapture
 
 		public void Stop()
 		{
-			captureThread.Abort();
-			currentSource?.Dispose();
+			lock (currentSourceLock)
+			{
+				captureThread.Abort();
+				currentSource?.Dispose();
+			}
 		}
 
 
@@ -73,7 +78,10 @@ namespace DiscordAudioStream.ScreenCapture
 					stopwatch.Restart();
 					try
 					{
-						EnqueueFrame(currentSource.CaptureFrame());
+						lock (currentSourceLock)
+						{
+							EnqueueFrame(currentSource.CaptureFrame());
+						}
 					}
 					catch (ThreadAbortException)
 					{
@@ -107,11 +115,13 @@ namespace DiscordAudioStream.ScreenCapture
 		{
 			try
 			{
-				CaptureSource oldSource = currentSource;
-				currentSource = CaptureSourceFactory.Build(captureState);
-				// Dispose after switching to avoid data races
-				oldSource?.Dispose();
-
+				lock (currentSourceLock)
+				{
+					// Don't dispose the old source until the new source is instantiated without errors
+					CaptureSource oldSource = currentSource;
+					currentSource = CaptureSourceFactory.Build(captureState);
+					oldSource?.Dispose();
+				}
 				Logger.Log("Changed current source to " + currentSource.GetType().Name);
 			}
 			catch (Exception e)
@@ -140,9 +150,13 @@ namespace DiscordAudioStream.ScreenCapture
 
 		private void EnqueueFrame(Bitmap frame)
 		{
+			// If there is no new content, avoid overwriting good frames
+			if (frame == null)
+			{
+				return;
+			}
 			frameQueue.Enqueue(frame);
 
-			// Limit the size of frameQueue to LIMIT_QUEUE_SZ
 			if (frameQueue.Count > LIMIT_QUEUE_SZ)
 			{
 				frameQueue.TryDequeue(out Bitmap b);
