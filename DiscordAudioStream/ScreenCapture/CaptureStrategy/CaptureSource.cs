@@ -17,5 +17,14 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			// Override this method if the subclass needs to dispose of resources
 		}
+
+		protected static void InvokeOnUI(Action action)
+		{
+			if (System.Windows.Forms.Application.OpenForms.Count == 0)
+			{
+				throw new InvalidOperationException("Cannot invoke on UI thread: no open forms");
+			}
+			System.Windows.Forms.Application.OpenForms[0].Invoke(action);
+		}
 	}
 }

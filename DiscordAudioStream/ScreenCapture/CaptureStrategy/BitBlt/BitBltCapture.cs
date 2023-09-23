@@ -10,17 +10,18 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		public CaptureAreaRectDelegate CaptureAreaRect { get; set; }
 
 		// Create DC and Bitmap objects for reuse
-		private readonly IntPtr hdcSrc;
+		private IntPtr hdcSrc;
 		private readonly IntPtr hdcDest;
 		private IntPtr hBitmap;
 		private Size bitmapSize;
 
-		public BitBltCapture()
+		public BitBltCapture(IntPtr desktopWindow)
 		{
-			// Initialize the DC and Bitmap objects in the constructor
-			hdcSrc = User32.GetWindowDC(User32.GetDesktopWindow());
+			InvokeOnUI(() => hdcSrc = User32.GetWindowDC(desktopWindow));
 			hdcDest = Gdi32.CreateCompatibleDC(hdcSrc);
 		}
+
+		public BitBltCapture(): this(User32.GetDesktopWindow()) { }
 
 		public override Bitmap CaptureFrame()
 		{

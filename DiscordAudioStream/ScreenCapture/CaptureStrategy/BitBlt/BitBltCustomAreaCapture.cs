@@ -15,7 +15,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			var bitBlt = new BitBltCapture();
 
-			ShowAreaForm();
+			InvokeOnUI(ShowAreaForm);
 
 			bitBlt.CaptureAreaRect += GetCustomArea;
 
@@ -40,7 +40,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			base.Dispose(disposing);
 			capture.Dispose();
-			HideAreaForm();
+			InvokeOnUI(HideAreaForm);
 		}
 
 		private static void ShowAreaForm()

@@ -28,7 +28,8 @@ namespace DiscordAudioStream.ScreenCapture
 		public ScreenCaptureManager(CaptureState captureState)
 		{
 			this.captureState = captureState;
-			captureState.StateChanged += UpdateState;
+			// Update the capture state in a separate thread to avoid deadlocks
+			captureState.StateChanged += () => new Thread(UpdateState).Start();
 
 			// Start capture
 			RefreshFramerate();
