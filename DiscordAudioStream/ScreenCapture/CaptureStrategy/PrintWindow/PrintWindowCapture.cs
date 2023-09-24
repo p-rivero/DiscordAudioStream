@@ -17,7 +17,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			if (captureCursor)
 			{
 				var paintCursor = new CursorPainter(printWindow);
-				paintCursor.CaptureAreaRect += GetWindowArea;
+				paintCursor.CaptureAreaRect += () => GetWindowArea(windowHandle);
 				capture = paintCursor;
 			}
 			else
@@ -35,11 +35,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			base.Dispose(disposing);
 			capture.Dispose();
-		}
-
-		private Rectangle GetWindowArea()
-		{
-			return WindowCapture.GetWindowArea(windowHandle);
 		}
 	}
 }

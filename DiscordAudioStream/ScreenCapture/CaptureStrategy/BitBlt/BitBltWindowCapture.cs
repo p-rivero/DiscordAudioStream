@@ -13,12 +13,12 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			windowHandle = hWnd;
 			var bitBlt = new BitBltCapture();
-			bitBlt.CaptureAreaRect += GetWindowArea;
+			bitBlt.CaptureAreaRect += () => GetWindowArea(windowHandle);
 
 			if (captureCursor)
 			{
 				var paintCursor = new CursorPainter(bitBlt);
-				paintCursor.CaptureAreaRect += GetWindowArea;
+				paintCursor.CaptureAreaRect += () => GetWindowArea(windowHandle);
 				capture = paintCursor;
 			}
 			else
@@ -42,11 +42,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 			// We are no longer capturing the window, do not bring it to front
 			SetWindowTopmost(windowHandle, false);
-		}
-
-		private Rectangle GetWindowArea()
-		{
-			return GetWindowArea(windowHandle);
 		}
 
 		private static void SetWindowTopmost(IntPtr hWnd, bool bringToFront)
