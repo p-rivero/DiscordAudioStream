@@ -50,7 +50,7 @@ Use this method if none of the previous ones work.
 
 ## Windows 10
 
-This is the recommended window capture method if you are using Windows 11 or Windows 10 (and you don't mind the yellow border).
+This is the recommended window capture method if you are using Windows 11 or Windows 10.
 
 **Pros:**
 
@@ -66,9 +66,9 @@ This is the recommended window capture method if you are using Windows 11 or Win
 
 ## PrintWindow
 
-Use this method if you are using Windows 8.1 (or Windows 10 if you don't want a yellow border).
+Use this method if you are using Windows 7, Windows 8 or Windows 8.1.
 
-> **Warning:** Do not use this method if you are sensitive to flashes or suffer from epilepsy, since some old programs may flicker while using this method (it's uncommon and with most programs the flickering is barely noticeable, but I don't want to take any risks).
+> **Warning:** Some programs may flash or flicker while using this capture method. Usually it's not very noticeable, but I strongly discourage using `PrintWindow` if you are sensitive to flashes or suffer from epilepsy.
 
 **Pros:**
 
@@ -77,8 +77,8 @@ Use this method if you are using Windows 8.1 (or Windows 10 if you don't want a 
 **Cons:**
 
 - Capture is performed using the CPU (slow).
-- Requires Windows 8.1 or higher.
-- May cause flickering.
+- Requires Windows 8.1 or higher for the best results. Windows 7 and Windows 8 will work fine, but some elements may be displayed incorrectly.
+- May cause flickering (see warning above).
 
 
 ## BitBlt
