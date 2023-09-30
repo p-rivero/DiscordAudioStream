@@ -1,4 +1,4 @@
-**Important:** Please note that "Capture all windows" and "Custom Area" only support `BitBlt` and ignore the selected capture method.
+**Important:** Please note that "Everything" (capture all screens) and "Custom area" only support `BitBlt` and ignore the selected capture method.
 
 # Full-screen capture
 
