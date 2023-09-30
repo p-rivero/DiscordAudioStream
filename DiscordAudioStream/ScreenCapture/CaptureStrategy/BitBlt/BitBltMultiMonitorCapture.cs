@@ -4,12 +4,12 @@ using System.Windows.Forms;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
-	public class BitBltMultimonitorCapture : CaptureSource
+	public class BitBltMultiMonitorCapture : CaptureSource
 	{
 		private readonly CaptureSource capture;
 		private readonly Rectangle virtualScreenRectangle = SystemInformation.VirtualScreen;
 
-		public BitBltMultimonitorCapture(bool captureCursor)
+		public BitBltMultiMonitorCapture(bool captureCursor)
 		{
 			var bitBlt = new BitBltCapture();
 			bitBlt.CaptureAreaRect += GetMonitorArea;

@@ -12,13 +12,8 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 		public Win10MonitorCapture(Screen monitor, bool captureCursor)
 		{
-			// Get the handle of the screen
-			// Screen.GetHashCode() is implemented as "return (int)hmonitor;"
-			int handle = monitor.GetHashCode();
-			IntPtr hMon = new IntPtr(handle);
-
-			GraphicsCaptureItem item = CaptureHelper.CreateItemForMonitor(hMon);
-			winCapture = new Win10Capture(item, captureCursor);
+			IntPtr hMon = GetScreenHandle(monitor);
+			winCapture = new Win10Capture(CaptureHelper.CreateItemForMonitor(hMon), captureCursor);
 		}
 
 		public override Bitmap CaptureFrame()
@@ -30,6 +25,13 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			base.Dispose(disposing);
 			winCapture.Dispose();
+		}
+
+		private IntPtr GetScreenHandle(Screen screen)
+		{
+			// Screen.GetHashCode() is implemented as "return (int)hmonitor"
+			int hmonitor = screen.GetHashCode();
+			return new IntPtr(hmonitor);
 		}
 	}
 }

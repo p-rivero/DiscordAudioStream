@@ -79,6 +79,7 @@
       <DependentUpon>AudioMeterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AudioPlayback.cs" />
+    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Win10MultiMonitorCapture.cs" />
     <Compile Include="Startup\CommandArguments.cs" />
     <Compile Include="CustomComponents\AudioMeter.cs">
       <SubType>Component</SubType>

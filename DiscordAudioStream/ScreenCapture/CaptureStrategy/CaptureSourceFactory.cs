@@ -15,13 +15,13 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 					result = WindowSource(state);
 					break;
 				case CaptureState.CaptureTarget.Screen:
-					result = ScreenSource(state);
+					result = MonitorSource(state);
 					break;
 				case CaptureState.CaptureTarget.AllScreens:
-					result = new BitBltMultimonitorCapture(state.CapturingCursor);
+					result = MultiMonitorSource(state);
 					break;
 				case CaptureState.CaptureTarget.CustomArea:
-					result = new BitBltCustomAreaCapture(state.CapturingCursor);
+					result = CustomAreaSource(state);
 					break;
 				default:
 					throw new ArgumentException("Invalid capture target");
@@ -54,7 +54,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			}
 		}
 		
-		private static CaptureSource ScreenSource(CaptureState state)
+		private static CaptureSource MonitorSource(CaptureState state)
 		{
 			// Capturing a screen
 			switch (state.ScreenMethod)
@@ -71,6 +71,20 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				default:
 					throw new ArgumentException("Invalid ScreenCaptureMethod");
 			}
+		}
+		
+		private static CaptureSource MultiMonitorSource(CaptureState state)
+		{
+			if (Win10MultiMonitorCapture.IsAvailable() && state.ScreenMethod != CaptureState.ScreenCaptureMethod.BitBlt)
+			{
+				return new Win10MultiMonitorCapture(state.CapturingCursor);
+			}
+			return new BitBltMultiMonitorCapture(state.CapturingCursor);
+		}
+		
+		private static CaptureSource CustomAreaSource(CaptureState state)
+		{
+			return new BitBltCustomAreaCapture(state.CapturingCursor);
 		}
 	}
 }
