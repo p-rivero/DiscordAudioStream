@@ -21,6 +21,9 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		private static readonly IDirect3DDevice device = Direct3D11Helper.CreateDevice();
 		private static readonly Device d3dDevice = Direct3D11Helper.CreateSharpDXDevice(device);
 
+		public delegate Rectangle CropCustomArea();
+		public CropCustomArea CropCustomAreaDelegate { get; set; }
+
 		public Win10Capture(GraphicsCaptureItem item, bool captureCursor)
 		{
 			framePool = Direct3D11CaptureFramePool.Create(
@@ -58,32 +61,31 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 		public override Bitmap CaptureFrame()
 		{
-			Direct3D11CaptureFrame frame = framePool.TryGetNextFrame();
-			if (frame == null)
+			using (Direct3D11CaptureFrame frame = framePool.TryGetNextFrame())
 			{
-				// No new content
-				return null;
-			}
+				if (frame == null)
+				{
+					// No new content
+					return null;
+				}
 
-			int width = frame.ContentSize.Width;
-			int height = frame.ContentSize.Height;
+				int width = frame.ContentSize.Width;
+				int height = frame.ContentSize.Height;
 
-			if (width != lastSize.Width || height != lastSize.Height)
-			{
-				// The thing we have been capturing has changed size.
-				lastSize = frame.ContentSize;
+				if (width != lastSize.Width || height != lastSize.Height)
+				{
+					lastSize = frame.ContentSize;
+					InvokeOnUI(() => framePool.Recreate(device, DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, frame.ContentSize));
+				}
 
-				// Need to recreate the framePool on the UI thread
-				InvokeOnUI(new Action(() =>
-					framePool.Recreate(device, DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, frame.ContentSize)
-				));
-			}
-
-			using (Texture2D texture = Direct3D11Helper.CreateSharpDXTexture2D(frame.Surface))
-			{
-				Bitmap bmp = BitmapHelper.CreateFromTexture2D(texture, d3dDevice);
-				frame.Dispose();
-				return bmp;
+				using (Texture2D texture = Direct3D11Helper.CreateSharpDXTexture2D(frame.Surface))
+				{
+					if (CropCustomAreaDelegate != null)
+					{
+						return BitmapHelper.CreateFromTexture2D(texture, d3dDevice, CropCustomAreaDelegate());
+					}
+					return BitmapHelper.CreateFromTexture2D(texture, d3dDevice);
+				}
 			}
 		}
 	}

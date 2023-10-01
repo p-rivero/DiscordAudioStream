@@ -10,36 +10,42 @@ namespace DiscordAudioStream.ScreenCapture
 	{
 		public static Bitmap CreateFromTexture2D(Texture2D texture, Device d3dDevice)
 		{
-			int width = texture.Description.Width;
-			int height = texture.Description.Height;
+			Rectangle copiedArea = new Rectangle(0, 0, texture.Description.Width, texture.Description.Height);
+			return CreateFromTexture2D(texture, d3dDevice, copiedArea);
+		}
+
+		public static Bitmap CreateFromTexture2D(Texture2D texture, Device d3dDevice, Rectangle copiedArea)
+		{
+			int width = copiedArea.Width;
+			int height = copiedArea.Height;
 
 			using (Texture2D screenTexture = CreateReadableTexture(width, height, d3dDevice))
 			{
-				// copy resource into memory that can be accessed by the CPU
+				// Copy resource into memory that can be accessed by the CPU
 				d3dDevice.ImmediateContext.CopyResource(texture, screenTexture);
-
-				var mapSource = d3dDevice.ImmediateContext.MapSubresource(screenTexture, 0, MapMode.Read, MapFlags.None);
-				var boundsRect = new Rectangle(0, 0, width, height);
+				DataBox sourceData = d3dDevice.ImmediateContext.MapSubresource(screenTexture, 0, MapMode.Read, MapFlags.None);
 
 				// Create new Bitmap
 				Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-
-				// Copy pixels from screen capture Texture to GDI bitmap
-				BitmapData bitmapData = bmp.LockBits(boundsRect, ImageLockMode.WriteOnly, bmp.PixelFormat);
-				IntPtr sourcePtr = mapSource.DataPointer;
-				IntPtr destinationPtr = bitmapData.Scan0;
+				Rectangle boundsRect = new Rectangle(0, 0, width, height);
+				BitmapData destinationData = bmp.LockBits(boundsRect, ImageLockMode.WriteOnly, bmp.PixelFormat);
+				
+				IntPtr sourcePtr = sourceData.DataPointer 
+					+ copiedArea.Top * sourceData.RowPitch
+					+ copiedArea.Left * 4;
+				IntPtr destinationPtr = destinationData.Scan0;
 				for (int y = 0; y < height; y++)
 				{
 					// Copy a single line 
 					Utilities.CopyMemory(destinationPtr, sourcePtr, width * 4);
 
 					// Advance pointers
-					sourcePtr += mapSource.RowPitch;
-					destinationPtr += bitmapData.Stride;
+					sourcePtr += sourceData.RowPitch;
+					destinationPtr += destinationData.Stride;
 				}
 
 				// Release source and dest locks
-				bmp.UnlockBits(bitmapData);
+				bmp.UnlockBits(destinationData);
 				d3dDevice.ImmediateContext.UnmapSubresource(screenTexture, 0);
 
 				return bmp;

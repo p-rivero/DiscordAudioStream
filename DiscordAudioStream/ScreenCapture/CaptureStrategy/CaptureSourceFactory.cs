@@ -84,6 +84,10 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		
 		private static CaptureSource CustomAreaSource(CaptureState state)
 		{
+			if (Win10MultiMonitorCapture.IsAvailable() && state.ScreenMethod != CaptureState.ScreenCaptureMethod.BitBlt)
+			{
+				return new Win10CustomAreaCapture(state.CapturingCursor);
+			}
 			return new BitBltCustomAreaCapture(state.CapturingCursor);
 		}
 	}
