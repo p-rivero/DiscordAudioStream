@@ -19,7 +19,7 @@ namespace DiscordAudioStream.ScreenCapture
 			int width = copiedArea.Width;
 			int height = copiedArea.Height;
 
-			using (Texture2D screenTexture = CreateReadableTexture(width, height, d3dDevice))
+			using (Texture2D screenTexture = CreateReadableTexture(texture.Description.Width, texture.Description.Height, d3dDevice))
 			{
 				// Copy resource into memory that can be accessed by the CPU
 				d3dDevice.ImmediateContext.CopyResource(texture, screenTexture);

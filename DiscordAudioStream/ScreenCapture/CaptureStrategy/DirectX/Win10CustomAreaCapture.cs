@@ -13,7 +13,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		public Win10CustomAreaCapture(bool captureCursor)
 		{
 			capture = new Win10Capture(CaptureHelper.CreateItemForMonitor(IntPtr.Zero), captureCursor);
-			capture.CropCustomAreaDelegate += GetCustomArea;
+			capture.CropCustomAreaDelegate += () => GetCustomArea(true);
 		}
 
 		public override Bitmap CaptureFrame()

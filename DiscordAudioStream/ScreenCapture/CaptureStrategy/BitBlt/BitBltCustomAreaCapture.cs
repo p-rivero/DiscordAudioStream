@@ -9,12 +9,12 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		public BitBltCustomAreaCapture(bool captureCursor)
 		{
 			BitBltCapture bitBlt = new BitBltCapture();
-			bitBlt.CaptureAreaRect += GetCustomArea;
+			bitBlt.CaptureAreaRect += () => GetCustomArea(false);
 
 			if (captureCursor)
 			{
 				CursorPainter paintCursor = new CursorPainter(bitBlt);
-				paintCursor.CaptureAreaRect += GetCustomArea;
+				paintCursor.CaptureAreaRect += () => GetCustomArea(false);
 				capture = paintCursor;
 			}
 			else
