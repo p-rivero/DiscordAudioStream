@@ -1,6 +1,5 @@
 ﻿using Composition.WindowsRuntimeHelpers;
 using SharpDX.Direct3D11;
-using System;
 using System.Drawing;
 using Windows.Foundation.Metadata;
 using Windows.Graphics;
@@ -10,8 +9,6 @@ using Windows.Graphics.DirectX.Direct3D11;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
-	// DirectX capture using Windows.Graphics.Capture
-
 	public class Win10Capture : CaptureSource
 	{
 		private readonly Direct3D11CaptureFramePool framePool;
@@ -37,7 +34,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			if (ApiInformation.IsPropertyPresent("Windows.Graphics.Capture.GraphicsCaptureSession", "IsBorderRequired"))
 			{
 				Logger.Log("Attempting to disable yellow border...");
-				// This must be done in a separate method, otherwise a MethodNotFound will be thrown before any code can be executed
 				DisableBorder(session);
 			}
 
@@ -49,6 +45,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 		private static void DisableBorder(GraphicsCaptureSession session)
 		{
+			// This must be done in a separate method, otherwise a MethodNotFound will be thrown before any code can be executed
 			session.IsBorderRequired = false;
 		}
 

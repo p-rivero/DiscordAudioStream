@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.Foundation.Metadata;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
@@ -75,7 +76,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		
 		private static CaptureSource MultiMonitorSource(CaptureState state)
 		{
-			if (Win10MultiMonitorCapture.IsAvailable() && state.ScreenMethod != CaptureState.ScreenCaptureMethod.BitBlt)
+			if (Win10CaptureAvailable() && state.ScreenMethod != CaptureState.ScreenCaptureMethod.BitBlt)
 			{
 				return new Win10MultiMonitorCapture(state.CapturingCursor);
 			}
@@ -84,11 +85,29 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		
 		private static CaptureSource CustomAreaSource(CaptureState state)
 		{
-			if (Win10MultiMonitorCapture.IsAvailable() && state.ScreenMethod != CaptureState.ScreenCaptureMethod.BitBlt)
+			if (Win10CaptureAvailable() && state.ScreenMethod != CaptureState.ScreenCaptureMethod.BitBlt)
 			{
 				return new Win10CustomAreaCapture(state.CapturingCursor);
 			}
 			return new BitBltCustomAreaCapture(state.CapturingCursor);
+		}
+
+		private static bool Win10CaptureAvailable()
+		{
+			try
+			{
+				return HasUniversalApiContractv9();
+			}
+			catch (TypeLoadException)
+			{
+				return false;
+			}
+		}
+
+		private static bool HasUniversalApiContractv9()
+		{
+			// This must be done in a separate method, otherwise a TypeLoadException will be thrown before any code can be executed
+			return ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 9);
 		}
 	}
 }

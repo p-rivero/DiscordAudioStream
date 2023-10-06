@@ -2,8 +2,6 @@
 using Composition.WindowsRuntimeHelpers;
 using System;
 using System.Drawing;
-using System.Windows.Forms;
-using Windows.Graphics.Capture;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
@@ -11,12 +9,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 	{
 
 		private readonly Win10Capture winCapture;
-
-		public static bool IsAvailable()
-		{
-			// TODO: Check windows version
-			return ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 9);
-		}
 
 		public Win10MultiMonitorCapture(bool captureCursor)
 		{

@@ -1,5 +1,3 @@
-**Important:** Please note that "Everything" (capture all screens) and "Custom area" only support `BitBlt` and ignore the selected capture method.
-
 # Full-screen capture
 
 ## DXGI Duplication
@@ -93,3 +91,17 @@ Use this method if none of the previous ones work.
 
 - Capture is performed using the CPU (slow).
 - Cannot capture windows that are partially outside the screen or occluded. When using this method, the captured window will be brought to the front (other windows cannot be placed on top).
+
+---
+
+# Custom area and multi-monitor capture
+
+The capture method used for "Custom area" and "Everything"* depends on the **Full-screen capture method** setting.
+
+- If your OS supports it and you have selected `DXGI Duplication` or `Windows 10`, the `Windows 10` GPU-accelerated method will be used. This is highly recommended.
+
+- If you have selected `BitBlt` or your OS does not support the `Windows 10` method, the `BitBlt` method will be used.
+
+Please note that the `DXGI Duplication` method does not allow capturing a custom area or multiple monitors at once.
+
+*\* "Everything" is only available when there are 2 or more monitors.*
