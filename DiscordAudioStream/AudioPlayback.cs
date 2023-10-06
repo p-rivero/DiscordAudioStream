@@ -9,8 +9,7 @@ namespace DiscordAudioStream.AudioCapture
 {
 	class AudioPlayback
 	{
-		public delegate void AudioLevelChangedDelegate(float left, float right);
-		public event AudioLevelChangedDelegate AudioLevelChanged;
+		public event Action<float, float> AudioLevelChanged;
 
 		private const int DESIRED_LATENCY_MS = 50;
 

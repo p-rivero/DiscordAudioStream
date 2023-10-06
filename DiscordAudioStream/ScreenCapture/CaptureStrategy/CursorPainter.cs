@@ -7,8 +7,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
 	public class CursorPainter : CaptureSource
 	{
-		public delegate Rectangle CaptureAreaRectDelegate();
-
 		private readonly CaptureSource source;
 		
 		private IntPtr currentCursorHandle = IntPtr.Zero;
@@ -21,7 +19,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			Logger.Log($"Instantiating CursorPainter source (wrapping {source.GetType().Name})");
 		}
 
-		public CaptureAreaRectDelegate CaptureAreaRect { get; set; }
+		public Func<Rectangle> CaptureAreaRect { get; set; }
 
 		public override Bitmap CaptureFrame()
 		{

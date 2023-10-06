@@ -7,27 +7,43 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 	public abstract class CustomAreaCapture : CaptureSource
 	{
 		private readonly static AreaForm areaForm = new AreaForm();
-		private static int customAreaCaptureCount = 0;
-		
+		private static int instanceCount = 0;
+		private readonly static object instanceCountLock = new object();
+
 		private readonly Rectangle bounds = SystemInformation.VirtualScreen;
 
 		protected CustomAreaCapture()
 		{
-			if (customAreaCaptureCount == 0)
-			{
-				InvokeOnUI(areaForm.Show);
-			}
-			customAreaCaptureCount++;
+			ShowAreaForm();
 		}
 
 		protected override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);
-			
-			customAreaCaptureCount--;
-			if (customAreaCaptureCount == 0)
+			HideAreaForm();
+		}
+
+		private static void ShowAreaForm()
+		{
+			lock (instanceCountLock)
 			{
-				InvokeOnUI(areaForm.Hide);
+				if (instanceCount == 0)
+				{
+					InvokeOnUI(areaForm.Show);
+				}
+				instanceCount++;
+			}
+		}
+		
+		private static void HideAreaForm()
+		{
+			lock (instanceCountLock)
+			{
+				instanceCount--;
+				if (instanceCount == 0)
+				{
+					InvokeOnUI(areaForm.Hide);
+				}
 			}
 		}
 

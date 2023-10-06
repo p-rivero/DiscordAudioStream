@@ -10,8 +10,7 @@ namespace DiscordAudioStream.ScreenCapture
 {
 	public class ScreenCaptureManager
 	{
-		public delegate void CaptureAbortDelegate();
-		public event CaptureAbortDelegate CaptureAborted;
+		public event Action CaptureAborted;
 
 		// Control framerate limit
 		public int CaptureIntervalMs { get; private set; } = 0;

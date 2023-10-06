@@ -26,9 +26,7 @@ namespace DiscordAudioStream.ScreenCapture
 			CustomArea
 		}
 
-		public delegate void StateChangedDelegate();
-		public event StateChangedDelegate StateChanged;
-
+		public event Action StateChanged;
 
 		private IntPtr hWnd = IntPtr.Zero;
 		private Screen screen = null;

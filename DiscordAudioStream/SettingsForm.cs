@@ -8,10 +8,9 @@ namespace DiscordAudioStream
 {
 	partial class SettingsForm : Form
 	{
-		public delegate void SettingChangedDelegate();
-		public event SettingChangedDelegate CaptureMethodChanged;
-		public event SettingChangedDelegate FramerateChanged;
-		public event SettingChangedDelegate ShowAudioInputsChanged;
+		public event Action CaptureMethodChanged;
+		public event Action FramerateChanged;
+		public event Action ShowAudioInputsChanged;
 
 		private enum FrameRates
 		{

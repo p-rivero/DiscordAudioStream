@@ -367,7 +367,7 @@ namespace DiscordAudioStream
 			else
 			{
 				// Use old sound settings
-				var cplPath = Path.Combine(Environment.SystemDirectory, "control.exe");
+				string cplPath = Path.Combine(Environment.SystemDirectory, "control.exe");
 				Process.Start(cplPath, "/name Microsoft.Sound");
 			}
 		}

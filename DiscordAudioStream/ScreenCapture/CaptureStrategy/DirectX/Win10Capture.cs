@@ -1,5 +1,6 @@
 ﻿using Composition.WindowsRuntimeHelpers;
 using SharpDX.Direct3D11;
+using System;
 using System.Drawing;
 using Windows.Foundation.Metadata;
 using Windows.Graphics;
@@ -18,8 +19,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		private static readonly IDirect3DDevice device = Direct3D11Helper.CreateDevice();
 		private static readonly Device d3dDevice = Direct3D11Helper.CreateSharpDXDevice(device);
 
-		public delegate Rectangle CropCustomArea();
-		public CropCustomArea CropCustomAreaDelegate { get; set; }
+		public Func<Rectangle> CustomAreaCrop { get; set; }
 
 		public Win10Capture(GraphicsCaptureItem item, bool captureCursor)
 		{
@@ -77,9 +77,9 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 				using (Texture2D texture = Direct3D11Helper.CreateSharpDXTexture2D(frame.Surface))
 				{
-					if (CropCustomAreaDelegate != null)
+					if (CustomAreaCrop != null)
 					{
-						return BitmapHelper.CreateFromTexture2D(texture, d3dDevice, CropCustomAreaDelegate());
+						return BitmapHelper.CreateFromTexture2D(texture, d3dDevice, CustomAreaCrop());
 					}
 					return BitmapHelper.CreateFromTexture2D(texture, d3dDevice);
 				}

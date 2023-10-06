@@ -11,12 +11,12 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 		public BitBltMultiMonitorCapture(bool captureCursor)
 		{
-			var bitBlt = new BitBltCapture();
+			BitBltCapture bitBlt = new BitBltCapture();
 			bitBlt.CaptureAreaRect += GetMonitorArea;
 
 			if (captureCursor)
 			{
-				var paintCursor = new CursorPainter(bitBlt);
+				CursorPainter paintCursor = new CursorPainter(bitBlt);
 				paintCursor.CaptureAreaRect += GetMonitorArea;
 				capture = paintCursor;
 			}
