@@ -1,7 +1,8 @@
-﻿using Composition.WindowsRuntimeHelpers;
-using System;
+﻿using System;
 using System.Drawing;
-using System.Threading.Tasks;
+
+using Composition.WindowsRuntimeHelpers;
+
 using Windows.Graphics.Capture;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy

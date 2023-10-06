@@ -69,7 +69,7 @@ namespace DiscordAudioStream.ScreenCapture
 			double dynamicScaleFactor;
 			if (constantScaleFactor != 0) dynamicScaleFactor = constantScaleFactor;
 			else dynamicScaleFactor = ComputeDynamicScaleFactor(original);
-			
+
 			int newWidth = (int)(original.Width * dynamicScaleFactor);
 			int newHeight = (int)(original.Height * dynamicScaleFactor);
 

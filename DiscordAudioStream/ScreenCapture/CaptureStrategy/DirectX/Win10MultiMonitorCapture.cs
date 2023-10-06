@@ -1,7 +1,7 @@
-﻿using Windows.Foundation.Metadata;
-using Composition.WindowsRuntimeHelpers;
-using System;
+﻿using System;
 using System.Drawing;
+
+using Composition.WindowsRuntimeHelpers;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {

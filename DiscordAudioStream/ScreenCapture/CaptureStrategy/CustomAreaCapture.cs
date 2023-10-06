@@ -34,7 +34,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 				instanceCount++;
 			}
 		}
-		
+
 		private static void HideAreaForm()
 		{
 			lock (instanceCountLock)
@@ -55,7 +55,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			int top = areaForm.Top + BORDER;
 			int width = areaForm.Width - 2 * BORDER;
 			int height = areaForm.Height - 2 * BORDER;
-			
+
 			left = Math.Max(left, bounds.X);
 			top = Math.Max(top, bounds.Y);
 			left = Math.Min(left, bounds.Right - width);

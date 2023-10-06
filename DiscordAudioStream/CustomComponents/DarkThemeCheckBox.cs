@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Windows.Forms;
@@ -57,7 +56,7 @@ namespace CustomComponents
 				base.OnPaint(pevent);
 				return;
 			}
-			
+
 			pevent.Graphics.Clear(BackColor);
 			PaintSquare(pevent.Graphics);
 			PaintText(pevent.Graphics);
@@ -74,7 +73,7 @@ namespace CustomComponents
 			if (pressed) bgColor = DarkThemeManager.PressedColor;
 			else if (hovered) bgColor = DarkThemeManager.DarkHoverColor;
 			else bgColor = DarkThemeManager.DarkSecondColor;
-			
+
 			int extraThickness = Focused ? 1 : 0;
 			int x = extraThickness;
 			int y = 2 + extraThickness;

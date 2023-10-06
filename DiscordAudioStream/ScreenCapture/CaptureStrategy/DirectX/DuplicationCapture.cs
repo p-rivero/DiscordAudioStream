@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Drawing;
+
 using SharpDX;
-using SharpDX.DXGI;
 using SharpDX.Direct3D11;
+using SharpDX.DXGI;
+
 using D3D11Device = SharpDX.Direct3D11.Device;
 using DXGIResource = SharpDX.DXGI.Resource;
 
@@ -15,8 +17,8 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		// https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values
 		private const int E_ACCESSDENIED = unchecked((int)0x80070005);
 		// https://docs.microsoft.com/en-us/windows/win32/direct3ddxgi/dxgi-error
-		private const int DXGI_ERROR_ACCESS_LOST   = unchecked((int)0x887A0026);
-		private const int DXGI_ERROR_WAIT_TIMEOUT  = unchecked((int)0x887A0027);
+		private const int DXGI_ERROR_ACCESS_LOST = unchecked((int)0x887A0026);
+		private const int DXGI_ERROR_WAIT_TIMEOUT = unchecked((int)0x887A0027);
 
 		private static OutputDuplication[] screens = null;
 		private static Bitmap[] cachedThumbnails = null;
@@ -44,7 +46,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			var adapter = Adapter;
 			// Iterate adapter.Outputs and create OutputDuplication on each
-			var result = new OutputDuplication[adapter.Outputs.Length];
+			OutputDuplication[] result = new OutputDuplication[adapter.Outputs.Length];
 			for (int i = 0; i < result.Length; i++)
 			{
 				Output1 o = adapter.Outputs[i].QueryInterface<Output1>();
@@ -97,7 +99,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 					RefreshScreen(index);
 					return null;
 				}
-				
+
 				// Try to get duplicated frame in 100 ms
 				screens[index].AcquireNextFrame(100, out _, out DXGIResource screenResource);
 				// Success: convert captured frame to Bitmap

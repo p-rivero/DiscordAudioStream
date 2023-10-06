@@ -6,16 +6,16 @@ namespace DiscordAudioStream
 {
 	internal static class Logger
 	{
-		const string LOG_FILE_PATH = "DiscordAudioStream_log.txt";
-		
-		const int GROUP_TIME_DELTA_MS = 50;
+		private const string LOG_FILE_PATH = "DiscordAudioStream_log.txt";
+
+		private const int GROUP_TIME_DELTA_MS = 50;
 
 		private static readonly int startTime = Environment.TickCount;
 
 		private static string groupCallerName = null;
 		private static int groupLastLogTime = 0;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3963", Justification = 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3963", Justification =
 			"Cannot convert this static constructor into an inline initialization")]
 		static Logger()
 		{
@@ -34,13 +34,13 @@ namespace DiscordAudioStream
 				}
 			}
 		}
-		
+
 		public static void EmptyLine()
 		{
 			ForceStartNewGroup();
 			Trace.WriteLine("");
 		}
-		
+
 		public static void Log(string text)
 		{
 			int timestamp = GetTimestamp();

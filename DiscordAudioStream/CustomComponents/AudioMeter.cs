@@ -7,20 +7,20 @@ namespace CustomComponents
 	public class AudioMeter : NAudio.Gui.VolumeMeter
 	{
 		private const double BACKGROUND_PERCENT = 0.1667;
-		private const int BACKGROUND_COLOR_INACTIVE = unchecked((int) 0xff225561);
-		private const int BACKGROUND_COLOR_ACTIVE = unchecked((int) 0xff61c4db);
+		private const int BACKGROUND_COLOR_INACTIVE = unchecked((int)0xff225561);
+		private const int BACKGROUND_COLOR_ACTIVE = unchecked((int)0xff61c4db);
 
 		private const double SPEAKING_PERCENT = 0.8333;
-		private const int SPEAKING_COLOR_INACTIVE = unchecked((int) 0xff226325);
-		private const int SPEAKING_COLOR_ACTIVE = unchecked((int) 0xff5fdd65);
+		private const int SPEAKING_COLOR_INACTIVE = unchecked((int)0xff226325);
+		private const int SPEAKING_COLOR_ACTIVE = unchecked((int)0xff5fdd65);
 
 		private const double LOUD_PERCENT = 0.96;
-		private const int LOUD_COLOR_INACTIVE = unchecked((int) 0xff556122);
-		private const int LOUD_COLOR_ACTIVE = unchecked((int) 0xffc4db61);
+		private const int LOUD_COLOR_INACTIVE = unchecked((int)0xff556122);
+		private const int LOUD_COLOR_ACTIVE = unchecked((int)0xffc4db61);
 
 		private const double CLIPPING_PERCENT = 1;
-		private const int CLIPPING_COLOR_INACTIVE = unchecked((int) 0xff5c2222);
-		private const int CLIPPING_COLOR_ACTIVE = unchecked((int) 0xffce0606);
+		private const int CLIPPING_COLOR_INACTIVE = unchecked((int)0xff5c2222);
+		private const int CLIPPING_COLOR_ACTIVE = unchecked((int)0xffce0606);
 
 
 		protected override void OnPaint(PaintEventArgs pe)

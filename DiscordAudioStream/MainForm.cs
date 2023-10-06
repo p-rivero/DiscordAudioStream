@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Diagnostics;
+
 using CustomComponents;
+
 using DLLs;
-using System.Collections.Generic;
 
 namespace DiscordAudioStream
 {
@@ -17,7 +19,7 @@ namespace DiscordAudioStream
 		private readonly Size defaultWindowSize;
 		private readonly Size defaultPreviewSize;
 		private readonly Point defaultPreviewLocation;
-		
+
 		public MainForm(bool darkMode)
 		{
 			Logger.EmptyLine();
@@ -83,7 +85,7 @@ namespace DiscordAudioStream
 		{
 			areaComboBox.Items.Clear();
 			int numSeparators = 0;
-			foreach (var (item, hasSeparator) in items)
+			foreach ((string item, bool hasSeparator) in items)
 			{
 				if (hasSeparator)
 				{
@@ -164,7 +166,7 @@ namespace DiscordAudioStream
 				controller.ShowAudioMeterForm(darkMode);
 				this.Text = Properties.Settings.Default.StreamTitle;
 				previewBox.ContextMenuStrip = streamContextMenu;
-				
+
 				showAudioMeterToolStripMenuItem.Enabled = HasSomeAudioSource;
 				showAudioMeterToolStripMenuItem.Checked = HasSomeAudioSource && Properties.Settings.Default.ShowAudioMeter;
 			}
@@ -266,7 +268,7 @@ namespace DiscordAudioStream
 			onTopBtn.Checked = Properties.Settings.Default.AlwaysOnTop;
 			captureCursorCheckBox.Checked = Properties.Settings.Default.CaptureCursor;
 			hideTaskbarCheckBox.Checked = Properties.Settings.Default.HideTaskbar;
-			
+
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
@@ -339,7 +341,7 @@ namespace DiscordAudioStream
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S4036", Justification = "This ms-settings URI is safe")]
 		private void volumeMixerButton_Click(object sender, EventArgs e)
 		{
-			var osVersionInfo = Ntdll.OsVersionInfoEx.Init();
+			Ntdll.OsVersionInfoEx osVersionInfo = Ntdll.OsVersionInfoEx.Init();
 			Ntdll.RtlGetVersion(ref osVersionInfo);
 
 			if (osVersionInfo.MajorVersion >= 10)
@@ -349,7 +351,7 @@ namespace DiscordAudioStream
 			else
 			{
 				// Use old volume mixer
-				var cplPath = Path.Combine(Environment.SystemDirectory, "sndvol.exe");
+				string cplPath = Path.Combine(Environment.SystemDirectory, "sndvol.exe");
 				Process.Start(cplPath);
 			}
 		}
@@ -357,7 +359,7 @@ namespace DiscordAudioStream
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S4036", Justification = "This ms-settings URI is safe")]
 		private void soundDevicesButton_Click(object sender, EventArgs e)
 		{
-			var osVersionInfo = Ntdll.OsVersionInfoEx.Init();
+			Ntdll.OsVersionInfoEx osVersionInfo = Ntdll.OsVersionInfoEx.Init();
 			Ntdll.RtlGetVersion(ref osVersionInfo);
 
 			if (osVersionInfo.MajorVersion >= 10 && osVersionInfo.BuildNumber >= 17063)

@@ -5,7 +5,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 	public class BitBltCustomAreaCapture : CustomAreaCapture
 	{
 		private readonly CaptureSource capture;
-		
+
 		public BitBltCustomAreaCapture(bool captureCursor)
 		{
 			BitBltCapture bitBlt = new BitBltCapture();

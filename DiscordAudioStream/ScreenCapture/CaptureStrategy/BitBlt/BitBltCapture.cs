@@ -1,6 +1,7 @@
-﻿using DLLs;
-using System;
+﻿using System;
 using System.Drawing;
+
+using DLLs;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
@@ -20,7 +21,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			hdcDest = Gdi32.CreateCompatibleDC(hdcSrc);
 		}
 
-		public BitBltCapture(): this(User32.GetDesktopWindow()) { }
+		public BitBltCapture() : this(User32.GetDesktopWindow()) { }
 
 		public override Bitmap CaptureFrame()
 		{

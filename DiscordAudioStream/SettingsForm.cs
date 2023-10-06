@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+
 using CustomComponents;
+
 using DiscordAudioStream.ScreenCapture;
 
 namespace DiscordAudioStream
 {
-	partial class SettingsForm : Form
+	internal partial class SettingsForm : Form
 	{
 		public event Action CaptureMethodChanged;
 		public event Action FramerateChanged;
@@ -45,8 +47,8 @@ namespace DiscordAudioStream
 			streamTitleBox.Text = Properties.Settings.Default.StreamTitle;
 			audioMeterCheckBox.Checked = Properties.Settings.Default.ShowAudioMeter;
 
-			windowMethodComboBox.SelectedIndex = (int) captureState.WindowMethod;
-			fullscreenMethodComboBox.SelectedIndex = (int) captureState.ScreenMethod;
+			windowMethodComboBox.SelectedIndex = (int)captureState.WindowMethod;
+			fullscreenMethodComboBox.SelectedIndex = (int)captureState.ScreenMethod;
 
 			FrameRates selectedFramerate = (FrameRates)Properties.Settings.Default.CaptureFramerate;
 			Array allFramerates = Enum.GetValues(typeof(FrameRates));
@@ -120,7 +122,7 @@ namespace DiscordAudioStream
 			Properties.Settings.Default.Save();
 			Logger.EmptyLine();
 			Logger.Log($"Change settings: Theme={Properties.Settings.Default.Theme}. Restarting...");
-			
+
 			Application.Restart();
 			Environment.Exit(0);
 		}
@@ -128,13 +130,13 @@ namespace DiscordAudioStream
 
 		private void classicVolumeMixerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			var cplPath = System.IO.Path.Combine(Environment.SystemDirectory, "sndvol.exe");
+			string cplPath = System.IO.Path.Combine(Environment.SystemDirectory, "sndvol.exe");
 			System.Diagnostics.Process.Start(cplPath);
 		}
 
 		private void audioDevicesLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			var cplPath = System.IO.Path.Combine(Environment.SystemDirectory, "control.exe");
+			string cplPath = System.IO.Path.Combine(Environment.SystemDirectory, "control.exe");
 			System.Diagnostics.Process.Start(cplPath, "/name Microsoft.Sound");
 		}
 
@@ -162,13 +164,13 @@ namespace DiscordAudioStream
 
 		private void fullscreenMethodComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			captureState.ScreenMethod = (CaptureState.ScreenCaptureMethod) fullscreenMethodComboBox.SelectedIndex;
+			captureState.ScreenMethod = (CaptureState.ScreenCaptureMethod)fullscreenMethodComboBox.SelectedIndex;
 			CaptureMethodChanged?.Invoke();
 		}
 
 		private void windowMethodComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			captureState.WindowMethod = (CaptureState.WindowCaptureMethod) windowMethodComboBox.SelectedIndex;
+			captureState.WindowMethod = (CaptureState.WindowCaptureMethod)windowMethodComboBox.SelectedIndex;
 			CaptureMethodChanged?.Invoke();
 		}
 
@@ -227,7 +229,9 @@ namespace DiscordAudioStream
 				Properties.Settings.Default.Save();
 				// Text could contain sensitive information, don't log it
 				Logger.Log("Stream title saved successfully");
-			} catch (ArgumentException ex) {
+			}
+			catch (ArgumentException ex)
+			{
 				Logger.Log("Failed to save stream title: " + ex.Message);
 				// Saving could fail when auto-filling a character with many code points, like some emojis
 				// Once the character has been completely filled, saving should succeed
@@ -238,7 +242,7 @@ namespace DiscordAudioStream
 		{
 			// Nothing changed
 			if (Properties.Settings.Default.ShowAudioMeter == audioMeterCheckBox.Checked) return;
-			
+
 			Properties.Settings.Default.ShowAudioMeter = audioMeterCheckBox.Checked;
 			Properties.Settings.Default.Save();
 			Logger.EmptyLine();

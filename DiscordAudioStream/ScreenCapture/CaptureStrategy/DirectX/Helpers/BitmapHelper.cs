@@ -1,8 +1,9 @@
-﻿using SharpDX;
-using SharpDX.Direct3D11;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+
+using SharpDX;
+using SharpDX.Direct3D11;
 
 namespace DiscordAudioStream.ScreenCapture
 {
@@ -29,8 +30,8 @@ namespace DiscordAudioStream.ScreenCapture
 				Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
 				Rectangle boundsRect = new Rectangle(0, 0, width, height);
 				BitmapData destinationData = bmp.LockBits(boundsRect, ImageLockMode.WriteOnly, bmp.PixelFormat);
-				
-				IntPtr sourcePtr = sourceData.DataPointer 
+
+				IntPtr sourcePtr = sourceData.DataPointer
 					+ copiedArea.Top * sourceData.RowPitch
 					+ copiedArea.Left * 4;
 				IntPtr destinationPtr = destinationData.Scan0;

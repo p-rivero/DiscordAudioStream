@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Text;
 using System.Windows.Forms;
 
 namespace CustomComponents
@@ -26,7 +24,7 @@ namespace CustomComponents
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			e.Graphics.Clear(BackColor);
-			
+
 			DrawMeterLine(e.Graphics, "0", 0f);
 			DrawMeterLine(e.Graphics, "-20", 0.3333f);
 			DrawMeterLine(e.Graphics, "-40", 0.6667f);
@@ -39,7 +37,7 @@ namespace CustomComponents
 				DrawMeterLine(e.Graphics, "-50", 0.8333f);
 			}
 		}
-		
+
 		private void DrawMeterLine(Graphics g, string text, float percent)
 		{
 			const int PADDING = 10;

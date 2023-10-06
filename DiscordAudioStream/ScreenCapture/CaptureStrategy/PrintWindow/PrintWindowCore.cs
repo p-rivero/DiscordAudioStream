@@ -1,6 +1,7 @@
-﻿using DLLs;
-using System;
+﻿using System;
 using System.Drawing;
+
+using DLLs;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {

@@ -12,11 +12,11 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		{
 			windowHandle = hWnd;
 
-			var printWindow = new PrintWindowCore(hWnd);
+			PrintWindowCore printWindow = new PrintWindowCore(hWnd);
 
 			if (captureCursor)
 			{
-				var paintCursor = new CursorPainter(printWindow);
+				CursorPainter paintCursor = new CursorPainter(printWindow);
 				paintCursor.CaptureAreaRect += () => GetWindowArea(windowHandle);
 				capture = paintCursor;
 			}

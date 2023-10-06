@@ -1,9 +1,11 @@
-﻿using DLLs;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+
+using DLLs;
+
+using Microsoft.Win32;
 
 namespace CustomComponents
 {

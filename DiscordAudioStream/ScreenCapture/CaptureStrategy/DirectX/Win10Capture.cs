@@ -1,7 +1,10 @@
-﻿using Composition.WindowsRuntimeHelpers;
-using SharpDX.Direct3D11;
-using System;
+﻿using System;
 using System.Drawing;
+
+using Composition.WindowsRuntimeHelpers;
+
+using SharpDX.Direct3D11;
+
 using Windows.Foundation.Metadata;
 using Windows.Graphics;
 using Windows.Graphics.Capture;

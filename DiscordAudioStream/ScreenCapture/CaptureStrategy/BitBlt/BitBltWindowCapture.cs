@@ -1,6 +1,7 @@
-﻿using DLLs;
-using System;
+﻿using System;
 using System.Drawing;
+
+using DLLs;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
@@ -12,12 +13,12 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 		public BitBltWindowCapture(IntPtr hWnd, bool captureCursor)
 		{
 			windowHandle = hWnd;
-			var bitBlt = new BitBltCapture();
+			BitBltCapture bitBlt = new BitBltCapture();
 			bitBlt.CaptureAreaRect += () => GetWindowArea(windowHandle);
 
 			if (captureCursor)
 			{
-				var paintCursor = new CursorPainter(bitBlt);
+				CursorPainter paintCursor = new CursorPainter(bitBlt);
 				paintCursor.CaptureAreaRect += () => GetWindowArea(windowHandle);
 				capture = paintCursor;
 			}

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Threading;
+
 using DiscordAudioStream.ScreenCapture.CaptureStrategy;
+
 using Mono.Options;
 
 namespace DiscordAudioStream
@@ -36,7 +37,7 @@ namespace DiscordAudioStream
 					v => printFps = v != null
 				},
 				{
-					"h|help|?", 
+					"h|help|?",
 					"Show this message and exit",
 					v => showHelp = v != null
 				},
@@ -57,7 +58,7 @@ namespace DiscordAudioStream
 				ExitImmediately = true;
 				return;
 			}
-			
+
 			if (showHelp)
 			{
 				PrintHelp(options);
@@ -66,7 +67,7 @@ namespace DiscordAudioStream
 		}
 
 		public bool ExitImmediately { get; private set; } = false;
-		
+
 
 		public void ProcessArgsBeforeMainForm()
 		{

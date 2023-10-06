@@ -1,8 +1,9 @@
-﻿using DLLs;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Timers;
 using System.Windows.Forms;
+
+using DLLs;
 
 namespace DiscordAudioStream
 {
@@ -69,7 +70,7 @@ namespace DiscordAudioStream
 				Height = Math.Min(targetHeight, bounds.Bottom - this.Top);
 			}));
 		}
-		
+
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			const int OFFSET = BORDER_WIDTH_PX / 2;
@@ -177,7 +178,7 @@ namespace DiscordAudioStream
 			Rectangle screen = SystemInformation.VirtualScreen;
 
 			// Allow moving out of bounds to compensate for red border
-			return new Rectangle(screen.X - BORDER_WIDTH_PX, screen.Y - BORDER_WIDTH_PX, 
+			return new Rectangle(screen.X - BORDER_WIDTH_PX, screen.Y - BORDER_WIDTH_PX,
 				screen.Width + 2 * BORDER_WIDTH_PX, screen.Height + 2 * BORDER_WIDTH_PX);
 		}
 

@@ -2,12 +2,13 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
 namespace DiscordAudioStream.AudioCapture
 {
-	class AudioPlayback
+	internal class AudioPlayback
 	{
 		public event Action<float, float> AudioLevelChanged;
 
@@ -45,7 +46,7 @@ namespace DiscordAudioStream.AudioCapture
 			audioSource.DataAvailable += AudioSource_DataAvailable;
 
 			Logger.Log("Started audio device: " + device);
-			
+
 			Logger.Log("Saving audio device ID: " + device.ID);
 			Properties.Settings.Default.AudioDeviceID = device.ID;
 			Properties.Settings.Default.Save();
@@ -91,7 +92,7 @@ namespace DiscordAudioStream.AudioCapture
 			MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
 			if (!enumerator.HasDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia))
 				return -1;
-			
+
 			string defaultDeviceId = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).ID;
 			for (int i = 0; i < audioDevices.Count; i++)
 			{
@@ -163,14 +164,14 @@ namespace DiscordAudioStream.AudioCapture
 			output.Play();
 		}
 
-		
+
 		private async Task UpdateAudioMeter(TimeSpan interval, CancellationToken token, MMDevice device)
 		{
 			while (!token.IsCancellationRequested)
 			{
 				int numChannels = device.AudioMeterInformation.PeakValues.Count;
 				float left = (numChannels >= 2) ?
-					device.AudioMeterInformation.PeakValues[0] : 
+					device.AudioMeterInformation.PeakValues[0] :
 					device.AudioMeterInformation.MasterPeakValue;
 				float right = (numChannels >= 2) ?
 					device.AudioMeterInformation.PeakValues[1] :

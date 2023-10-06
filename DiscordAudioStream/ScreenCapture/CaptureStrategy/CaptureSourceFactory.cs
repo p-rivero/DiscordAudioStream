@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Windows.Foundation.Metadata;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
@@ -54,7 +55,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 					throw new ArgumentException("Invalid WindowCaptureMethod");
 			}
 		}
-		
+
 		private static CaptureSource MonitorSource(CaptureState state)
 		{
 			// Capturing a screen
@@ -65,7 +66,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 				case CaptureState.ScreenCaptureMethod.Windows10:
 					return new Win10MonitorCapture(state.Screen, state.CapturingCursor);
-			
+
 				case CaptureState.ScreenCaptureMethod.BitBlt:
 					return new BitBltMonitorCapture(state.Screen, state.CapturingCursor, state.HideTaskbar);
 
@@ -73,7 +74,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 					throw new ArgumentException("Invalid ScreenCaptureMethod");
 			}
 		}
-		
+
 		private static CaptureSource MultiMonitorSource(CaptureState state)
 		{
 			if (Win10CaptureAvailable() && state.ScreenMethod != CaptureState.ScreenCaptureMethod.BitBlt)
@@ -82,7 +83,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			}
 			return new BitBltMultiMonitorCapture(state.CapturingCursor);
 		}
-		
+
 		private static CaptureSource CustomAreaSource(CaptureState state)
 		{
 			if (Win10CaptureAvailable() && state.ScreenMethod != CaptureState.ScreenCaptureMethod.BitBlt)

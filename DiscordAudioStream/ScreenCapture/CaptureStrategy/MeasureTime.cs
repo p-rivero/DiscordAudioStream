@@ -15,7 +15,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
 		public override Bitmap CaptureFrame()
 		{
-			var watch = System.Diagnostics.Stopwatch.StartNew();
+			System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
 			Bitmap bmp = capture.CaptureFrame();
 			long elapsed_ms = watch.ElapsedMilliseconds;
 			float fps = 1000f / elapsed_ms;

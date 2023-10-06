@@ -12,7 +12,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
-		
+
 		protected virtual void Dispose(bool disposing)
 		{
 			// Override this method if the subclass needs to dispose of resources

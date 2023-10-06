@@ -3,11 +3,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+
 using CustomComponents;
 
 namespace DiscordAudioStream
 {
-	partial class AboutForm : Form
+	internal partial class AboutForm : Form
 	{
 		public AboutForm(bool darkMode)
 		{

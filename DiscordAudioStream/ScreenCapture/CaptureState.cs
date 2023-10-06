@@ -50,7 +50,7 @@ namespace DiscordAudioStream.ScreenCapture
 				Logger.Log($"Done changing CaptureState. CapturingCursor = {value}");
 			}
 		}
-		
+
 		// True if the taskbar should be hidden
 		public bool HideTaskbar
 		{
@@ -79,7 +79,8 @@ namespace DiscordAudioStream.ScreenCapture
 		}
 
 		// What kind of item are we capturing now?
-		public CaptureTarget Target {
+		public CaptureTarget Target
+		{
 			get
 			{
 				// Default value for captureTarget
@@ -173,7 +174,7 @@ namespace DiscordAudioStream.ScreenCapture
 			get
 			{
 				int method = Properties.Settings.Default.CaptureWindowMethod;
-				return (WindowCaptureMethod) method;
+				return (WindowCaptureMethod)method;
 			}
 			set
 			{

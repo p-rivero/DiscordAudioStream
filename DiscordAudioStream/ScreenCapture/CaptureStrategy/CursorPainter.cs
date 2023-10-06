@@ -1,14 +1,15 @@
-﻿using DLLs;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+
+using DLLs;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
 	public class CursorPainter : CaptureSource
 	{
 		private readonly CaptureSource source;
-		
+
 		private IntPtr currentCursorHandle = IntPtr.Zero;
 		private Bitmap cursorBitmap = null;
 		private Point cursorHotspot = Point.Empty;

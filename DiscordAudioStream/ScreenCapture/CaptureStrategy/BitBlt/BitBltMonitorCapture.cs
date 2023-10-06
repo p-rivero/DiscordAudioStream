@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
@@ -15,12 +14,12 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			this.monitor = monitor;
 			this.hideTaskbar = hideTaskbar;
 
-			var bitBlt = new BitBltCapture();
+			BitBltCapture bitBlt = new BitBltCapture();
 			bitBlt.CaptureAreaRect += GetMonitorArea;
 
 			if (captureCursor)
 			{
-				var paintCursor = new CursorPainter(bitBlt);
+				CursorPainter paintCursor = new CursorPainter(bitBlt);
 				paintCursor.CaptureAreaRect += GetMonitorArea;
 				capture = paintCursor;
 			}

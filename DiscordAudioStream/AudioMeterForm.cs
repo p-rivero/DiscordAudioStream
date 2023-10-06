@@ -1,7 +1,8 @@
-﻿using CustomComponents;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+
+using CustomComponents;
 
 namespace DiscordAudioStream
 {
@@ -11,7 +12,7 @@ namespace DiscordAudioStream
 		{
 			Logger.EmptyLine();
 			Logger.Log("Initializing AudioMeterForm. darkMode = " + darkMode);
-			
+
 			if (darkMode) HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
 
 			InitializeComponent();
@@ -39,9 +40,9 @@ namespace DiscordAudioStream
 		}
 
 
-		
+
 		// Store last position in settings
-		
+
 		new public void Show()
 		{
 			base.Show();
@@ -54,7 +55,7 @@ namespace DiscordAudioStream
 			volumeMeterText.SetWindowWidth(Width);
 			volumeMeterText2.SetWindowWidth(Width);
 		}
-		
+
 		new public void Hide()
 		{
 			StorePosition();

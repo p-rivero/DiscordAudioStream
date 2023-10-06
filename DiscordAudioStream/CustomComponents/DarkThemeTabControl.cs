@@ -73,7 +73,7 @@ namespace CustomComponents
 			{
 				Rectangle tabRect = GetTabRect(i);
 				Rectangle rectangle = new Rectangle(tabRect.Location.X + 2, tabRect.Location.Y, tabRect.Width, tabRect.Height);
-				
+
 				if (i == SelectedIndex)
 				{
 					using (SolidBrush brush = new SolidBrush(ActiveColor))
@@ -81,7 +81,7 @@ namespace CustomComponents
 						graphics.FillRectangle(brush, new Rectangle(rectangle.X - 3, rectangle.Y - 3, rectangle.Width, rectangle.Height + 5));
 					}
 				}
-				
+
 				Color textColor = i == SelectedIndex ? SelectedTextColor : TextColor;
 				using (Brush textBrush = new SolidBrush(textColor))
 				{

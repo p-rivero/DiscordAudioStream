@@ -5,7 +5,7 @@ using System.Security;
 
 namespace DLLs
 {
-	static class Gdi32
+	internal static class Gdi32
 	{
 		public enum RasterOps : uint
 		{
@@ -43,7 +43,7 @@ namespace DLLs
 		public static extern int SelectObject(IntPtr hdc, IntPtr hgdiobj);
 	}
 
-	static class User32
+	internal static class User32
 	{
 		[StructLayout(LayoutKind.Sequential)]
 		public struct PointApi
@@ -208,7 +208,7 @@ namespace DLLs
 		public static extern bool SetProcessDpiAwarenessContext(int value);
 	}
 
-	static class Kernel32
+	internal static class Kernel32
 	{
 		public const uint ATTACH_PARENT_PROCESS = 0x0ffffffff;
 
@@ -216,7 +216,7 @@ namespace DLLs
 		public static extern bool AttachConsole(uint dwProcessId);
 	}
 
-	static class Ntdll
+	internal static class Ntdll
 	{
 		[SecurityCritical]
 		[DllImport("ntdll.dll", SetLastError = true)]
@@ -245,7 +245,7 @@ namespace DLLs
 		}
 	}
 
-	static class Dwmapi
+	internal static class Dwmapi
 	{
 		public enum DwmWindowAttribute
 		{
@@ -313,7 +313,7 @@ namespace DLLs
 		}
 	}
 
-	static class Uxtheme
+	internal static class Uxtheme
 	{
 		[DllImport("uxtheme.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode, EntryPoint = "#133", ExactSpelling = true, SetLastError = true)]
 		public static extern bool AllowDarkModeForWindow(IntPtr hWnd, bool allow);

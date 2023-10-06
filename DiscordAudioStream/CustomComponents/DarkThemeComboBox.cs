@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
 
@@ -117,7 +116,7 @@ namespace CustomComponents
 					e.Graphics.FillRectangle(brush, bounds);
 				}
 
-				float y = e.Bounds.Bottom - ItemHeight/2;
+				float y = e.Bounds.Bottom - ItemHeight / 2;
 				using (Pen pen = new Pen(DarkThemeManager.BorderColor))
 				{
 					e.Graphics.DrawLine(pen, e.Bounds.Left + 5, y, e.Bounds.Right - 5, y);

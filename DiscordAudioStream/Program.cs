@@ -1,15 +1,17 @@
-﻿using CustomComponents;
-using System;
-using System.Windows.Forms;
+﻿using System;
 using System.Linq;
+using System.Windows.Forms;
+
+using CustomComponents;
+
 using DLLs;
 
 namespace DiscordAudioStream
 {
-	static class Program
+	internal static class Program
 	{
 		[STAThread]
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 			ExceptionHandler.Register();
 			EmbeddedAssemblyResolver.Register();
@@ -38,7 +40,7 @@ namespace DiscordAudioStream
 			mainForm.Load += (sender, e) => consoleArgs.ProcessArgsAfterMainForm(mainForm.Controller);
 			Application.Run(mainForm);
 		}
-		
+
 
 		private static bool IsDarkTheme()
 		{
@@ -80,7 +82,7 @@ namespace DiscordAudioStream
 		{
 			bool success = Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
 			if (!success) return;
-			
+
 			// Skip shell prompt
 			Console.WriteLine();
 			Console.WriteLine();

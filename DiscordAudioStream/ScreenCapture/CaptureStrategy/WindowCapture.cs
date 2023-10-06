@@ -1,6 +1,7 @@
-﻿using DLLs;
-using System;
+﻿using System;
 using System.Drawing;
+
+using DLLs;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
@@ -22,7 +23,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 			{
 				return GetWindowAreaFallback(windowHandle);
 			}
-			
+
 			// Trim the black bar at the top when the window is maximized,
 			// as well as the title bar for applications with a defined client area
 			int yOffset = frame.Height - clientRect.Height;

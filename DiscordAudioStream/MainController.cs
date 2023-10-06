@@ -1,12 +1,14 @@
-﻿using DiscordAudioStream.AudioCapture;
-using DiscordAudioStream.ScreenCapture;
-using DLLs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+
+using DiscordAudioStream.AudioCapture;
+using DiscordAudioStream.ScreenCapture;
+
+using DLLs;
 
 namespace DiscordAudioStream
 {
@@ -56,8 +58,7 @@ namespace DiscordAudioStream
 			bool cancel = false;
 			if (streamEnabled)
 			{
-				cancel = true; // Do not close form
-				// Instead, return to settings
+				cancel = true; // Do not close form, return to settings instead
 				EndStream();
 			}
 			else
@@ -126,7 +127,7 @@ namespace DiscordAudioStream
 		{
 			// Get the handle now, since we cannot get it from inside the thread
 			IntPtr formHandle = form.Handle;
-			
+
 			return new Thread(() =>
 			{
 				int fps = Properties.Settings.Default.CaptureFramerate;
@@ -251,7 +252,7 @@ namespace DiscordAudioStream
 			{
 				elements.Add((window, false));
 			}
-			
+
 			form.SetVideoItems(elements);
 		}
 
@@ -340,7 +341,7 @@ namespace DiscordAudioStream
 
 			Logger.EmptyLine();
 			Logger.Log("START STREAM (With audio)");
-			
+
 			audioPlayback = new AudioPlayback(deviceIndex);
 			audioPlayback.AudioLevelChanged += (left, right) => currentMeterForm?.SetLevels(left, right);
 			try
@@ -406,19 +407,20 @@ namespace DiscordAudioStream
 			if (form.TopMost) aboutBox.TopMost = true;
 			aboutBox.ShowDialog();
 		}
-		
+
 		internal void ShowAudioMeterForm(bool darkMode)
 		{
 			// Disabled by the user
 			if (!Properties.Settings.Default.ShowAudioMeter) return;
 			// No audio to display
 			if (!form.HasSomeAudioSource) return;
-			
+
 			if (currentMeterForm == null)
 			{
 				currentMeterForm = new AudioMeterForm(darkMode);
 				currentMeterForm.Owner = form;
-				currentMeterForm.FormClosed += (sender, e) => {
+				currentMeterForm.FormClosed += (sender, e) =>
+				{
 					currentMeterForm = null;
 					form.AudioMeterClosed();
 				};
