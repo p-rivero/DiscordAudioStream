@@ -2,36 +2,36 @@
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
-	public class BitBltCustomAreaCapture : CustomAreaCapture
-	{
-		private readonly CaptureSource capture;
+    public class BitBltCustomAreaCapture : CustomAreaCapture
+    {
+        private readonly CaptureSource capture;
 
-		public BitBltCustomAreaCapture(bool captureCursor)
-		{
-			BitBltCapture bitBlt = new BitBltCapture();
-			bitBlt.CaptureAreaRect += () => GetCustomArea(false);
+        public BitBltCustomAreaCapture(bool captureCursor)
+        {
+            BitBltCapture bitBlt = new BitBltCapture();
+            bitBlt.CaptureAreaRect += () => GetCustomArea(false);
 
-			if (captureCursor)
-			{
-				CursorPainter paintCursor = new CursorPainter(bitBlt);
-				paintCursor.CaptureAreaRect += () => GetCustomArea(false);
-				capture = paintCursor;
-			}
-			else
-			{
-				capture = bitBlt;
-			}
-		}
+            if (captureCursor)
+            {
+                CursorPainter paintCursor = new CursorPainter(bitBlt);
+                paintCursor.CaptureAreaRect += () => GetCustomArea(false);
+                capture = paintCursor;
+            }
+            else
+            {
+                capture = bitBlt;
+            }
+        }
 
-		public override Bitmap CaptureFrame()
-		{
-			return capture.CaptureFrame();
-		}
+        public override Bitmap CaptureFrame()
+        {
+            return capture.CaptureFrame();
+        }
 
-		protected override void Dispose(bool disposing)
-		{
-			base.Dispose(disposing);
-			capture.Dispose();
-		}
-	}
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            capture.Dispose();
+        }
+    }
 }
