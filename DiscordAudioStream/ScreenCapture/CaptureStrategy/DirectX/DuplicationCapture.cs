@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 
 using SharpDX;
 using SharpDX.Direct3D11;
@@ -16,6 +17,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
     {
         // https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values
         private const int E_ACCESSDENIED = unchecked((int)0x80070005);
+
         // https://docs.microsoft.com/en-us/windows/win32/direct3ddxgi/dxgi-error
         private const int DXGI_ERROR_ACCESS_LOST = unchecked((int)0x887A0026);
         private const int DXGI_ERROR_WAIT_TIMEOUT = unchecked((int)0x887A0027);
@@ -44,16 +46,11 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
         private static OutputDuplication[] InitScreens()
         {
-            var adapter = Adapter;
-            // Iterate adapter.Outputs and create OutputDuplication on each
-            OutputDuplication[] result = new OutputDuplication[adapter.Outputs.Length];
-            for (int i = 0; i < result.Length; i++)
-            {
-                Output1 o = adapter.Outputs[i].QueryInterface<Output1>();
-                result[i] = o.DuplicateOutput(d3dDevice);
-            }
-            return result;
+            return Adapter.Outputs
+                .Select(o => o.QueryInterface<Output1>().DuplicateOutput(d3dDevice))
+                .ToArray();
         }
+
         private static void RefreshScreen(int screenIndex)
         {
             try
@@ -85,7 +82,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
                 return new Factory1().GetAdapter(0);
             }
         }
-
 
         public override Bitmap CaptureFrame()
         {

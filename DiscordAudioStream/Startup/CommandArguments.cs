@@ -68,7 +68,6 @@ namespace DiscordAudioStream
 
         public bool ExitImmediately { get; private set; } = false;
 
-
         public void ProcessArgsBeforeMainForm()
         {
             if (printFps)
@@ -92,7 +91,6 @@ namespace DiscordAudioStream
             }
         }
 
-
         private void PrintHelp(OptionSet options)
         {
             Console.WriteLine($"Usage: {AppDomain.CurrentDomain.FriendlyName} [options]");
@@ -102,13 +100,21 @@ namespace DiscordAudioStream
             Console.WriteLine("All options support Unix and Windows styles (-option, --option or /option)");
         }
 
-        static private Point ParsePoint(string str)
+        private static Point ParsePoint(string str)
         {
             string[] parts = str.Split(',');
-            if (parts.Length != 2) throw new FormatException("Invalid point format. Expected \"X,Y\".");
-            if (!int.TryParse(parts[0], out int x)) throw new FormatException("Invalid X coordinate.");
-            if (!int.TryParse(parts[1], out int y)) throw new FormatException("Invalid Y coordinate.");
-
+            if (parts.Length != 2)
+            {
+                throw new FormatException("Invalid point format. Expected \"X,Y\".");
+            }
+            if (!int.TryParse(parts[0], out int x))
+            {
+                throw new FormatException("Invalid X coordinate.");
+            }
+            if (!int.TryParse(parts[1], out int y))
+            {
+                throw new FormatException("Invalid Y coordinate.");
+            }
             return new Point(x, y);
         }
     }

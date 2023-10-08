@@ -20,6 +20,7 @@ namespace DiscordAudioStream
             FPS_30 = 30,
             FPS_60 = 60
         }
+
         private readonly CaptureState captureState;
 
         public SettingsForm(bool darkMode, CaptureState captureState)
@@ -31,7 +32,10 @@ namespace DiscordAudioStream
             this.captureState = captureState;
 
             // Enable dark titlebar
-            if (darkMode) HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
+            if (darkMode)
+            {
+                HandleCreated += DarkThemeManager.FormHandleCreated;
+            }
 
             InitializeComponent();
 
@@ -103,20 +107,25 @@ namespace DiscordAudioStream
             audioDevicesLink.LinkColor = DarkThemeManager.AccentColor;
         }
 
-
         // Events
 
 
         private void SettingsForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape) Close();
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
         }
 
         private void themeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             int theme = themeComboBox.SelectedIndex;
             // Nothing changed
-            if (Properties.Settings.Default.Theme == theme) return;
+            if (Properties.Settings.Default.Theme == theme)
+            {
+                return;
+            }
 
             Properties.Settings.Default.Theme = theme;
             Properties.Settings.Default.Save();
@@ -143,7 +152,10 @@ namespace DiscordAudioStream
         private void autoExitCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             // Nothing changed
-            if (Properties.Settings.Default.AutoExit == autoExitCheckbox.Checked) return;
+            if (Properties.Settings.Default.AutoExit == autoExitCheckbox.Checked)
+            {
+                return;
+            }
 
             Properties.Settings.Default.AutoExit = autoExitCheckbox.Checked;
             Properties.Settings.Default.Save();
@@ -154,7 +166,10 @@ namespace DiscordAudioStream
         private void outputLogCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             // Nothing changed
-            if (Properties.Settings.Default.OutputLogFile == outputLogCheckbox.Checked) return;
+            if (Properties.Settings.Default.OutputLogFile == outputLogCheckbox.Checked)
+            {
+                return;
+            }
 
             Properties.Settings.Default.OutputLogFile = outputLogCheckbox.Checked;
             Properties.Settings.Default.Save();
@@ -180,7 +195,10 @@ namespace DiscordAudioStream
             FrameRates selectedFramerate = (FrameRates)allFramerates.GetValue(captureFramerateComboBox.SelectedIndex);
 
             // Nothing changed
-            if (Properties.Settings.Default.CaptureFramerate == (int)selectedFramerate) return;
+            if (Properties.Settings.Default.CaptureFramerate == (int)selectedFramerate)
+            {
+                return;
+            }
 
             Properties.Settings.Default.CaptureFramerate = (int)selectedFramerate;
             Properties.Settings.Default.Save();
@@ -193,7 +211,10 @@ namespace DiscordAudioStream
         private void offscreenDrawCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             // Nothing changed
-            if (Properties.Settings.Default.OffscreenDraw == offscreenDrawCheckbox.Checked) return;
+            if (Properties.Settings.Default.OffscreenDraw == offscreenDrawCheckbox.Checked)
+            {
+                return;
+            }
 
             Properties.Settings.Default.OffscreenDraw = offscreenDrawCheckbox.Checked;
             Properties.Settings.Default.Save();
@@ -209,7 +230,10 @@ namespace DiscordAudioStream
         private void showAudioInputsCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             // Nothing changed
-            if (Properties.Settings.Default.ShowAudioInputs == showAudioInputsCheckbox.Checked) return;
+            if (Properties.Settings.Default.ShowAudioInputs == showAudioInputsCheckbox.Checked)
+            {
+                return;
+            }
 
             Properties.Settings.Default.ShowAudioInputs = showAudioInputsCheckbox.Checked;
             Properties.Settings.Default.Save();
@@ -222,7 +246,10 @@ namespace DiscordAudioStream
         private void streamTitleBox_TextChanged(object sender, EventArgs e)
         {
             // Nothing changed
-            if (Properties.Settings.Default.StreamTitle == streamTitleBox.Text) return;
+            if (Properties.Settings.Default.StreamTitle == streamTitleBox.Text)
+            {
+                return;
+            }
             try
             {
                 Properties.Settings.Default.StreamTitle = streamTitleBox.Text;
@@ -241,7 +268,10 @@ namespace DiscordAudioStream
         private void audioMeterCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             // Nothing changed
-            if (Properties.Settings.Default.ShowAudioMeter == audioMeterCheckBox.Checked) return;
+            if (Properties.Settings.Default.ShowAudioMeter == audioMeterCheckBox.Checked)
+            {
+                return;
+            }
 
             Properties.Settings.Default.ShowAudioMeter = audioMeterCheckBox.Checked;
             Properties.Settings.Default.Save();

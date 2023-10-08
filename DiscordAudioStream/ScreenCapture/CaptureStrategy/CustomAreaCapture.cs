@@ -6,9 +6,9 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
     public abstract class CustomAreaCapture : CaptureSource
     {
-        private readonly static AreaForm areaForm = new AreaForm();
+        private static readonly AreaForm areaForm = new AreaForm();
         private static int instanceCount = 0;
-        private readonly static object instanceCountLock = new object();
+        private static readonly object instanceCountLock = new object();
 
         private readonly Rectangle bounds = SystemInformation.VirtualScreen;
 
@@ -72,5 +72,4 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             return new Rectangle(left, top, width, height);
         }
     }
-
 }

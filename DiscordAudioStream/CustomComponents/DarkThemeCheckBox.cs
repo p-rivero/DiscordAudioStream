@@ -33,6 +33,7 @@ namespace CustomComponents
             hovered = value;
             Refresh();
         }
+
         private void UpdatePressed(bool value)
         {
             pressed = value;
@@ -70,9 +71,18 @@ namespace CustomComponents
         private void PaintSquare(Graphics g)
         {
             Color bgColor;
-            if (pressed) bgColor = DarkThemeManager.PressedColor;
-            else if (hovered) bgColor = DarkThemeManager.DarkHoverColor;
-            else bgColor = DarkThemeManager.DarkSecondColor;
+            if (pressed)
+            {
+                bgColor = DarkThemeManager.PressedColor;
+            }
+            else if (hovered)
+            {
+                bgColor = DarkThemeManager.DarkHoverColor;
+            }
+            else
+            {
+                bgColor = DarkThemeManager.DarkSecondColor;
+            }
 
             int extraThickness = Focused ? 1 : 0;
             int x = extraThickness;

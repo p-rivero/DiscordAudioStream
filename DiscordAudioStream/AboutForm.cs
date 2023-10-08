@@ -15,7 +15,10 @@ namespace DiscordAudioStream
             Logger.EmptyLine();
             Logger.Log("Initializing AboutForm. darkMode = " + darkMode);
 
-            if (darkMode) HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
+            if (darkMode)
+            {
+                HandleCreated += DarkThemeManager.FormHandleCreated;
+            }
 
             InitializeComponent();
 
@@ -47,9 +50,7 @@ namespace DiscordAudioStream
             pagesGroup.SetDarkMode(darkMode);
         }
 
-
         // Events
-
 
         private void projectLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -68,7 +69,10 @@ namespace DiscordAudioStream
 
         private void AboutForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape) Close();
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
         }
 
         private void licenseLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

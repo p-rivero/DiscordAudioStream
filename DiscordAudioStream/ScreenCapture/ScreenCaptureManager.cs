@@ -62,8 +62,6 @@ namespace DiscordAudioStream.ScreenCapture
             }
         }
 
-
-
         private Thread CreateCaptureThread()
         {
             return new Thread(() =>
@@ -134,8 +132,9 @@ namespace DiscordAudioStream.ScreenCapture
                     Logger.Log(e);
 
                     // We already have a valid source, do not call Dispose and just show warning
-                    string msg = "Unable to display this item.\n" +
-                        "If the problem persists, consider changing the capture method in Settings > Capture";
+                    string msg =
+                        "Unable to display this item.\n"
+                        + "If the problem persists, consider changing the capture method in Settings > Capture";
                     MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }

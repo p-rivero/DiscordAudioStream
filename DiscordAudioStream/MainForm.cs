@@ -28,7 +28,10 @@ namespace DiscordAudioStream
             controller = new MainController(this);
 
             this.darkMode = darkMode;
-            if (darkMode) HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
+            if (darkMode)
+            {
+                HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
+            }
 
             InitializeComponent();
             previewBox.Visible = true;
@@ -137,10 +140,12 @@ namespace DiscordAudioStream
             {
                 hideTaskbarCheckBox.Enabled = value;
                 // When disabling the checkbox, also set its state to unchecked
-                if (!value) hideTaskbarCheckBox.Checked = false;
+                if (!value)
+                {
+                    hideTaskbarCheckBox.Checked = false;
+                }
             }
         }
-
 
         internal void SetPreviewUISize(Size newSize)
         {
@@ -211,7 +216,6 @@ namespace DiscordAudioStream
             showAudioMeterToolStripMenuItem.Checked = false;
         }
 
-
         // PRIVATE METHODS
 
         private void ApplyDarkTheme(bool darkMode)
@@ -258,8 +262,6 @@ namespace DiscordAudioStream
             }
         }
 
-
-
         // EVENTS
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -268,14 +270,16 @@ namespace DiscordAudioStream
             onTopBtn.Checked = Properties.Settings.Default.AlwaysOnTop;
             captureCursorCheckBox.Checked = Properties.Settings.Default.CaptureCursor;
             hideTaskbarCheckBox.Checked = Properties.Settings.Default.HideTaskbar;
-
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
 
-            if (e.CloseReason == CloseReason.WindowsShutDown) return;
+            if (e.CloseReason == CloseReason.WindowsShutDown)
+            {
+                return;
+            }
 
             // MainController.Stop() returns false if the form has to be closed
             e.Cancel = controller.Stop();
@@ -303,7 +307,10 @@ namespace DiscordAudioStream
                         soundDevicesButton.PerformClick();
                         break;
                     case Keys.Enter:
-                        if (!controller.IsStreaming) controller.StartStream(false);
+                        if (!controller.IsStreaming)
+                        {
+                            controller.StartStream(false);
+                        }
                         break;
                 }
             }
@@ -315,12 +322,14 @@ namespace DiscordAudioStream
                         aboutBtn.PerformClick();
                         break;
                     case Keys.Escape:
-                        if (controller.IsStreaming) controller.Stop();
+                        if (controller.IsStreaming)
+                        {
+                            controller.Stop();
+                        }
                         break;
                 }
             }
         }
-
 
         private void previewBtn_CheckedChanged(object sender, EventArgs e)
         {
@@ -428,8 +437,14 @@ namespace DiscordAudioStream
             Properties.Settings.Default.ShowAudioMeter = show;
             Properties.Settings.Default.Save();
 
-            if (show) controller.ShowAudioMeterForm(darkMode);
-            else controller.HideAudioMeterForm();
+            if (show)
+            {
+                controller.ShowAudioMeterForm(darkMode);
+            }
+            else
+            {
+                controller.HideAudioMeterForm();
+            }
         }
 
         private void stopStreamToolStripMenuItem_Click(object sender, EventArgs e)

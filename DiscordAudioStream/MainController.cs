@@ -29,14 +29,13 @@ namespace DiscordAudioStream
         private AudioPlayback audioPlayback = null;
         private AudioMeterForm currentMeterForm = null;
 
-
         public MainController(MainForm owner)
         {
             form = owner;
             processHandleList = ProcessHandleList.Refresh();
         }
 
-        public bool IsStreaming { get => streamEnabled; }
+        public bool IsStreaming => streamEnabled;
 
         internal void Init()
         {
@@ -71,7 +70,6 @@ namespace DiscordAudioStream
             return cancel;
         }
 
-
         // PRIVATE METHODS
 
         private void SetPreviewSize(Size size)
@@ -86,7 +84,10 @@ namespace DiscordAudioStream
 
         private void RefreshAreaInfo()
         {
-            if (!form.Created) return;
+            if (!form.Created)
+            {
+                return;
+            }
 
             int windowIndex = form.VideoIndex - numberOfScreens - 1;
 
@@ -182,8 +183,6 @@ namespace DiscordAudioStream
             };
         }
 
-
-
         // INTERNAL METHODS (called from MainForm)
 
         internal void UpdateAreaComboBox(int oldIndex)
@@ -271,13 +270,18 @@ namespace DiscordAudioStream
             form.SetAudioElements(elements, defaultIndex);
         }
 
-
         internal void StartStream(bool skipAudioWarning)
         {
             try
             {
-                if (form.HasSomeAudioSource) StartStreamAudioRecording(form.AudioSourceIndex, skipAudioWarning);
-                else StartStreamWithoutAudio(skipAudioWarning);
+                if (form.HasSomeAudioSource)
+                {
+                    StartStreamAudioRecording(form.AudioSourceIndex, skipAudioWarning);
+                }
+                else
+                {
+                    StartStreamWithoutAudio(skipAudioWarning);
+                }
             }
             catch (OperationCanceledException)
             {
@@ -306,7 +310,10 @@ namespace DiscordAudioStream
                     MessageBoxDefaultButton.Button2
                 );
 
-                if (r == DialogResult.No) throw new OperationCanceledException();
+                if (r == DialogResult.No)
+                {
+                    throw new OperationCanceledException();
+                }
             }
 
             Logger.EmptyLine();
@@ -323,8 +330,8 @@ namespace DiscordAudioStream
                 if (!skipAudioWarning)
                 {
                     DialogResult r = MessageBox.Show(
-                        "The captured audio device is the same as the output device of DiscordAudioStream.\n" +
-                        "This will cause an audio loop, which may result in echo or very loud sounds. Continue anyways?",
+                        "The captured audio device is the same as the output device of DiscordAudioStream.\n"
+                            + "This will cause an audio loop, which may result in echo or very loud sounds. Continue anyways?",
                         "Warning",
                         MessageBoxButtons.OKCancel,
                         MessageBoxIcon.Warning,
@@ -332,7 +339,10 @@ namespace DiscordAudioStream
                         MessageBoxDefaultButton.Button2
                     );
 
-                    if (r == DialogResult.Cancel) throw new OperationCanceledException();
+                    if (r == DialogResult.Cancel)
+                    {
+                        throw new OperationCanceledException();
+                    }
                 }
 
                 Logger.EmptyLine();
@@ -370,14 +380,16 @@ namespace DiscordAudioStream
             audioPlayback?.Stop();
         }
 
-
         private void AbortCapture()
         {
             form.Invoke(new Action(() =>
             {
                 RefreshScreens();
                 form.VideoIndex = Properties.Settings.Default.AreaIndex;
-                if (!streamEnabled) return;
+                if (!streamEnabled)
+                {
+                    return;
+                }
 
                 EndStream();
                 if (Properties.Settings.Default.AutoExit)
@@ -391,44 +403,46 @@ namespace DiscordAudioStream
 
         internal void ShowSettingsForm(bool darkMode)
         {
-            SettingsForm settingsBox = new SettingsForm(darkMode, captureState);
-            settingsBox.Owner = form;
+            SettingsForm settingsBox = new SettingsForm(darkMode, captureState) { Owner = form, TopMost = form.TopMost };
             settingsBox.CaptureMethodChanged += RefreshAreaInfo;
             settingsBox.FramerateChanged += screenCapture.RefreshFramerate;
             settingsBox.ShowAudioInputsChanged += RefreshAudioDevices;
-            if (form.TopMost) settingsBox.TopMost = true;
             settingsBox.ShowDialog();
         }
 
         internal void ShowAboutForm(bool darkMode)
         {
-            AboutForm aboutBox = new AboutForm(darkMode);
-            aboutBox.Owner = form;
-            if (form.TopMost) aboutBox.TopMost = true;
+            AboutForm aboutBox = new AboutForm(darkMode) { Owner = form, TopMost = form.TopMost };
             aboutBox.ShowDialog();
         }
 
         internal void ShowAudioMeterForm(bool darkMode)
         {
             // Disabled by the user
-            if (!Properties.Settings.Default.ShowAudioMeter) return;
+            if (!Properties.Settings.Default.ShowAudioMeter)
+            {
+                return;
+            }
             // No audio to display
-            if (!form.HasSomeAudioSource) return;
+            if (!form.HasSomeAudioSource)
+            {
+                return;
+            }
 
             if (currentMeterForm == null)
             {
-                currentMeterForm = new AudioMeterForm(darkMode);
-                currentMeterForm.Owner = form;
+                currentMeterForm = new AudioMeterForm(darkMode) { Owner = form };
                 currentMeterForm.FormClosed += (sender, e) =>
                 {
                     currentMeterForm = null;
                     form.AudioMeterClosed();
                 };
             }
-            if (form.TopMost) currentMeterForm.TopMost = true;
+            currentMeterForm.TopMost = form.TopMost;
             currentMeterForm.Show();
             form.Focus();
         }
+
         internal void HideAudioMeterForm()
         {
             currentMeterForm?.Hide();
@@ -436,7 +450,10 @@ namespace DiscordAudioStream
 
         internal void SetVideoIndex(int index)
         {
-            if (numberOfScreens == -1) return;
+            if (numberOfScreens == -1)
+            {
+                return;
+            }
 
             RefreshAreaInfo();
 

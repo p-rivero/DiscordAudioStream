@@ -30,7 +30,8 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
                 device,
                 DirectXPixelFormat.B8G8R8A8UIntNormalized,
                 1,
-                item.Size);
+                item.Size
+            );
             session = framePool.CreateCaptureSession(item);
 
             // Attempt to disable yellow capture border. This method is only avaiable from Windows 11

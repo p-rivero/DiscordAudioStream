@@ -3,7 +3,6 @@ using System.Drawing;
 
 using Composition.WindowsRuntimeHelpers;
 
-
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
     public class Win10CustomAreaCapture : CustomAreaCapture

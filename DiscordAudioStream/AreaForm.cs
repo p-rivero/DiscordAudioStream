@@ -29,11 +29,11 @@ namespace DiscordAudioStream
             LocationChanged += (sender, e) => EnsureWithinBounds();
             SizeChanged += (sender, e) => Refresh();
 
-            resizeTimer.Elapsed += new ElapsedEventHandler(ResizeTimerElapsed);
+            resizeTimer.Elapsed += ResizeTimerElapsed;
             resizeTimer.Interval = 30;
         }
 
-        new public void Show()
+        public new void Show()
         {
             base.Show();
             SetButtonsVisible(true);
@@ -47,7 +47,8 @@ namespace DiscordAudioStream
                 EnsureWithinBounds();
             }
         }
-        new public void Hide()
+
+        public new void Hide()
         {
             // Save position
             Properties.Settings.Default.AreaForm_Position = Location;
@@ -105,9 +106,9 @@ namespace DiscordAudioStream
             if (!Properties.Settings.Default.SeenLockAreaDiag)
             {
                 DialogResult r = MessageBox.Show(
-                    "This will hide the red area marker and you won't be able to move it anymore. " +
-                    "To show the red marker again, change the capture to anything else and then back to \"Custom area\".\n" +
-                    "This message won't be shown again.",
+                    "This will hide the red area marker and you won't be able to move it anymore. "
+                        + "To show the red marker again, change the capture to anything else and then back to \"Custom area\".\n"
+                        + "This message won't be shown again.",
                     "Lock area",
                     MessageBoxButtons.OKCancel,
                     MessageBoxIcon.Information,
@@ -169,7 +170,10 @@ namespace DiscordAudioStream
             titleBtn.Visible = visible;
             lockBtn.Visible = visible;
             // Activate form so that AreaForm_Deactivate is called when we click somewhere
-            if (visible) Activate();
+            if (visible)
+            {
+                Activate();
+            }
         }
 
         private static Rectangle GetScreenBounds()
@@ -178,8 +182,12 @@ namespace DiscordAudioStream
             Rectangle screen = SystemInformation.VirtualScreen;
 
             // Allow moving out of bounds to compensate for red border
-            return new Rectangle(screen.X - BORDER_WIDTH_PX, screen.Y - BORDER_WIDTH_PX,
-                screen.Width + 2 * BORDER_WIDTH_PX, screen.Height + 2 * BORDER_WIDTH_PX);
+            return new Rectangle(
+                screen.X - BORDER_WIDTH_PX,
+                screen.Y - BORDER_WIDTH_PX,
+                screen.Width + 2 * BORDER_WIDTH_PX,
+                screen.Height + 2 * BORDER_WIDTH_PX
+            );
         }
 
         private void AreaForm_ResizeEnd(object sender, EventArgs e)

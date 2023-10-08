@@ -31,13 +31,14 @@ namespace DiscordAudioStream.ScreenCapture
                 Rectangle boundsRect = new Rectangle(0, 0, width, height);
                 BitmapData destinationData = bmp.LockBits(boundsRect, ImageLockMode.WriteOnly, bmp.PixelFormat);
 
-                IntPtr sourcePtr = sourceData.DataPointer
+                IntPtr sourcePtr =
+                    sourceData.DataPointer
                     + copiedArea.Top * sourceData.RowPitch
                     + copiedArea.Left * 4;
                 IntPtr destinationPtr = destinationData.Scan0;
                 for (int y = 0; y < height; y++)
                 {
-                    // Copy a single line 
+                    // Copy a single line
                     Utilities.CopyMemory(destinationPtr, sourcePtr, width * 4);
 
                     // Advance pointers

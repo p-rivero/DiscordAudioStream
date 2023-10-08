@@ -25,7 +25,6 @@ namespace CustomComponents
         public static readonly Color AccentColor = Color.FromArgb(0, 120, 215);
         public static readonly Color PressedColor = Color.FromArgb(140, 140, 140);
 
-
         public static void FormHandleCreated(object sender, EventArgs e)
         {
             EnableDarkTitlebar((sender as Form).Handle, dark: true);
@@ -33,7 +32,10 @@ namespace CustomComponents
 
         public static bool IsDarkTheme()
         {
-            if (!IsWindows10OrGreater()) return false;
+            if (!IsWindows10OrGreater())
+            {
+                return false;
+            }
 
             try
             {

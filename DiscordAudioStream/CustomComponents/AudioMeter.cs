@@ -22,7 +22,6 @@ namespace CustomComponents
         private const int CLIPPING_COLOR_INACTIVE = unchecked((int)0xff5c2222);
         private const int CLIPPING_COLOR_ACTIVE = unchecked((int)0xffce0606);
 
-
         protected override void OnPaint(PaintEventArgs pe)
         {
             // Draw an audio meter, see https://github.com/p-rivero/DiscordAudioStream/issues/15

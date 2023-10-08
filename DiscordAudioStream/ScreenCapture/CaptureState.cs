@@ -11,12 +11,14 @@ namespace DiscordAudioStream.ScreenCapture
             BitBlt,
             PrintScreen
         }
+
         public enum ScreenCaptureMethod
         {
             DXGIDuplication,
             Windows10,
             BitBlt
         }
+
         public enum CaptureTarget
         {
             Invalid,
@@ -34,14 +36,16 @@ namespace DiscordAudioStream.ScreenCapture
         private bool capturingCursor;
         private bool hideTaskbar;
 
-
         // True if the cursor should be captured
         public bool CapturingCursor
         {
             get { return capturingCursor; }
             set
             {
-                if (capturingCursor == value) return; // No changes
+                if (capturingCursor == value)
+                {
+                    return; // No changes
+                }
 
                 Logger.EmptyLine();
                 Logger.Log($"Changing CaptureState... (CapturingCursor = {value})");
@@ -57,7 +61,10 @@ namespace DiscordAudioStream.ScreenCapture
             get { return hideTaskbar; }
             set
             {
-                if (hideTaskbar == value) return; // No changes
+                if (hideTaskbar == value)
+                {
+                    return; // No changes
+                }
 
                 Logger.EmptyLine();
                 Logger.Log($"Changing CaptureState... (HideTaskbar = {value})");
@@ -73,7 +80,10 @@ namespace DiscordAudioStream.ScreenCapture
             get
             {
                 // Only BitBlt screen capture supports hiding taskbar
-                if (Target != CaptureTarget.Screen) return false;
+                if (Target != CaptureTarget.Screen)
+                {
+                    return false;
+                }
                 return (ScreenMethod == ScreenCaptureMethod.BitBlt);
             }
         }
@@ -100,13 +110,19 @@ namespace DiscordAudioStream.ScreenCapture
                 {
                     throw new ArgumentException("Don't set the capture target to Invalid");
                 }
-                if (captureTarget == value) return; // No changes
+                if (captureTarget == value)
+                {
+                    return; // No changes
+                }
 
                 Logger.EmptyLine();
                 Logger.Log($"Changing CaptureState... (Target = {value})");
                 CaptureTarget oldValue = captureTarget;
                 captureTarget = value;
-                if (oldValue != value) StateChanged?.Invoke();
+                if (oldValue != value)
+                {
+                    StateChanged?.Invoke();
+                }
                 Logger.Log($"Done changing CaptureState. Target = {value}");
             }
         }
@@ -128,7 +144,10 @@ namespace DiscordAudioStream.ScreenCapture
                 {
                     throw new ArgumentException("Trying to set WindowHandle to IntPtr.Zero");
                 }
-                if (hWnd == value && captureTarget == CaptureTarget.Window) return; // No changes
+                if (hWnd == value && captureTarget == CaptureTarget.Window)
+                {
+                    return; // No changes
+                }
 
                 Logger.EmptyLine();
                 Logger.Log($"Changing CaptureState... (WindowHandle = {value})");
@@ -157,7 +176,10 @@ namespace DiscordAudioStream.ScreenCapture
                 {
                     throw new ArgumentNullException("value");
                 }
-                if (screen == value && captureTarget == CaptureTarget.Screen) return; // No changes
+                if (screen == value && captureTarget == CaptureTarget.Screen)
+                {
+                    return; // No changes
+                }
 
                 Logger.EmptyLine();
                 Logger.Log($"Changing CaptureState... (Screen = {value})");

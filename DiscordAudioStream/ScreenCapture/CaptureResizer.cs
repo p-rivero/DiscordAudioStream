@@ -15,6 +15,7 @@ namespace DiscordAudioStream.ScreenCapture
         Scale15,
         Scale10,
     }
+
     public class CaptureResizer
     {
         private const double DISCORD_ASPECT_RATIO = 16.0 / 9.0;
@@ -67,15 +68,19 @@ namespace DiscordAudioStream.ScreenCapture
         public Size GetScaledSize(Size original)
         {
             double dynamicScaleFactor;
-            if (constantScaleFactor != 0) dynamicScaleFactor = constantScaleFactor;
-            else dynamicScaleFactor = ComputeDynamicScaleFactor(original);
+            if (constantScaleFactor != 0)
+            {
+                dynamicScaleFactor = constantScaleFactor;
+            }
+            else
+            {
+                dynamicScaleFactor = ComputeDynamicScaleFactor(original);
+            }
 
             int newWidth = (int)(original.Width * dynamicScaleFactor);
             int newHeight = (int)(original.Height * dynamicScaleFactor);
-
             return new Size(newWidth, newHeight);
         }
-
 
         private double ComputeDynamicScaleFactor(Size original)
         {

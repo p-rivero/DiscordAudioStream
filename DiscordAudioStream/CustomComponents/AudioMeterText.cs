@@ -7,11 +7,14 @@ namespace CustomComponents
     public class AudioMeterText : Control
     {
         private int windowWidth = 0;
-        public void SetWindowWidth(int width)
+
+        public void SetWindowWidth(int newWidth)
         {
-            bool refresh = (width != windowWidth);
-            windowWidth = width;
-            if (refresh) Refresh();
+            if (windowWidth != newWidth)
+            {
+                windowWidth = newWidth;
+                Refresh();
+            }
         }
 
         protected override void OnResize(EventArgs e)
@@ -19,7 +22,6 @@ namespace CustomComponents
             base.OnResize(e);
             Refresh();
         }
-
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -44,24 +46,32 @@ namespace CustomComponents
             const int LINE_LENGTH = 3;
             const int WIDTH_SHOW_TEXT = 130;
             const int WIDTH_SHOW_DB = 170;
-            int y = GetYPos(percent);
 
-            if (windowWidth < WIDTH_SHOW_TEXT) text = "";
-            else if (windowWidth > WIDTH_SHOW_DB) text += " dB";
+            if (windowWidth < WIDTH_SHOW_TEXT)
+            {
+                text = "";
+            }
+            else if (windowWidth > WIDTH_SHOW_DB)
+            {
+                text += " dB";
+            }
 
             SizeF strSz = g.MeasureString(text, Font);
+            float lineY = GetYPos(percent);
+            float textY = lineY - strSz.Height / 2;
+
             using (Brush fgBrush = new SolidBrush(ForeColor))
             using (Pen fgPen = new Pen(ForeColor))
             {
                 if (RightToLeft == RightToLeft.Yes)
                 {
-                    g.DrawString(text, Font, fgBrush, Width - strSz.Width - PADDING, y - strSz.Height / 2);
-                    g.DrawLine(fgPen, Width - LINE_LENGTH, y, Width, y);
+                    g.DrawString(text, Font, fgBrush, Width - strSz.Width - PADDING, textY);
+                    g.DrawLine(fgPen, Width - LINE_LENGTH, lineY, Width, lineY);
                 }
                 else
                 {
-                    g.DrawString(text, Font, fgBrush, PADDING, y - strSz.Height / 2);
-                    g.DrawLine(fgPen, 0, y, LINE_LENGTH, y);
+                    g.DrawString(text, Font, fgBrush, PADDING, textY);
+                    g.DrawLine(fgPen, 0, lineY, LINE_LENGTH, lineY);
                 }
             }
         }

@@ -13,7 +13,10 @@ namespace DiscordAudioStream
             Logger.EmptyLine();
             Logger.Log("Initializing AudioMeterForm. darkMode = " + darkMode);
 
-            if (darkMode) HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
+            if (darkMode)
+            {
+                HandleCreated += DarkThemeManager.FormHandleCreated;
+            }
 
             InitializeComponent();
             FormClosing += (s, e) => StorePosition();
@@ -30,7 +33,6 @@ namespace DiscordAudioStream
             }
         }
 
-
         public void SetLevels(float left, float right)
         {
             volumeMeterLeft.Amplitude = left;
@@ -39,14 +41,27 @@ namespace DiscordAudioStream
             volumeMeterLeft.Refresh();
         }
 
-
-
-        // Store last position in settings
-
-        new public void Show()
+        public new void Show()
         {
             base.Show();
-            // Restore saved position
+            RestoreSavedPosition();
+        }
+
+        public new void Hide()
+        {
+            StorePosition();
+            base.Hide();
+        }
+
+        private void StorePosition()
+        {
+            Properties.Settings.Default.AudioMeterForm_Position = Location;
+            Properties.Settings.Default.AudioMeterForm_Size = Size;
+            Properties.Settings.Default.Save();
+        }
+
+        private void RestoreSavedPosition()
+        {
             if (Properties.Settings.Default.AudioMeterForm_Size != Size.Empty)
             {
                 Location = Properties.Settings.Default.AudioMeterForm_Position;
@@ -54,18 +69,6 @@ namespace DiscordAudioStream
             }
             volumeMeterText.SetWindowWidth(Width);
             volumeMeterText2.SetWindowWidth(Width);
-        }
-
-        new public void Hide()
-        {
-            StorePosition();
-            base.Hide();
-        }
-        private void StorePosition()
-        {
-            Properties.Settings.Default.AudioMeterForm_Position = Location;
-            Properties.Settings.Default.AudioMeterForm_Size = Size;
-            Properties.Settings.Default.Save();
         }
 
         protected override void OnResize(EventArgs e)

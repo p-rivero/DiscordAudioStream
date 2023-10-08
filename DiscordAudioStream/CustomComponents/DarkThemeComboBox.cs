@@ -12,6 +12,7 @@ namespace CustomComponents
         public class ItemWithSeparator
         {
             private readonly string text;
+
             public ItemWithSeparator(string text)
             {
                 this.text = text;
@@ -24,9 +25,7 @@ namespace CustomComponents
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S2094", Justification =
             "This class cannot be an interface because it needs to be instantiated as a sentinel")]
-        public class Dummy
-        {
-        }
+        public class Dummy { }
 
         public DarkThemeComboBox()
         {
@@ -60,11 +59,16 @@ namespace CustomComponents
             get => base.SelectedIndex;
             set
             {
-                if (value >= Items.Count) base.SelectedIndex = 0;
-                else base.SelectedIndex = value;
+                if (value >= Items.Count)
+                {
+                    base.SelectedIndex = 0;
+                }
+                else
+                {
+                    base.SelectedIndex = value;
+                }
             }
         }
-
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -104,7 +108,6 @@ namespace CustomComponents
                 e.DrawBackground();
                 return;
             }
-            bool useWhite = (!darkMode && (e.State & DrawItemState.Selected) == DrawItemState.Selected);
             object item = Items[e.Index];
 
             if (item is ItemWithSeparator && e.Bounds.Height > ItemHeight)
@@ -127,6 +130,8 @@ namespace CustomComponents
                 e.DrawBackground();
             }
 
+            bool isSelected = (e.State & DrawItemState.Selected) != 0;
+            bool useWhite = !darkMode && isSelected;
             Color fgColor = useWhite ? Color.White : ForeColor;
             using (Brush fgBrush = new SolidBrush(fgColor))
             {
@@ -137,10 +142,13 @@ namespace CustomComponents
         protected override void OnMeasureItem(MeasureItemEventArgs e)
         {
             if (Items[e.Index] is ItemWithSeparator)
+            {
                 e.ItemHeight += ItemHeight;
+            }
             else if (Items[e.Index] is Dummy)
+            {
                 e.ItemHeight = 0;
-
+            }
             base.OnMeasureItem(e);
         }
     }

@@ -46,7 +46,10 @@ namespace CustomComponents
 
         public DarkThemeTabControl()
         {
-            SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, value: true);
+            SetStyle(
+                ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer,
+                value: true
+            );
             DoubleBuffered = true;
             SizeMode = TabSizeMode.Normal;
             ItemSize = new Size(240, 16);
@@ -78,7 +81,7 @@ namespace CustomComponents
                 {
                     using (SolidBrush brush = new SolidBrush(ActiveColor))
                     {
-                        graphics.FillRectangle(brush, new Rectangle(rectangle.X - 3, rectangle.Y - 3, rectangle.Width, rectangle.Height + 5));
+                        graphics.FillRectangle(brush, rectangle.X - 3, rectangle.Y - 3, rectangle.Width, rectangle.Height + 5);
                     }
                 }
 

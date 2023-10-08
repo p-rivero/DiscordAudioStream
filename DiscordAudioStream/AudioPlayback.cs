@@ -62,7 +62,7 @@ namespace DiscordAudioStream.AudioCapture
 
             // Start a periodic timer to update the audio meter, discard the result
             audioMeterCancel = new CancellationTokenSource();
-            _ = UpdateAudioMeter(TimeSpan.FromMilliseconds(10), audioMeterCancel.Token, device);
+            _ = UpdateAudioMeter(audioMeterCancel.Token, device);
         }
 
         public static string[] RefreshDevices()
@@ -77,7 +77,10 @@ namespace DiscordAudioStream.AudioCapture
             {
                 names[i] = audioDevices[i].FriendlyName;
                 // Add [IN] prefix to input devices (microphones and capture cards)
-                if (audioDevices[i].DataFlow == DataFlow.Capture) names[i] = "[IN] " + names[i];
+                if (audioDevices[i].DataFlow == DataFlow.Capture)
+                {
+                    names[i] = "[IN] " + names[i];
+                }
             }
             return names;
         }
@@ -132,7 +135,10 @@ namespace DiscordAudioStream.AudioCapture
                 {
                     throw new InvalidOperationException("The selected audio device is already in use by another application. Please select a different device.");
                 }
-                else throw;
+                else
+                {
+                    throw;
+                }
             }
             catch (Exception)
             {
@@ -164,20 +170,20 @@ namespace DiscordAudioStream.AudioCapture
             output.Play();
         }
 
-
-        private async Task UpdateAudioMeter(TimeSpan interval, CancellationToken token, MMDevice device)
+        private async Task UpdateAudioMeter(CancellationToken token, MMDevice device)
         {
+            TimeSpan updatePeriod = TimeSpan.FromMilliseconds(10);
             while (!token.IsCancellationRequested)
             {
-                int numChannels = device.AudioMeterInformation.PeakValues.Count;
-                float left = (numChannels >= 2) ?
-                    device.AudioMeterInformation.PeakValues[0] :
-                    device.AudioMeterInformation.MasterPeakValue;
-                float right = (numChannels >= 2) ?
-                    device.AudioMeterInformation.PeakValues[1] :
-                    device.AudioMeterInformation.MasterPeakValue;
+                bool stereo = device.AudioMeterInformation.PeakValues.Count >= 2;
+                float left = stereo
+                    ? device.AudioMeterInformation.PeakValues[0]
+                    : device.AudioMeterInformation.MasterPeakValue;
+                float right = stereo
+                    ? device.AudioMeterInformation.PeakValues[1]
+                    : device.AudioMeterInformation.MasterPeakValue;
                 AudioLevelChanged?.Invoke(left, right);
-                await Task.Delay(interval, token);
+                await Task.Delay(updatePeriod, token);
             }
         }
     }

@@ -41,7 +41,6 @@ namespace DiscordAudioStream
             Application.Run(mainForm);
         }
 
-
         private static bool IsDarkTheme()
         {
             switch (Properties.Settings.Default.Theme)
@@ -81,7 +80,10 @@ namespace DiscordAudioStream
         private static void RedirectConsoleOutput()
         {
             bool success = Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
-            if (!success) return;
+            if (!success)
+            {
+                return;
+            }
 
             // Skip shell prompt
             Console.WriteLine();

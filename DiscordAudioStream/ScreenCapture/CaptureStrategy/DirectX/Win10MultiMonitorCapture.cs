@@ -7,7 +7,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 {
     public class Win10MultiMonitorCapture : CaptureSource
     {
-
         private readonly Win10Capture winCapture;
 
         public Win10MultiMonitorCapture(bool captureCursor)

@@ -29,7 +29,10 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
                 throw new ArgumentException("Attempting to paint cursor without setting CaptureAreaRect");
             }
             Bitmap bmp = source.CaptureFrame();
-            if (bmp == null) return null;
+            if (bmp == null)
+            {
+                return null;
+            }
             return PaintCursor(bmp, CaptureAreaRect().Location);
         }
 
@@ -39,7 +42,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             source.Dispose();
             cursorBitmap?.Dispose();
         }
-
 
         private Bitmap PaintCursor(Bitmap src, Point originPos)
         {
@@ -62,7 +64,10 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             }
 
             // Screen coordinates where the cursor has to be drawn (compensate for hotspot)
-            Point cursorPos = new Point(pci.ptScreenPos.x - cursorHotspot.X, pci.ptScreenPos.y - cursorHotspot.Y);
+            Point cursorPos = new Point(
+                pci.ptScreenPos.x - cursorHotspot.X,
+                pci.ptScreenPos.y - cursorHotspot.Y
+            );
             // Transform from screen coordinates (relative to main screen) to window coordinates (relative to captured area)
             cursorPos.X -= originPos.X;
             cursorPos.Y -= originPos.Y;
@@ -101,8 +106,18 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             using (Bitmap bmp = Image.FromHbitmap(iconInfo.hbmColor))
             {
                 // Move data pointer (bmData.Scan0) from bmp to dstBitmap
-                BitmapData bmData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
-                Bitmap dstBitmap = new Bitmap(bmData.Width, bmData.Height, bmData.Stride, PixelFormat.Format32bppArgb, bmData.Scan0);
+                BitmapData bmData = bmp.LockBits(
+                    new Rectangle(0, 0, bmp.Width, bmp.Height),
+                    ImageLockMode.ReadOnly,
+                    bmp.PixelFormat
+                );
+                Bitmap dstBitmap = new Bitmap(
+                    bmData.Width,
+                    bmData.Height,
+                    bmData.Stride,
+                    PixelFormat.Format32bppArgb,
+                    bmData.Scan0
+                );
                 bmp.UnlockBits(bmData);
 
                 return new Bitmap(dstBitmap);
@@ -114,6 +129,5 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             Gdi32.DeleteObject(iconInfo.hbmMask);
             Gdi32.DeleteObject(iconInfo.hbmColor);
         }
-
     }
 }
