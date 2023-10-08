@@ -24,7 +24,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
 
         private static OutputDuplication[] screens = null;
         private static Bitmap[] cachedThumbnails = null;
-        private static readonly D3D11Device d3dDevice = new D3D11Device(Adapter);
+        private static readonly D3D11Device d3dDevice = new D3D11Device(GPU0Adapter);
 
         // Index of the selected screen to capture
         private readonly int index;
@@ -44,9 +44,11 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             }
         }
 
+        internal static Adapter GPU0Adapter => new Factory1().GetAdapter(0);
+
         private static OutputDuplication[] InitScreens()
         {
-            return Adapter.Outputs
+            return GPU0Adapter.Outputs
                 .Select(o => o.QueryInterface<Output1>().DuplicateOutput(d3dDevice))
                 .ToArray();
         }
@@ -58,7 +60,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
                 // Release the old screen
                 screens[screenIndex]?.Dispose();
                 // Get the new output
-                Output1 o = Adapter.Outputs[screenIndex].QueryInterface<Output1>();
+                Output1 o = GPU0Adapter.Outputs[screenIndex].QueryInterface<Output1>();
                 screens[screenIndex] = o.DuplicateOutput(d3dDevice);
             }
             catch (SharpDXException e)
@@ -71,15 +73,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
                 }
                 // Otherwise, don't catch the exception
                 throw;
-            }
-        }
-
-        internal static Adapter Adapter
-        {
-            get
-            {
-                // Get adapter for GPU 0
-                return new Factory1().GetAdapter(0);
             }
         }
 

@@ -29,6 +29,8 @@ namespace DiscordAudioStream
         private AudioPlayback audioPlayback = null;
         private AudioMeterForm currentMeterForm = null;
 
+        internal Action OnAudioMeterClosed { get; set; }
+
         public MainController(MainForm owner)
         {
             form = owner;
@@ -435,7 +437,7 @@ namespace DiscordAudioStream
                 currentMeterForm.FormClosed += (sender, e) =>
                 {
                     currentMeterForm = null;
-                    form.AudioMeterClosed();
+                    OnAudioMeterClosed?.Invoke();
                 };
             }
             currentMeterForm.TopMost = form.TopMost;
@@ -443,10 +445,7 @@ namespace DiscordAudioStream
             form.Focus();
         }
 
-        internal void HideAudioMeterForm()
-        {
-            currentMeterForm?.Hide();
-        }
+        internal void HideAudioMeterForm() => currentMeterForm?.Hide();
 
         internal void SetVideoIndex(int index)
         {
@@ -487,9 +486,6 @@ namespace DiscordAudioStream
             Properties.Settings.Default.Save();
         }
 
-        internal void MoveWindow(Point newPosition)
-        {
-            form.Location = newPosition;
-        }
+        internal void MoveWindow(Point newPosition) => form.Location = newPosition;
     }
 }

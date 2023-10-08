@@ -25,21 +25,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             }
         }
 
-        private int IndexOf(Screen screen)
-        {
-            var adapter = DuplicationCapture.Adapter;
-            for (int i = 0; i < adapter.Outputs.Length; i++)
-            {
-                if (adapter.Outputs[i].Description.DeviceName == screen.DeviceName)
-                    return i;
-            }
-            throw new ArgumentException("Could not find index of screen");
-        }
-
-        public override Bitmap CaptureFrame()
-        {
-            return source.CaptureFrame();
-        }
+        public override Bitmap CaptureFrame() => source.CaptureFrame();
 
         protected override void Dispose(bool disposing)
         {
@@ -47,9 +33,14 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             source.Dispose();
         }
 
-        private Rectangle GetMonitorArea()
+        private int IndexOf(Screen screen)
         {
-            return monitor.Bounds;
+            return Array.FindIndex(
+                DuplicationCapture.GPU0Adapter.Outputs,
+                output => output.Description.DeviceName == screen.DeviceName
+            );
         }
+
+        private Rectangle GetMonitorArea() => monitor.Bounds;
     }
 }

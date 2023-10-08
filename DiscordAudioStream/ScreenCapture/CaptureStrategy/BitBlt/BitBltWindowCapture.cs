@@ -27,21 +27,16 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
                 capture = bitBlt;
             }
 
-            // This method cannot capture occluded windows, set selected process as topmost
             SetWindowTopmost(windowHandle, true);
         }
 
-        public override Bitmap CaptureFrame()
-        {
-            return capture.CaptureFrame();
-        }
+        public override Bitmap CaptureFrame() => capture.CaptureFrame();
 
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
             capture.Dispose();
 
-            // We are no longer capturing the window, do not bring it to front
             SetWindowTopmost(windowHandle, false);
         }
 

@@ -23,10 +23,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             }
         }
 
-        public override Bitmap CaptureFrame()
-        {
-            return capture.CaptureFrame();
-        }
+        public override Bitmap CaptureFrame() => capture.CaptureFrame();
 
         protected override void Dispose(bool disposing)
         {

@@ -86,27 +86,11 @@ namespace Composition.WindowsRuntimeHelpers
                 uint error = CreateDirect3D11DeviceFromDXGIDevice(dxgiDevice.NativePointer, out IntPtr pUnknown);
                 if (error != 0)
                 {
-                    throw new Exception($"Failed to create Direct3D11 device, error code 0x{error:X}");
+                    throw new InvalidOperationException($"Failed to create Direct3D11 device, error code 0x{error:X}");
                 }
                 IDirect3DDevice device = Marshal.GetObjectForIUnknown(pUnknown) as IDirect3DDevice;
                 Marshal.Release(pUnknown);
                 return device;
-            }
-        }
-
-        public static IDirect3DSurface CreateDirect3DSurfaceFromSharpDXTexture(Texture2D texture)
-        {
-            using (SharpDX.DXGI.Surface dxgiSurface = texture.QueryInterface<SharpDX.DXGI.Surface>())
-            {
-                // Wrap the native device using a WinRT interop object.
-                uint error = CreateDirect3D11SurfaceFromDXGISurface(dxgiSurface.NativePointer, out IntPtr pUnknown);
-                if (error != 0)
-                {
-                    throw new Exception($"Failed to create Direct3D11 surface, error code 0x{error:X}");
-                }
-                IDirect3DSurface surface = Marshal.GetObjectForIUnknown(pUnknown) as IDirect3DSurface;
-                Marshal.Release(pUnknown);
-                return surface;
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,10 +54,11 @@ namespace DiscordAudioStream.AudioCapture
 
             // Output (to default audio device)
             output = new DirectSoundOut(DESIRED_LATENCY_MS);
-            WaveFormat format = audioSource.WaveFormat;
-            outputProvider = new BufferedWaveProvider(format);
-            outputProvider.DiscardOnBufferOverflow = true;
-            outputProvider.BufferDuration = TimeSpan.FromSeconds(2);
+            outputProvider = new BufferedWaveProvider(audioSource.WaveFormat)
+            {
+                DiscardOnBufferOverflow = true,
+                BufferDuration = TimeSpan.FromSeconds(2)
+            };
 
             output.Init(outputProvider);
 
@@ -71,21 +73,11 @@ namespace DiscordAudioStream.AudioCapture
             DataFlow flow = Properties.Settings.Default.ShowAudioInputs ? DataFlow.All : DataFlow.Render;
             audioDevices = enumerator.EnumerateAudioEndPoints(flow, DeviceState.Active);
 
-            string[] names = new string[audioDevices.Count];
-
-            for (int i = 0; i < audioDevices.Count; i++)
-            {
-                names[i] = audioDevices[i].FriendlyName;
-                // Add [IN] prefix to input devices (microphones and capture cards)
-                if (audioDevices[i].DataFlow == DataFlow.Capture)
-                {
-                    names[i] = "[IN] " + names[i];
-                }
-            }
-            return names;
+            return audioDevices
+                .Select(device => (device.DataFlow == DataFlow.Capture ? "[IN] " : "") + device.FriendlyName)
+                .ToArray();
         }
 
-        // Returns the index of the default audio output device
         public static int GetDefaultDeviceIndex()
         {
             if (audioDevices == null)
@@ -94,18 +86,14 @@ namespace DiscordAudioStream.AudioCapture
             }
             MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
             if (!enumerator.HasDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia))
+            {
                 return -1;
+            }
 
             string defaultDeviceId = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).ID;
-            for (int i = 0; i < audioDevices.Count; i++)
-            {
-                if (audioDevices[i].ID == defaultDeviceId)
-                    return i;
-            }
-            return -1;
+            return FindIndex(device => device.ID == defaultDeviceId);
         }
 
-        // Returns the index of the last device that was used, or -1 if none
         public static int GetLastDeviceIndex()
         {
             if (audioDevices == null)
@@ -113,12 +101,7 @@ namespace DiscordAudioStream.AudioCapture
                 throw new InvalidOperationException("Must call RefreshDevices() before trying to get the last device index");
             }
             string lastDeviceId = Properties.Settings.Default.AudioDeviceID;
-            for (int i = 0; i < audioDevices.Count; i++)
-            {
-                if (audioDevices[i].ID == lastDeviceId)
-                    return i;
-            }
-            return -1;
+            return FindIndex(device => device.ID == lastDeviceId);
         }
 
         public void Start()
@@ -130,7 +113,8 @@ namespace DiscordAudioStream.AudioCapture
             }
             catch (COMException e)
             {
-                Logger.Log("COMException while starting audio device:\n" + e);
+                Logger.Log("COMException while starting audio device:");
+                Logger.Log(e);
                 if ((uint)e.ErrorCode == 0x8889000A)
                 {
                     throw new InvalidOperationException("The selected audio device is already in use by another application. Please select a different device.");
@@ -168,6 +152,18 @@ namespace DiscordAudioStream.AudioCapture
             // In some cases, streaming to Discord will cause DirectSoundOut to throw an
             // exception and stop. If that happens, just resume playback
             output.Play();
+        }
+
+        private static int FindIndex(Predicate<MMDevice> match)
+        {
+            for (int i = 0; i < audioDevices.Count; i++)
+            {
+                if (match(audioDevices[i]))
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         private async Task UpdateAudioMeter(CancellationToken token, MMDevice device)

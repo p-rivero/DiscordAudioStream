@@ -61,6 +61,8 @@ namespace DiscordAudioStream
             VideoIndex = Properties.Settings.Default.AreaIndex;
             scaleComboBox.SelectedIndex = Math.Min(Properties.Settings.Default.ScaleIndex, scaleComboBox.Items.Count - 1);
 
+            controller.OnAudioMeterClosed += () => showAudioMeterToolStripMenuItem.Checked = false;
+
             ApplyDarkTheme(darkMode);
 
             toolTip.SetToolTip(captureCursorCheckBox, Properties.Resources.Tooltip_CaptureCursor);
@@ -80,8 +82,8 @@ namespace DiscordAudioStream
 
         internal int VideoIndex
         {
-            get { return areaComboBox.SelectedIndex; }
-            set { areaComboBox.SelectedIndex = value; }
+            get => areaComboBox.SelectedIndex;
+            set => areaComboBox.SelectedIndex = value;
         }
 
         internal void SetVideoItems(IEnumerable<(string, bool)> items)
@@ -108,14 +110,9 @@ namespace DiscordAudioStream
             }
         }
 
-        internal bool HasSomeAudioSource
-        {
-            get => inputDeviceComboBox.SelectedIndex > 0;
-        }
-        internal int AudioSourceIndex
-        {
-            get => inputDeviceComboBox.SelectedIndex - 1;
-        }
+        internal bool HasSomeAudioSource => inputDeviceComboBox.SelectedIndex > 0;
+
+        internal int AudioSourceIndex => inputDeviceComboBox.SelectedIndex - 1;
 
         internal void SetAudioElements(IEnumerable<string> elements, int defaultIndex)
         {
@@ -129,13 +126,11 @@ namespace DiscordAudioStream
             inputDeviceComboBox.SelectedIndex = defaultIndex;
         }
 
-        internal bool HideTaskbar
-        {
-            get { return hideTaskbarCheckBox.Checked; }
-        }
+        internal bool HideTaskbar => hideTaskbarCheckBox.Checked;
+
         internal bool HideTaskbarEnabled
         {
-            get { return hideTaskbarCheckBox.Enabled; }
+            get => hideTaskbarCheckBox.Enabled;
             set
             {
                 hideTaskbarCheckBox.Enabled = value;
@@ -209,11 +204,6 @@ namespace DiscordAudioStream
                 // Use PrintWindow to send a WM_PRINT to our own window handle, forcing a complete redraw.
                 User32.PrintWindow(handle, IntPtr.Zero, 0);
             }
-        }
-
-        internal void AudioMeterClosed()
-        {
-            showAudioMeterToolStripMenuItem.Checked = false;
         }
 
         // PRIVATE METHODS
