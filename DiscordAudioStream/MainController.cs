@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -239,7 +239,7 @@ namespace DiscordAudioStream
                 screens.Add("Everything");
             }
             numberOfScreens = screens.Count;
-            
+
             processHandleList = ProcessHandleList.Refresh();
             IEnumerable<(string, bool)> elements = screens
                 .Select(screenName => (screenName, false))
@@ -248,7 +248,7 @@ namespace DiscordAudioStream
 
             form.SetVideoItems(elements);
         }
-        
+
         internal void RefreshAudioDevices()
         {
             IEnumerable<string> elements = new string[] { "(None)" }
