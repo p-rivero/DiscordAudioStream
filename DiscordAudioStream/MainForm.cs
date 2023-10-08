@@ -89,25 +89,18 @@ namespace DiscordAudioStream
         internal void SetVideoItems(IEnumerable<(string, bool)> items)
         {
             areaComboBox.Items.Clear();
-            int numSeparators = 0;
             foreach ((string item, bool hasSeparator) in items)
             {
                 if (hasSeparator)
                 {
                     areaComboBox.Items.Add(new DarkThemeComboBox.ItemWithSeparator(item));
-                    numSeparators++;
                 }
                 else
                 {
                     areaComboBox.Items.Add(item);
                 }
             }
-
-            // For each separator, we need to add a dummy element at the end
-            for (int i = 0; i < numSeparators; i++)
-            {
-                areaComboBox.Items.Add(new DarkThemeComboBox.Dummy());
-            }
+            areaComboBox.RefreshSeparators();
         }
 
         internal bool HasSomeAudioSource => inputDeviceComboBox.SelectedIndex > 0;
@@ -396,11 +389,6 @@ namespace DiscordAudioStream
 
         private void areaComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Do not select the dummy object at the end of the list
-            if (VideoIndex == areaComboBox.Items.Count - 1)
-            {
-                VideoIndex = areaComboBox.Items.Count - 2;
-            }
             controller.SetVideoIndex(VideoIndex);
         }
 

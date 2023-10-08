@@ -1,5 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Text;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CustomComponents
@@ -8,6 +10,9 @@ namespace CustomComponents
     {
         private bool darkMode;
         private bool hovered;
+
+        private int numSeparators;
+        private readonly object separatorSentinel = new object();
 
         public class ItemWithSeparator
         {
@@ -23,9 +28,6 @@ namespace CustomComponents
                 return text;
             }
         }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S2094", Justification =
-            "This class cannot be an interface because it needs to be instantiated as a sentinel")]
-        public class Dummy { }
 
         public DarkThemeComboBox()
         {
@@ -41,7 +43,7 @@ namespace CustomComponents
                 hovered = false;
                 Refresh();
             };
-            DrawItem += new DrawItemEventHandler(CustomDrawItem);
+            DrawItem += CustomDrawItem;
         }
 
         public void SetDarkMode(bool dark)
@@ -54,19 +56,28 @@ namespace CustomComponents
             }
         }
 
+        public void RefreshSeparators()
+        {
+            RemoveSentinels();
+            numSeparators = CountItemsWithSeparators();
+            AddSentinels(numSeparators);
+        }
+
         public override int SelectedIndex
         {
             get => base.SelectedIndex;
-            set
+            set => base.SelectedIndex = Math.Min(value, Items.Count - numSeparators - 1);
+        }
+
+        protected override void OnSelectedIndexChanged(EventArgs e)
+        {
+            if (SelectedIndex >= Items.Count - numSeparators)
             {
-                if (value >= Items.Count)
-                {
-                    base.SelectedIndex = 0;
-                }
-                else
-                {
-                    base.SelectedIndex = value;
-                }
+                SelectedIndex = Items.Count - numSeparators - 1;
+            }
+            else
+            {
+                base.OnSelectedIndexChanged(e);
             }
         }
 
@@ -131,8 +142,8 @@ namespace CustomComponents
             }
 
             bool isSelected = (e.State & DrawItemState.Selected) != 0;
-            bool useWhite = !darkMode && isSelected;
-            Color fgColor = useWhite ? Color.White : ForeColor;
+            bool forceWhite = !darkMode && isSelected;
+            Color fgColor = forceWhite ? Color.White : ForeColor;
             using (Brush fgBrush = new SolidBrush(fgColor))
             {
                 e.Graphics.DrawString(item.ToString(), Font, fgBrush, e.Bounds.X, e.Bounds.Y);
@@ -145,11 +156,36 @@ namespace CustomComponents
             {
                 e.ItemHeight += ItemHeight;
             }
-            else if (Items[e.Index] is Dummy)
+            else if (Items[e.Index] == separatorSentinel)
             {
                 e.ItemHeight = 0;
             }
             base.OnMeasureItem(e);
         }
+
+        private void RemoveSentinels()
+        {
+            for (int i = Items.Count - 1; i >= 0; i--)
+            {
+                if (Items[i] == separatorSentinel)
+                {
+                    Items.RemoveAt(i);
+                }
+            }
+        }
+
+        private void AddSentinels(int amount)
+        {
+            for (int i = 0; i < amount; i++)
+            {
+                Items.Add(separatorSentinel);
+            }
+        }
+
+        private int CountItemsWithSeparators()
+        {
+            return Items.Cast<object>().Count(item => item is ItemWithSeparator);
+        }
+
     }
 }
