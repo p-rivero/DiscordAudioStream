@@ -109,7 +109,6 @@ namespace DiscordAudioStream
 
         // Events
 
-
         private void SettingsForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
@@ -135,7 +134,6 @@ namespace DiscordAudioStream
             Application.Restart();
             Environment.Exit(0);
         }
-
 
         private void classicVolumeMixerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {

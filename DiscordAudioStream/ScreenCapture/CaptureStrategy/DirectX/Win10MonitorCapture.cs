@@ -16,7 +16,10 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             winCapture = new Win10Capture(CaptureHelper.CreateItemForMonitor(hMon), captureCursor);
         }
 
-        public override Bitmap CaptureFrame() => winCapture.CaptureFrame();
+        public override Bitmap CaptureFrame()
+        {
+            return winCapture.CaptureFrame();
+        }
 
         protected override void Dispose(bool disposing)
         {

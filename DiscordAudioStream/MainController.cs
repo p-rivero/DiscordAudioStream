@@ -16,8 +16,6 @@ namespace DiscordAudioStream
     public class MainController
     {
         private readonly MainForm form;
-
-        private bool streamEnabled = false;
         private bool forceRefresh = false;
         private int numberOfScreens = -1;
         private Size lastCapturedFrameSize = new Size(0, 0);
@@ -38,7 +36,7 @@ namespace DiscordAudioStream
             processHandleList = ProcessHandleList.Refresh();
         }
 
-        public bool IsStreaming => streamEnabled;
+        public bool IsStreaming { get; private set; } = false;
 
         internal void Init()
         {
@@ -58,7 +56,7 @@ namespace DiscordAudioStream
         internal bool Stop()
         {
             bool cancel = false;
-            if (streamEnabled)
+            if (IsStreaming)
             {
                 cancel = true; // Do not close form, return to settings instead
                 EndStream();
@@ -78,7 +76,7 @@ namespace DiscordAudioStream
         private void SetPreviewSize(Size size)
         {
             lastCapturedFrameSize = size;
-            if (streamEnabled)
+            if (IsStreaming)
             {
                 size = captureResizer.GetScaledSize(size);
                 form.SetPreviewUISize(size);
@@ -163,7 +161,7 @@ namespace DiscordAudioStream
 
                         // Display captured frame
                         // Refresh if the stream has started and "Force screen redraw" is enabled
-                        form.UpdatePreview(next, streamEnabled && forceRefresh, formHandle);
+                        form.UpdatePreview(next, IsStreaming && forceRefresh, formHandle);
                     }
                     catch (InvalidOperationException)
                     {
@@ -280,7 +278,7 @@ namespace DiscordAudioStream
             // Reading Properties.Settings can be slow, set flag once at the start of the stream
             forceRefresh = Properties.Settings.Default.OffscreenDraw;
             Logger.Log("Force screen redraw: " + forceRefresh);
-            streamEnabled = true;
+            IsStreaming = true;
 
             SetPreviewSize(lastCapturedFrameSize);
         }
@@ -364,7 +362,7 @@ namespace DiscordAudioStream
             Logger.EmptyLine();
             Logger.Log("END STREAM");
             form.EnableStreamingUI(false);
-            streamEnabled = false;
+            IsStreaming = false;
             audioPlayback?.Stop();
         }
 
@@ -374,7 +372,7 @@ namespace DiscordAudioStream
             {
                 RefreshScreens();
                 form.VideoIndex = Properties.Settings.Default.AreaIndex;
-                if (!streamEnabled)
+                if (!IsStreaming)
                 {
                     return;
                 }
@@ -431,7 +429,10 @@ namespace DiscordAudioStream
             form.Focus();
         }
 
-        internal void HideAudioMeterForm() => currentMeterForm?.Hide();
+        internal void HideAudioMeterForm()
+        {
+            currentMeterForm?.Hide();
+        }
 
         internal void SetVideoIndex(int index)
         {
@@ -472,6 +473,9 @@ namespace DiscordAudioStream
             Properties.Settings.Default.Save();
         }
 
-        internal void MoveWindow(Point newPosition) => form.Location = newPosition;
+        internal void MoveWindow(Point newPosition)
+        {
+            form.Location = newPosition;
+        }
     }
 }

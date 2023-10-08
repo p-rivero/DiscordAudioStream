@@ -66,6 +66,7 @@ namespace CustomComponents
         public override int SelectedIndex
         {
             get => base.SelectedIndex;
+
             set => base.SelectedIndex = Math.Min(value, Items.Count - numSeparators - 1);
         }
 
@@ -186,6 +187,5 @@ namespace CustomComponents
         {
             return Items.Cast<object>().Count(item => item is ItemWithSeparator);
         }
-
     }
 }

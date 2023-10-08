@@ -15,7 +15,10 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             capture.CustomAreaCrop += () => GetCustomArea(true);
         }
 
-        public override Bitmap CaptureFrame() => capture.CaptureFrame();
+        public override Bitmap CaptureFrame()
+        {
+            return capture.CaptureFrame();
+        }
 
         protected override void Dispose(bool disposing)
         {

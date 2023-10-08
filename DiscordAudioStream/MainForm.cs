@@ -14,8 +14,6 @@ namespace DiscordAudioStream
 {
     public partial class MainForm : Form
     {
-        private readonly MainController controller;
-
         private readonly bool darkMode;
         private readonly Size defaultWindowSize;
         private readonly Size defaultPreviewSize;
@@ -26,7 +24,7 @@ namespace DiscordAudioStream
             Logger.EmptyLine();
             Logger.Log("Initializing MainForm. darkMode = " + darkMode);
 
-            controller = new MainController(this);
+            Controller = new MainController(this);
 
             this.darkMode = darkMode;
             if (darkMode)
@@ -37,14 +35,14 @@ namespace DiscordAudioStream
             InitializeComponent();
             previewBox.Visible = true;
 
-            defaultWindowSize = this.Size;
+            defaultWindowSize = Size;
             defaultPreviewSize = previewBox.Size;
             defaultPreviewLocation = previewBox.Location;
 
             inputDeviceComboBox.SelectedIndex = 0;
 
-            controller.RefreshScreens();
-            controller.RefreshAudioDevices();
+            Controller.RefreshScreens();
+            Controller.RefreshAudioDevices();
             try
             {
                 VideoIndex = Properties.Settings.Default.AreaIndex;
@@ -62,7 +60,7 @@ namespace DiscordAudioStream
             VideoIndex = Properties.Settings.Default.AreaIndex;
             scaleComboBox.SelectedIndex = Math.Min(Properties.Settings.Default.ScaleIndex, scaleComboBox.Items.Count - 1);
 
-            controller.OnAudioMeterClosed += () => showAudioMeterToolStripMenuItem.Checked = false;
+            Controller.OnAudioMeterClosed += () => showAudioMeterToolStripMenuItem.Checked = false;
 
             ApplyDarkTheme(darkMode);
 
@@ -77,13 +75,14 @@ namespace DiscordAudioStream
             toolTip.SetToolTip(startButton, Properties.Resources.Tooltip_StartStream);
         }
 
-        public MainController Controller => controller;
+        public MainController Controller { get; }
 
         // INTERNAL METHODS (called from controller)
 
         internal int VideoIndex
         {
             get => areaComboBox.SelectedIndex;
+
             set => areaComboBox.SelectedIndex = value;
         }
 
@@ -120,6 +119,7 @@ namespace DiscordAudioStream
         internal bool HideTaskbarEnabled
         {
             get => hideTaskbarCheckBox.Enabled;
+
             set
             {
                 hideTaskbarCheckBox.Enabled = value;
@@ -139,7 +139,7 @@ namespace DiscordAudioStream
         internal void EnableStreamingUI(bool streaming)
         {
             // Autosize the form only while streaming
-            this.AutoSize = streaming;
+            AutoSize = streaming;
 
             // Disable UI elements while streaming
             videoGroup.Visible = !streaming;
@@ -152,8 +152,8 @@ namespace DiscordAudioStream
                 // If we start streaming, override previewBtn and enable the previewBox
                 DisplayPreview(true);
                 previewBox.Location = new Point(0, 0);
-                controller.ShowAudioMeterForm(darkMode);
-                this.Text = Properties.Settings.Default.StreamTitle;
+                Controller.ShowAudioMeterForm(darkMode);
+                Text = Properties.Settings.Default.StreamTitle;
                 previewBox.ContextMenuStrip = streamContextMenu;
 
                 showAudioMeterToolStripMenuItem.Enabled = HasSomeAudioSource;
@@ -165,8 +165,8 @@ namespace DiscordAudioStream
                 previewBox.Size = defaultPreviewSize;
                 previewBox.Location = defaultPreviewLocation;
                 CenterToScreen();
-                controller.HideAudioMeterForm();
-                this.Text = "Discord Audio Stream";
+                Controller.HideAudioMeterForm();
+                Text = "Discord Audio Stream";
                 previewBox.ContextMenuStrip = null;
             }
         }
@@ -201,8 +201,8 @@ namespace DiscordAudioStream
         {
             if (darkMode)
             {
-                this.ForeColor = Color.White;
-                this.BackColor = DarkThemeManager.DarkBackColor;
+                ForeColor = Color.White;
+                BackColor = DarkThemeManager.DarkBackColor;
 
                 aboutBtn.Image = Properties.Resources.white_about;
                 onTopBtn.Image = Properties.Resources.white_ontop;
@@ -228,13 +228,13 @@ namespace DiscordAudioStream
 
             if (visible)
             {
-                this.Size = defaultWindowSize;
+                Size = defaultWindowSize;
             }
             else
             {
-                Size newSize = this.Size;
+                Size newSize = Size;
                 newSize.Width = defaultWindowSize.Width - (defaultPreviewSize.Width + 10);
-                this.Size = newSize;
+                Size = newSize;
 
                 previewBox.Image?.Dispose();
                 previewBox.Image = null;
@@ -245,7 +245,7 @@ namespace DiscordAudioStream
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            controller.Init();
+            Controller.Init();
             onTopBtn.Checked = Properties.Settings.Default.AlwaysOnTop;
             captureCursorCheckBox.Checked = Properties.Settings.Default.CaptureCursor;
             hideTaskbarCheckBox.Checked = Properties.Settings.Default.HideTaskbar;
@@ -261,7 +261,7 @@ namespace DiscordAudioStream
             }
 
             // MainController.Stop() returns false if the form has to be closed
-            e.Cancel = controller.Stop();
+            e.Cancel = Controller.Stop();
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
@@ -286,9 +286,9 @@ namespace DiscordAudioStream
                         soundDevicesButton.PerformClick();
                         break;
                     case Keys.Enter:
-                        if (!controller.IsStreaming)
+                        if (!Controller.IsStreaming)
                         {
-                            controller.StartStream(false);
+                            Controller.StartStream(false);
                         }
                         break;
                 }
@@ -301,9 +301,9 @@ namespace DiscordAudioStream
                         aboutBtn.PerformClick();
                         break;
                     case Keys.Escape:
-                        if (controller.IsStreaming)
+                        if (Controller.IsStreaming)
                         {
-                            controller.Stop();
+                            Controller.Stop();
                         }
                         break;
                 }
@@ -364,43 +364,43 @@ namespace DiscordAudioStream
 
         private void settingsBtn_Click(object sender, EventArgs e)
         {
-            controller.ShowSettingsForm(darkMode);
+            Controller.ShowSettingsForm(darkMode);
         }
 
         private void aboutBtn_Click(object sender, EventArgs e)
         {
-            controller.ShowAboutForm(darkMode);
+            Controller.ShowAboutForm(darkMode);
         }
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            controller.StartStream(false);
+            Controller.StartStream(false);
         }
 
         private void areaComboBox_DropDown(object sender, EventArgs e)
         {
             // When the user expands the area combobox, update its elements
-            controller.UpdateAreaComboBox(VideoIndex);
+            Controller.UpdateAreaComboBox(VideoIndex);
         }
 
         private void areaComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            controller.SetVideoIndex(VideoIndex);
+            Controller.SetVideoIndex(VideoIndex);
         }
 
         private void scaleComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            controller.SetScaleIndex(scaleComboBox.SelectedIndex);
+            Controller.SetScaleIndex(scaleComboBox.SelectedIndex);
         }
 
         private void hideTaskbarCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            controller.SetHideTaskbar(hideTaskbarCheckBox.Checked);
+            Controller.SetHideTaskbar(hideTaskbarCheckBox.Checked);
         }
 
         private void captureCursorCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            controller.SetCapturingCursor(captureCursorCheckBox.Checked);
+            Controller.SetCapturingCursor(captureCursorCheckBox.Checked);
         }
 
         private void showAudioMeterToolStripMenuItem_Click(object sender, EventArgs e)
@@ -413,17 +413,17 @@ namespace DiscordAudioStream
 
             if (show)
             {
-                controller.ShowAudioMeterForm(darkMode);
+                Controller.ShowAudioMeterForm(darkMode);
             }
             else
             {
-                controller.HideAudioMeterForm();
+                Controller.HideAudioMeterForm();
             }
         }
 
         private void stopStreamToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            controller.Stop();
+            Controller.Stop();
         }
     }
 }

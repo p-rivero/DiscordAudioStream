@@ -30,7 +30,10 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             SetWindowTopmost(windowHandle, true);
         }
 
-        public override Bitmap CaptureFrame() => capture.CaptureFrame();
+        public override Bitmap CaptureFrame()
+        {
+            return capture.CaptureFrame();
+        }
 
         protected override void Dispose(bool disposing)
         {

@@ -7,7 +7,7 @@ namespace CustomComponents
 {
     public class AudioMeter : NAudio.Gui.VolumeMeter
     {
-        private class AudioMeterSegment
+        private sealed class AudioMeterSegment
         {
             public double FromPercent { get; set; }
             public double ToPercent { get; set; }
@@ -15,8 +15,16 @@ namespace CustomComponents
             public Color ActiveColor { get; set; }
 
             public double RelativeHeight => ToPercent - FromPercent;
-            public bool CompletelyFilled(double audioValue) => audioValue >= ToPercent;
-            public bool CompletelyEmpty(double audioValue) => audioValue <= FromPercent;
+
+            public bool CompletelyFilled(double audioValue)
+            {
+                return audioValue >= ToPercent;
+            }
+
+            public bool CompletelyEmpty(double audioValue)
+            {
+                return audioValue <= FromPercent;
+            }
 
             public void Paint(Graphics g, double meterPercent, Size meterSize)
             {

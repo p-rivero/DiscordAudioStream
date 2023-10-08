@@ -59,8 +59,8 @@ namespace DLLs
         [StructLayout(LayoutKind.Sequential)]
         public struct CursorInfo
         {
-            public Int32 cbSize;
-            public Int32 flags;
+            public int cbSize;
+            public int flags;
             public IntPtr hCursor;
             public PointApi ptScreenPos;
 
@@ -80,13 +80,15 @@ namespace DLLs
 
             public int Height
             {
-                get { return bottom - top; }
-                set { bottom = value + top; }
+                get => bottom - top;
+
+                set => bottom = value + top;
             }
             public int Width
             {
-                get { return right - left; }
-                set { right = value + left; }
+                get => right - left;
+
+                set => right = value + left;
             }
 
             public Rect(int x, int y, int width, int height)

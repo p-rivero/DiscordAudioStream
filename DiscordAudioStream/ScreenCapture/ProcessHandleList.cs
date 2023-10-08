@@ -89,10 +89,7 @@ namespace DiscordAudioStream.ScreenCapture
             return new ProcessHandleList(windows);
         }
 
-        public ICollection<string> Names
-        {
-            get { return processNames; }
-        }
+        public ICollection<string> Names => processNames;
 
         public IntPtr this[int index]
         {

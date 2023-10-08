@@ -67,8 +67,8 @@ namespace DiscordAudioStream
                 int targetHeight = startSize.Height + curPos.Y - startPos.Y;
 
                 // Clip to bottom-right corner
-                Width = Math.Min(targetWidth, bounds.Right - this.Left);
-                Height = Math.Min(targetHeight, bounds.Bottom - this.Top);
+                Width = Math.Min(targetWidth, bounds.Right - Left);
+                Height = Math.Min(targetHeight, bounds.Bottom - Top);
             }));
         }
 
@@ -116,7 +116,10 @@ namespace DiscordAudioStream
                     MessageBoxDefaultButton.Button2
                 );
                 if (r == DialogResult.Cancel)
+                {
                     return;
+                }
+
                 Properties.Settings.Default.SeenLockAreaDiag = true;
                 Properties.Settings.Default.Save();
                 Logger.Log("Set SeenLockAreaDiag = true");

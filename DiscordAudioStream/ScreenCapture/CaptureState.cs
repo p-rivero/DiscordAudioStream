@@ -39,7 +39,8 @@ namespace DiscordAudioStream.ScreenCapture
         // True if the cursor should be captured
         public bool CapturingCursor
         {
-            get { return capturingCursor; }
+            get => capturingCursor;
+
             set
             {
                 if (capturingCursor == value)
@@ -58,7 +59,8 @@ namespace DiscordAudioStream.ScreenCapture
         // True if the taskbar should be hidden
         public bool HideTaskbar
         {
-            get { return hideTaskbar; }
+            get => hideTaskbar;
+
             set
             {
                 if (hideTaskbar == value)
@@ -84,7 +86,7 @@ namespace DiscordAudioStream.ScreenCapture
                 {
                     return false;
                 }
-                return (ScreenMethod == ScreenCaptureMethod.BitBlt);
+                return ScreenMethod == ScreenCaptureMethod.BitBlt;
             }
         }
 

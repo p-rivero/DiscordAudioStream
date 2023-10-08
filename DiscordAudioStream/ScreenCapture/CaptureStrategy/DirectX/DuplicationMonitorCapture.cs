@@ -25,7 +25,10 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             }
         }
 
-        public override Bitmap CaptureFrame() => source.CaptureFrame();
+        public override Bitmap CaptureFrame()
+        {
+            return source.CaptureFrame();
+        }
 
         protected override void Dispose(bool disposing)
         {
@@ -41,6 +44,9 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
             );
         }
 
-        private Rectangle GetMonitorArea() => monitor.Bounds;
+        private Rectangle GetMonitorArea()
+        {
+            return monitor.Bounds;
+        }
     }
 }

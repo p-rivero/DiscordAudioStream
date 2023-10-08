@@ -16,7 +16,6 @@ namespace DiscordAudioStream
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
         }
 
-
         private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             HandleException(e.ExceptionObject as Exception);
