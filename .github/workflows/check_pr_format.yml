@@ -1,0 +1,46 @@
+name: Format check on pull request
+on: pull_request
+jobs:
+  dotnet-format:
+    runs-on: windows-latest
+    steps:
+      - name: Get branch info
+        id: comment-branch
+        uses: xt0rted/pull-request-comment-branch@v1
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.comment-branch.outputs.ref }}
+          persist-credentials: false
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.x
+
+      - name: Run dotnet format
+        run: dotnet format .\DiscordAudioStream.sln --verbosity diagnostic
+
+      - name: Check for changes
+        id: git-diff
+        run: |
+          git diff --exit-code
+
+      - name: Commit files
+        if: steps.git-diff.outputs.exit_code != '0'
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -a -m 'Automated dotnet-format update
+
+          Co-authored-by: ${{ github.event.comment.user.login }} <${{ github.event.comment.user.id }}+${{ github.event.comment.user.login }}@users.noreply.github.com>'
+
+      - name: Push changes
+        if: steps.git-diff.outputs.exit_code != '0'
+        uses: ad-m/github-push-action@v0.5.0
+        with:
+          branch: ${{ steps.comment-branch.outputs.ref }}
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}

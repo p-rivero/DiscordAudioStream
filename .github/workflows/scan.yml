@@ -88,3 +88,19 @@ jobs:
       
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
+
+
+  dotnet-format:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.x
+
+      - name: Run dotnet format
+        run: dotnet format .\DiscordAudioStream.sln --verify-no-changes --verbosity diagnostic
+
