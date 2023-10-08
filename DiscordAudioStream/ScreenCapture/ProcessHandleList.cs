@@ -10,14 +10,14 @@ namespace DiscordAudioStream.ScreenCapture
 {
     public class ProcessHandleList
     {
-        private readonly IntPtr[] handles = null;
-        private readonly string[] processNames = null;
+        private readonly List<IntPtr> handles = null;
+        private readonly List<string> processNames = null;
 
         // Cannot instantiate directly, must call ProcessHandleList.Refresh()
         private ProcessHandleList(Dictionary<IntPtr, string> processes)
         {
-            handles = processes.Keys.ToArray();
-            processNames = processes.Values.ToArray();
+            handles = processes.Keys.ToList();
+            processNames = processes.Values.ToList();
         }
 
         public static ProcessHandleList Refresh()
@@ -89,7 +89,7 @@ namespace DiscordAudioStream.ScreenCapture
             return new ProcessHandleList(windows);
         }
 
-        public string[] Names
+        public ICollection<string> Names
         {
             get { return processNames; }
         }
@@ -102,7 +102,7 @@ namespace DiscordAudioStream.ScreenCapture
                 {
                     throw new InvalidOperationException("Call RefreshHandles() before attempting to get a handle");
                 }
-                if (index < 0 || index >= handles.Length)
+                if (index < 0 || index >= handles.Count)
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
@@ -110,15 +110,9 @@ namespace DiscordAudioStream.ScreenCapture
             }
         }
 
-        // Get the index of a given handle
         public int IndexOf(IntPtr handle)
         {
-            for (int i = 0; i < handles.Length; i++)
-            {
-                if (handles[i] == handle)
-                    return i;
-            }
-            return -1;
+            return handles.IndexOf(handle);
         }
     }
 }

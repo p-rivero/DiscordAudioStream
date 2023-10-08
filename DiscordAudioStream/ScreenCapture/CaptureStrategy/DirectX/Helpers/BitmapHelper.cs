@@ -56,7 +56,7 @@ namespace DiscordAudioStream.ScreenCapture
 
         private static Texture2D CreateReadableTexture(int width, int height, Device d3dDevice)
         {
-            var texture2DDescription = new Texture2DDescription
+            Texture2DDescription texture2DDescription = new Texture2DDescription
             {
                 CpuAccessFlags = CpuAccessFlags.Read,
                 BindFlags = BindFlags.None,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -20,14 +21,12 @@ namespace DiscordAudioStream.AudioCapture
         private readonly BufferedWaveProvider outputProvider;
         private readonly CancellationTokenSource audioMeterCancel;
 
-        private static MMDeviceCollection audioDevices = null;
+        private static List<MMDevice> audioDevices = null;
 
         public AudioPlayback(int deviceIndex)
         {
-            if (audioDevices == null)
-            {
-                throw new InvalidOperationException("Must call RefreshDevices() before initializing an AudioPlayback");
-            }
+            AssertDevicesInitialized("AudioPlayback constructor");
+
             if (deviceIndex < 0 || deviceIndex > audioDevices.Count)
             {
                 throw new ArgumentOutOfRangeException("deviceIndex");
@@ -71,7 +70,7 @@ namespace DiscordAudioStream.AudioCapture
         {
             MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
             DataFlow flow = Properties.Settings.Default.ShowAudioInputs ? DataFlow.All : DataFlow.Render;
-            audioDevices = enumerator.EnumerateAudioEndPoints(flow, DeviceState.Active);
+            audioDevices = enumerator.EnumerateAudioEndPoints(flow, DeviceState.Active).ToList();
 
             return audioDevices
                 .Select(device => (device.DataFlow == DataFlow.Capture ? "[IN] " : "") + device.FriendlyName)
@@ -80,10 +79,7 @@ namespace DiscordAudioStream.AudioCapture
 
         public static int GetDefaultDeviceIndex()
         {
-            if (audioDevices == null)
-            {
-                throw new InvalidOperationException("Must call RefreshDevices() before trying to get the default index");
-            }
+            AssertDevicesInitialized("GetDefaultDeviceIndex");
             MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
             if (!enumerator.HasDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia))
             {
@@ -91,17 +87,14 @@ namespace DiscordAudioStream.AudioCapture
             }
 
             string defaultDeviceId = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).ID;
-            return FindIndex(device => device.ID == defaultDeviceId);
+            return audioDevices.FindIndex(device => device.ID == defaultDeviceId);
         }
 
         public static int GetLastDeviceIndex()
         {
-            if (audioDevices == null)
-            {
-                throw new InvalidOperationException("Must call RefreshDevices() before trying to get the last device index");
-            }
+            AssertDevicesInitialized("GetLastDeviceIndex");
             string lastDeviceId = Properties.Settings.Default.AudioDeviceID;
-            return FindIndex(device => device.ID == lastDeviceId);
+            return audioDevices.FindIndex(device => device.ID == lastDeviceId);
         }
 
         public void Start()
@@ -141,6 +134,14 @@ namespace DiscordAudioStream.AudioCapture
             output.Stop();
         }
 
+        private static void AssertDevicesInitialized(string method)
+        {
+            if (audioDevices == null)
+            {
+                throw new InvalidOperationException("RefreshDevices() must be called before calling " + method);
+            }
+        }
+
         private void AudioSource_DataAvailable(object sender, WaveInEventArgs e)
         {
             // New audio data available, append to output audio buffer
@@ -152,18 +153,6 @@ namespace DiscordAudioStream.AudioCapture
             // In some cases, streaming to Discord will cause DirectSoundOut to throw an
             // exception and stop. If that happens, just resume playback
             output.Play();
-        }
-
-        private static int FindIndex(Predicate<MMDevice> match)
-        {
-            for (int i = 0; i < audioDevices.Count; i++)
-            {
-                if (match(audioDevices[i]))
-                {
-                    return i;
-                }
-            }
-            return -1;
         }
 
         private async Task UpdateAudioMeter(CancellationToken token, MMDevice device)

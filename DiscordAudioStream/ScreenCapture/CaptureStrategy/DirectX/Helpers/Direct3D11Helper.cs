@@ -56,16 +56,6 @@ namespace Composition.WindowsRuntimeHelpers
         )]
         private static extern uint CreateDirect3D11DeviceFromDXGIDevice(IntPtr dxgiDevice, out IntPtr graphicsDevice);
 
-        [DllImport(
-            "d3d11.dll",
-            EntryPoint = "CreateDirect3D11SurfaceFromDXGISurface",
-            SetLastError = true,
-            CharSet = CharSet.Unicode,
-            ExactSpelling = true,
-            CallingConvention = CallingConvention.StdCall
-        )]
-        private static extern uint CreateDirect3D11SurfaceFromDXGISurface(IntPtr dxgiSurface, out IntPtr graphicsSurface);
-
         public static IDirect3DDevice CreateDevice()
         {
             return CreateDevice(false);

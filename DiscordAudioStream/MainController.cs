@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -224,49 +225,34 @@ namespace DiscordAudioStream
 
         internal void RefreshScreens()
         {
-            List<(string, bool)> elements = new List<(string, bool)>();
+            List<string> screens = Screen.AllScreens
+                .Select((screen, i) =>
+                {
+                    Rectangle bounds = screen.Bounds;
+                    string screenName = screen.Primary ? "Primary screen" : $"Screen {i + 1}";
+                    return $"{screenName} ({bounds.Width} x {bounds.Height})";
+                })
+                .ToList();
 
-            for (int i = 0; i < Screen.AllScreens.Length; i++)
-            {
-                Rectangle bounds = Screen.AllScreens[i].Bounds;
-                if (Screen.AllScreens[i].Primary)
-                {
-                    elements.Add(("Primary screen (" + bounds.Width + "x" + bounds.Height + ")", false));
-                }
-                else
-                {
-                    elements.Add(("Screen " + (i + 1) + " (" + bounds.Width + "x" + bounds.Height + ")", false));
-                }
-            }
             if (Screen.AllScreens.Length > 1)
             {
-                elements.Add(("Everything", false));
+                screens.Add("Everything");
             }
-
-            numberOfScreens = elements.Count;
-
-            // Item with separator
-            elements.Add(("Custom area", true));
-
+            numberOfScreens = screens.Count;
+            
             processHandleList = ProcessHandleList.Refresh();
-            foreach (string window in processHandleList.Names)
-            {
-                elements.Add((window, false));
-            }
+            IEnumerable<(string, bool)> elements = screens
+                .Select(screenName => (screenName, false))
+                .Append(("Custom area", true))
+                .Concat(processHandleList.Names.Select(windowName => (windowName, false)));
 
             form.SetVideoItems(elements);
         }
-
+        
         internal void RefreshAudioDevices()
         {
-            List<string> elements = new List<string>();
-
-            elements.Add("(None)");
-
-            foreach (string device in AudioPlayback.RefreshDevices())
-            {
-                elements.Add(device);
-            }
+            IEnumerable<string> elements = new string[] { "(None)" }
+                .Concat(AudioPlayback.RefreshDevices());
 
             int defaultIndex = AudioPlayback.GetLastDeviceIndex() + 1; // Add 1 for "None" element
             form.SetAudioElements(elements, defaultIndex);

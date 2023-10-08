@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -110,12 +111,7 @@ namespace DiscordAudioStream
         internal void SetAudioElements(IEnumerable<string> elements, int defaultIndex)
         {
             inputDeviceComboBox.Items.Clear();
-
-            foreach (string element in elements)
-            {
-                inputDeviceComboBox.Items.Add(element);
-            }
-
+            inputDeviceComboBox.Items.AddRange(elements.ToArray());
             inputDeviceComboBox.SelectedIndex = defaultIndex;
         }
 

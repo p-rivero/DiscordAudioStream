@@ -65,7 +65,7 @@ namespace Composition.WindowsRuntimeHelpers
             IActivationFactory factory = WindowsRuntimeMarshal.GetActivationFactory(typeof(GraphicsCaptureItem));
             IGraphicsCaptureItemInterop interop = (IGraphicsCaptureItemInterop)factory;
             IntPtr itemPointer = interop.CreateForWindow(hwnd, GraphicsCaptureItemGuid);
-            var item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
+            GraphicsCaptureItem item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
             Marshal.Release(itemPointer);
 
             return item;
@@ -76,7 +76,7 @@ namespace Composition.WindowsRuntimeHelpers
             IActivationFactory factory = WindowsRuntimeMarshal.GetActivationFactory(typeof(GraphicsCaptureItem));
             IGraphicsCaptureItemInterop interop = (IGraphicsCaptureItemInterop)factory;
             IntPtr itemPointer = interop.CreateForMonitor(hmon, GraphicsCaptureItemGuid);
-            var item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
+            GraphicsCaptureItem item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
             Marshal.Release(itemPointer);
 
             return item;
