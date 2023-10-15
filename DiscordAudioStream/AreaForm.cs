@@ -3,16 +3,14 @@ using System.Drawing;
 using System.Timers;
 using System.Windows.Forms;
 
-using DLLs;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 
 namespace DiscordAudioStream
 {
     public partial class AreaForm : Form
     {
         public const int BORDER_WIDTH_PX = 2;
-
-        private const int WM_NCLBUTTONDOWN = 0xA1;
-        private const int HT_CAPTION = 0x2;
 
         private Point startPos;
         private Size startSize;
@@ -88,8 +86,8 @@ namespace DiscordAudioStream
         private void AreaForm_MouseDown(object sender, MouseEventArgs e)
         {
             Cursor.Current = Cursors.SizeAll;
-            User32.ReleaseCapture();
-            User32.SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            PInvoke.ReleaseCapture();
+            PInvoke.SendMessage((HWND)Handle, PInvoke.WM_NCLBUTTONDOWN, PInvoke.HTCAPTION, LPARAM.Null);
         }
 
         private void dragBtn_MouseDown(object sender, MouseEventArgs e)

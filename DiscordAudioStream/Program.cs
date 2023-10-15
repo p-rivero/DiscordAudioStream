@@ -2,6 +2,9 @@
 using System.Linq;
 using System.Windows.Forms;
 
+using Windows.Win32;
+using Windows.Win32.UI.HiDpi;
+
 using CustomComponents;
 
 using DLLs;
@@ -69,17 +72,20 @@ namespace DiscordAudioStream
         {
             try
             {
-                User32.SetProcessDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+                if (!PInvoke.SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+                {
+                    Logger.Log("Failed to set DPI awareness context.");
+                }
             }
             catch (EntryPointNotFoundException)
             {
-                Logger.Log("Failed to set DPI awareness context. This is normal on Windows 7.");
+                Logger.Log("SetProcessDpiAwarenessContext not found. This is normal on Windows 7.");
             }
         }
 
         private static void RedirectConsoleOutput()
         {
-            bool success = Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
+            bool success = PInvoke.AttachConsole(PInvoke.ATTACH_PARENT_PROCESS);
             if (!success)
             {
                 return;

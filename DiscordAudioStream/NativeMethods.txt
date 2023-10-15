@@ -1,0 +1,12 @@
+﻿SetProcessDpiAwarenessContext
+ReleaseCapture
+
+SendMessage
+WM_NCLBUTTONDOWN
+HTCAPTION
+
+DwmSetWindowAttribute
+DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
+
+AttachConsole
+ATTACH_PARENT_PROCESS
