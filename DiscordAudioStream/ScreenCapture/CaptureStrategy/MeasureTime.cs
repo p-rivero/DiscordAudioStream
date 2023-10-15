@@ -1,34 +1,33 @@
 ﻿using System;
 using System.Drawing;
 
-namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
+namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
+
+public class MeasureTime : CaptureSource
 {
-    public class MeasureTime : CaptureSource
+    private readonly CaptureSource capture;
+
+    public MeasureTime(CaptureSource capture)
     {
-        private readonly CaptureSource capture;
+        this.capture = capture;
+        Logger.Log($"Instantiating MeasureTime source (wrapping {capture.GetType().Name})");
+    }
 
-        public MeasureTime(CaptureSource capture)
-        {
-            this.capture = capture;
-            Logger.Log($"Instantiating MeasureTime source (wrapping {capture.GetType().Name})");
-        }
+    public override Bitmap CaptureFrame()
+    {
+        System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
+        Bitmap bmp = capture.CaptureFrame();
 
-        public override Bitmap CaptureFrame()
-        {
-            System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
-            Bitmap bmp = capture.CaptureFrame();
+        long elapsed_ms = watch.ElapsedMilliseconds;
+        float fps = 1000f / elapsed_ms;
+        Console.WriteLine($"{capture.GetType().Name}: {elapsed_ms} ms ({fps:0.#} FPS)");
 
-            long elapsed_ms = watch.ElapsedMilliseconds;
-            float fps = 1000f / elapsed_ms;
-            Console.WriteLine($"{capture.GetType().Name}: {elapsed_ms} ms ({fps:0.#} FPS)");
+        return bmp;
+    }
 
-            return bmp;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            capture.Dispose();
-        }
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        capture.Dispose();
     }
 }

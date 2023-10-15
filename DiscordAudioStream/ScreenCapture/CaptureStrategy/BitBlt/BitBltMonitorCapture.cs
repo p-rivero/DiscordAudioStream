@@ -1,48 +1,47 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
+namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
+
+public class BitBltMonitorCapture : CaptureSource
 {
-    public class BitBltMonitorCapture : CaptureSource
+    private readonly CaptureSource capture;
+    private readonly Screen monitor;
+    private readonly bool hideTaskbar;
+
+    public BitBltMonitorCapture(Screen monitor, bool captureCursor, bool hideTaskbar)
     {
-        private readonly CaptureSource capture;
-        private readonly Screen monitor;
-        private readonly bool hideTaskbar;
+        this.monitor = monitor;
+        this.hideTaskbar = hideTaskbar;
 
-        public BitBltMonitorCapture(Screen monitor, bool captureCursor, bool hideTaskbar)
+        BitBltCapture bitBlt = new();
+        bitBlt.CaptureAreaRect += GetMonitorArea;
+
+        if (captureCursor)
         {
-            this.monitor = monitor;
-            this.hideTaskbar = hideTaskbar;
-
-            BitBltCapture bitBlt = new BitBltCapture();
-            bitBlt.CaptureAreaRect += GetMonitorArea;
-
-            if (captureCursor)
-            {
-                CursorPainter paintCursor = new CursorPainter(bitBlt);
-                paintCursor.CaptureAreaRect += GetMonitorArea;
-                capture = paintCursor;
-            }
-            else
-            {
-                capture = bitBlt;
-            }
+            CursorPainter paintCursor = new(bitBlt);
+            paintCursor.CaptureAreaRect += GetMonitorArea;
+            capture = paintCursor;
         }
-
-        public override Bitmap CaptureFrame()
+        else
         {
-            return capture.CaptureFrame();
+            capture = bitBlt;
         }
+    }
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            capture.Dispose();
-        }
+    public override Bitmap CaptureFrame()
+    {
+        return capture.CaptureFrame();
+    }
 
-        private Rectangle GetMonitorArea()
-        {
-            return hideTaskbar ? monitor.WorkingArea : monitor.Bounds;
-        }
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        capture.Dispose();
+    }
+
+    private Rectangle GetMonitorArea()
+    {
+        return hideTaskbar ? monitor.WorkingArea : monitor.Bounds;
     }
 }

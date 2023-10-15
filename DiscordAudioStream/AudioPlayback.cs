@@ -8,171 +8,170 @@ using System.Threading.Tasks;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
-namespace DiscordAudioStream.AudioCapture
+namespace DiscordAudioStream.AudioCapture;
+
+internal class AudioPlayback
 {
-    internal class AudioPlayback
+    public event Action<float, float> AudioLevelChanged;
+
+    private const int DESIRED_LATENCY_MS = 50;
+
+    // https://www.hresult.info/FACILITY_AUDCLNT
+    private const uint AUDCLNT_E_DEVICE_IN_USE = 0x8889000A;
+
+    private readonly IWaveIn audioSource;
+    private readonly DirectSoundOut output;
+    private readonly BufferedWaveProvider outputProvider;
+    private readonly CancellationTokenSource audioMeterCancel;
+
+    private static List<MMDevice> audioDevices = null;
+
+    public AudioPlayback(int deviceIndex)
     {
-        public event Action<float, float> AudioLevelChanged;
+        AssertDevicesInitialized("AudioPlayback constructor");
 
-        private const int DESIRED_LATENCY_MS = 50;
-
-        // https://www.hresult.info/FACILITY_AUDCLNT
-        private const uint AUDCLNT_E_DEVICE_IN_USE = 0x8889000A;
-
-        private readonly IWaveIn audioSource;
-        private readonly DirectSoundOut output;
-        private readonly BufferedWaveProvider outputProvider;
-        private readonly CancellationTokenSource audioMeterCancel;
-
-        private static List<MMDevice> audioDevices = null;
-
-        public AudioPlayback(int deviceIndex)
+        if (deviceIndex < 0 || deviceIndex > audioDevices.Count)
         {
-            AssertDevicesInitialized("AudioPlayback constructor");
+            throw new ArgumentOutOfRangeException("deviceIndex");
+        }
 
-            if (deviceIndex < 0 || deviceIndex > audioDevices.Count)
-            {
-                throw new ArgumentOutOfRangeException("deviceIndex");
-            }
+        MMDevice device = audioDevices[deviceIndex];
+        if (device.DataFlow == DataFlow.Render)
+        {
+            // Input from programs outputting to selected device
+            audioSource = new WasapiLoopbackCapture(device);
+        }
+        else
+        {
+            // Input from microphone
+            audioSource = new WasapiCapture(device);
+        }
+        audioSource.DataAvailable += AudioSource_DataAvailable;
 
-            MMDevice device = audioDevices[deviceIndex];
-            if (device.DataFlow == DataFlow.Render)
+        Logger.Log("Started audio device: " + device);
+
+        Logger.Log("Saving audio device ID: " + device.ID);
+        Properties.Settings.Default.AudioDeviceID = device.ID;
+        Properties.Settings.Default.Save();
+
+        // Output (to default audio device)
+        output = new DirectSoundOut(DESIRED_LATENCY_MS);
+        outputProvider = new BufferedWaveProvider(audioSource.WaveFormat)
+        {
+            DiscardOnBufferOverflow = true,
+            BufferDuration = TimeSpan.FromSeconds(2)
+        };
+
+        output.Init(outputProvider);
+
+        // Start a periodic timer to update the audio meter, discard the result
+        audioMeterCancel = new CancellationTokenSource();
+        _ = UpdateAudioMeter(audioMeterCancel.Token, device);
+    }
+
+    public static string[] RefreshDevices()
+    {
+        MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
+        DataFlow flow = Properties.Settings.Default.ShowAudioInputs ? DataFlow.All : DataFlow.Render;
+        audioDevices = enumerator.EnumerateAudioEndPoints(flow, DeviceState.Active).ToList();
+
+        return audioDevices
+            .Select(device => (device.DataFlow == DataFlow.Capture ? "[IN] " : "") + device.FriendlyName)
+            .ToArray();
+    }
+
+    public static int GetDefaultDeviceIndex()
+    {
+        AssertDevicesInitialized("GetDefaultDeviceIndex");
+        MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
+        if (!enumerator.HasDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia))
+        {
+            return -1;
+        }
+
+        string defaultDeviceId = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).ID;
+        return audioDevices.FindIndex(device => device.ID == defaultDeviceId);
+    }
+
+    public static int GetLastDeviceIndex()
+    {
+        AssertDevicesInitialized("GetLastDeviceIndex");
+        string lastDeviceId = Properties.Settings.Default.AudioDeviceID;
+        return audioDevices.FindIndex(device => device.ID == lastDeviceId);
+    }
+
+    public void Start()
+    {
+        output.PlaybackStopped += Output_StoppedHandler;
+        try
+        {
+            audioSource.StartRecording();
+        }
+        catch (COMException e)
+        {
+            Logger.Log("COMException while starting audio device:");
+            Logger.Log(e);
+            if ((uint)e.ErrorCode == AUDCLNT_E_DEVICE_IN_USE)
             {
-                // Input from programs outputting to selected device
-                audioSource = new WasapiLoopbackCapture(device);
+                throw new InvalidOperationException("The selected audio device is already in use by another application. Please select a different device.");
             }
             else
             {
-                // Input from microphone
-                audioSource = new WasapiCapture(device);
-            }
-            audioSource.DataAvailable += AudioSource_DataAvailable;
-
-            Logger.Log("Started audio device: " + device);
-
-            Logger.Log("Saving audio device ID: " + device.ID);
-            Properties.Settings.Default.AudioDeviceID = device.ID;
-            Properties.Settings.Default.Save();
-
-            // Output (to default audio device)
-            output = new DirectSoundOut(DESIRED_LATENCY_MS);
-            outputProvider = new BufferedWaveProvider(audioSource.WaveFormat)
-            {
-                DiscardOnBufferOverflow = true,
-                BufferDuration = TimeSpan.FromSeconds(2)
-            };
-
-            output.Init(outputProvider);
-
-            // Start a periodic timer to update the audio meter, discard the result
-            audioMeterCancel = new CancellationTokenSource();
-            _ = UpdateAudioMeter(audioMeterCancel.Token, device);
-        }
-
-        public static string[] RefreshDevices()
-        {
-            MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
-            DataFlow flow = Properties.Settings.Default.ShowAudioInputs ? DataFlow.All : DataFlow.Render;
-            audioDevices = enumerator.EnumerateAudioEndPoints(flow, DeviceState.Active).ToList();
-
-            return audioDevices
-                .Select(device => (device.DataFlow == DataFlow.Capture ? "[IN] " : "") + device.FriendlyName)
-                .ToArray();
-        }
-
-        public static int GetDefaultDeviceIndex()
-        {
-            AssertDevicesInitialized("GetDefaultDeviceIndex");
-            MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
-            if (!enumerator.HasDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia))
-            {
-                return -1;
-            }
-
-            string defaultDeviceId = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).ID;
-            return audioDevices.FindIndex(device => device.ID == defaultDeviceId);
-        }
-
-        public static int GetLastDeviceIndex()
-        {
-            AssertDevicesInitialized("GetLastDeviceIndex");
-            string lastDeviceId = Properties.Settings.Default.AudioDeviceID;
-            return audioDevices.FindIndex(device => device.ID == lastDeviceId);
-        }
-
-        public void Start()
-        {
-            output.PlaybackStopped += Output_StoppedHandler;
-            try
-            {
-                audioSource.StartRecording();
-            }
-            catch (COMException e)
-            {
-                Logger.Log("COMException while starting audio device:");
-                Logger.Log(e);
-                if ((uint)e.ErrorCode == AUDCLNT_E_DEVICE_IN_USE)
-                {
-                    throw new InvalidOperationException("The selected audio device is already in use by another application. Please select a different device.");
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            catch (Exception)
-            {
-                output.PlaybackStopped -= Output_StoppedHandler;
                 throw;
             }
-            output.Play();
         }
-
-        public void Stop()
+        catch (Exception)
         {
-            audioMeterCancel.Cancel();
-            audioSource.StopRecording();
-            // Remove the handler before stopping manually
             output.PlaybackStopped -= Output_StoppedHandler;
-            output.Stop();
+            throw;
         }
+        output.Play();
+    }
 
-        private static void AssertDevicesInitialized(string method)
+    public void Stop()
+    {
+        audioMeterCancel.Cancel();
+        audioSource.StopRecording();
+        // Remove the handler before stopping manually
+        output.PlaybackStopped -= Output_StoppedHandler;
+        output.Stop();
+    }
+
+    private static void AssertDevicesInitialized(string method)
+    {
+        if (audioDevices == null)
         {
-            if (audioDevices == null)
-            {
-                throw new InvalidOperationException("RefreshDevices() must be called before calling " + method);
-            }
+            throw new InvalidOperationException("RefreshDevices() must be called before calling " + method);
         }
+    }
 
-        private void AudioSource_DataAvailable(object sender, WaveInEventArgs e)
-        {
-            // New audio data available, append to output audio buffer
-            outputProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
-        }
+    private void AudioSource_DataAvailable(object sender, WaveInEventArgs e)
+    {
+        // New audio data available, append to output audio buffer
+        outputProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
+    }
 
-        private void Output_StoppedHandler(object sender, StoppedEventArgs e)
-        {
-            // In some cases, streaming to Discord will cause DirectSoundOut to throw an
-            // exception and stop. If that happens, just resume playback
-            output.Play();
-        }
+    private void Output_StoppedHandler(object sender, StoppedEventArgs e)
+    {
+        // In some cases, streaming to Discord will cause DirectSoundOut to throw an
+        // exception and stop. If that happens, just resume playback
+        output.Play();
+    }
 
-        private async Task UpdateAudioMeter(CancellationToken token, MMDevice device)
+    private async Task UpdateAudioMeter(CancellationToken token, MMDevice device)
+    {
+        TimeSpan updatePeriod = TimeSpan.FromMilliseconds(10);
+        while (!token.IsCancellationRequested)
         {
-            TimeSpan updatePeriod = TimeSpan.FromMilliseconds(10);
-            while (!token.IsCancellationRequested)
-            {
-                bool stereo = device.AudioMeterInformation.PeakValues.Count >= 2;
-                float left = stereo
-                    ? device.AudioMeterInformation.PeakValues[0]
-                    : device.AudioMeterInformation.MasterPeakValue;
-                float right = stereo
-                    ? device.AudioMeterInformation.PeakValues[1]
-                    : device.AudioMeterInformation.MasterPeakValue;
-                AudioLevelChanged?.Invoke(left, right);
-                await Task.Delay(updatePeriod, token);
-            }
+            bool stereo = device.AudioMeterInformation.PeakValues.Count >= 2;
+            float left = stereo
+                ? device.AudioMeterInformation.PeakValues[0]
+                : device.AudioMeterInformation.MasterPeakValue;
+            float right = stereo
+                ? device.AudioMeterInformation.PeakValues[1]
+                : device.AudioMeterInformation.MasterPeakValue;
+            AudioLevelChanged?.Invoke(left, right);
+            await Task.Delay(updatePeriod, token);
         }
     }
 }

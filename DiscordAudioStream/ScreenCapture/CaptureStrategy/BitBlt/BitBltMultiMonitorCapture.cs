@@ -1,44 +1,43 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
+namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
+
+public class BitBltMultiMonitorCapture : CaptureSource
 {
-    public class BitBltMultiMonitorCapture : CaptureSource
+    private readonly CaptureSource capture;
+    private readonly Rectangle virtualScreenRectangle = SystemInformation.VirtualScreen;
+
+    public BitBltMultiMonitorCapture(bool captureCursor)
     {
-        private readonly CaptureSource capture;
-        private readonly Rectangle virtualScreenRectangle = SystemInformation.VirtualScreen;
+        BitBltCapture bitBlt = new();
+        bitBlt.CaptureAreaRect += GetMonitorArea;
 
-        public BitBltMultiMonitorCapture(bool captureCursor)
+        if (captureCursor)
         {
-            BitBltCapture bitBlt = new BitBltCapture();
-            bitBlt.CaptureAreaRect += GetMonitorArea;
-
-            if (captureCursor)
-            {
-                CursorPainter paintCursor = new CursorPainter(bitBlt);
-                paintCursor.CaptureAreaRect += GetMonitorArea;
-                capture = paintCursor;
-            }
-            else
-            {
-                capture = bitBlt;
-            }
+            CursorPainter paintCursor = new(bitBlt);
+            paintCursor.CaptureAreaRect += GetMonitorArea;
+            capture = paintCursor;
         }
-
-        public override Bitmap CaptureFrame()
+        else
         {
-            return capture.CaptureFrame();
+            capture = bitBlt;
         }
+    }
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            capture.Dispose();
-        }
+    public override Bitmap CaptureFrame()
+    {
+        return capture.CaptureFrame();
+    }
 
-        private Rectangle GetMonitorArea()
-        {
-            return virtualScreenRectangle;
-        }
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        capture.Dispose();
+    }
+
+    private Rectangle GetMonitorArea()
+    {
+        return virtualScreenRectangle;
     }
 }

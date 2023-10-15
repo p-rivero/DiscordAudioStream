@@ -1,40 +1,39 @@
 ﻿using System;
 using System.Drawing;
 
-namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
+namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
+
+public class PrintWindowCapture : WindowCapture
 {
-    public class PrintWindowCapture : WindowCapture
+    private readonly CaptureSource capture;
+    private readonly IntPtr windowHandle;
+
+    public PrintWindowCapture(IntPtr hWnd, bool captureCursor)
     {
-        private readonly CaptureSource capture;
-        private readonly IntPtr windowHandle;
+        windowHandle = hWnd;
 
-        public PrintWindowCapture(IntPtr hWnd, bool captureCursor)
+        PrintWindowCore printWindow = new(hWnd);
+
+        if (captureCursor)
         {
-            windowHandle = hWnd;
-
-            PrintWindowCore printWindow = new PrintWindowCore(hWnd);
-
-            if (captureCursor)
-            {
-                CursorPainter paintCursor = new CursorPainter(printWindow);
-                paintCursor.CaptureAreaRect += () => GetWindowArea(windowHandle);
-                capture = paintCursor;
-            }
-            else
-            {
-                capture = printWindow;
-            }
+            CursorPainter paintCursor = new(printWindow);
+            paintCursor.CaptureAreaRect += () => GetWindowArea(windowHandle);
+            capture = paintCursor;
         }
-
-        public override Bitmap CaptureFrame()
+        else
         {
-            return capture.CaptureFrame();
+            capture = printWindow;
         }
+    }
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            capture.Dispose();
-        }
+    public override Bitmap CaptureFrame()
+    {
+        return capture.CaptureFrame();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        capture.Dispose();
     }
 }

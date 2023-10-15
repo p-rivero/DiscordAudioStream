@@ -30,72 +30,69 @@ using SharpDX.Direct3D11;
 
 using Windows.Graphics.DirectX.Direct3D11;
 
-namespace Composition.WindowsRuntimeHelpers
+namespace Composition.WindowsRuntimeHelpers;
+
+public static class Direct3D11Helper
 {
-    public static class Direct3D11Helper
+    private static Guid ID3D11Device = new("db6f6ddb-ac77-4e88-8253-819df9bbf140");
+    private static Guid ID3D11Texture2D = new("6f15aaf2-d208-4e89-9ab4-489535d34f9c");
+
+    [ComImport]
+    [Guid("A9B3D012-3DF2-4EE3-B8D1-8695F457D3C1")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComVisible(true)]
+    private interface IDirect3DDxgiInterfaceAccess
     {
-        private static Guid ID3D11Device = new Guid("db6f6ddb-ac77-4e88-8253-819df9bbf140");
-        private static Guid ID3D11Texture2D = new Guid("6f15aaf2-d208-4e89-9ab4-489535d34f9c");
+        IntPtr GetInterface([In] ref Guid iid);
+    };
 
-        [ComImport]
-        [Guid("A9B3D012-3DF2-4EE3-B8D1-8695F457D3C1")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [ComVisible(true)]
-        private interface IDirect3DDxgiInterfaceAccess
+    [DllImport(
+        "d3d11.dll",
+        EntryPoint = "CreateDirect3D11DeviceFromDXGIDevice",
+        SetLastError = true,
+        CharSet = CharSet.Unicode,
+        ExactSpelling = true,
+        CallingConvention = CallingConvention.StdCall
+    )]
+    private static extern uint CreateDirect3D11DeviceFromDXGIDevice(IntPtr dxgiDevice, out IntPtr graphicsDevice);
+
+    public static IDirect3DDevice CreateDevice()
+    {
+        return CreateDevice(false);
+    }
+
+    public static IDirect3DDevice CreateDevice(bool useWARP)
+    {
+        DriverType driverType = useWARP ? DriverType.Software : DriverType.Hardware;
+        Device d3dDevice = new Device(driverType, DeviceCreationFlags.BgraSupport);
+        return CreateDirect3DDeviceFromSharpDXDevice(d3dDevice);
+    }
+
+    public static IDirect3DDevice CreateDirect3DDeviceFromSharpDXDevice(Device d3dDevice)
+    {
+        using SharpDX.DXGI.Device3 dxgiDevice = d3dDevice.QueryInterface<SharpDX.DXGI.Device3>();
+        // Wrap the native device using a WinRT interop object.
+        uint error = CreateDirect3D11DeviceFromDXGIDevice(dxgiDevice.NativePointer, out IntPtr pUnknown);
+        if (error != 0)
         {
-            IntPtr GetInterface([In] ref Guid iid);
-        };
-
-        [DllImport(
-            "d3d11.dll",
-            EntryPoint = "CreateDirect3D11DeviceFromDXGIDevice",
-            SetLastError = true,
-            CharSet = CharSet.Unicode,
-            ExactSpelling = true,
-            CallingConvention = CallingConvention.StdCall
-        )]
-        private static extern uint CreateDirect3D11DeviceFromDXGIDevice(IntPtr dxgiDevice, out IntPtr graphicsDevice);
-
-        public static IDirect3DDevice CreateDevice()
-        {
-            return CreateDevice(false);
+            throw new InvalidOperationException($"Failed to create Direct3D11 device, error code 0x{error:X}");
         }
+        IDirect3DDevice device = Marshal.GetObjectForIUnknown(pUnknown) as IDirect3DDevice;
+        Marshal.Release(pUnknown);
+        return device;
+    }
 
-        public static IDirect3DDevice CreateDevice(bool useWARP)
-        {
-            DriverType driverType = useWARP ? DriverType.Software : DriverType.Hardware;
-            Device d3dDevice = new Device(driverType, DeviceCreationFlags.BgraSupport);
-            return CreateDirect3DDeviceFromSharpDXDevice(d3dDevice);
-        }
+    public static Device CreateSharpDXDevice(IDirect3DDevice device)
+    {
+        IDirect3DDxgiInterfaceAccess access = (IDirect3DDxgiInterfaceAccess)device;
+        IntPtr d3dPointer = access.GetInterface(ID3D11Device);
+        return new Device(d3dPointer);
+    }
 
-        public static IDirect3DDevice CreateDirect3DDeviceFromSharpDXDevice(Device d3dDevice)
-        {
-            using (SharpDX.DXGI.Device3 dxgiDevice = d3dDevice.QueryInterface<SharpDX.DXGI.Device3>())
-            {
-                // Wrap the native device using a WinRT interop object.
-                uint error = CreateDirect3D11DeviceFromDXGIDevice(dxgiDevice.NativePointer, out IntPtr pUnknown);
-                if (error != 0)
-                {
-                    throw new InvalidOperationException($"Failed to create Direct3D11 device, error code 0x{error:X}");
-                }
-                IDirect3DDevice device = Marshal.GetObjectForIUnknown(pUnknown) as IDirect3DDevice;
-                Marshal.Release(pUnknown);
-                return device;
-            }
-        }
-
-        public static Device CreateSharpDXDevice(IDirect3DDevice device)
-        {
-            IDirect3DDxgiInterfaceAccess access = (IDirect3DDxgiInterfaceAccess)device;
-            IntPtr d3dPointer = access.GetInterface(ID3D11Device);
-            return new Device(d3dPointer);
-        }
-
-        public static Texture2D CreateSharpDXTexture2D(IDirect3DSurface surface)
-        {
-            IDirect3DDxgiInterfaceAccess access = (IDirect3DDxgiInterfaceAccess)surface;
-            IntPtr d3dPointer = access.GetInterface(ID3D11Texture2D);
-            return new Texture2D(d3dPointer);
-        }
+    public static Texture2D CreateSharpDXTexture2D(IDirect3DSurface surface)
+    {
+        IDirect3DDxgiInterfaceAccess access = (IDirect3DDxgiInterfaceAccess)surface;
+        IntPtr d3dPointer = access.GetInterface(ID3D11Texture2D);
+        return new Texture2D(d3dPointer);
     }
 }

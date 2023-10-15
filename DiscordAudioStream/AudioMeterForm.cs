@@ -4,78 +4,77 @@ using System.Windows.Forms;
 
 using CustomComponents;
 
-namespace DiscordAudioStream
+namespace DiscordAudioStream;
+
+public partial class AudioMeterForm : Form
 {
-    public partial class AudioMeterForm : Form
+    public AudioMeterForm(bool darkMode)
     {
-        public AudioMeterForm(bool darkMode)
+        Logger.EmptyLine();
+        Logger.Log("Initializing AudioMeterForm. darkMode = " + darkMode);
+
+        if (darkMode)
         {
-            Logger.EmptyLine();
-            Logger.Log("Initializing AudioMeterForm. darkMode = " + darkMode);
-
-            if (darkMode)
-            {
-                HandleCreated += DarkThemeManager.FormHandleCreated;
-            }
-
-            InitializeComponent();
-            FormClosing += (s, e) => StorePosition();
-
-            ApplyDarkTheme(darkMode);
+            HandleCreated += DarkThemeManager.FormHandleCreated;
         }
 
-        private void ApplyDarkTheme(bool darkMode)
-        {
-            if (darkMode)
-            {
-                BackColor = DarkThemeManager.DarkBackColor;
-                ForeColor = Color.White;
-            }
-        }
+        InitializeComponent();
+        FormClosing += (s, e) => StorePosition();
 
-        public void SetLevels(float left, float right)
-        {
-            volumeMeterLeft.Amplitude = left;
-            volumeMeterRight.Amplitude = right;
-            volumeMeterRight.Refresh();
-            volumeMeterLeft.Refresh();
-        }
+        ApplyDarkTheme(darkMode);
+    }
 
-        public new void Show()
+    private void ApplyDarkTheme(bool darkMode)
+    {
+        if (darkMode)
         {
-            base.Show();
-            RestoreSavedPosition();
+            BackColor = DarkThemeManager.DarkBackColor;
+            ForeColor = Color.White;
         }
+    }
 
-        public new void Hide()
-        {
-            StorePosition();
-            base.Hide();
-        }
+    public void SetLevels(float left, float right)
+    {
+        volumeMeterLeft.Amplitude = left;
+        volumeMeterRight.Amplitude = right;
+        volumeMeterRight.Refresh();
+        volumeMeterLeft.Refresh();
+    }
 
-        private void StorePosition()
-        {
-            Properties.Settings.Default.AudioMeterForm_Position = Location;
-            Properties.Settings.Default.AudioMeterForm_Size = Size;
-            Properties.Settings.Default.Save();
-        }
+    public new void Show()
+    {
+        base.Show();
+        RestoreSavedPosition();
+    }
 
-        private void RestoreSavedPosition()
-        {
-            if (Properties.Settings.Default.AudioMeterForm_Size != Size.Empty)
-            {
-                Location = Properties.Settings.Default.AudioMeterForm_Position;
-                Size = Properties.Settings.Default.AudioMeterForm_Size;
-            }
-            volumeMeterText.SetWindowWidth(Width);
-            volumeMeterText2.SetWindowWidth(Width);
-        }
+    public new void Hide()
+    {
+        StorePosition();
+        base.Hide();
+    }
 
-        protected override void OnResize(EventArgs e)
+    private void StorePosition()
+    {
+        Properties.Settings.Default.AudioMeterForm_Position = Location;
+        Properties.Settings.Default.AudioMeterForm_Size = Size;
+        Properties.Settings.Default.Save();
+    }
+
+    private void RestoreSavedPosition()
+    {
+        if (Properties.Settings.Default.AudioMeterForm_Size != Size.Empty)
         {
-            base.OnResize(e);
-            volumeMeterText.SetWindowWidth(Width);
-            volumeMeterText2.SetWindowWidth(Width);
+            Location = Properties.Settings.Default.AudioMeterForm_Position;
+            Size = Properties.Settings.Default.AudioMeterForm_Size;
         }
+        volumeMeterText.SetWindowWidth(Width);
+        volumeMeterText2.SetWindowWidth(Width);
+    }
+
+    protected override void OnResize(EventArgs e)
+    {
+        base.OnResize(e);
+        volumeMeterText.SetWindowWidth(Width);
+        volumeMeterText2.SetWindowWidth(Width);
     }
 }

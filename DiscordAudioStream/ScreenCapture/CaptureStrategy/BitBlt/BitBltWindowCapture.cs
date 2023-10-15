@@ -3,50 +3,49 @@ using System.Drawing;
 
 using DLLs;
 
-namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
+namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
+
+public class BitBltWindowCapture : WindowCapture
 {
-    public class BitBltWindowCapture : WindowCapture
+    private readonly CaptureSource capture;
+    private readonly IntPtr windowHandle;
+
+    public BitBltWindowCapture(IntPtr hWnd, bool captureCursor)
     {
-        private readonly CaptureSource capture;
-        private readonly IntPtr windowHandle;
+        windowHandle = hWnd;
+        BitBltCapture bitBlt = new();
+        bitBlt.CaptureAreaRect += () => GetWindowArea(windowHandle);
 
-        public BitBltWindowCapture(IntPtr hWnd, bool captureCursor)
+        if (captureCursor)
         {
-            windowHandle = hWnd;
-            BitBltCapture bitBlt = new BitBltCapture();
-            bitBlt.CaptureAreaRect += () => GetWindowArea(windowHandle);
-
-            if (captureCursor)
-            {
-                CursorPainter paintCursor = new CursorPainter(bitBlt);
-                paintCursor.CaptureAreaRect += () => GetWindowArea(windowHandle);
-                capture = paintCursor;
-            }
-            else
-            {
-                capture = bitBlt;
-            }
-
-            SetWindowTopmost(windowHandle, true);
+            CursorPainter paintCursor = new(bitBlt);
+            paintCursor.CaptureAreaRect += () => GetWindowArea(windowHandle);
+            capture = paintCursor;
+        }
+        else
+        {
+            capture = bitBlt;
         }
 
-        public override Bitmap CaptureFrame()
-        {
-            return capture.CaptureFrame();
-        }
+        SetWindowTopmost(windowHandle, true);
+    }
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            capture.Dispose();
+    public override Bitmap CaptureFrame()
+    {
+        return capture.CaptureFrame();
+    }
 
-            SetWindowTopmost(windowHandle, false);
-        }
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        capture.Dispose();
 
-        private static void SetWindowTopmost(IntPtr hWnd, bool bringToFront)
-        {
-            IntPtr insertAfter = bringToFront ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST;
-            User32.SetWindowPos(hWnd, insertAfter, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
-        }
+        SetWindowTopmost(windowHandle, false);
+    }
+
+    private static void SetWindowTopmost(IntPtr hWnd, bool bringToFront)
+    {
+        IntPtr insertAfter = bringToFront ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST;
+        User32.SetWindowPos(hWnd, insertAfter, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
     }
 }

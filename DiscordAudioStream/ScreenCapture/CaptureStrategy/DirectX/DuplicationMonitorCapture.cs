@@ -2,51 +2,50 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace DiscordAudioStream.ScreenCapture.CaptureStrategy
+namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
+
+public class DuplicationMonitorCapture : CaptureSource
 {
-    public class DuplicationMonitorCapture : CaptureSource
+    private readonly CaptureSource source;
+    private readonly Screen monitor;
+
+    public DuplicationMonitorCapture(Screen monitor, bool captureCursor)
     {
-        private readonly CaptureSource source;
-        private readonly Screen monitor;
-
-        public DuplicationMonitorCapture(Screen monitor, bool captureCursor)
+        this.monitor = monitor;
+        DuplicationCapture dupCapture = new(IndexOf(monitor));
+        if (captureCursor)
         {
-            this.monitor = monitor;
-            DuplicationCapture dupCapture = new DuplicationCapture(IndexOf(monitor));
-            if (captureCursor)
-            {
-                CursorPainter paintCursor = new CursorPainter(dupCapture);
-                paintCursor.CaptureAreaRect += GetMonitorArea;
-                source = paintCursor;
-            }
-            else
-            {
-                source = dupCapture;
-            }
+            CursorPainter paintCursor = new(dupCapture);
+            paintCursor.CaptureAreaRect += GetMonitorArea;
+            source = paintCursor;
         }
-
-        public override Bitmap CaptureFrame()
+        else
         {
-            return source.CaptureFrame();
+            source = dupCapture;
         }
+    }
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            source.Dispose();
-        }
+    public override Bitmap CaptureFrame()
+    {
+        return source.CaptureFrame();
+    }
 
-        private int IndexOf(Screen screen)
-        {
-            return Array.FindIndex(
-                DuplicationCapture.GPU0Adapter.Outputs,
-                output => output.Description.DeviceName == screen.DeviceName
-            );
-        }
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        source.Dispose();
+    }
 
-        private Rectangle GetMonitorArea()
-        {
-            return monitor.Bounds;
-        }
+    private int IndexOf(Screen screen)
+    {
+        return Array.FindIndex(
+            DuplicationCapture.GPU0Adapter.Outputs,
+            output => output.Description.DeviceName == screen.DeviceName
+        );
+    }
+
+    private Rectangle GetMonitorArea()
+    {
+        return monitor.Bounds;
     }
 }

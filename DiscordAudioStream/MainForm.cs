@@ -10,420 +10,419 @@ using CustomComponents;
 
 using DLLs;
 
-namespace DiscordAudioStream
+namespace DiscordAudioStream;
+
+public partial class MainForm : Form
 {
-    public partial class MainForm : Form
+    private readonly bool darkMode;
+    private readonly Size defaultWindowSize;
+    private readonly Size defaultPreviewSize;
+    private readonly Point defaultPreviewLocation;
+
+    public MainForm(bool darkMode)
     {
-        private readonly bool darkMode;
-        private readonly Size defaultWindowSize;
-        private readonly Size defaultPreviewSize;
-        private readonly Point defaultPreviewLocation;
+        Logger.EmptyLine();
+        Logger.Log("Initializing MainForm. darkMode = " + darkMode);
 
-        public MainForm(bool darkMode)
+        Controller = new MainController(this);
+
+        this.darkMode = darkMode;
+        if (darkMode)
         {
-            Logger.EmptyLine();
-            Logger.Log("Initializing MainForm. darkMode = " + darkMode);
+            HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
+        }
 
-            Controller = new MainController(this);
+        InitializeComponent();
+        previewBox.Visible = true;
 
-            this.darkMode = darkMode;
-            if (darkMode)
-            {
-                HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
-            }
+        defaultWindowSize = Size;
+        defaultPreviewSize = previewBox.Size;
+        defaultPreviewLocation = previewBox.Location;
 
-            InitializeComponent();
-            previewBox.Visible = true;
+        inputDeviceComboBox.SelectedIndex = 0;
 
-            defaultWindowSize = Size;
-            defaultPreviewSize = previewBox.Size;
-            defaultPreviewLocation = previewBox.Location;
-
-            inputDeviceComboBox.SelectedIndex = 0;
-
-            Controller.RefreshScreens();
-            Controller.RefreshAudioDevices();
-            try
-            {
-                VideoIndex = Properties.Settings.Default.AreaIndex;
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                // Number of screens may have changed
-                Logger.Log("ArgumentOutOfRangeException caught, number of screens may have changed.");
-                VideoIndex = 0;
-            }
-
-            previewBtn.Checked = Properties.Settings.Default.Preview;
-            DisplayPreview(previewBtn.Checked);
-
+        Controller.RefreshScreens();
+        Controller.RefreshAudioDevices();
+        try
+        {
             VideoIndex = Properties.Settings.Default.AreaIndex;
-            scaleComboBox.SelectedIndex = Math.Min(Properties.Settings.Default.ScaleIndex, scaleComboBox.Items.Count - 1);
-
-            Controller.OnAudioMeterClosed += () => showAudioMeterToolStripMenuItem.Checked = false;
-
-            ApplyDarkTheme(darkMode);
-
-            toolTip.SetToolTip(captureCursorCheckBox, Properties.Resources.Tooltip_CaptureCursor);
-            toolTip.SetToolTip(hideTaskbarCheckBox, Properties.Resources.Tooltip_HideTaskbar);
-            toolTip.SetToolTip(areaComboBox, Properties.Resources.Tooltip_CaptureArea);
-            toolTip.SetToolTip(areaLabel, Properties.Resources.Tooltip_CaptureArea);
-            toolTip.SetToolTip(scaleComboBox, Properties.Resources.Tooltip_VideoScale);
-            toolTip.SetToolTip(scaleLabel, Properties.Resources.Tooltip_VideoScale);
-            toolTip.SetToolTip(inputDeviceComboBox, Properties.Resources.Tooltip_AudioSource);
-            toolTip.SetToolTip(inputDeviceLabel, Properties.Resources.Tooltip_AudioSource);
-            toolTip.SetToolTip(startButton, Properties.Resources.Tooltip_StartStream);
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            // Number of screens may have changed
+            Logger.Log("ArgumentOutOfRangeException caught, number of screens may have changed.");
+            VideoIndex = 0;
         }
 
-        public MainController Controller { get; }
+        previewBtn.Checked = Properties.Settings.Default.Preview;
+        DisplayPreview(previewBtn.Checked);
 
-        // INTERNAL METHODS (called from controller)
+        VideoIndex = Properties.Settings.Default.AreaIndex;
+        scaleComboBox.SelectedIndex = Math.Min(Properties.Settings.Default.ScaleIndex, scaleComboBox.Items.Count - 1);
 
-        internal int VideoIndex
+        Controller.OnAudioMeterClosed += () => showAudioMeterToolStripMenuItem.Checked = false;
+
+        ApplyDarkTheme(darkMode);
+
+        toolTip.SetToolTip(captureCursorCheckBox, Properties.Resources.Tooltip_CaptureCursor);
+        toolTip.SetToolTip(hideTaskbarCheckBox, Properties.Resources.Tooltip_HideTaskbar);
+        toolTip.SetToolTip(areaComboBox, Properties.Resources.Tooltip_CaptureArea);
+        toolTip.SetToolTip(areaLabel, Properties.Resources.Tooltip_CaptureArea);
+        toolTip.SetToolTip(scaleComboBox, Properties.Resources.Tooltip_VideoScale);
+        toolTip.SetToolTip(scaleLabel, Properties.Resources.Tooltip_VideoScale);
+        toolTip.SetToolTip(inputDeviceComboBox, Properties.Resources.Tooltip_AudioSource);
+        toolTip.SetToolTip(inputDeviceLabel, Properties.Resources.Tooltip_AudioSource);
+        toolTip.SetToolTip(startButton, Properties.Resources.Tooltip_StartStream);
+    }
+
+    public MainController Controller { get; }
+
+    // INTERNAL METHODS (called from controller)
+
+    internal int VideoIndex
+    {
+        get => areaComboBox.SelectedIndex;
+
+        set => areaComboBox.SelectedIndex = value;
+    }
+
+    internal void SetVideoItems(IEnumerable<(string, bool)> items)
+    {
+        areaComboBox.Items.Clear();
+        foreach ((string item, bool hasSeparator) in items)
         {
-            get => areaComboBox.SelectedIndex;
-
-            set => areaComboBox.SelectedIndex = value;
-        }
-
-        internal void SetVideoItems(IEnumerable<(string, bool)> items)
-        {
-            areaComboBox.Items.Clear();
-            foreach ((string item, bool hasSeparator) in items)
+            if (hasSeparator)
             {
-                if (hasSeparator)
-                {
-                    areaComboBox.Items.Add(new DarkThemeComboBox.ItemWithSeparator(item));
-                }
-                else
-                {
-                    areaComboBox.Items.Add(item);
-                }
-            }
-            areaComboBox.RefreshSeparators();
-        }
-
-        internal bool HasSomeAudioSource => inputDeviceComboBox.SelectedIndex > 0;
-
-        internal int AudioSourceIndex => inputDeviceComboBox.SelectedIndex - 1;
-
-        internal void SetAudioElements(IEnumerable<string> elements, int defaultIndex)
-        {
-            inputDeviceComboBox.Items.Clear();
-            inputDeviceComboBox.Items.AddRange(elements.ToArray());
-            inputDeviceComboBox.SelectedIndex = defaultIndex;
-        }
-
-        internal bool HideTaskbar => hideTaskbarCheckBox.Checked;
-
-        internal bool HideTaskbarEnabled
-        {
-            get => hideTaskbarCheckBox.Enabled;
-
-            set
-            {
-                hideTaskbarCheckBox.Enabled = value;
-                // When disabling the checkbox, also set its state to unchecked
-                if (!value)
-                {
-                    hideTaskbarCheckBox.Checked = false;
-                }
-            }
-        }
-
-        internal void SetPreviewUISize(Size newSize)
-        {
-            BeginInvoke(new Action(() => previewBox.Size = newSize));
-        }
-
-        internal void EnableStreamingUI(bool streaming)
-        {
-            // Autosize the form only while streaming
-            AutoSize = streaming;
-
-            // Disable UI elements while streaming
-            videoGroup.Visible = !streaming;
-            audioGroup.Visible = !streaming;
-            startButton.Visible = !streaming;
-            toolStrip.Visible = !streaming;
-
-            if (streaming)
-            {
-                // If we start streaming, override previewBtn and enable the previewBox
-                DisplayPreview(true);
-                previewBox.Location = new Point(0, 0);
-                Controller.ShowAudioMeterForm(darkMode);
-                Text = Properties.Settings.Default.StreamTitle;
-                previewBox.ContextMenuStrip = streamContextMenu;
-
-                showAudioMeterToolStripMenuItem.Enabled = HasSomeAudioSource;
-                showAudioMeterToolStripMenuItem.Checked = HasSomeAudioSource && Properties.Settings.Default.ShowAudioMeter;
+                areaComboBox.Items.Add(new DarkThemeComboBox.ItemWithSeparator(item));
             }
             else
             {
-                DisplayPreview(previewBtn.Checked);
-                previewBox.Size = defaultPreviewSize;
-                previewBox.Location = defaultPreviewLocation;
-                CenterToScreen();
-                Controller.HideAudioMeterForm();
-                Text = "Discord Audio Stream";
-                previewBox.ContextMenuStrip = null;
+                areaComboBox.Items.Add(item);
             }
         }
+        areaComboBox.RefreshSeparators();
+    }
 
-        internal void UpdatePreview(Bitmap newImage, bool forceRefresh, IntPtr handle)
+    internal bool HasSomeAudioSource => inputDeviceComboBox.SelectedIndex > 0;
+
+    internal int AudioSourceIndex => inputDeviceComboBox.SelectedIndex - 1;
+
+    internal void SetAudioElements(IEnumerable<string> elements, int defaultIndex)
+    {
+        inputDeviceComboBox.Items.Clear();
+        inputDeviceComboBox.Items.AddRange(elements.ToArray());
+        inputDeviceComboBox.SelectedIndex = defaultIndex;
+    }
+
+    internal bool HideTaskbar => hideTaskbarCheckBox.Checked;
+
+    internal bool HideTaskbarEnabled
+    {
+        get => hideTaskbarCheckBox.Enabled;
+
+        set
         {
-            // This method is called in a worker thread, redraw the previewBox in the UI thread.
-            // If needed, triger a full redraw of the form, but do it in the worker thread to reduce
-            // the load on the UI thread.
-            Invoke(new Action(() =>
+            hideTaskbarCheckBox.Enabled = value;
+            // When disabling the checkbox, also set its state to unchecked
+            if (!value)
             {
-                if (IsDisposed)
-                {
-                    Logger.Log("Attempting to update preview after disposing: ignore");
-                    return;
-                }
-                previewBox.Image?.Dispose();
-                previewBox.Image = newImage;
-            }));
-            if (forceRefresh)
-            {
-                // Windows only refreshes the part of the window that is shown to the user. Therefore, if this
-                // window is partially off-screen, it won't be streamed correctly in Discord.
-                // Use PrintWindow to send a WM_PRINT to our own window handle, forcing a complete redraw.
-                User32.PrintWindow(handle, IntPtr.Zero, 0);
+                hideTaskbarCheckBox.Checked = false;
             }
         }
+    }
 
-        // PRIVATE METHODS
+    internal void SetPreviewUISize(Size newSize)
+    {
+        BeginInvoke(new Action(() => previewBox.Size = newSize));
+    }
 
-        private void ApplyDarkTheme(bool darkMode)
+    internal void EnableStreamingUI(bool streaming)
+    {
+        // Autosize the form only while streaming
+        AutoSize = streaming;
+
+        // Disable UI elements while streaming
+        videoGroup.Visible = !streaming;
+        audioGroup.Visible = !streaming;
+        startButton.Visible = !streaming;
+        toolStrip.Visible = !streaming;
+
+        if (streaming)
         {
-            if (darkMode)
-            {
-                ForeColor = Color.White;
-                BackColor = DarkThemeManager.DarkBackColor;
+            // If we start streaming, override previewBtn and enable the previewBox
+            DisplayPreview(true);
+            previewBox.Location = new Point(0, 0);
+            Controller.ShowAudioMeterForm(darkMode);
+            Text = Properties.Settings.Default.StreamTitle;
+            previewBox.ContextMenuStrip = streamContextMenu;
 
-                aboutBtn.Image = Properties.Resources.white_about;
-                onTopBtn.Image = Properties.Resources.white_ontop;
-                volumeMixerButton.Image = Properties.Resources.white_mixer;
-                soundDevicesButton.Image = Properties.Resources.white_speaker;
-                settingsBtn.Image = Properties.Resources.white_settings;
-                previewBtn.Image = Properties.Resources.white_preview;
-            }
-
-            videoGroup.SetDarkMode(darkMode);
-            audioGroup.SetDarkMode(darkMode);
-            toolStrip.SetDarkMode(darkMode, false);
-            inputDeviceComboBox.SetDarkMode(darkMode);
-            areaComboBox.SetDarkMode(darkMode);
-            scaleComboBox.SetDarkMode(darkMode);
-            captureCursorCheckBox.SetDarkMode(darkMode);
-            hideTaskbarCheckBox.SetDarkMode(darkMode);
+            showAudioMeterToolStripMenuItem.Enabled = HasSomeAudioSource;
+            showAudioMeterToolStripMenuItem.Checked = HasSomeAudioSource && Properties.Settings.Default.ShowAudioMeter;
         }
-
-        private void DisplayPreview(bool visible)
+        else
         {
-            previewBox.Visible = visible;
-
-            if (visible)
-            {
-                Size = defaultWindowSize;
-            }
-            else
-            {
-                Size newSize = Size;
-                newSize.Width = defaultWindowSize.Width - (defaultPreviewSize.Width + 10);
-                Size = newSize;
-
-                previewBox.Image?.Dispose();
-                previewBox.Image = null;
-            }
+            DisplayPreview(previewBtn.Checked);
+            previewBox.Size = defaultPreviewSize;
+            previewBox.Location = defaultPreviewLocation;
+            CenterToScreen();
+            Controller.HideAudioMeterForm();
+            Text = "Discord Audio Stream";
+            previewBox.ContextMenuStrip = null;
         }
+    }
 
-        // EVENTS
-
-        private void MainForm_Load(object sender, EventArgs e)
+    internal void UpdatePreview(Bitmap newImage, bool forceRefresh, IntPtr handle)
+    {
+        // This method is called in a worker thread, redraw the previewBox in the UI thread.
+        // If needed, triger a full redraw of the form, but do it in the worker thread to reduce
+        // the load on the UI thread.
+        Invoke(new Action(() =>
         {
-            Controller.Init();
-            onTopBtn.Checked = Properties.Settings.Default.AlwaysOnTop;
-            captureCursorCheckBox.Checked = Properties.Settings.Default.CaptureCursor;
-            hideTaskbarCheckBox.Checked = Properties.Settings.Default.HideTaskbar;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-
-            if (e.CloseReason == CloseReason.WindowsShutDown)
+            if (IsDisposed)
             {
+                Logger.Log("Attempting to update preview after disposing: ignore");
                 return;
             }
+            previewBox.Image?.Dispose();
+            previewBox.Image = newImage;
+        }));
+        if (forceRefresh)
+        {
+            // Windows only refreshes the part of the window that is shown to the user. Therefore, if this
+            // window is partially off-screen, it won't be streamed correctly in Discord.
+            // Use PrintWindow to send a WM_PRINT to our own window handle, forcing a complete redraw.
+            User32.PrintWindow(handle, IntPtr.Zero, 0);
+        }
+    }
 
-            // MainController.Stop() returns false if the form has to be closed
-            e.Cancel = Controller.Stop();
+    // PRIVATE METHODS
+
+    private void ApplyDarkTheme(bool darkMode)
+    {
+        if (darkMode)
+        {
+            ForeColor = Color.White;
+            BackColor = DarkThemeManager.DarkBackColor;
+
+            aboutBtn.Image = Properties.Resources.white_about;
+            onTopBtn.Image = Properties.Resources.white_ontop;
+            volumeMixerButton.Image = Properties.Resources.white_mixer;
+            soundDevicesButton.Image = Properties.Resources.white_speaker;
+            settingsBtn.Image = Properties.Resources.white_settings;
+            previewBtn.Image = Properties.Resources.white_preview;
         }
 
-        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        videoGroup.SetDarkMode(darkMode);
+        audioGroup.SetDarkMode(darkMode);
+        toolStrip.SetDarkMode(darkMode, false);
+        inputDeviceComboBox.SetDarkMode(darkMode);
+        areaComboBox.SetDarkMode(darkMode);
+        scaleComboBox.SetDarkMode(darkMode);
+        captureCursorCheckBox.SetDarkMode(darkMode);
+        hideTaskbarCheckBox.SetDarkMode(darkMode);
+    }
+
+    private void DisplayPreview(bool visible)
+    {
+        previewBox.Visible = visible;
+
+        if (visible)
         {
-            if (e.Control)
+            Size = defaultWindowSize;
+        }
+        else
+        {
+            Size newSize = Size;
+            newSize.Width = defaultWindowSize.Width - (defaultPreviewSize.Width + 10);
+            Size = newSize;
+
+            previewBox.Image?.Dispose();
+            previewBox.Image = null;
+        }
+    }
+
+    // EVENTS
+
+    private void MainForm_Load(object sender, EventArgs e)
+    {
+        Controller.Init();
+        onTopBtn.Checked = Properties.Settings.Default.AlwaysOnTop;
+        captureCursorCheckBox.Checked = Properties.Settings.Default.CaptureCursor;
+        hideTaskbarCheckBox.Checked = Properties.Settings.Default.HideTaskbar;
+    }
+
+    protected override void OnFormClosing(FormClosingEventArgs e)
+    {
+        base.OnFormClosing(e);
+
+        if (e.CloseReason == CloseReason.WindowsShutDown)
+        {
+            return;
+        }
+
+        // MainController.Stop() returns false if the form has to be closed
+        e.Cancel = Controller.Stop();
+    }
+
+    private void MainForm_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Control)
+        {
+            switch (e.KeyCode)
             {
-                switch (e.KeyCode)
-                {
-                    case Keys.P:
-                        previewBtn.PerformClick();
-                        break;
-                    case Keys.T:
-                        onTopBtn.PerformClick();
-                        break;
-                    case Keys.Oemcomma:
-                        settingsBtn.PerformClick();
-                        break;
-                    case Keys.V:
-                        volumeMixerButton.PerformClick();
-                        break;
-                    case Keys.A:
-                        soundDevicesButton.PerformClick();
-                        break;
-                    case Keys.Enter:
-                        if (!Controller.IsStreaming)
-                        {
-                            Controller.StartStream(false);
-                        }
-                        break;
-                }
-            }
-            else
-            {
-                switch (e.KeyCode)
-                {
-                    case Keys.F1:
-                        aboutBtn.PerformClick();
-                        break;
-                    case Keys.Escape:
-                        if (Controller.IsStreaming)
-                        {
-                            Controller.Stop();
-                        }
-                        break;
-                }
-            }
-        }
-
-        private void previewBtn_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.Preview = previewBtn.Checked;
-            Properties.Settings.Default.Save();
-
-            DisplayPreview(previewBtn.Checked);
-        }
-
-        private void onTopCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.AlwaysOnTop = onTopBtn.Checked;
-            Properties.Settings.Default.Save();
-
-            TopMost = onTopBtn.Checked;
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S4036", Justification = "This ms-settings URI is safe")]
-        private void volumeMixerButton_Click(object sender, EventArgs e)
-        {
-            Ntdll.OsVersionInfoEx osVersionInfo = Ntdll.OsVersionInfoEx.Init();
-            Ntdll.RtlGetVersion(ref osVersionInfo);
-
-            if (osVersionInfo.MajorVersion >= 10)
-            {
-                Process.Start("ms-settings:apps-volume");
-            }
-            else
-            {
-                // Use old volume mixer
-                string cplPath = Path.Combine(Environment.SystemDirectory, "sndvol.exe");
-                Process.Start(cplPath);
-            }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S4036", Justification = "This ms-settings URI is safe")]
-        private void soundDevicesButton_Click(object sender, EventArgs e)
-        {
-            Ntdll.OsVersionInfoEx osVersionInfo = Ntdll.OsVersionInfoEx.Init();
-            Ntdll.RtlGetVersion(ref osVersionInfo);
-
-            if (osVersionInfo.MajorVersion >= 10 && osVersionInfo.BuildNumber >= 17063)
-            {
-                Process.Start("ms-settings:sound");
-            }
-            else
-            {
-                // Use old sound settings
-                string cplPath = Path.Combine(Environment.SystemDirectory, "control.exe");
-                Process.Start(cplPath, "/name Microsoft.Sound");
-            }
-        }
-
-        private void settingsBtn_Click(object sender, EventArgs e)
-        {
-            Controller.ShowSettingsForm(darkMode);
-        }
-
-        private void aboutBtn_Click(object sender, EventArgs e)
-        {
-            Controller.ShowAboutForm(darkMode);
-        }
-
-        private void startButton_Click(object sender, EventArgs e)
-        {
-            Controller.StartStream(false);
-        }
-
-        private void areaComboBox_DropDown(object sender, EventArgs e)
-        {
-            // When the user expands the area combobox, update its elements
-            Controller.UpdateAreaComboBox(VideoIndex);
-        }
-
-        private void areaComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Controller.SetVideoIndex(VideoIndex);
-        }
-
-        private void scaleComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Controller.SetScaleIndex(scaleComboBox.SelectedIndex);
-        }
-
-        private void hideTaskbarCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Controller.SetHideTaskbar(hideTaskbarCheckBox.Checked);
-        }
-
-        private void captureCursorCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Controller.SetCapturingCursor(captureCursorCheckBox.Checked);
-        }
-
-        private void showAudioMeterToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            bool show = !showAudioMeterToolStripMenuItem.Checked;
-
-            showAudioMeterToolStripMenuItem.Checked = show;
-            Properties.Settings.Default.ShowAudioMeter = show;
-            Properties.Settings.Default.Save();
-
-            if (show)
-            {
-                Controller.ShowAudioMeterForm(darkMode);
-            }
-            else
-            {
-                Controller.HideAudioMeterForm();
+                case Keys.P:
+                    previewBtn.PerformClick();
+                    break;
+                case Keys.T:
+                    onTopBtn.PerformClick();
+                    break;
+                case Keys.Oemcomma:
+                    settingsBtn.PerformClick();
+                    break;
+                case Keys.V:
+                    volumeMixerButton.PerformClick();
+                    break;
+                case Keys.A:
+                    soundDevicesButton.PerformClick();
+                    break;
+                case Keys.Enter:
+                    if (!Controller.IsStreaming)
+                    {
+                        Controller.StartStream(false);
+                    }
+                    break;
             }
         }
-
-        private void stopStreamToolStripMenuItem_Click(object sender, EventArgs e)
+        else
         {
-            Controller.Stop();
+            switch (e.KeyCode)
+            {
+                case Keys.F1:
+                    aboutBtn.PerformClick();
+                    break;
+                case Keys.Escape:
+                    if (Controller.IsStreaming)
+                    {
+                        Controller.Stop();
+                    }
+                    break;
+            }
         }
+    }
+
+    private void previewBtn_CheckedChanged(object sender, EventArgs e)
+    {
+        Properties.Settings.Default.Preview = previewBtn.Checked;
+        Properties.Settings.Default.Save();
+
+        DisplayPreview(previewBtn.Checked);
+    }
+
+    private void onTopCheckBox_CheckedChanged(object sender, EventArgs e)
+    {
+        Properties.Settings.Default.AlwaysOnTop = onTopBtn.Checked;
+        Properties.Settings.Default.Save();
+
+        TopMost = onTopBtn.Checked;
+    }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S4036", Justification = "This ms-settings URI is safe")]
+    private void volumeMixerButton_Click(object sender, EventArgs e)
+    {
+        Ntdll.OsVersionInfoEx osVersionInfo = Ntdll.OsVersionInfoEx.Init();
+        Ntdll.RtlGetVersion(ref osVersionInfo);
+
+        if (osVersionInfo.MajorVersion >= 10)
+        {
+            Process.Start("ms-settings:apps-volume");
+        }
+        else
+        {
+            // Use old volume mixer
+            string cplPath = Path.Combine(Environment.SystemDirectory, "sndvol.exe");
+            Process.Start(cplPath);
+        }
+    }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S4036", Justification = "This ms-settings URI is safe")]
+    private void soundDevicesButton_Click(object sender, EventArgs e)
+    {
+        Ntdll.OsVersionInfoEx osVersionInfo = Ntdll.OsVersionInfoEx.Init();
+        Ntdll.RtlGetVersion(ref osVersionInfo);
+
+        if (osVersionInfo.MajorVersion >= 10 && osVersionInfo.BuildNumber >= 17063)
+        {
+            Process.Start("ms-settings:sound");
+        }
+        else
+        {
+            // Use old sound settings
+            string cplPath = Path.Combine(Environment.SystemDirectory, "control.exe");
+            Process.Start(cplPath, "/name Microsoft.Sound");
+        }
+    }
+
+    private void settingsBtn_Click(object sender, EventArgs e)
+    {
+        Controller.ShowSettingsForm(darkMode);
+    }
+
+    private void aboutBtn_Click(object sender, EventArgs e)
+    {
+        Controller.ShowAboutForm(darkMode);
+    }
+
+    private void startButton_Click(object sender, EventArgs e)
+    {
+        Controller.StartStream(false);
+    }
+
+    private void areaComboBox_DropDown(object sender, EventArgs e)
+    {
+        // When the user expands the area combobox, update its elements
+        Controller.UpdateAreaComboBox(VideoIndex);
+    }
+
+    private void areaComboBox_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        Controller.SetVideoIndex(VideoIndex);
+    }
+
+    private void scaleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        Controller.SetScaleIndex(scaleComboBox.SelectedIndex);
+    }
+
+    private void hideTaskbarCheckBox_CheckedChanged(object sender, EventArgs e)
+    {
+        Controller.SetHideTaskbar(hideTaskbarCheckBox.Checked);
+    }
+
+    private void captureCursorCheckBox_CheckedChanged(object sender, EventArgs e)
+    {
+        Controller.SetCapturingCursor(captureCursorCheckBox.Checked);
+    }
+
+    private void showAudioMeterToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        bool show = !showAudioMeterToolStripMenuItem.Checked;
+
+        showAudioMeterToolStripMenuItem.Checked = show;
+        Properties.Settings.Default.ShowAudioMeter = show;
+        Properties.Settings.Default.Save();
+
+        if (show)
+        {
+            Controller.ShowAudioMeterForm(darkMode);
+        }
+        else
+        {
+            Controller.HideAudioMeterForm();
+        }
+    }
+
+    private void stopStreamToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Controller.Stop();
     }
 }
