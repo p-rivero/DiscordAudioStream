@@ -32,7 +32,7 @@ internal class AudioPlayback
 
         if (deviceIndex < 0 || deviceIndex > audioDevices.Count)
         {
-            throw new ArgumentOutOfRangeException("deviceIndex");
+            throw new ArgumentOutOfRangeException(nameof(deviceIndex));
         }
 
         MMDevice device = audioDevices[deviceIndex];
@@ -66,12 +66,12 @@ internal class AudioPlayback
 
         // Start a periodic timer to update the audio meter, discard the result
         audioMeterCancel = new CancellationTokenSource();
-        _ = UpdateAudioMeter(audioMeterCancel.Token, device);
+        _ = UpdateAudioMeter(device, audioMeterCancel.Token);
     }
 
     public static string[] RefreshDevices()
     {
-        MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
+        MMDeviceEnumerator enumerator = new();
         DataFlow flow = Properties.Settings.Default.ShowAudioInputs ? DataFlow.All : DataFlow.Render;
         audioDevices = enumerator.EnumerateAudioEndPoints(flow, DeviceState.Active).ToList();
 
@@ -83,7 +83,7 @@ internal class AudioPlayback
     public static int GetDefaultDeviceIndex()
     {
         AssertDevicesInitialized("GetDefaultDeviceIndex");
-        MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
+        MMDeviceEnumerator enumerator = new();
         if (!enumerator.HasDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia))
         {
             return -1;
@@ -158,7 +158,7 @@ internal class AudioPlayback
         output.Play();
     }
 
-    private async Task UpdateAudioMeter(CancellationToken token, MMDevice device)
+    private async Task UpdateAudioMeter(MMDevice device, CancellationToken token)
     {
         TimeSpan updatePeriod = TimeSpan.FromMilliseconds(10);
         while (!token.IsCancellationRequested)

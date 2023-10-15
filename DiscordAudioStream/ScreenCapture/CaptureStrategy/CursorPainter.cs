@@ -95,7 +95,7 @@ public class CursorPainter : CaptureSource
         CleanUpIconInfo(iconInfo);
     }
 
-    private Bitmap BitmapFromCursor(in User32.IconInfo iconInfo)
+    private static Bitmap BitmapFromCursor(in User32.IconInfo iconInfo)
     {
         if (iconInfo.hbmColor == IntPtr.Zero)
         {
@@ -120,7 +120,7 @@ public class CursorPainter : CaptureSource
         return new Bitmap(dstBitmap);
     }
 
-    private void CleanUpIconInfo(User32.IconInfo iconInfo)
+    private static void CleanUpIconInfo(User32.IconInfo iconInfo)
     {
         Gdi32.DeleteObject(iconInfo.hbmMask);
         Gdi32.DeleteObject(iconInfo.hbmColor);

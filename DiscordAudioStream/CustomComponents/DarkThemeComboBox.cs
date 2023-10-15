@@ -86,14 +86,14 @@ public class DarkThemeComboBox : ComboBox
     {
         Color hoverColor = darkMode ? DarkThemeManager.DarkHoverColor : DarkThemeManager.LightHoverColor;
         Color rectangleColor = hovered ? hoverColor : BackColor;
-        using (Brush brush = new SolidBrush(rectangleColor))
+        using (SolidBrush brush = new(rectangleColor))
         {
             e.Graphics.FillRectangle(brush, 0, 0, Width, Height - 2);
         }
 
         e.Graphics.TextRenderingHint = TextRenderingHint.SystemDefault;
-        using (Brush foreground = new SolidBrush(ForeColor))
-        using (Brush background = new SolidBrush(BackColor))
+        using (SolidBrush foreground = new(ForeColor))
+        using (SolidBrush background = new(BackColor))
         {
             e.Graphics.DrawString(Text, Font, foreground, 3f, 3f);
             e.Graphics.FillRectangle(background, Width - 18, 0, 18, Height);
@@ -124,7 +124,7 @@ public class DarkThemeComboBox : ComboBox
         {
             Rectangle bounds = e.Bounds;
             bounds.Height -= ItemHeight;
-            using (Brush brush = new SolidBrush(e.BackColor))
+            using (SolidBrush brush = new(e.BackColor))
             {
                 e.Graphics.FillRectangle(brush, bounds);
             }
@@ -141,7 +141,7 @@ public class DarkThemeComboBox : ComboBox
         bool isSelected = (e.State & DrawItemState.Selected) != 0;
         bool forceWhite = !darkMode && isSelected;
         Color fgColor = forceWhite ? Color.White : ForeColor;
-        using Brush fgBrush = new SolidBrush(fgColor);
+        using SolidBrush fgBrush = new(fgColor);
         e.Graphics.DrawString(item.ToString(), Font, fgBrush, e.Bounds.X, e.Bounds.Y);
     }
 

@@ -64,7 +64,7 @@ public static class Direct3D11Helper
     public static IDirect3DDevice CreateDevice(bool useWARP)
     {
         DriverType driverType = useWARP ? DriverType.Software : DriverType.Hardware;
-        Device d3dDevice = new Device(driverType, DeviceCreationFlags.BgraSupport);
+        Device d3dDevice = new(driverType, DeviceCreationFlags.BgraSupport);
         return CreateDirect3DDeviceFromSharpDXDevice(d3dDevice);
     }
 

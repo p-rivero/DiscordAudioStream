@@ -54,7 +54,7 @@ public static class BitmapHelper
 
     private static Texture2D CreateReadableTexture(int width, int height, Device d3dDevice)
     {
-        Texture2DDescription texture2DDescription = new Texture2DDescription
+        Texture2DDescription texture2DDescription = new()
         {
             CpuAccessFlags = CpuAccessFlags.Read,
             BindFlags = BindFlags.None,

@@ -30,8 +30,8 @@ public class AudioMeter : NAudio.Gui.VolumeMeter
         {
             int PercentToPixels(double percent) => (int)Math.Round(percent * meterSize.Height) + 1;
 
-            using Brush colorActive = new SolidBrush(ActiveColor);
-            using Brush colorInactive = new SolidBrush(InactiveColor);
+            using SolidBrush colorActive = new(ActiveColor);
+            using SolidBrush colorInactive = new(InactiveColor);
             int top = PercentToPixels(1 - ToPercent) - 2;
 
             if (CompletelyFilled(meterPercent))

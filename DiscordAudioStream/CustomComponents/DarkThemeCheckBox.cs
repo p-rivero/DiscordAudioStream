@@ -88,7 +88,7 @@ public class DarkThemeCheckBox : CheckBox
         int x = extraThickness;
         int y = 2 + extraThickness;
         int size = 12 - extraThickness;
-        using Brush bgBrush = new SolidBrush(bgColor);
+        using SolidBrush bgBrush = new(bgColor);
         using Pen edgePen = new(DarkThemeManager.BorderColor, 1 + extraThickness);
         g.FillRectangle(bgBrush, x, y, size, size);
         g.DrawRectangle(edgePen, x, y, size, size);
@@ -98,7 +98,7 @@ public class DarkThemeCheckBox : CheckBox
     {
         g.TextRenderingHint = TextRenderingHint.SystemDefault;
         Color textColor = Enabled ? ForeColor : DarkThemeManager.BorderColor;
-        using Brush textBrush = new SolidBrush(textColor);
+        using SolidBrush textBrush = new(textColor);
         g.DrawString(darkText, Font, textBrush, 17f, 0f);
     }
 

@@ -27,7 +27,7 @@ public class Win10MonitorCapture : CaptureSource
         winCapture.Dispose();
     }
 
-    private IntPtr GetScreenHandle(Screen screen)
+    private static IntPtr GetScreenHandle(Screen screen)
     {
         // Screen.GetHashCode() is implemented as "return (int)hmonitor"
         int hmonitor = screen.GetHashCode();

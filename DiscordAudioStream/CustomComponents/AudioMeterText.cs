@@ -60,7 +60,7 @@ public class AudioMeterText : Control
         float lineY = GetYPos(percent);
         float textY = lineY - strSz.Height / 2;
 
-        using Brush fgBrush = new SolidBrush(ForeColor);
+        using SolidBrush fgBrush = new(ForeColor);
         using Pen fgPen = new(ForeColor);
         if (RightToLeft == RightToLeft.Yes)
         {

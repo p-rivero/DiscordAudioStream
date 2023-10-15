@@ -19,10 +19,10 @@ public class ScreenCaptureManager
     // Number of frames that are stored in the queue
     private const int LIMIT_QUEUE_SZ = 3;
 
-    private readonly Thread captureThread;
+    private readonly CancellationTokenSource captureThreadToken = new();
     private readonly CaptureState captureState;
     private static readonly ConcurrentQueue<Bitmap> frameQueue = new();
-    private CaptureSource currentSource = null;
+    private CaptureSource currentSource;
     private readonly object currentSourceLock = new();
 
     public ScreenCaptureManager(CaptureState captureState)
@@ -34,8 +34,7 @@ public class ScreenCaptureManager
         // Start capture
         RefreshFramerate();
         UpdateState();
-        captureThread = CreateCaptureThread();
-        captureThread.Start();
+        CreateCaptureThread().Start();
     }
 
     // Return the next frame, if it exists (null otherwise)
@@ -57,7 +56,7 @@ public class ScreenCaptureManager
     {
         lock (currentSourceLock)
         {
-            captureThread.Abort();
+            captureThreadToken.Cancel();
             currentSource?.Dispose();
         }
     }
@@ -101,6 +100,11 @@ public class ScreenCaptureManager
                 if (wait > 0)
                 {
                     Thread.Sleep(wait);
+                }
+                if (captureThreadToken.IsCancellationRequested)
+                {
+                    Logger.Log("Capture thread got cancellation request, stopping.");
+                    break;
                 }
             }
         })
@@ -148,7 +152,7 @@ public class ScreenCaptureManager
         }
     }
 
-    private void EnqueueFrame(Bitmap frame)
+    private static void EnqueueFrame(Bitmap frame)
     {
         // If there is no new content, avoid overwriting good frames
         if (frame == null)

@@ -41,7 +41,7 @@ internal class CustomToolStripSystemRenderer : ToolStripSystemRenderer
         int xOffset = button.Pressed ? 1 : 0;
         Rectangle buttonArea = new(xOffset, 0, e.Item.Width - 2, e.Item.Height - 3);
         Color backColor = darkMode ? DarkThemeManager.DarkPaleColor : DarkThemeManager.LightPaleColor;
-        using Brush backBrush = new SolidBrush(backColor);
+        using SolidBrush backBrush = new(backColor);
         using Pen edgePen = new(DarkThemeManager.AccentColor);
         e.Graphics.FillRectangle(backBrush, buttonArea);
         e.Graphics.DrawRectangle(edgePen, buttonArea);

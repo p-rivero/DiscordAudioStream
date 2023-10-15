@@ -24,7 +24,7 @@ public class DuplicationCapture : CaptureSource
 
     private static OutputDuplication[] screens = null;
     private static Bitmap[] cachedThumbnails = null;
-    private static readonly D3D11Device d3dDevice = new D3D11Device(GPU0Adapter);
+    private static readonly D3D11Device d3dDevice = new(GPU0Adapter);
 
     // Index of the selected screen to capture
     private readonly int index;

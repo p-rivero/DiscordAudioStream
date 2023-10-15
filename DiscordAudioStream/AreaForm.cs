@@ -11,6 +11,7 @@ namespace DiscordAudioStream;
 public partial class AreaForm : Form
 {
     public const int BORDER_WIDTH_PX = 2;
+    public const string AREA_FORM_TITLE = "Recording area - Discord Audio Stream";
 
     private Point startPos;
     private Size startSize;
@@ -26,6 +27,7 @@ public partial class AreaForm : Form
 
         LocationChanged += (sender, e) => EnsureWithinBounds();
         SizeChanged += (sender, e) => Refresh();
+        Text = AREA_FORM_TITLE;
 
         resizeTimer.Elapsed += ResizeTimerElapsed;
         resizeTimer.Interval = 30;

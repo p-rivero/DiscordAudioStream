@@ -176,7 +176,7 @@ public class CaptureState
         {
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
             if (screen == value && captureTarget == CaptureTarget.Screen)
             {

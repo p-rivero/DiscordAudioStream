@@ -74,8 +74,7 @@ public class ProcessHandleList
                 User32.GetWindowText(hWnd, builder, windowTextLength + 1);
                 string name = builder.ToString();
 
-                // Ignore the "Custom area" window
-                if (name == "Recording area - Discord Audio Stream")
+                if (name == AreaForm.AREA_FORM_TITLE)
                 {
                     return true;
                 }
@@ -101,7 +100,7 @@ public class ProcessHandleList
             }
             if (index < 0 || index >= handles.Count)
             {
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
             }
             return handles[index];
         }

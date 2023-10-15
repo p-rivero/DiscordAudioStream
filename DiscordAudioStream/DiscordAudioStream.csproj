@@ -39,7 +39,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
@@ -84,7 +84,7 @@
       <DependentUpon>AudioMeterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AudioPlayback.cs" />
-    <Compile Include="UseCSharp10.cs" />
+    <Compile Include="Helpers\UseCSharp10.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\CustomAreaCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Win10CustomAreaCapture.cs" />
     <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Win10MultiMonitorCapture.cs" />

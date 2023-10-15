@@ -84,11 +84,11 @@ public class DarkThemeTabControl : TabControl
             }
 
             Color textColor = i == SelectedIndex ? SelectedTextColor : TextColor;
-            using Brush textBrush = new SolidBrush(textColor);
+            using SolidBrush textBrush = new(textColor);
             graphics.DrawString(TabPages[i].Text, Font, textBrush, rectangle, CenterSringFormat);
         }
 
-        using (Brush backTabBrush = new SolidBrush(BackTabColor))
+        using (SolidBrush backTabBrush = new(BackTabColor))
         using (Pen borderPen = new(BorderColor, 2f))
         {
             graphics.FillRectangle(backTabBrush, new Rectangle(0, 20, Width, Height - 20));

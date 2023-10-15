@@ -18,7 +18,7 @@ internal class CommandArguments
     {
         bool showHelp = false;
 
-        OptionSet options = new OptionSet()
+        OptionSet options = new()
         {
             {
                 "position=",
@@ -91,7 +91,7 @@ internal class CommandArguments
         }
     }
 
-    private void PrintHelp(OptionSet options)
+    private static void PrintHelp(OptionSet options)
     {
         Console.WriteLine($"Usage: {AppDomain.CurrentDomain.FriendlyName} [options]");
         Console.WriteLine();

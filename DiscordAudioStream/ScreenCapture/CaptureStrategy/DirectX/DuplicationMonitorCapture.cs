@@ -36,7 +36,7 @@ public class DuplicationMonitorCapture : CaptureSource
         source.Dispose();
     }
 
-    private int IndexOf(Screen screen)
+    private static int IndexOf(Screen screen)
     {
         return Array.FindIndex(
             DuplicationCapture.GPU0Adapter.Outputs,

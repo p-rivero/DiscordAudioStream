@@ -18,9 +18,10 @@ public static class CaptureSourceFactory
             CaptureState.CaptureTarget.CustomArea => CustomAreaSource(state),
             _ => throw new ArgumentException("Invalid capture target"),
         };
+
         if (PrintFrameTime)
         {
-            result = new MeasureTime(result);
+            return new MeasureTime(result);
         }
 
         return result;
