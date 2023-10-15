@@ -16,6 +16,9 @@ namespace DiscordAudioStream.AudioCapture
 
         private const int DESIRED_LATENCY_MS = 50;
 
+        // https://www.hresult.info/FACILITY_AUDCLNT
+        private const uint AUDCLNT_E_DEVICE_IN_USE = 0x8889000A;
+
         private readonly IWaveIn audioSource;
         private readonly DirectSoundOut output;
         private readonly BufferedWaveProvider outputProvider;
@@ -108,7 +111,7 @@ namespace DiscordAudioStream.AudioCapture
             {
                 Logger.Log("COMException while starting audio device:");
                 Logger.Log(e);
-                if ((uint)e.ErrorCode == 0x8889000A)
+                if ((uint)e.ErrorCode == AUDCLNT_E_DEVICE_IN_USE)
                 {
                     throw new InvalidOperationException("The selected audio device is already in use by another application. Please select a different device.");
                 }
