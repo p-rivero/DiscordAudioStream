@@ -87,7 +87,7 @@ namespace DiscordAudioStream
         {
             Cursor.Current = Cursors.SizeAll;
             PInvoke.ReleaseCapture();
-            PInvoke.SendMessage((HWND)Handle, PInvoke.WM_NCLBUTTONDOWN, PInvoke.HTCAPTION, LPARAM.Null);
+            PInvoke.SendMessage((HWND)Handle, PInvoke.WM_NCLBUTTONDOWN, (WPARAM)(nuint)PInvoke.HTCAPTION, (LPARAM)0);
         }
 
         private void dragBtn_MouseDown(object sender, MouseEventArgs e)
