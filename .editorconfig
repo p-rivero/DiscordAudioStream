@@ -171,6 +171,9 @@ csharp_style_prefer_pattern_matching = true:warning
 csharp_style_prefer_extended_property_pattern = true:warning
 csharp_style_prefer_not_pattern = true:warning
 csharp_space_after_comma = true
+
+dotnet_diagnostic.IDE0036.severity = error
+
 ###############################
 # VB Coding Conventions       #
 ###############################
