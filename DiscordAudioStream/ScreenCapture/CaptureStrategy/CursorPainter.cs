@@ -28,13 +28,13 @@ public class CursorPainter : CaptureSource
         {
             throw new ArgumentException("Attempting to paint cursor without setting CaptureAreaRect");
         }
-        
+
         Bitmap? bmp = source.CaptureFrame();
         if (bmp == null)
         {
             return null;
         }
-        
+
         return PaintCursor(bmp, CaptureAreaRect().Location);
     }
 
@@ -93,7 +93,7 @@ public class CursorPainter : CaptureSource
         }
         cursorBitmap?.Dispose();
         cursorBitmap = BitmapFromCursor(iconInfo);
-        cursorHotspot = new Point(iconInfo.xHotspot, iconInfo.yHotspot);
+        cursorHotspot = new(iconInfo.xHotspot, iconInfo.yHotspot);
         CleanUpIconInfo(iconInfo);
     }
 

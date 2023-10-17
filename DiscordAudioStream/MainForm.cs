@@ -24,12 +24,12 @@ public partial class MainForm : Form
         Logger.EmptyLine();
         Logger.Log("Initializing MainForm. darkMode = " + darkMode);
 
-        Controller = new MainController(this);
+        Controller = new(this);
 
         this.darkMode = darkMode;
         if (darkMode)
         {
-            HandleCreated += new EventHandler(DarkThemeManager.FormHandleCreated);
+            HandleCreated += new(DarkThemeManager.FormHandleCreated);
         }
 
         InitializeComponent();
@@ -151,7 +151,7 @@ public partial class MainForm : Form
         {
             // If we start streaming, override previewBtn and enable the previewBox
             DisplayPreview(true);
-            previewBox.Location = new Point(0, 0);
+            previewBox.Location = Point.Empty;
             Controller.ShowAudioMeterForm(darkMode);
             Text = Properties.Settings.Default.StreamTitle;
             previewBox.ContextMenuStrip = streamContextMenu;

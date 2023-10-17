@@ -99,7 +99,7 @@ public class DuplicationCapture : CaptureSource
             }
 
             Screen.AcquireNextFrame(FRAME_TIMEOUT_MS, out _, out DXGIResource screenResource);
-            
+
             // Success: convert captured frame to Bitmap
             using Texture2D texture = screenResource.QueryInterface<Texture2D>();
             Bitmap bmp = BitmapHelper.CreateFromTexture2D(texture, d3dDevice);

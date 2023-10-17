@@ -17,7 +17,7 @@ public class Win10WindowCapture : WindowCapture
         windowHandle = hWnd;
 
         GraphicsCaptureItem item = CaptureHelper.CreateItemForWindow(windowHandle);
-        winCapture = new Win10Capture(item, captureCursor);
+        winCapture = new(item, captureCursor);
     }
 
     public override Bitmap? CaptureFrame()

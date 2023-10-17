@@ -11,7 +11,7 @@ public class Win10CustomAreaCapture : CustomAreaCapture
 
     public Win10CustomAreaCapture(bool captureCursor)
     {
-        capture = new Win10Capture(CaptureHelper.CreateItemForMonitor(IntPtr.Zero), captureCursor);
+        capture = new(CaptureHelper.CreateItemForMonitor(IntPtr.Zero), captureCursor);
         capture.CustomAreaCrop += () => GetCustomArea(true);
     }
 

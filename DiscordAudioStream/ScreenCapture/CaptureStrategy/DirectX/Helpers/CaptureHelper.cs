@@ -70,7 +70,7 @@ public static class CaptureHelper
 
         if (item == null)
         {
-            throw new InvalidOperationException("IGraphicsCaptureItemInterop.CreateItemForWindow returned null");
+            throw new ExternalException("IGraphicsCaptureItemInterop.CreateItemForWindow returned null");
         }
         return item;
     }
@@ -85,7 +85,7 @@ public static class CaptureHelper
 
         if (item == null)
         {
-            throw new InvalidOperationException("IGraphicsCaptureItemInterop.CreateForMonitor returned null");
+            throw new ExternalException("IGraphicsCaptureItemInterop.CreateForMonitor returned null");
         }
         return item;
     }

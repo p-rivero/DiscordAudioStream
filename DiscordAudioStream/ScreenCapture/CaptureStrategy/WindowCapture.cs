@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 using DLLs;
 
@@ -19,7 +20,7 @@ public abstract class WindowCapture : CaptureSource
             // Get frame size and position (generally more accurate than GetWindowRect)
             frame = Dwmapi.GetRectAttr(windowHandle, Dwmapi.DwmWindowAttribute.EXTENDED_FRAME_BOUNDS);
         }
-        catch (InvalidOperationException)
+        catch (ExternalException)
         {
             return GetWindowAreaFallback(windowHandle);
         }

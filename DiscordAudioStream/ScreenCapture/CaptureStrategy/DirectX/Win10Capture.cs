@@ -16,7 +16,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 public class Win10Capture : CaptureSource
 {
     public Func<Rectangle>? CustomAreaCrop { get; set; }
-    
+
     private readonly Direct3D11CaptureFramePool framePool;
     private readonly GraphicsCaptureSession session;
     private SizeInt32 lastSize;

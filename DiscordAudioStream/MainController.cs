@@ -16,7 +16,7 @@ namespace DiscordAudioStream;
 public class MainController
 {
     internal Action? OnAudioMeterClosed { get; set; }
-    
+
     private readonly MainForm form;
     private bool forceRefresh;
     private int numberOfScreens = -1;
@@ -45,7 +45,7 @@ public class MainController
         captureState.HideTaskbar = Properties.Settings.Default.HideTaskbar;
         captureState.CapturingCursor = Properties.Settings.Default.CaptureCursor;
 
-        screenCapture = new ScreenCaptureManager(captureState);
+        screenCapture = new(captureState);
         screenCapture.CaptureAborted += AbortCapture;
 
         Thread drawThread = CreateDrawThread();
@@ -170,7 +170,6 @@ public class MainController
                 }
                 catch (InvalidOperationException)
                 {
-                    // Form is closing
                     Logger.Log("Form is closing, stop Draw thread.");
                     return;
                 }
@@ -343,7 +342,7 @@ public class MainController
         Logger.EmptyLine();
         Logger.Log("START STREAM (With audio)");
 
-        audioPlayback = new AudioPlayback(deviceIndex);
+        audioPlayback = new(deviceIndex);
         audioPlayback.AudioLevelChanged += (left, right) => currentMeterForm?.SetLevels(left, right);
         try
         {

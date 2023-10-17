@@ -6,6 +6,8 @@ namespace DLLs;
 
 internal static class Gdi32
 {
+    public const int HGDI_ERROR = -1;
+
     public enum RasterOps : uint
     {
         SRCCOPY = 0x00CC0020,
@@ -180,7 +182,7 @@ internal static class User32
     public static extern IntPtr GetWindowDC(IntPtr hWnd);
 
     [DllImport("user32.dll")]
-    public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
+    public static extern bool ReleaseDC(IntPtr hWnd, IntPtr hDC);
 
     [DllImport("user32.dll")]
     public static extern bool DrawIcon(IntPtr hDC, int X, int Y, IntPtr hIcon);
@@ -219,7 +221,7 @@ internal static class User32
     [DllImport("user32.dll")]
     public static extern IntPtr GetShellWindow();
 
-    [DllImport("user32.dll")]
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     public static extern int GetWindowText(IntPtr IntPtr, System.Text.StringBuilder lpString, int nMaxCount);
     [DllImport("user32.dll")]
     public static extern int GetWindowTextLength(IntPtr IntPtr);
@@ -321,7 +323,7 @@ internal static class Dwmapi
         int result = DwmGetWindowAttribute(hwnd, (int)attribute, out bool pvAttribute, Marshal.SizeOf(typeof(bool)));
         if (result != 0)
         {
-            throw new InvalidOperationException($"DwmGetWindowAttribute returned 0x{result:X}");
+            throw new ExternalException($"DwmGetWindowAttribute returned an error", result);
         }
         return pvAttribute;
     }
@@ -331,7 +333,7 @@ internal static class Dwmapi
         int result = DwmGetWindowAttribute(hwnd, (int)attribute, out User32.Rect pvAttribute, Marshal.SizeOf(typeof(User32.Rect)));
         if (result != 0)
         {
-            throw new InvalidOperationException($"DwmGetWindowAttribute returned 0x{result:X}");
+            throw new ExternalException($"DwmGetWindowAttribute returned an error", result);
         }
         return pvAttribute;
     }
@@ -342,7 +344,7 @@ internal static class Dwmapi
         int result = DwmSetWindowAttribute(hwnd, attribute, ref intVal, Marshal.SizeOf(typeof(int)));
         if (result != 0)
         {
-            throw new InvalidOperationException($"DwmSetWindowAttribute returned 0x{result:X}");
+            throw new ExternalException($"DwmSetWindowAttribute returned an error", result);
         }
     }
 }

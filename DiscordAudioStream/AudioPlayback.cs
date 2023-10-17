@@ -68,7 +68,7 @@ internal class AudioPlayback
         output.Init(outputProvider);
 
         // Start a periodic timer to update the audio meter, discard the result
-        audioMeterCancel = new CancellationTokenSource();
+        audioMeterCancel = new();
         _ = UpdateAudioMeter(device, audioMeterCancel.Token);
     }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 using DLLs;
@@ -63,7 +64,7 @@ public class ProcessHandleList
                         return true;
                     }
                 }
-                catch (InvalidOperationException)
+                catch (ExternalException)
                 {
                     Logger.Log(
                         $"Cannot get property CLOAKED of window {hWnd}. This is normal on Windows 7."

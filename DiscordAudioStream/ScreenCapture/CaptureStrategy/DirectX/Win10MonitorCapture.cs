@@ -13,7 +13,7 @@ public class Win10MonitorCapture : CaptureSource
     public Win10MonitorCapture(Screen monitor, bool captureCursor)
     {
         IntPtr hMon = GetScreenHandle(monitor);
-        winCapture = new Win10Capture(CaptureHelper.CreateItemForMonitor(hMon), captureCursor);
+        winCapture = new(CaptureHelper.CreateItemForMonitor(hMon), captureCursor);
     }
 
     public override Bitmap? CaptureFrame()

@@ -48,8 +48,7 @@ internal static class ExceptionHandler
     {
         Logger.Log("  Trace path is: " + tracePath);
 
-        string[] lines = new string[] { exception.ToString() };
-        System.IO.File.WriteAllLines(tracePath, lines);
+        File.WriteAllText(tracePath, exception.ToString());
 
         Logger.Log("  Stack trace written successfully.");
     }

@@ -67,7 +67,7 @@ public class ScreenCaptureManager
         {
             throw new InvalidOperationException("Call UpdateState() before creating the capture thread");
         }
-        
+
         return new Thread(() =>
         {
             int fps = Properties.Settings.Default.CaptureFramerate;

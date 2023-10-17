@@ -52,7 +52,7 @@ public class DarkThemeTabControl : TabControl
         );
         DoubleBuffered = true;
         SizeMode = TabSizeMode.Normal;
-        ItemSize = new Size(240, 16);
+        ItemSize = new(240, 16);
         AllowDrop = true;
     }
 

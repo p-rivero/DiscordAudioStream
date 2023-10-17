@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 using DLLs;
 
@@ -41,8 +42,12 @@ public class BitBltCapture : CaptureSource
                 Gdi32.DeleteObject(hBitmap);
             }
             hBitmap = Gdi32.CreateCompatibleBitmap(hdcSrc, area.Width, area.Height);
-            bitmapSize = new Size(area.Width, area.Height);
-            Gdi32.SelectObject(hdcDest, hBitmap);
+            bitmapSize = new(area.Width, area.Height);
+            int result = Gdi32.SelectObject(hdcDest, hBitmap);
+            if (result is 0 or Gdi32.HGDI_ERROR)
+            {
+                throw new ExternalException("Failed to select target bitmap");
+            }
         }
 
         Gdi32.BitBlt(hdcDest, 0, 0, area.Width, area.Height, hdcSrc, area.X, area.Y, Gdi32.RasterOps.SRCCOPY);
@@ -55,15 +60,27 @@ public class BitBltCapture : CaptureSource
         base.Dispose(disposing);
         if (hBitmap != IntPtr.Zero)
         {
-            Gdi32.DeleteObject(hBitmap);
+            bool success = Gdi32.DeleteObject(hBitmap);
+            if (!success)
+            {
+                throw new ExternalException("Failed to delete bitmap");
+            }
         }
         if (hdcDest != IntPtr.Zero)
         {
-            Gdi32.DeleteDC(hdcDest);
+            bool success = Gdi32.DeleteDC(hdcDest);
+            if (!success)
+            {
+                throw new ExternalException("Failed to delete destination DC");
+            }
         }
         if (hdcSrc != IntPtr.Zero)
         {
-            User32.ReleaseDC(User32.GetDesktopWindow(), hdcSrc);
+            bool success = User32.ReleaseDC(User32.GetDesktopWindow(), hdcSrc);
+            if (!success)
+            {
+                throw new ExternalException("Failed to release source DC");
+            }
         }
     }
 }
