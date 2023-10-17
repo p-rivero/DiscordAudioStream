@@ -1,244 +1,81 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{739D3A11-1F74-40EF-8CA8-3789066D7E58}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>DiscordAudioStream</RootNamespace>
     <AssemblyName>DiscordAudioStream</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFramework>net472</TargetFramework>
     <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-  </PropertyGroup>
-  <PropertyGroup>
+    <StartupObject>DiscordAudioStream.Program</StartupObject>
     <ApplicationIcon>resources\imgs\logo.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup />
-  <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Version>1.3.3</Version>
+    <Authors>p-rivero</Authors>
+    <Product>Discord Audio Stream</Product>
+    <Description>Utility for streaming the entire screen (or use OBS) with Discord... with audio!</Description>
+    <PackageProjectUrl>https://github.com/p-rivero/DiscordAudioStream</PackageProjectUrl>
+    <PackageIcon>logo-128.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/p-rivero/DiscordAudioStream</RepositoryUrl>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <NoWarn />
+    <Prefer32Bit>false</Prefer32Bit>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <NoWarn />
+    <Prefer32Bit>false</Prefer32Bit>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="AboutForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AboutForm.Designer.cs">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AreaForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AreaForm.Designer.cs">
-      <DependentUpon>AreaForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AudioMeterForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AudioMeterForm.Designer.cs">
-      <DependentUpon>AudioMeterForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AudioPlayback.cs" />
-    <Compile Include="Helpers\UseCSharp10.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\CustomAreaCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Win10CustomAreaCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Win10MultiMonitorCapture.cs" />
-    <Compile Include="Startup\CommandArguments.cs" />
-    <Compile Include="CustomComponents\AudioMeter.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CustomComponents\AudioMeterText.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CustomComponents\DarkThemeTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Helpers\Logger.cs" />
-    <Compile Include="MainController.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.49-beta">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.22000.196" />
+    <PackageReference Include="Mono.Options" Version="6.12.0.148" />
+    <PackageReference Include="NAudio" Version="1.10.0" />
+    <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\BuildId.cs" />
-    <Compile Include="ScreenCapture\CaptureState.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltCustomAreaCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltMultiMonitorCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\CaptureSourceFactory.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\DuplicationCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Helpers\BitmapHelper.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\DuplicationMonitorCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\PrintWindow\PrintWindowCore.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltWindowCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltMonitorCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\CursorPainter.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Win10Capture.cs" />
-    <Compile Include="CustomComponents\DarkThemeGroupBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CustomComponents\DarkThemeCheckBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CustomComponents\DarkThemeComboBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CustomComponents\DarkThemeManager.cs" />
-    <Compile Include="CustomComponents\DarkThemeTabControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CustomComponents\DarkThemeToolStrip.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Helpers\DLLs.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\BitBlt\BitBltCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Win10MonitorCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Win10WindowCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\CaptureSource.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\MeasureTime.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\PrintWindow\PrintWindowCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\WindowCapture.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Helpers\CaptureHelper.cs" />
-    <Compile Include="ScreenCapture\CaptureStrategy\DirectX\Helpers\Direct3D11Helper.cs" />
-    <Compile Include="ScreenCapture\ProcessHandleList.cs" />
-    <Compile Include="ScreenCapture\ScreenCaptureManager.cs" />
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScreenCapture\CaptureResizer.cs" />
-    <Compile Include="SettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SettingsForm.Designer.cs">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Startup\ExceptionHandler.cs" />
-    <Compile Include="Startup\EmbeddedAssemblyResolver.cs" />
-    <EmbeddedResource Include="AboutForm.resx">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AreaForm.resx">
-      <DependentUpon>AreaForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AudioMeterForm.resx">
-      <DependentUpon>AudioMeterForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsForm.resx">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="app.manifest" />
-    <None Include="Properties\Settings.settings">
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
+    <None Update="resources\imgs\logo-128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\imgs\light\white-speaker.png" />
-    <None Include="resources\imgs\light\white-mixer.png" />
-    <None Include="resources\imgs\light\white-preview.png" />
-    <None Include="resources\imgs\light\white-settings.png" />
-    <None Include="resources\imgs\light\white-ontop.png" />
-    <None Include="resources\imgs\light\white-refresh.png" />
-    <None Include="resources\imgs\light\white-stop.png" />
-    <None Include="resources\imgs\light\white-record.png" />
-    <None Include="resources\imgs\light\white-about.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="NativeMethods.txt" />
-    <Content Include="resources\imgs\logo.ico" />
-    <None Include="resources\imgs\lock.png" />
-    <Content Include="resources\Mono.Options.dll" />
-    <Content Include="resources\SharpDX.Direct3D11.dll" />
-    <Content Include="resources\SharpDX.dll" />
-    <Content Include="resources\SharpDX.DXGI.dll" />
-    <None Include="resources\imgs\move.png" />
-    <None Include="resources\imgs\resize.png" />
-    <None Include="resources\NAudio.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.CsWin32">
-      <Version>0.3.46-beta</Version>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Mono.Options">
-      <Version>6.12.0.148</Version>
-    </PackageReference>
-    <PackageReference Include="NAudio">
-      <Version>1.10.0</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.22000.196" />
-    <PackageReference Include="SharpDX.Direct3D11">
-      <Version>4.2.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
-  </ItemGroup>
+
 </Project>
