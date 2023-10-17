@@ -6,7 +6,7 @@ namespace CustomComponents;
 
 public class AudioMeterText : Control
 {
-    private int windowWidth = 0;
+    private int windowWidth = -1;
 
     public void SetWindowWidth(int newWidth)
     {

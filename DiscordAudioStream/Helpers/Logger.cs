@@ -12,8 +12,8 @@ internal static class Logger
 
     private static readonly int startTime = Environment.TickCount;
 
-    private static string groupCallerName = null;
-    private static int groupLastLogTime = 0;
+    private static string? groupCallerName;
+    private static int groupLastLogTime;
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3963", Justification =
         "Cannot convert this static constructor into an inline initialization")]

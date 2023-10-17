@@ -9,7 +9,7 @@ public class DarkThemeCheckBox : CheckBox
 {
     private bool darkMode;
 
-    private string darkText;
+    private string darkText = "";
 
     private bool hovered;
 

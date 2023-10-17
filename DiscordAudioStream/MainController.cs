@@ -15,20 +15,20 @@ namespace DiscordAudioStream;
 
 public class MainController
 {
+    internal Action? OnAudioMeterClosed { get; set; }
+    
     private readonly MainForm form;
-    private bool forceRefresh = false;
+    private bool forceRefresh;
     private int numberOfScreens = -1;
-    private Size lastCapturedFrameSize = new(0, 0);
+    private Size lastCapturedFrameSize = Size.Empty;
 
-    private ScreenCaptureManager screenCapture;
+    private ScreenCaptureManager? screenCapture;
     private ProcessHandleList processHandleList;
     private readonly CaptureState captureState = new();
     private readonly CaptureResizer captureResizer = new();
 
-    private AudioPlayback audioPlayback = null;
-    private AudioMeterForm currentMeterForm = null;
-
-    internal Action OnAudioMeterClosed { get; set; }
+    private AudioPlayback? audioPlayback;
+    private AudioMeterForm? currentMeterForm;
 
     public MainController(MainForm owner)
     {
@@ -36,7 +36,7 @@ public class MainController
         processHandleList = ProcessHandleList.Refresh();
     }
 
-    public bool IsStreaming { get; private set; } = false;
+    public bool IsStreaming { get; private set; }
 
     internal void Init()
     {
@@ -130,6 +130,11 @@ public class MainController
         // Get the handle now, since we cannot get it from inside the thread
         IntPtr formHandle = form.Handle;
 
+        if (screenCapture == null)
+        {
+            throw new InvalidOperationException("Must call Init() before creating draw thread");
+        }
+
         return new Thread(() =>
         {
             int fps = Properties.Settings.Default.CaptureFramerate;
@@ -137,14 +142,14 @@ public class MainController
             Logger.Log($"Creating Draw thread. Target framerate: {fps} FPS ({screenCapture.CaptureIntervalMs} ms)");
 
             Stopwatch stopwatch = new();
-            Size oldSize = new(0, 0);
+            Size oldSize = Size.Empty;
 
             while (true)
             {
                 stopwatch.Restart();
                 try
                 {
-                    Bitmap next = ScreenCaptureManager.GetNextFrame();
+                    Bitmap? next = ScreenCaptureManager.GetNextFrame();
 
                     // No new data, keep displaying last frame
                     if (next == null)
@@ -391,7 +396,7 @@ public class MainController
     {
         SettingsForm settingsBox = new(darkMode, captureState) { Owner = form, TopMost = form.TopMost };
         settingsBox.CaptureMethodChanged += RefreshAreaInfo;
-        settingsBox.FramerateChanged += screenCapture.RefreshFramerate;
+        settingsBox.FramerateChanged += () => screenCapture?.RefreshFramerate();
         settingsBox.ShowAudioInputsChanged += RefreshAudioDevices;
         settingsBox.ShowDialog();
     }

@@ -10,9 +10,9 @@ namespace DiscordAudioStream;
 
 internal class CommandArguments
 {
-    private Point? position = null;
-    private bool startStream = false;
-    private bool printFps = false;
+    private Point? position;
+    private bool startStream;
+    private bool printFps;
 
     public CommandArguments(string[] args)
     {
@@ -66,7 +66,7 @@ internal class CommandArguments
         }
     }
 
-    public bool ExitImmediately { get; private set; } = false;
+    public bool ExitImmediately { get; private set; }
 
     public void ProcessArgsBeforeMainForm()
     {

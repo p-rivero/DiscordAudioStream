@@ -11,7 +11,7 @@ internal static class EmbeddedAssemblyResolver
         AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
     }
 
-    private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+    private static Assembly? CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
     {
         string dllName = args.Name.Contains(",")
             ? args.Name.Substring(0, args.Name.IndexOf(','))

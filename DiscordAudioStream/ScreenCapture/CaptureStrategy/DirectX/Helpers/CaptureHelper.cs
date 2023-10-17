@@ -65,9 +65,13 @@ public static class CaptureHelper
         IActivationFactory factory = WindowsRuntimeMarshal.GetActivationFactory(typeof(GraphicsCaptureItem));
         IGraphicsCaptureItemInterop interop = (IGraphicsCaptureItemInterop)factory;
         IntPtr itemPointer = interop.CreateForWindow(hwnd, GraphicsCaptureItemGuid);
-        GraphicsCaptureItem item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
+        GraphicsCaptureItem? item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
         Marshal.Release(itemPointer);
 
+        if (item == null)
+        {
+            throw new InvalidOperationException("IGraphicsCaptureItemInterop.CreateItemForWindow returned null");
+        }
         return item;
     }
 
@@ -76,9 +80,13 @@ public static class CaptureHelper
         IActivationFactory factory = WindowsRuntimeMarshal.GetActivationFactory(typeof(GraphicsCaptureItem));
         IGraphicsCaptureItemInterop interop = (IGraphicsCaptureItemInterop)factory;
         IntPtr itemPointer = interop.CreateForMonitor(hmon, GraphicsCaptureItemGuid);
-        GraphicsCaptureItem item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
+        GraphicsCaptureItem? item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
         Marshal.Release(itemPointer);
 
+        if (item == null)
+        {
+            throw new InvalidOperationException("IGraphicsCaptureItemInterop.CreateForMonitor returned null");
+        }
         return item;
     }
 }

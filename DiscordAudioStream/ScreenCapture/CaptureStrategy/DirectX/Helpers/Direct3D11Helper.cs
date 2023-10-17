@@ -77,8 +77,13 @@ public static class Direct3D11Helper
         {
             throw new InvalidOperationException($"Failed to create Direct3D11 device, error code 0x{error:X}");
         }
-        IDirect3DDevice device = Marshal.GetObjectForIUnknown(pUnknown) as IDirect3DDevice;
+        IDirect3DDevice? device = Marshal.GetObjectForIUnknown(pUnknown) as IDirect3DDevice;
         Marshal.Release(pUnknown);
+
+        if (device == null)
+        {
+            throw new InvalidOperationException("CreateDirect3D11DeviceFromDXGIDevice returned null");
+        }
         return device;
     }
 

@@ -15,7 +15,7 @@ public class Win10CustomAreaCapture : CustomAreaCapture
         capture.CustomAreaCrop += () => GetCustomArea(true);
     }
 
-    public override Bitmap CaptureFrame()
+    public override Bitmap? CaptureFrame()
     {
         return capture.CaptureFrame();
     }

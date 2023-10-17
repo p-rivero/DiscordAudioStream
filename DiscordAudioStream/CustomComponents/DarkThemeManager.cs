@@ -25,9 +25,12 @@ internal static class DarkThemeManager
     public static readonly Color AccentColor = Color.FromArgb(0, 120, 215);
     public static readonly Color PressedColor = Color.FromArgb(140, 140, 140);
 
-    public static void FormHandleCreated(object sender, EventArgs e)
+    public static void FormHandleCreated(object? sender, EventArgs e)
     {
-        EnableDarkTitlebar((sender as Form).Handle, dark: true);
+        if (sender is Form form)
+        {
+            EnableDarkTitlebar(form.Handle, dark: true);
+        }
     }
 
     public static bool IsDarkTheme()

@@ -10,9 +10,9 @@ namespace DiscordAudioStream;
 
 internal partial class SettingsForm : Form
 {
-    public event Action CaptureMethodChanged;
-    public event Action FramerateChanged;
-    public event Action ShowAudioInputsChanged;
+    public event Action? CaptureMethodChanged;
+    public event Action? FramerateChanged;
+    public event Action? ShowAudioInputsChanged;
 
     private enum FrameRates
     {

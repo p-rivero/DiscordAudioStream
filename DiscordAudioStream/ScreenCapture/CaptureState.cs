@@ -28,10 +28,10 @@ public class CaptureState
         CustomArea
     }
 
-    public event Action StateChanged;
+    public event Action? StateChanged;
 
     private IntPtr hWnd = IntPtr.Zero;
-    private Screen screen = null;
+    private Screen? screen;
     private CaptureTarget captureTarget = CaptureTarget.Invalid;
     private bool capturingCursor;
     private bool hideTaskbar;

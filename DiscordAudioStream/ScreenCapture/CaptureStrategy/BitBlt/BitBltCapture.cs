@@ -7,7 +7,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 public class BitBltCapture : CaptureSource
 {
-    public Func<Rectangle> CaptureAreaRect { get; set; }
+    public Func<Rectangle>? CaptureAreaRect { get; set; }
 
     // Create DC and Bitmap objects for reuse
     private IntPtr hdcSrc;

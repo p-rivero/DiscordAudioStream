@@ -16,7 +16,7 @@ public class Win10MultiMonitorCapture : CaptureSource
         winCapture = new Win10Capture(CaptureHelper.CreateItemForMonitor(IntPtr.Zero), captureCursor);
     }
 
-    public override Bitmap CaptureFrame()
+    public override Bitmap? CaptureFrame()
     {
         return winCapture.CaptureFrame();
     }

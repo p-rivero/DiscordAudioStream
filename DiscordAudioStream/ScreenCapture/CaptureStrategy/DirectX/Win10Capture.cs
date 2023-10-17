@@ -15,14 +15,14 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 public class Win10Capture : CaptureSource
 {
+    public Func<Rectangle>? CustomAreaCrop { get; set; }
+    
     private readonly Direct3D11CaptureFramePool framePool;
     private readonly GraphicsCaptureSession session;
     private SizeInt32 lastSize;
 
     private static readonly IDirect3DDevice device = Direct3D11Helper.CreateDevice();
     private static readonly Device d3dDevice = Direct3D11Helper.CreateSharpDXDevice(device);
-
-    public Func<Rectangle> CustomAreaCrop { get; set; }
 
     public Win10Capture(GraphicsCaptureItem item, bool captureCursor)
     {
@@ -60,7 +60,7 @@ public class Win10Capture : CaptureSource
         framePool?.Dispose();
     }
 
-    public override Bitmap CaptureFrame()
+    public override Bitmap? CaptureFrame()
     {
         using Direct3D11CaptureFrame frame = framePool.TryGetNextFrame();
         if (frame == null)

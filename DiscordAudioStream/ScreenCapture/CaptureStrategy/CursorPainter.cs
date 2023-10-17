@@ -8,10 +8,12 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 public class CursorPainter : CaptureSource
 {
+    public Func<Rectangle>? CaptureAreaRect { get; set; }
+
     private readonly CaptureSource source;
 
     private IntPtr currentCursorHandle = IntPtr.Zero;
-    private Bitmap cursorBitmap = null;
+    private Bitmap? cursorBitmap;
     private Point cursorHotspot = Point.Empty;
 
     public CursorPainter(CaptureSource source)
@@ -20,19 +22,19 @@ public class CursorPainter : CaptureSource
         Logger.Log($"Instantiating CursorPainter source (wrapping {source.GetType().Name})");
     }
 
-    public Func<Rectangle> CaptureAreaRect { get; set; }
-
-    public override Bitmap CaptureFrame()
+    public override Bitmap? CaptureFrame()
     {
         if (CaptureAreaRect == null)
         {
             throw new ArgumentException("Attempting to paint cursor without setting CaptureAreaRect");
         }
-        Bitmap bmp = source.CaptureFrame();
+        
+        Bitmap? bmp = source.CaptureFrame();
         if (bmp == null)
         {
             return null;
         }
+        
         return PaintCursor(bmp, CaptureAreaRect().Location);
     }
 
@@ -95,7 +97,7 @@ public class CursorPainter : CaptureSource
         CleanUpIconInfo(iconInfo);
     }
 
-    private static Bitmap BitmapFromCursor(in User32.IconInfo iconInfo)
+    private static Bitmap? BitmapFromCursor(in User32.IconInfo iconInfo)
     {
         if (iconInfo.hbmColor == IntPtr.Zero)
         {

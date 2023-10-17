@@ -18,10 +18,13 @@ internal static class ExceptionHandler
 
     private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
     {
-        HandleException(e.ExceptionObject as Exception);
+        if (e.ExceptionObject is Exception ex)
+        {
+            HandleException(ex);
+        }
     }
 
-    private static void ApplicationThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+    private static void ApplicationThreadException(object sender, ThreadExceptionEventArgs e)
     {
         HandleException(e.Exception);
     }

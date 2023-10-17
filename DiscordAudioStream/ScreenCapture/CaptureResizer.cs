@@ -19,9 +19,9 @@ public enum ScaleMode
 public class CaptureResizer
 {
     private const double DISCORD_ASPECT_RATIO = 16.0 / 9.0;
-    private double constantScaleFactor = 0;
-    private uint fixedHeight = 0;
-    private uint fixedWidth = 0;
+    private double constantScaleFactor;
+    private uint fixedHeight;
+    private uint fixedWidth;
 
     public CaptureResizer()
     {

@@ -29,7 +29,7 @@ public class BitBltMonitorCapture : CaptureSource
         }
     }
 
-    public override Bitmap CaptureFrame()
+    public override Bitmap? CaptureFrame()
     {
         return capture.CaptureFrame();
     }

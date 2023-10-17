@@ -22,25 +22,39 @@ public class DuplicationCapture : CaptureSource
     private const int DXGI_ERROR_ACCESS_LOST = unchecked((int)0x887A0026);
     private const int DXGI_ERROR_WAIT_TIMEOUT = unchecked((int)0x887A0027);
 
-    private static OutputDuplication[] screens = null;
-    private static Bitmap[] cachedThumbnails = null;
+    private const int FRAME_TIMEOUT_MS = 100;
+
     private static readonly D3D11Device d3dDevice = new(GPU0Adapter);
+    private static readonly Lazy<OutputDuplication[]> screens = new(InitScreens);
+    private static readonly Lazy<Bitmap?[]> cachedThumbnails = new(() => new Bitmap[screens.Value.Length]);
 
-    // Index of the selected screen to capture
-    private readonly int index;
+    private readonly int selectedIndex;
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S3010", Justification =
-        "We cannot control when static initializers are called, and we need InitScreens to be called here. See commit b5eb879")]
+    private OutputDuplication Screen
+    {
+        get => screens.Value[selectedIndex];
+        set
+        {
+            screens.Value[selectedIndex].Dispose();
+            screens.Value[selectedIndex] = value;
+        }
+    }
+
+    private Bitmap? CachedThumbnail
+    {
+        get => cachedThumbnails.Value[selectedIndex];
+        set
+        {
+            cachedThumbnails.Value[selectedIndex]?.Dispose();
+            cachedThumbnails.Value[selectedIndex] = value;
+        }
+    }
+
     public DuplicationCapture(int index)
     {
-        this.index = index;
-        // Initialize static field manually, since InitScreens throws exceptions and we
-        // can't control when the static initializer is called
-        if (screens == null)
-        {
-            screens = InitScreens();
-            cachedThumbnails = new Bitmap[screens.Length];
-        }
+        selectedIndex = index;
+        // Trigger InitScreens(), we want to throw during the constructor if there's an error
+        _ = Screen.Description;
     }
 
     internal static Adapter GPU0Adapter => new Factory1().GetAdapter(0);
@@ -52,15 +66,11 @@ public class DuplicationCapture : CaptureSource
             .ToArray();
     }
 
-    private static void RefreshScreen(int screenIndex)
+    private void RefreshScreen()
     {
         try
         {
-            // Release the old screen
-            screens[screenIndex]?.Dispose();
-            // Get the new output
-            Output1 o = GPU0Adapter.Outputs[screenIndex].QueryInterface<Output1>();
-            screens[screenIndex] = o.DuplicateOutput(d3dDevice);
+            Screen = GPU0Adapter.Outputs[selectedIndex].QueryInterface<Output1>().DuplicateOutput(d3dDevice);
         }
         catch (SharpDXException e)
         {
@@ -75,38 +85,35 @@ public class DuplicationCapture : CaptureSource
         }
     }
 
-    public override Bitmap CaptureFrame()
+    public override Bitmap? CaptureFrame()
     {
         try
         {
             // If RefreshScreen failed, the screen may be disposed after switching capture methods
-            if (screens[index].IsDisposed)
+            if (Screen.IsDisposed)
             {
                 Logger.EmptyLine();
                 Logger.Log("Screen was disposed, attempting to refresh OutputDuplication...");
-                RefreshScreen(index);
+                RefreshScreen();
                 return null;
             }
 
-            // Try to get duplicated frame in 100 ms
-            screens[index].AcquireNextFrame(100, out _, out DXGIResource screenResource);
+            Screen.AcquireNextFrame(FRAME_TIMEOUT_MS, out _, out DXGIResource screenResource);
+            
             // Success: convert captured frame to Bitmap
             using Texture2D texture = screenResource.QueryInterface<Texture2D>();
             Bitmap bmp = BitmapHelper.CreateFromTexture2D(texture, d3dDevice);
             screenResource.Dispose();
-            // Done processing this frame
-            screens[index].ReleaseFrame();
+            Screen.ReleaseFrame();
 
-            // Delete old thumbnail and store new captured frame
-            cachedThumbnails[index]?.Dispose();
-            cachedThumbnails[index] = (Bitmap)bmp.Clone();
+            CachedThumbnail = (Bitmap)bmp.Clone();
             return bmp;
         }
         catch (SharpDXException e)
         {
             if (e.HResult == DXGI_ERROR_WAIT_TIMEOUT)
             {
-                // The screen does not have new content. Return cached thumbnail
+                // The screen does not have new content
                 return CloneThumbnail();
             }
             else if (e.HResult == DXGI_ERROR_ACCESS_LOST)
@@ -114,14 +121,13 @@ public class DuplicationCapture : CaptureSource
                 // The desktop duplication interface is invalid. Release the OutputDuplication and create a new one
                 Logger.EmptyLine();
                 Logger.Log("Access lost, attempting to refresh OutputDuplication...");
-                RefreshScreen(index);
+                RefreshScreen();
                 return CloneThumbnail();
             }
             else
             {
                 Logger.EmptyLine();
-                Logger.Log("SharpDXException while capturing frame.");
-                Logger.Log("HResult = " + e.HResult);
+                Logger.Log($"SharpDXException while capturing frame: 0x{e.HResult:X}");
                 Logger.Log(e);
                 throw;
             }
@@ -135,12 +141,11 @@ public class DuplicationCapture : CaptureSource
         }
     }
 
-    private Bitmap CloneThumbnail()
+    private Bitmap? CloneThumbnail()
     {
-        if (cachedThumbnails[index] == null)
+        if (CachedThumbnail == null)
         {
             // AcquireNextFrame failed on the very first frame and we don't have a cache yet.
-            // This should never happen, but return null just to be safe
             Logger.EmptyLine();
             Logger.Log("AcquireNextFrame: Failed to get the first frame!");
             return null;
@@ -148,7 +153,7 @@ public class DuplicationCapture : CaptureSource
 
         try
         {
-            return (Bitmap)cachedThumbnails[index].Clone();
+            return (Bitmap)CachedThumbnail.Clone();
         }
         catch (ArgumentException)
         {
@@ -170,9 +175,9 @@ public class DuplicationCapture : CaptureSource
         Logger.Log("Attempting to log bitmap params...");
         try
         {
-            Logger.Log("Format: " + cachedThumbnails[index].PixelFormat);
-            Logger.Log("Size: " + cachedThumbnails[index].Size);
-            Logger.Log("Flags: " + cachedThumbnails[index].Flags);
+            Logger.Log("Format: " + CachedThumbnail?.PixelFormat);
+            Logger.Log("Size: " + CachedThumbnail?.Size);
+            Logger.Log("Flags: " + CachedThumbnail?.Flags);
         }
         catch (Exception e)
         {

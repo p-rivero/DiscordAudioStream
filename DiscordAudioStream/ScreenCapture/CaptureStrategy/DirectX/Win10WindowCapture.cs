@@ -20,9 +20,9 @@ public class Win10WindowCapture : WindowCapture
         winCapture = new Win10Capture(item, captureCursor);
     }
 
-    public override Bitmap CaptureFrame()
+    public override Bitmap? CaptureFrame()
     {
-        Bitmap result = winCapture.CaptureFrame();
+        Bitmap? result = winCapture.CaptureFrame();
         if (result == null)
         {
             // Check if the window has been closed or it just doesn't have new content

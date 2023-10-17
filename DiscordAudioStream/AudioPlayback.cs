@@ -12,7 +12,7 @@ namespace DiscordAudioStream.AudioCapture;
 
 internal class AudioPlayback
 {
-    public event Action<float, float> AudioLevelChanged;
+    public event Action<float, float>? AudioLevelChanged;
 
     private const int DESIRED_LATENCY_MS = 50;
 
@@ -24,11 +24,14 @@ internal class AudioPlayback
     private readonly BufferedWaveProvider outputProvider;
     private readonly CancellationTokenSource audioMeterCancel;
 
-    private static List<MMDevice> audioDevices = null;
+    private static List<MMDevice>? audioDevices;
 
     public AudioPlayback(int deviceIndex)
     {
-        AssertDevicesInitialized("AudioPlayback constructor");
+        if (audioDevices == null)
+        {
+            throw new InvalidOperationException("RefreshDevices() must be called before constructor");
+        }
 
         if (deviceIndex < 0 || deviceIndex > audioDevices.Count)
         {
@@ -82,7 +85,10 @@ internal class AudioPlayback
 
     public static int GetDefaultDeviceIndex()
     {
-        AssertDevicesInitialized("GetDefaultDeviceIndex");
+        if (audioDevices == null)
+        {
+            throw new InvalidOperationException("RefreshDevices() must be called before calling GetDefaultDeviceIndex");
+        }
         MMDeviceEnumerator enumerator = new();
         if (!enumerator.HasDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia))
         {
@@ -95,7 +101,10 @@ internal class AudioPlayback
 
     public static int GetLastDeviceIndex()
     {
-        AssertDevicesInitialized("GetLastDeviceIndex");
+        if (audioDevices == null)
+        {
+            throw new InvalidOperationException("RefreshDevices() must be called before calling GetLastDeviceIndex");
+        }
         string lastDeviceId = Properties.Settings.Default.AudioDeviceID;
         return audioDevices.FindIndex(device => device.ID == lastDeviceId);
     }
@@ -137,21 +146,13 @@ internal class AudioPlayback
         output.Stop();
     }
 
-    private static void AssertDevicesInitialized(string method)
-    {
-        if (audioDevices == null)
-        {
-            throw new InvalidOperationException("RefreshDevices() must be called before calling " + method);
-        }
-    }
-
-    private void AudioSource_DataAvailable(object sender, WaveInEventArgs e)
+    private void AudioSource_DataAvailable(object? sender, WaveInEventArgs e)
     {
         // New audio data available, append to output audio buffer
         outputProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
     }
 
-    private void Output_StoppedHandler(object sender, StoppedEventArgs e)
+    private void Output_StoppedHandler(object? sender, StoppedEventArgs e)
     {
         // In some cases, streaming to Discord will cause DirectSoundOut to throw an
         // exception and stop. If that happens, just resume playback

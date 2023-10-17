@@ -5,7 +5,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 public abstract class CaptureSource : IDisposable
 {
-    public abstract Bitmap CaptureFrame();
+    public abstract Bitmap? CaptureFrame();
 
     public void Dispose()
     {

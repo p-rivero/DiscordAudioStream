@@ -25,7 +25,7 @@ public class DuplicationMonitorCapture : CaptureSource
         }
     }
 
-    public override Bitmap CaptureFrame()
+    public override Bitmap? CaptureFrame()
     {
         return source.CaptureFrame();
     }

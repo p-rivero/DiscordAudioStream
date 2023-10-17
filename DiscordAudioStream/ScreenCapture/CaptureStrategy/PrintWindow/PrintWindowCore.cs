@@ -15,9 +15,14 @@ internal class PrintWindowCore : WindowCapture
         windowHandle = hWnd;
     }
 
-    public override Bitmap CaptureFrame()
+    public override Bitmap? CaptureFrame()
     {
         Rectangle winArea = GetWindowArea(windowHandle);
+
+        if (winArea.Size == Size.Empty)
+        {
+            return null;
+        }
 
         Bitmap result = new(winArea.Width, winArea.Height);
 

@@ -30,7 +30,7 @@ public class BitBltWindowCapture : WindowCapture
         SetWindowTopmost(windowHandle, true);
     }
 
-    public override Bitmap CaptureFrame()
+    public override Bitmap? CaptureFrame()
     {
         return capture.CaptureFrame();
     }

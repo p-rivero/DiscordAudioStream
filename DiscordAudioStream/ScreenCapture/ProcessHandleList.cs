@@ -10,8 +10,8 @@ namespace DiscordAudioStream.ScreenCapture;
 
 public class ProcessHandleList
 {
-    private readonly List<IntPtr> handles = null;
-    private readonly List<string> processNames = null;
+    private readonly List<IntPtr> handles;
+    private readonly List<string> processNames;
 
     // Cannot instantiate directly, must call ProcessHandleList.Refresh()
     private ProcessHandleList(Dictionary<IntPtr, string> processes)
@@ -71,7 +71,7 @@ public class ProcessHandleList
                 }
 
                 StringBuilder builder = new(windowTextLength);
-                User32.GetWindowText(hWnd, builder, windowTextLength + 1);
+                _ = User32.GetWindowText(hWnd, builder, windowTextLength + 1);
                 string name = builder.ToString();
 
                 if (name == AreaForm.AREA_FORM_TITLE)

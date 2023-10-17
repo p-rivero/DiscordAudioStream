@@ -11,10 +11,10 @@ namespace DiscordAudioStream.ScreenCapture;
 
 public class ScreenCaptureManager
 {
-    public event Action CaptureAborted;
+    public event Action? CaptureAborted;
 
     // Control framerate limit
-    public int CaptureIntervalMs { get; private set; } = 0;
+    public int CaptureIntervalMs { get; private set; }
 
     // Number of frames that are stored in the queue
     private const int LIMIT_QUEUE_SZ = 3;
@@ -22,7 +22,7 @@ public class ScreenCaptureManager
     private readonly CancellationTokenSource captureThreadToken = new();
     private readonly CaptureState captureState;
     private static readonly ConcurrentQueue<Bitmap> frameQueue = new();
-    private CaptureSource currentSource;
+    private CaptureSource? currentSource;
     private readonly object currentSourceLock = new();
 
     public ScreenCaptureManager(CaptureState captureState)
@@ -38,7 +38,7 @@ public class ScreenCaptureManager
     }
 
     // Return the next frame, if it exists (null otherwise)
-    public static Bitmap GetNextFrame()
+    public static Bitmap? GetNextFrame()
     {
         if (frameQueue.TryDequeue(out Bitmap frame))
         {
@@ -63,6 +63,11 @@ public class ScreenCaptureManager
 
     private Thread CreateCaptureThread()
     {
+        if (currentSource == null)
+        {
+            throw new InvalidOperationException("Call UpdateState() before creating the capture thread");
+        }
+        
         return new Thread(() =>
         {
             int fps = Properties.Settings.Default.CaptureFramerate;
@@ -121,7 +126,7 @@ public class ScreenCaptureManager
             lock (currentSourceLock)
             {
                 // Don't dispose the old source until the new source is instantiated without errors
-                CaptureSource oldSource = currentSource;
+                CaptureSource? oldSource = currentSource;
                 currentSource = CaptureSourceFactory.Build(captureState);
                 oldSource?.Dispose();
             }
@@ -152,7 +157,7 @@ public class ScreenCaptureManager
         }
     }
 
-    private static void EnqueueFrame(Bitmap frame)
+    private static void EnqueueFrame(Bitmap? frame)
     {
         // If there is no new content, avoid overwriting good frames
         if (frame == null)

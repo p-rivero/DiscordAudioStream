@@ -23,7 +23,7 @@ public class BitBltCustomAreaCapture : CustomAreaCapture
         }
     }
 
-    public override Bitmap CaptureFrame()
+    public override Bitmap? CaptureFrame()
     {
         return capture.CaptureFrame();
     }
