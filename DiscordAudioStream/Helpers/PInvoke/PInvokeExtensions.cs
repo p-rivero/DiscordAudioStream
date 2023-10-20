@@ -20,7 +20,7 @@ public static partial class PInvoke
 
     public static unsafe HRESULT DwmGetWindowAttribute<T>(HWND hwnd, DWMWINDOWATTRIBUTE dwAttribute, out T attr) where T : unmanaged
     {
-        fixed (void* attrPtr = &attr)
+        fixed (T* attrPtr = &attr)
         {
             return DwmGetWindowAttribute(hwnd, dwAttribute, attrPtr, SizeOf<T>());
         }
@@ -28,7 +28,7 @@ public static partial class PInvoke
 
     public static unsafe HRESULT DwmSetWindowAttribute<T>(HWND hWnd, DWMWINDOWATTRIBUTE attribute, in T value) where T : unmanaged
     {
-        fixed (void* attrPtr = &value)
+        fixed (T* attrPtr = &value)
         {
             return DwmSetWindowAttribute(hWnd, attribute, attrPtr, SizeOf<T>());
         }

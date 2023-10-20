@@ -12,18 +12,18 @@ public abstract class WindowCapture : CaptureSource
     protected static Rectangle GetWindowArea(HWND windowHandle)
     {
         // Get size of client area (don't use X and Y, these are relative to the WINDOW rect)
-        RECT clientRect = GetClientArea(windowHandle);
+        Rectangle clientRect = GetClientArea(windowHandle);
         try
         {
             // Get frame size and position (generally more accurate than GetWindowRect)
-            PInvoke.DwmGetWindowAttribute(windowHandle, DWMWINDOWATTRIBUTE.DWMWA_EXTENDED_FRAME_BOUNDS, out Rectangle frame)
+            PInvoke.DwmGetWindowAttribute(windowHandle, DWMWINDOWATTRIBUTE.DWMWA_EXTENDED_FRAME_BOUNDS, out RECT frame)
                 .AssertSuccess("Failed to get window frame");
 
             // Trim the black bar at the top when the window is maximized,
             // as well as the title bar for applications with a defined client area
             int yOffset = frame.Height - clientRect.Height;
 
-            return new Rectangle(frame.Left + 1, frame.Top + yOffset, clientRect.Width, clientRect.Height);
+            return new Rectangle(frame.left + 1, frame.top + yOffset, clientRect.Width, clientRect.Height);
         }
         catch (ExternalException)
         {
