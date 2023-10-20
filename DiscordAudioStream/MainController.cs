@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 
 using DiscordAudioStream.AudioCapture;
 using DiscordAudioStream.ScreenCapture;
 
-using DLLs;
+using Windows.Win32.Foundation;
 
 namespace DiscordAudioStream;
 
@@ -66,7 +62,6 @@ public class MainController
             Logger.EmptyLine();
             Logger.Log("Close button pressed, stopping program.");
             screenCapture?.Stop();
-            User32.UnregisterHotKey(form.Handle, 0);
         }
         return cancel;
     }
@@ -128,7 +123,7 @@ public class MainController
     private Thread CreateDrawThread()
     {
         // Get the handle now, since we cannot get it from inside the thread
-        IntPtr formHandle = form.Handle;
+        HWND formHandle = (HWND)form.Handle;
 
         if (screenCapture == null)
         {
@@ -192,7 +187,7 @@ public class MainController
 
     internal void UpdateAreaComboBox(int oldIndex)
     {
-        IntPtr oldHandle = IntPtr.Zero;
+        HWND oldHandle = HWND.Null;
         if (oldIndex > numberOfScreens)
         {
             // We were capturing a window, store its handle

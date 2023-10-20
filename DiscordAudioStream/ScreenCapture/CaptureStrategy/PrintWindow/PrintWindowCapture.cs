@@ -1,23 +1,21 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
+
+using Windows.Win32.Foundation;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 public class PrintWindowCapture : WindowCapture
 {
     private readonly CaptureSource capture;
-    private readonly IntPtr windowHandle;
 
-    public PrintWindowCapture(IntPtr hWnd, bool captureCursor)
+    public PrintWindowCapture(HWND hWnd, bool captureCursor)
     {
-        windowHandle = hWnd;
-
         PrintWindowCore printWindow = new(hWnd);
 
         if (captureCursor)
         {
             CursorPainter paintCursor = new(printWindow);
-            paintCursor.CaptureAreaRect += () => GetWindowArea(windowHandle);
+            paintCursor.CaptureAreaRect += () => GetWindowArea(hWnd);
             capture = paintCursor;
         }
         else

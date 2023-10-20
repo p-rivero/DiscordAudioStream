@@ -1,50 +1,43 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Runtime.InteropServices;
 
-using DLLs;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Dwm;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 public abstract class WindowCapture : CaptureSource
 {
-    protected static Rectangle GetWindowArea(IntPtr windowHandle)
+    protected static Rectangle GetWindowArea(HWND windowHandle)
     {
         // Get size of client area (don't use X and Y, these are relative to the WINDOW rect)
-        bool success = User32.GetClientRect(windowHandle, out User32.Rect clientRect);
-        CheckSuccess(success);
-
-        User32.Rect frame;
+        RECT clientRect = GetClientArea(windowHandle);
         try
         {
             // Get frame size and position (generally more accurate than GetWindowRect)
-            frame = Dwmapi.GetRectAttr(windowHandle, Dwmapi.DwmWindowAttribute.EXTENDED_FRAME_BOUNDS);
+            PInvoke.DwmGetWindowAttribute(windowHandle, DWMWINDOWATTRIBUTE.DWMWA_EXTENDED_FRAME_BOUNDS, out Rectangle frame)
+                .AssertSuccess("Failed to get window frame");
+
+            // Trim the black bar at the top when the window is maximized,
+            // as well as the title bar for applications with a defined client area
+            int yOffset = frame.Height - clientRect.Height;
+
+            return new Rectangle(frame.Left + 1, frame.Top + yOffset, clientRect.Width, clientRect.Height);
         }
         catch (ExternalException)
         {
-            return GetWindowAreaFallback(windowHandle);
+            // GetClientRect is not always accurate when the window is maximized, but doesn't fail on Windows 7
+            return GetClientArea(windowHandle);
         }
-
-        // Trim the black bar at the top when the window is maximized,
-        // as well as the title bar for applications with a defined client area
-        int yOffset = frame.Height - clientRect.Height;
-
-        return new Rectangle(frame.left + 1, frame.top + yOffset, clientRect.Width, clientRect.Height);
     }
 
-    private static Rectangle GetWindowAreaFallback(IntPtr windowHandle)
+    private static Rectangle GetClientArea(HWND hWnd)
     {
-        // GetWindowRect is not always accurate when the window is maximized, but doesn't fail on Windows 7
-        bool success = User32.GetWindowRect(windowHandle, out User32.Rect windowRect);
-        CheckSuccess(success);
-        return new Rectangle(windowRect.left, windowRect.top, windowRect.Width, windowRect.Height);
-    }
-
-    private static void CheckSuccess(bool success)
-    {
-        if (!success)
+        if (!PInvoke.GetClientRect(hWnd, out RECT clientRect))
         {
             throw new InvalidOperationException("Window was closed");
         }
+        return clientRect;
     }
 }

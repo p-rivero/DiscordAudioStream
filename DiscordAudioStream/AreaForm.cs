@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -86,7 +85,7 @@ public partial class AreaForm : Form
     private void AreaForm_MouseDown(object sender, MouseEventArgs e)
     {
         Cursor.Current = Cursors.SizeAll;
-        PInvoke.ReleaseCapture();
+        PInvoke.ReleaseCapture().AssertSuccess("Could not release capture");
         PInvoke.SendMessage((HWND)Handle, PInvoke.WM_NCLBUTTONDOWN, (WPARAM)(nuint)PInvoke.HTCAPTION, (LPARAM)0);
     }
 

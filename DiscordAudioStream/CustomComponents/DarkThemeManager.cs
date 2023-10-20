@@ -1,11 +1,11 @@
-﻿using System;
-using System.Drawing;
-using System.Runtime.InteropServices;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
-using DLLs;
-
 using Microsoft.Win32;
+
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Dwm;
 
 namespace CustomComponents;
 
@@ -25,11 +25,14 @@ internal static class DarkThemeManager
     public static readonly Color AccentColor = Color.FromArgb(0, 120, 215);
     public static readonly Color PressedColor = Color.FromArgb(140, 140, 140);
 
+    private const DWMWINDOWATTRIBUTE DWMWA_USE_IMMERSIVE_DARK_MODE_OLD = (DWMWINDOWATTRIBUTE)19;
+    private const DWMWINDOWATTRIBUTE WCA_USEDARKMODECOLORS = (DWMWINDOWATTRIBUTE)26;
+
     public static void FormHandleCreated(object? sender, EventArgs e)
     {
         if (sender is Form form)
         {
-            EnableDarkTitlebar(form.Handle, dark: true);
+            EnableDarkTitlebar((HWND)form.Handle, dark: true);
         }
     }
 
@@ -51,38 +54,26 @@ internal static class DarkThemeManager
         }
     }
 
-    private static void EnableDarkTitlebar(IntPtr handle, bool dark)
+    private static void EnableDarkTitlebar(HWND handle, bool dark)
     {
         if (IsWindows10OrGreater(18985))
         {
-            Dwmapi.SetBoolAttr(handle, Dwmapi.DwmWindowAttribute.USE_IMMERSIVE_DARK_MODE, dark);
+            PInvoke.DwmSetWindowAttribute(handle, DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE, dark);
         }
         else if (IsWindows10OrGreater(17763))
         {
-            Dwmapi.SetBoolAttr(handle, Dwmapi.DwmWindowAttribute.USE_IMMERSIVE_DARK_MODE_OLD, dark);
+            PInvoke.DwmSetWindowAttribute(handle, DWMWA_USE_IMMERSIVE_DARK_MODE_OLD, dark);
         }
         else
         {
             // Use legacy method as backup
-
-            Uxtheme.AllowDarkModeForWindow(handle, dark);
-            int sizeOfBool = Marshal.SizeOf(dark);
-            IntPtr intPtr = Marshal.AllocHGlobal(sizeOfBool);
-            User32.WindowCompositionAttribData composition;
-            composition.Attribute = User32.WindowCompositionAttribute.WCA_USEDARKMODECOLORS;
-            composition.Data = intPtr;
-            composition.SizeOfData = sizeOfBool;
-            User32.SetWindowCompositionAttribute(handle, ref composition);
-            Marshal.FreeHGlobal(intPtr);
+            PInvoke.AllowDarkModeForWindow(handle, dark);
+            PInvoke.DwmSetWindowAttribute(handle, WCA_USEDARKMODECOLORS, dark);
         }
     }
 
-    private static bool IsWindows10OrGreater(int build = -1)
+    private static bool IsWindows10OrGreater(int build = 0)
     {
-        if (Environment.OSVersion.Version.Major == 10)
-        {
-            return Environment.OSVersion.Version.Build >= build;
-        }
-        return Environment.OSVersion.Version.Major > 10;
+        return Environment.OSVersion.Version >= new Version(10, build);
     }
 }

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
 
-using DLLs;
+using Windows.Win32;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
@@ -47,9 +47,9 @@ public class CursorPainter : CaptureSource
 
     private Bitmap PaintCursor(Bitmap src, Point originPos)
     {
-        User32.CursorInfo pci = User32.CursorInfo.Init();
+        CURSORINFO pci = CURSORINFO.New();
 
-        if (!User32.GetCursorInfo(ref pci) || pci.flags != User32.CURSOR_SHOWING)
+        if (!PInvoke.GetCursorInfo(ref pci) || pci.flags != CURSORINFO_FLAGS.CURSOR_SHOWING)
         {
             // Could not get cursor info, or the cursor was hidden. Do not paint the cursor
             return src;
@@ -67,8 +67,8 @@ public class CursorPainter : CaptureSource
 
         // Screen coordinates where the cursor has to be drawn (compensate for hotspot)
         Point cursorPos = new(
-            pci.ptScreenPos.x - cursorHotspot.X,
-            pci.ptScreenPos.y - cursorHotspot.Y
+            pci.ptScreenPos.X - cursorHotspot.X,
+            pci.ptScreenPos.Y - cursorHotspot.Y
         );
         // Transform from screen coordinates (relative to main screen) to window coordinates (relative to captured area)
         cursorPos.X -= originPos.X;
@@ -85,19 +85,19 @@ public class CursorPainter : CaptureSource
         return src;
     }
 
-    private void UpdateCursorBitmap(IntPtr hCursor)
+    private void UpdateCursorBitmap(HCURSOR hCursor)
     {
-        if (!User32.GetIconInfo(hCursor, out User32.IconInfo iconInfo))
+        if (!PInvoke.GetIconInfo(hCursor, out ICONINFO iconInfo))
         {
             return;
         }
         cursorBitmap?.Dispose();
         cursorBitmap = BitmapFromCursor(iconInfo);
-        cursorHotspot = new(iconInfo.xHotspot, iconInfo.yHotspot);
+        cursorHotspot = new((int)iconInfo.xHotspot, (int)iconInfo.yHotspot);
         CleanUpIconInfo(iconInfo);
     }
 
-    private static Bitmap? BitmapFromCursor(in User32.IconInfo iconInfo)
+    private static Bitmap? BitmapFromCursor(in ICONINFO iconInfo)
     {
         if (iconInfo.hbmColor == IntPtr.Zero)
         {
@@ -122,9 +122,9 @@ public class CursorPainter : CaptureSource
         return new Bitmap(dstBitmap);
     }
 
-    private static void CleanUpIconInfo(User32.IconInfo iconInfo)
+    private static void CleanUpIconInfo(in ICONINFO iconInfo)
     {
-        Gdi32.DeleteObject(iconInfo.hbmMask);
-        Gdi32.DeleteObject(iconInfo.hbmColor);
+        PInvoke.DeleteObject(iconInfo.hbmMask).AssertSuccess("Could not delete cursor mask");
+        PInvoke.DeleteObject(iconInfo.hbmColor).AssertSuccess("Could not delete cursor color bitmap");
     }
 }

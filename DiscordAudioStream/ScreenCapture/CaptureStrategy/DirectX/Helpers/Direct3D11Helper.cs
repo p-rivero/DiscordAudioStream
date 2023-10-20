@@ -22,7 +22,6 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
-using System;
 using System.Runtime.InteropServices;
 
 using SharpDX.Direct3D;

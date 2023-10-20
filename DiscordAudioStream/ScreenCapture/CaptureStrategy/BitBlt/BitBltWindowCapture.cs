@@ -1,16 +1,17 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
-using DLLs;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 public class BitBltWindowCapture : WindowCapture
 {
     private readonly CaptureSource capture;
-    private readonly IntPtr windowHandle;
+    private readonly HWND windowHandle;
 
-    public BitBltWindowCapture(IntPtr hWnd, bool captureCursor)
+    public BitBltWindowCapture(HWND hWnd, bool captureCursor)
     {
         windowHandle = hWnd;
         BitBltCapture bitBlt = new();
@@ -43,9 +44,10 @@ public class BitBltWindowCapture : WindowCapture
         SetWindowTopmost(windowHandle, false);
     }
 
-    private static void SetWindowTopmost(IntPtr hWnd, bool bringToFront)
+    private static void SetWindowTopmost(HWND hWnd, bool bringToFront)
     {
-        IntPtr insertAfter = bringToFront ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST;
-        User32.SetWindowPos(hWnd, insertAfter, 0, 0, 0, 0, User32.SWP_NOMOVE | User32.SWP_NOSIZE);
+        HWND insertAfter = bringToFront ? HWND.HWND_TOPMOST : HWND.HWND_NOTOPMOST;
+        SET_WINDOW_POS_FLAGS flags = SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE;
+        PInvoke.SetWindowPos(hWnd, insertAfter, 0, 0, 0, 0, flags).AssertSuccess("SetWindowPos failed");
     }
 }

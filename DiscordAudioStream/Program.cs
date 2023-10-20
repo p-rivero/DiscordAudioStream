@@ -1,10 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 using CustomComponents;
-
-using DLLs;
 
 using Windows.Win32;
 using Windows.Win32.UI.HiDpi;
@@ -61,7 +57,7 @@ internal static class Program
         Application.SetCompatibleTextRenderingDefault(false);
         if (darkMode)
         {
-            Uxtheme.AllowDarkModeForApp(true);
+            PInvoke.AllowDarkModeForApp(true).AssertSuccess("Failed to enable dark mode.");
         }
     }
 
@@ -69,10 +65,8 @@ internal static class Program
     {
         try
         {
-            if (!PInvoke.SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
-            {
-                Logger.Log("Failed to set DPI awareness context.");
-            }
+            PInvoke.SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2)
+                .AssertSuccess("Failed to set DPI awareness context");
         }
         catch (EntryPointNotFoundException)
         {
@@ -82,8 +76,7 @@ internal static class Program
 
     private static void RedirectConsoleOutput()
     {
-        bool success = PInvoke.AttachConsole(PInvoke.ATTACH_PARENT_PROCESS);
-        if (!success)
+        if (!PInvoke.AttachConsole(PInvoke.ATTACH_PARENT_PROCESS))
         {
             return;
         }

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 using CustomComponents;
 
-using DLLs;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
 
 namespace DiscordAudioStream;
 
@@ -171,7 +169,7 @@ public partial class MainForm : Form
         }
     }
 
-    internal void UpdatePreview(Bitmap newImage, bool forceRefresh, IntPtr handle)
+    internal void UpdatePreview(Bitmap newImage, bool forceRefresh, HWND handle)
     {
         // This method is called in a worker thread, redraw the previewBox in the UI thread.
         // If needed, triger a full redraw of the form, but do it in the worker thread to reduce
@@ -191,7 +189,7 @@ public partial class MainForm : Form
             // Windows only refreshes the part of the window that is shown to the user. Therefore, if this
             // window is partially off-screen, it won't be streamed correctly in Discord.
             // Use PrintWindow to send a WM_PRINT to our own window handle, forcing a complete redraw.
-            User32.PrintWindow(handle, IntPtr.Zero, 0);
+            PInvoke.PrintWindow(handle, (HDC)IntPtr.Zero, 0).AssertSuccess("PrintWindow failed");
         }
     }
 
@@ -329,10 +327,7 @@ public partial class MainForm : Form
     [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S4036", Justification = "This ms-settings URI is safe")]
     private void volumeMixerButton_Click(object sender, EventArgs e)
     {
-        Ntdll.OsVersionInfoEx osVersionInfo = Ntdll.OsVersionInfoEx.Init();
-        Ntdll.RtlGetVersion(ref osVersionInfo);
-
-        if (osVersionInfo.MajorVersion >= 10)
+        if (Environment.OSVersion.Version.Major >= 10)
         {
             Process.Start("ms-settings:apps-volume");
         }
@@ -347,10 +342,7 @@ public partial class MainForm : Form
     [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S4036", Justification = "This ms-settings URI is safe")]
     private void soundDevicesButton_Click(object sender, EventArgs e)
     {
-        Ntdll.OsVersionInfoEx osVersionInfo = Ntdll.OsVersionInfoEx.Init();
-        Ntdll.RtlGetVersion(ref osVersionInfo);
-
-        if (osVersionInfo.MajorVersion >= 10 && osVersionInfo.BuildNumber >= 17063)
+        if (Environment.OSVersion.Version >= new Version(10, 17063))
         {
             Process.Start("ms-settings:sound");
         }

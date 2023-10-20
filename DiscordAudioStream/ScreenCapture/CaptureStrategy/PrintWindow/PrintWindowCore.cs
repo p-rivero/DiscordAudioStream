@@ -1,16 +1,18 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
-using DLLs;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
+using Windows.Win32.Storage.Xps;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 internal class PrintWindowCore : WindowCapture
 {
-    private readonly IntPtr windowHandle;
-    private readonly bool isWindows8_1OrHigher = Environment.OSVersion.Version >= new Version(6, 3);
+    private readonly HWND windowHandle;
+    private readonly bool isWindows8_1 = Environment.OSVersion.Version >= new Version(6, 3);
 
-    public PrintWindowCore(IntPtr hWnd)
+    public PrintWindowCore(HWND hWnd)
     {
         windowHandle = hWnd;
     }
@@ -26,11 +28,12 @@ internal class PrintWindowCore : WindowCapture
 
         Bitmap result = new(winArea.Width, winArea.Height);
 
-        int renderFullContent = isWindows8_1OrHigher ? User32.PW_RENDERFULLCONTENT : 0;
+        uint renderFullContent = isWindows8_1 ? PInvoke.PW_RENDERFULLCONTENT : 0;
+        PRINT_WINDOW_FLAGS flags = PRINT_WINDOW_FLAGS.PW_CLIENTONLY | (PRINT_WINDOW_FLAGS)renderFullContent;
 
         using (Graphics g = Graphics.FromImage(result))
         {
-            User32.PrintWindow(windowHandle, g.GetHdc(), User32.PW_CLIENTONLY | renderFullContent);
+            PInvoke.PrintWindow(windowHandle, (HDC)g.GetHdc(), flags).AssertSuccess("PrintWindow failed");
         }
         return result;
     }

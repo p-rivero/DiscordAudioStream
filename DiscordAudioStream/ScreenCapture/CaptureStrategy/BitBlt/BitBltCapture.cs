@@ -1,8 +1,8 @@
-﻿using System;
-using System.Drawing;
-using System.Runtime.InteropServices;
+﻿using System.Drawing;
 
-using DLLs;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
@@ -11,18 +11,19 @@ public class BitBltCapture : CaptureSource
     public Func<Rectangle>? CaptureAreaRect { get; set; }
 
     // Create DC and Bitmap objects for reuse
-    private IntPtr hdcSrc;
-    private readonly IntPtr hdcDest;
-    private IntPtr hBitmap;
+    private HDC hdcSrc;
+    private readonly HDC hdcDest;
+    private HBITMAP hBitmap;
     private Size bitmapSize;
 
-    public BitBltCapture(IntPtr desktopWindow)
+    public BitBltCapture()
     {
-        InvokeOnUI(() => hdcSrc = User32.GetWindowDC(desktopWindow));
-        hdcDest = Gdi32.CreateCompatibleDC(hdcSrc);
-    }
+        HWND desktopWindow = PInvoke.GetDesktopWindow().AssertNotNull("Failed to get desktop window handle");
 
-    public BitBltCapture() : this(User32.GetDesktopWindow()) { }
+        InvokeOnUI(() => hdcSrc = PInvoke.GetWindowDC(desktopWindow).AssertNotNull("Failed to get desktop window DC"));
+
+        hdcDest = PInvoke.CreateCompatibleDC(hdcSrc).AssertNotNull("Failed to create compatible DC");
+    }
 
     public override Bitmap CaptureFrame()
     {
@@ -35,22 +36,18 @@ public class BitBltCapture : CaptureSource
         Rectangle area = CaptureAreaRect();
 
         // Create the bitmap only if it doesn't exist or if its size has changed
-        if (hBitmap == IntPtr.Zero || area.Width != bitmapSize.Width || area.Height != bitmapSize.Height)
+        if (hBitmap.IsNull || area.Width != bitmapSize.Width || area.Height != bitmapSize.Height)
         {
-            if (hBitmap != IntPtr.Zero)
+            if (!hBitmap.IsNull)
             {
-                Gdi32.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hBitmap).AssertSuccess("Failed to delete old bitmap");
             }
-            hBitmap = Gdi32.CreateCompatibleBitmap(hdcSrc, area.Width, area.Height);
+            hBitmap = PInvoke.CreateCompatibleBitmap(hdcSrc, area.Width, area.Height).AssertNotNull("CreateCompatibleBitmap failed");
             bitmapSize = new(area.Width, area.Height);
-            int result = Gdi32.SelectObject(hdcDest, hBitmap);
-            if (result is 0 or Gdi32.HGDI_ERROR)
-            {
-                throw new ExternalException("Failed to select target bitmap");
-            }
+            PInvoke.SelectObject(hdcDest, hBitmap).AssertSuccess("Failed to select bitmap into DC");
         }
 
-        Gdi32.BitBlt(hdcDest, 0, 0, area.Width, area.Height, hdcSrc, area.X, area.Y, Gdi32.RasterOps.SRCCOPY);
+        PInvoke.BitBlt(hdcDest, 0, 0, area.Width, area.Height, hdcSrc, area.X, area.Y, ROP_CODE.SRCCOPY).AssertSuccess("BitBlt failed");
 
         return Image.FromHbitmap(hBitmap, IntPtr.Zero);
     }
@@ -60,27 +57,15 @@ public class BitBltCapture : CaptureSource
         base.Dispose(disposing);
         if (hBitmap != IntPtr.Zero)
         {
-            bool success = Gdi32.DeleteObject(hBitmap);
-            if (!success)
-            {
-                throw new ExternalException("Failed to delete bitmap");
-            }
+            PInvoke.DeleteObject(hBitmap).AssertSuccess("Failed to delete bitmap");
         }
         if (hdcDest != IntPtr.Zero)
         {
-            bool success = Gdi32.DeleteDC(hdcDest);
-            if (!success)
-            {
-                throw new ExternalException("Failed to delete destination DC");
-            }
+            PInvoke.DeleteDC(hdcDest).AssertSuccess("Failed to delete destination DC");
         }
         if (hdcSrc != IntPtr.Zero)
         {
-            bool success = User32.ReleaseDC(User32.GetDesktopWindow(), hdcSrc);
-            if (!success)
-            {
-                throw new ExternalException("Failed to release source DC");
-            }
+            ((BOOL)PInvoke.ReleaseDC(PInvoke.GetDesktopWindow(), hdcSrc)).AssertSuccess("Failed to release source DC");
         }
     }
 }

@@ -1,5 +1,6 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+
+using Windows.Win32.Foundation;
 
 namespace DiscordAudioStream.ScreenCapture;
 
@@ -30,7 +31,7 @@ public class CaptureState
 
     public event Action? StateChanged;
 
-    private IntPtr hWnd = IntPtr.Zero;
+    private HWND hWnd = HWND.Null;
     private Screen? screen;
     private CaptureTarget captureTarget = CaptureTarget.Invalid;
     private bool capturingCursor;
@@ -130,11 +131,11 @@ public class CaptureState
     }
 
     // Handle to the captured window (if any)
-    public IntPtr WindowHandle
+    public HWND WindowHandle
     {
         get
         {
-            if (hWnd == IntPtr.Zero)
+            if (hWnd.IsNull)
             {
                 throw new InvalidOperationException("Trying to get WindowHandle without setting it first");
             }
@@ -187,7 +188,7 @@ public class CaptureState
             Logger.Log($"Changing CaptureState... (Screen = {value})");
             screen = value;
             captureTarget = CaptureTarget.Screen;
-            hWnd = IntPtr.Zero; // Remove window handle (if any)
+            hWnd = HWND.Null; // Remove window handle (if any)
             StateChanged?.Invoke();
             Logger.Log($"Done changing CaptureState. Screen = {value.DeviceName}");
         }

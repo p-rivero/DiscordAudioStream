@@ -1,18 +1,18 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 using Composition.WindowsRuntimeHelpers;
 
 using Windows.Graphics.Capture;
+using Windows.Win32.Foundation;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 public class Win10WindowCapture : WindowCapture
 {
     private readonly Win10Capture winCapture;
-    private readonly IntPtr windowHandle;
+    private readonly HWND windowHandle;
 
-    public Win10WindowCapture(IntPtr hWnd, bool captureCursor)
+    public Win10WindowCapture(HWND hWnd, bool captureCursor)
     {
         windowHandle = hWnd;
 

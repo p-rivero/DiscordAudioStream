@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 using Windows.Foundation.Metadata;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;

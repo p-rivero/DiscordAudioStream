@@ -1,12 +1,42 @@
-﻿SetProcessDpiAwarenessContext
+﻿// user32
+SetProcessDpiAwarenessContext
 ReleaseCapture
-
+GetWindowDC
+GetDesktopWindow
+GetIconInfo
+PrintWindow
+GetClientRect
+GetCursorInfo
 SendMessage
+SetWindowPos
+GetShellWindow
+ReleaseDC
+EnumWindows
+IsWindowVisible
+GetWindowTextLength
+GetWindowText
 WM_NCLBUTTONDOWN
 HTCAPTION
+PW_RENDERFULLCONTENT
+HWND_TOPMOST
+HWND_NOTOPMOST
 
-DwmSetWindowAttribute
-DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
+// gdi32
+CreateCompatibleDC
+CreateCompatibleBitmap
+SelectObject
+DeleteObject
+DeleteDC
+BitBlt
+GDI_ERROR
 
+
+// kernel32
 AttachConsole
 ATTACH_PARENT_PROCESS
+
+
+// dwmapi
+DwmSetWindowAttribute
+DwmGetWindowAttribute
+DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2

@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Diagnostics;
 
-using DLLs;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Dwm;
 
 namespace DiscordAudioStream.ScreenCapture;
 
 public class ProcessHandleList
 {
-    private readonly List<IntPtr> handles;
+    private readonly List<HWND> handles;
     private readonly List<string> processNames;
 
     // Cannot instantiate directly, must call ProcessHandleList.Refresh()
-    private ProcessHandleList(Dictionary<IntPtr, string> processes)
+    private ProcessHandleList(Dictionary<HWND, string> processes)
     {
         handles = processes.Keys.ToList();
         processNames = processes.Values.ToList();
@@ -23,10 +20,10 @@ public class ProcessHandleList
 
     public static ProcessHandleList Refresh()
     {
-        IntPtr shellWindow = User32.GetShellWindow();
-        Dictionary<IntPtr, string> windows = new();
+        HWND shellWindow = PInvoke.GetShellWindow().AssertNotNull("No shell process found");
+        Dictionary<HWND, string> windows = new();
 
-        User32.EnumWindows(
+        PInvoke.EnumWindows(
             (hWnd, lParam) =>
             {
                 // Called for each top-level window
@@ -44,37 +41,29 @@ public class ProcessHandleList
                 }
 
                 // Ignore windows without WS_VISIBLE
-                if (!User32.IsWindowVisible(hWnd))
+                if (!PInvoke.IsWindowVisible(hWnd))
                 {
                     return true;
                 }
 
                 // Ignore windows with "" as title
-                int windowTextLength = User32.GetWindowTextLength(hWnd);
-                if (User32.GetWindowTextLength(hWnd) == 0)
+                int windowTextLength = PInvoke.GetWindowTextLength(hWnd);
+                if (windowTextLength == 0)
                 {
                     return true;
                 }
 
                 // Ignore suspended Windows Store apps
-                try
+                if (PInvoke.DwmGetWindowAttribute(hWnd, DWMWINDOWATTRIBUTE.DWMWA_CLOAKED, out BOOL cloaked).Failed)
                 {
-                    if (Dwmapi.GetBoolAttr(hWnd, Dwmapi.DwmWindowAttribute.CLOAKED))
-                    {
-                        return true;
-                    }
+                    Logger.Log($"Cannot get property DWMWA_CLOAKED. This is normal on Windows 7.");
                 }
-                catch (ExternalException)
+                else if (cloaked)
                 {
-                    Logger.Log(
-                        $"Cannot get property CLOAKED of window {hWnd}. This is normal on Windows 7."
-                    );
+                    return true;
                 }
 
-                StringBuilder builder = new(windowTextLength);
-                _ = User32.GetWindowText(hWnd, builder, windowTextLength + 1);
-                string name = builder.ToString();
-
+                string name = PInvoke.GetWindowText(hWnd, windowTextLength + 1);
                 if (name == AreaForm.AREA_FORM_TITLE)
                 {
                     return true;
@@ -84,14 +73,14 @@ public class ProcessHandleList
                 return true;
             },
             IntPtr.Zero
-        );
+        ).AssertSuccess("EnumWindows failed");
 
         return new ProcessHandleList(windows);
     }
 
     public ICollection<string> Names => processNames;
 
-    public IntPtr this[int index]
+    public HWND this[int index]
     {
         get
         {
@@ -107,7 +96,7 @@ public class ProcessHandleList
         }
     }
 
-    public int IndexOf(IntPtr handle)
+    public int IndexOf(HWND handle)
     {
         return handles.IndexOf(handle);
     }
