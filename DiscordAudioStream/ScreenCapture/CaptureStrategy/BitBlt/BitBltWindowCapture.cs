@@ -14,7 +14,7 @@ public class BitBltWindowCapture : WindowCapture
     public BitBltWindowCapture(HWND hWnd, bool captureCursor)
     {
         windowHandle = hWnd;
-        BitBltCapture bitBlt = new();
+        BitBltCapture bitBlt = new() { ClearBackground = true };
         bitBlt.CaptureAreaRect += () => GetWindowArea(windowHandle);
 
         if (captureCursor)

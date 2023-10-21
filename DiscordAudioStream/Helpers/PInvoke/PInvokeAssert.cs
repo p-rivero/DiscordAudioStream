@@ -4,7 +4,7 @@ using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
 
-namespace DiscordAudioStream;
+namespace Windows.Win32;
 
 public static class PInvokeAssert
 {

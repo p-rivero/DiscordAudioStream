@@ -9,10 +9,11 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 public class BitBltCapture : CaptureSource
 {
     public Func<Rectangle>? CaptureAreaRect { get; set; }
+    public bool ClearBackground { get; init; }
 
-    // Create DC and Bitmap objects for reuse
-    private HDC hdcSrc;
+    private readonly HDC hdcSrc;
     private readonly HDC hdcDest;
+    private readonly HBRUSH blackBrush = GetBlackBrush();
     private HBITMAP hBitmap;
     private Size bitmapSize;
 
@@ -20,7 +21,7 @@ public class BitBltCapture : CaptureSource
     {
         HWND desktopWindow = PInvoke.GetDesktopWindow().AssertNotNull("Failed to get desktop window handle");
 
-        InvokeOnUI(() => hdcSrc = PInvoke.GetWindowDC(desktopWindow).AssertNotNull("Failed to get desktop window DC"));
+        hdcSrc = InvokeOnUI(() => PInvoke.GetWindowDC(desktopWindow).AssertNotNull("Failed to get desktop window DC"));
 
         hdcDest = PInvoke.CreateCompatibleDC(hdcSrc).AssertNotNull("Failed to create compatible DC");
     }
@@ -46,6 +47,11 @@ public class BitBltCapture : CaptureSource
             bitmapSize = new(area.Width, area.Height);
             PInvoke.SelectObject(hdcDest, hBitmap).AssertSuccess("Failed to select bitmap into DC");
         }
+        else if (ClearBackground)
+        {
+            RECT rect = RECT.FromXYWH(0, 0, area.Width, area.Height);
+            PInvoke.FillRect(hdcDest, rect, blackBrush);
+        }
 
         PInvoke.BitBlt(hdcDest, 0, 0, area.Width, area.Height, hdcSrc, area.X, area.Y, ROP_CODE.SRCCOPY).AssertSuccess("BitBlt failed");
 
@@ -67,5 +73,11 @@ public class BitBltCapture : CaptureSource
         {
             ((BOOL)PInvoke.ReleaseDC(PInvoke.GetDesktopWindow(), hdcSrc)).AssertSuccess("Failed to release source DC");
         }
+    }
+
+    private static HBRUSH GetBlackBrush()
+    {
+        HGDIOBJ brush = PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.BLACK_BRUSH).AssertSuccess("Cannot get black brush");
+        return (HBRUSH)(nint)brush;
     }
 }
