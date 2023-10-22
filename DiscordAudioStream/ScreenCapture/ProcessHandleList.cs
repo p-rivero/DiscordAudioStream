@@ -21,21 +21,14 @@ public class ProcessHandleList
     public static ProcessHandleList Refresh()
     {
         HWND shellWindow = PInvoke.GetShellWindow().AssertNotNull("No shell process found");
+        HWND discordAudioStreamWindow = (HWND)Process.GetCurrentProcess().MainWindowHandle;
         Dictionary<HWND, string> windows = new();
 
         PInvoke.EnumWindows(
+            // Called for each top-level window
             (hWnd, lParam) =>
             {
-                // Called for each top-level window
-
-                // Ignore shell
-                if (hWnd == shellWindow)
-                {
-                    return true;
-                }
-
-                // Ignore this window
-                if (hWnd == Process.GetCurrentProcess().MainWindowHandle)
+                if (hWnd == shellWindow || hWnd == discordAudioStreamWindow)
                 {
                     return true;
                 }
