@@ -18,6 +18,11 @@ public class ProcessHandleList
         processNames = processes.Values.ToList();
     }
 
+    public static ProcessHandleList Empty()
+    {
+        return new(new());
+    }
+
     public static ProcessHandleList Refresh()
     {
         HWND shellWindow = PInvoke.GetShellWindow().AssertNotNull("No shell process found");

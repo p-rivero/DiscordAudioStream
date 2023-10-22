@@ -42,7 +42,8 @@ internal static class DarkThemeManager
 
         try
         {
-            object? light = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", null);
+            string key = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
+            object? light = Registry.GetValue(key, "AppsUseLightTheme", null);
             return light?.ToString() == "0";
         }
         catch
@@ -53,21 +54,12 @@ internal static class DarkThemeManager
 
     private static void EnableDarkTitlebar(HWND handle, bool dark)
     {
-        DWMWINDOWATTRIBUTE attribute;
-        if (IsWindows10OrGreater(18985))
+        if (!IsWindows10OrGreater(18985))
         {
-            attribute = DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE;
+            return;
         }
-        else if (IsWindows10OrGreater(17763))
-        {
-            attribute = DWMWINDOWATTRIBUTE_EXT.DWMWA_USE_IMMERSIVE_DARK_MODE_OLD;
-        }
-        else
-        {
-            PInvoke.AllowDarkModeForWindow(handle, dark).AssertSuccess("AllowDarkModeForWindow failed");
-            attribute = DWMWINDOWATTRIBUTE_EXT.WCA_USEDARKMODECOLORS;
-        }
-        PInvoke.DwmSetWindowAttribute(handle, attribute, dark).AssertSuccess($"Failed to set dark mode attribute: {attribute}");
+        PInvoke.DwmSetWindowAttribute(handle, DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE, dark)
+            .AssertSuccess($"Failed to enable dark titlebar");
     }
 
     private static bool IsWindows10OrGreater(int build = 0)

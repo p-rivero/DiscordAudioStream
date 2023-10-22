@@ -29,7 +29,7 @@ public class MainController
     public MainController(MainForm owner)
     {
         form = owner;
-        processHandleList = ProcessHandleList.Refresh();
+        processHandleList = ProcessHandleList.Empty();
     }
 
     public bool IsStreaming { get; private set; }

@@ -29,11 +29,10 @@ internal static class Program
             return;
         }
 
-        bool darkMode = IsDarkTheme();
-        EnableNativeStyles(darkMode);
+        EnableNativeStyles();
 
         consoleArgs.ProcessArgsBeforeMainForm();
-        MainForm mainForm = new(darkMode);
+        MainForm mainForm = new(IsDarkTheme);
         mainForm.Load += (sender, e) => consoleArgs.ProcessArgsAfterMainForm(mainForm.Controller);
         mainForm.Shown += (sender, e) => ExceptionHandler.StartupDone();
         Application.Run(mainForm);
@@ -47,28 +46,14 @@ internal static class Program
         Logger.Log($"Log ID: {new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds()}");
     }
 
-    private static bool IsDarkTheme()
+    private static bool IsDarkTheme => Properties.Settings.Default.Theme switch
     {
-        return Properties.Settings.Default.Theme switch
-        {
-            0 => DarkThemeManager.IsDarkTheme(),
-            1 => false,
-            _ => true,
-        };
-    }
+        0 => DarkThemeManager.IsDarkTheme(),
+        1 => false,
+        _ => true,
+    };
 
-    private static void EnableNativeStyles(bool darkMode)
-    {
-        EnableDpiAwareness();
-        Application.EnableVisualStyles();
-        Application.SetCompatibleTextRenderingDefault(false);
-        if (darkMode)
-        {
-            PInvoke.AllowDarkModeForApp(true).AssertSuccess("Failed to enable dark mode.");
-        }
-    }
-
-    private static void EnableDpiAwareness()
+    private static void EnableNativeStyles()
     {
         try
         {
@@ -79,6 +64,9 @@ internal static class Program
         {
             Logger.Log("SetProcessDpiAwarenessContext not found. This is normal on Windows 7.");
         }
+
+        Application.EnableVisualStyles();
+        Application.SetCompatibleTextRenderingDefault(false);
     }
 
     private static void RedirectConsoleOutput()

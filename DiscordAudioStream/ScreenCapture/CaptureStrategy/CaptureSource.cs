@@ -21,7 +21,7 @@ public abstract class CaptureSource : IDisposable
     {
         return (T)InvokeOnUI((Delegate)func);
     }
-    
+
     protected static void InvokeOnUI(Action action)
     {
         InvokeOnUI((Delegate)action);
