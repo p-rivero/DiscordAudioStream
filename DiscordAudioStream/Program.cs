@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 using CustomComponents;
 
@@ -12,18 +14,14 @@ internal static class Program
     [STAThread]
     private static void Main(string[] args)
     {
+        Logger.Log($"Started Main method. Arguments: [{args.CommaSeparated()}]");
         ExceptionHandler.Register();
         EmbeddedAssemblyResolver.Register();
+        LogStartupInfo();
         RedirectConsoleOutput();
-
-        string argumentList = string.Join(", ", args.Select(a => $"'{a}'"));
-        Logger.Log($"Started Main method. Arguments: [{argumentList}]");
-        Logger.Log("OS Version: " + Environment.OSVersion);
-        Logger.Log("Log ID: " + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds());
-        Logger.Log("Build ID: " + BuildId.Id);
+        CheckFrameworkVersion();
 
         CommandArguments consoleArgs = new(args);
-
         if (consoleArgs.ExitImmediately)
         {
             Logger.EmptyLine();
@@ -37,7 +35,16 @@ internal static class Program
         consoleArgs.ProcessArgsBeforeMainForm();
         MainForm mainForm = new(darkMode);
         mainForm.Load += (sender, e) => consoleArgs.ProcessArgsAfterMainForm(mainForm.Controller);
+        mainForm.Shown += (sender, e) => ExceptionHandler.StartupDone();
         Application.Run(mainForm);
+    }
+
+    private static void LogStartupInfo()
+    {
+        Logger.Log($"OS Version: {Environment.OSVersion}");
+        Logger.Log($"Installed framework: {FrameworkInfo.VersionName}");
+        Logger.Log($"Build ID: {BuildId.Id}");
+        Logger.Log($"Log ID: {new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds()}");
     }
 
     private static bool IsDarkTheme()
@@ -87,5 +94,30 @@ internal static class Program
 
         // Since we skipped the prompt, we need to trigger it manually
         AppDomain.CurrentDomain.ProcessExit += (sender, e) => SendKeys.SendWait("{ENTER}");
+    }
+
+    private static void CheckFrameworkVersion()
+    {
+        if (FrameworkInfo.VersionIsSupported)
+        {
+            return;
+        }
+        DialogResult result = MessageBox.Show(
+            "This application requires .NET Framework 4.7.2 or newer to work properly.\n"
+                + "Do you want to open the download page?",
+            ".NET Framework runtime not found",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Warning
+        );
+        if (result == DialogResult.Yes)
+        {
+            Process.Start(FrameworkInfo.DOWNLOAD_URL);
+            Environment.Exit(0);
+        }
+    }
+
+    private static string CommaSeparated(this string[] list)
+    {
+        return string.Join(", ", list.Select(a => $"'{a}'")); // "'a', 'b', 'c'"
     }
 }

@@ -42,8 +42,8 @@ internal static class DarkThemeManager
 
         try
         {
-            object light = Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", null);
-            return light.ToString() == "0";
+            object? light = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", null);
+            return light?.ToString() == "0";
         }
         catch
         {

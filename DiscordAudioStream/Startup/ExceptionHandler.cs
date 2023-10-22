@@ -6,13 +6,18 @@ internal static class ExceptionHandler
 {
     private const string TRACE_FILE_NAME = "DiscordAudioStream_stack_trace.txt";
 
+    private static bool crashDuringStartup = true;
+
     public static void Register()
     {
-        Application.ThreadException += ApplicationThreadException;
-
-        // Set the unhandled exception mode to force all Windows Forms errors to go through our handler.
+        Application.ThreadException += (sender, e) => HandleException(e.Exception);
         Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
         AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
+    }
+
+    public static void StartupDone()
+    {
+        crashDuringStartup = false;
     }
 
     private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -23,23 +28,38 @@ internal static class ExceptionHandler
         }
     }
 
-    private static void ApplicationThreadException(object sender, ThreadExceptionEventArgs e)
-    {
-        HandleException(e.Exception);
-    }
-
     private static void HandleException(Exception exception)
     {
         Logger.Log("Unhandled exception caught, outputting stack trace...");
 
-        string tracePath = System.IO.Path.GetFullPath(TRACE_FILE_NAME);
-
+        string tracePath = Path.GetFullPath(TRACE_FILE_NAME);
         WriteStackTrace(exception, tracePath);
 
-        string msg = $"Unhandled exception: {exception.Message}\nClick OK to open the generated trace file:\n{tracePath}";
-        MessageBox.Show(msg, "DiscordAudioStream Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+        MessageBox.Show(
+            $"Unhandled exception: {exception.Message}\nClick OK to open the generated trace file:\n{tracePath}",
+            "DiscordAudioStream Error",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Error
+        );
         OpenFile(tracePath);
+
+        if (crashDuringStartup && !Properties.Settings.Default.OutputLogFile)
+        {
+            Thread.Sleep(500);
+            DialogResult result = MessageBox.Show(
+                "The application crashed before it could finish starting up.\n"
+                    + "Do you want to enable debug logging?",
+                "DiscordAudioStream Error",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+            if (result == DialogResult.Yes)
+            {
+                Properties.Settings.Default.OutputLogFile = true;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         Application.Exit();
     }
 
