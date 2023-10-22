@@ -25,12 +25,7 @@ public class Win10Capture : CaptureSource
 
     public Win10Capture(GraphicsCaptureItem item, bool captureCursor)
     {
-        framePool = Direct3D11CaptureFramePool.Create(
-            device,
-            DirectXPixelFormat.B8G8R8A8UIntNormalized,
-            1,
-            item.Size
-        );
+        framePool = Direct3D11CaptureFramePool.Create(device, DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, item.Size);
         session = framePool.CreateCaptureSession(item);
 
         // Attempt to disable yellow capture border. This method is only avaiable from Windows 11
@@ -55,7 +50,15 @@ public class Win10Capture : CaptureSource
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        session?.Dispose();
+        try
+        {
+            session?.Dispose();
+        }
+        catch (Exception e)
+        {
+            Logger.Log("Failed to dispose capture session due to exception:");
+            Logger.Log(e);
+        }
         framePool?.Dispose();
     }
 
@@ -74,7 +77,7 @@ public class Win10Capture : CaptureSource
         if (width != lastSize.Width || height != lastSize.Height)
         {
             lastSize = frame.ContentSize;
-            InvokeOnUI(() => framePool.Recreate(device, DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, frame.ContentSize));
+            framePool.Recreate(device, DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, frame.ContentSize);
         }
 
         using Texture2D texture = Direct3D11Helper.CreateSharpDXTexture2D(frame.Surface);

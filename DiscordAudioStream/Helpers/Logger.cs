@@ -94,6 +94,7 @@ internal static class Logger
     private static string SanitizeText(string text)
     {
         // CRLF required for Windows 7 Notepad
-        return text.Replace("\n", "\r\n    ");
+        string normalizedLineEnding = text.Replace("\r\n", "\n");
+        return normalizedLineEnding.Replace("\n", "\r\n    ");
     }
 }
