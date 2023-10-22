@@ -25,9 +25,6 @@ internal static class DarkThemeManager
     public static readonly Color AccentColor = Color.FromArgb(0, 120, 215);
     public static readonly Color PressedColor = Color.FromArgb(140, 140, 140);
 
-    private const DWMWINDOWATTRIBUTE DWMWA_USE_IMMERSIVE_DARK_MODE_OLD = (DWMWINDOWATTRIBUTE)19;
-    private const DWMWINDOWATTRIBUTE WCA_USEDARKMODECOLORS = (DWMWINDOWATTRIBUTE)26;
-
     public static void FormHandleCreated(object? sender, EventArgs e)
     {
         if (sender is Form form)
@@ -63,18 +60,18 @@ internal static class DarkThemeManager
         }
         else if (IsWindows10OrGreater(17763))
         {
-            attribute = DWMWA_USE_IMMERSIVE_DARK_MODE_OLD;
+            attribute = DWMWINDOWATTRIBUTE_EXT.DWMWA_USE_IMMERSIVE_DARK_MODE_OLD;
         }
         else
         {
             PInvoke.AllowDarkModeForWindow(handle, dark).AssertSuccess("AllowDarkModeForWindow failed");
-            attribute = WCA_USEDARKMODECOLORS;
+            attribute = DWMWINDOWATTRIBUTE_EXT.WCA_USEDARKMODECOLORS;
         }
-        PInvoke.DwmSetWindowAttribute(handle, attribute, dark).AssertSuccess("Failed to set dark mode attribute");
+        PInvoke.DwmSetWindowAttribute(handle, attribute, dark).AssertSuccess($"Failed to set dark mode attribute: {attribute}");
     }
 
     private static bool IsWindows10OrGreater(int build = 0)
     {
-        return Environment.OSVersion.Version >= new Version(10, build);
+        return Environment.OSVersion.Version >= new Version(10, 0, build);
     }
 }

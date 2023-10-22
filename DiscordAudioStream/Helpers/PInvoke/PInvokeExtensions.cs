@@ -47,3 +47,12 @@ public static partial class PInvoke
     [SuppressMessage("Interoperability", "CA1401:P/Invokes should not be visible")]
     public static extern BOOL AllowDarkModeForApp(BOOL allow);
 }
+
+public struct DWMWINDOWATTRIBUTE_EXT
+{
+    public static readonly DWMWINDOWATTRIBUTE_EXT DWMWA_USE_IMMERSIVE_DARK_MODE_OLD = new() { Value = 19 };
+    public static readonly DWMWINDOWATTRIBUTE_EXT WCA_USEDARKMODECOLORS = new() { Value = 26 };
+    
+    private int Value { get; init; }
+    public static implicit operator DWMWINDOWATTRIBUTE(DWMWINDOWATTRIBUTE_EXT dwmwindowattribute) => (DWMWINDOWATTRIBUTE)dwmwindowattribute.Value;
+}
