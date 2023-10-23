@@ -63,60 +63,58 @@ public class ScreenCaptureManager
 
     private Thread CreateCaptureThread()
     {
+        return new Thread(CaptureThreadRun) { IsBackground = true, Name = "Capture Thread" };
+    }
+
+    private void CaptureThreadRun()
+    {
         if (currentSource == null)
         {
             throw new InvalidOperationException("Call UpdateState() before creating the capture thread");
         }
 
-        return new Thread(() =>
+        int fps = Properties.Settings.Default.CaptureFramerate;
+        Logger.EmptyLine();
+        Logger.Log($"Creating Capture thread. Target framerate: {fps} FPS ({CaptureIntervalMs} ms)");
+
+        Stopwatch stopwatch = new();
+
+        while (true)
         {
-            int fps = Properties.Settings.Default.CaptureFramerate;
-            Logger.EmptyLine();
-            Logger.Log($"Creating Capture thread. Target framerate: {fps} FPS ({CaptureIntervalMs} ms)");
-
-            Stopwatch stopwatch = new();
-
-            while (true)
+            stopwatch.Restart();
+            try
             {
-                stopwatch.Restart();
-                try
+                lock (currentSourceLock)
                 {
-                    lock (currentSourceLock)
-                    {
-                        EnqueueFrame(currentSource.CaptureFrame());
-                    }
-                }
-                catch (ThreadAbortException)
-                {
-                    Logger.EmptyLine();
-                    Logger.Log("Aborting capture due to ThreadAbortException.");
-                    break;
-                }
-                catch (Exception e)
-                {
-                    Logger.EmptyLine();
-                    Logger.Log("Aborting capture due to exception.");
-                    Logger.Log(e);
-                    CaptureAborted?.Invoke();
-                }
-                stopwatch.Stop();
-
-                int wait = CaptureIntervalMs - (int)stopwatch.ElapsedMilliseconds;
-                if (wait > 0)
-                {
-                    Thread.Sleep(wait);
-                }
-                if (captureThreadToken.IsCancellationRequested)
-                {
-                    Logger.Log("Capture thread got cancellation request, stopping.");
-                    break;
+                    EnqueueFrame(currentSource.CaptureFrame());
                 }
             }
-        })
-        {
-            IsBackground = true,
-            Name = "Capture Thread"
-        };
+            catch (ThreadAbortException)
+            {
+                Logger.EmptyLine();
+                Logger.Log("Aborting capture due to ThreadAbortException.");
+                break;
+            }
+            catch (Exception e)
+            {
+                Logger.EmptyLine();
+                Logger.Log("Aborting capture due to exception.");
+                Logger.Log(e);
+                CaptureAborted?.Invoke();
+            }
+            stopwatch.Stop();
+
+            int wait = CaptureIntervalMs - (int)stopwatch.ElapsedMilliseconds;
+            if (wait > 0)
+            {
+                Thread.Sleep(wait);
+            }
+            if (captureThreadToken.IsCancellationRequested)
+            {
+                Logger.Log("Capture thread got cancellation request, stopping.");
+                break;
+            }
+        }
     }
 
     private void UpdateState()

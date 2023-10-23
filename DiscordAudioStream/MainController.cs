@@ -124,63 +124,60 @@ public class MainController
     {
         // Get the handle now, since we cannot get it from inside the thread
         HWND formHandle = (HWND)form.Handle;
+        return new Thread(() => DrawThreadRun(formHandle)) { IsBackground = true, Name = "Draw Thread" };
+    }
 
+    private void DrawThreadRun(HWND formHandle)
+    {
         if (screenCapture == null)
         {
             throw new InvalidOperationException("Must call Init() before creating draw thread");
         }
 
-        return new Thread(() =>
+        int fps = Properties.Settings.Default.CaptureFramerate;
+        Logger.EmptyLine();
+        Logger.Log($"Creating Draw thread. Target framerate: {fps} FPS ({screenCapture.CaptureIntervalMs} ms)");
+
+        Stopwatch stopwatch = new();
+        Size oldSize = Size.Empty;
+
+        while (true)
         {
-            int fps = Properties.Settings.Default.CaptureFramerate;
-            Logger.EmptyLine();
-            Logger.Log($"Creating Draw thread. Target framerate: {fps} FPS ({screenCapture.CaptureIntervalMs} ms)");
-
-            Stopwatch stopwatch = new();
-            Size oldSize = Size.Empty;
-
-            while (true)
+            stopwatch.Restart();
+            try
             {
-                stopwatch.Restart();
-                try
+                Bitmap? next = ScreenCaptureManager.GetNextFrame();
+
+                // No new data, keep displaying last frame
+                if (next == null)
                 {
-                    Bitmap? next = ScreenCaptureManager.GetNextFrame();
-
-                    // No new data, keep displaying last frame
-                    if (next == null)
-                    {
-                        continue;
-                    }
-
-                    // Detect size changes
-                    if (next.Size != oldSize)
-                    {
-                        oldSize = next.Size;
-                        SetPreviewSize(next.Size);
-                    }
-
-                    // Display captured frame
-                    // Refresh if the stream has started and "Force screen redraw" is enabled
-                    form.UpdatePreview(next, IsStreaming && forceRefresh, formHandle);
+                    continue;
                 }
-                catch (InvalidOperationException)
+
+                // Detect size changes
+                if (next.Size != oldSize)
                 {
-                    Logger.Log("Form is closing, stop Draw thread.");
-                    return;
+                    oldSize = next.Size;
+                    SetPreviewSize(next.Size);
                 }
-                stopwatch.Stop();
 
-                int wait = screenCapture.CaptureIntervalMs - (int)stopwatch.ElapsedMilliseconds;
-                if (wait > 0)
-                {
-                    Thread.Sleep(wait);
-                }
+                // Display captured frame
+                // Refresh if the stream has started and "Force screen redraw" is enabled
+                form.UpdatePreview(next, IsStreaming && forceRefresh, formHandle);
             }
-        })
-        {
-            IsBackground = true,
-            Name = "Draw Thread"
-        };
+            catch (InvalidOperationException)
+            {
+                Logger.Log("Form is closing, stop Draw thread.");
+                return;
+            }
+            stopwatch.Stop();
+
+            int wait = screenCapture.CaptureIntervalMs - (int)stopwatch.ElapsedMilliseconds;
+            if (wait > 0)
+            {
+                Thread.Sleep(wait);
+            }
+        }
     }
 
     // INTERNAL METHODS (called from MainForm)
