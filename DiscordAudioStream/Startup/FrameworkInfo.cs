@@ -7,8 +7,6 @@ namespace DiscordAudioStream;
 
 public static class FrameworkInfo
 {
-    public const string DOWNLOAD_URL = "https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net472-web-installer";
-
     // https://learn.microsoft.com/en-us/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed#minimum-version
     private const int MINIMUM_VERSION_472 = 461808;
 

@@ -282,7 +282,7 @@ public class MainController
         SetPreviewSize(lastCapturedFrameSize);
     }
 
-    private void StartStreamWithoutAudio(bool skipAudioWarning)
+    private static void StartStreamWithoutAudio(bool skipAudioWarning)
     {
         if (!skipAudioWarning)
         {

@@ -244,4 +244,7 @@ Other VOIP apps may show this title to the viewers.</value>
     <value>Rescale the captured video to make the window size more manageable (especially when capturing fullscreen).
 Warning: this can reduce the quality of the streamed video. The default value (720p) is recommended.</value>
   </data>
+  <data name="URL_NETFrameworkDownloadLink" xml:space="preserve">
+    <value>https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net472-web-installer</value>
+  </data>
 </root>

@@ -29,11 +29,11 @@ internal class PrintWindowCore : WindowCapture
         Bitmap result = new(winArea.Width, winArea.Height);
 
         uint renderFullContent = isWindows8_1 ? PInvoke.PW_RENDERFULLCONTENT : 0;
-        PRINT_WINDOW_FLAGS flags = PRINT_WINDOW_FLAGS.PW_CLIENTONLY | (PRINT_WINDOW_FLAGS)renderFullContent;
+        uint flags = (uint)PRINT_WINDOW_FLAGS.PW_CLIENTONLY | renderFullContent;
 
         using (Graphics g = Graphics.FromImage(result))
         {
-            PInvoke.PrintWindow(windowHandle, (HDC)g.GetHdc(), flags).AssertSuccess("PrintWindow failed");
+            PInvoke.PrintWindow(windowHandle, (HDC)g.GetHdc(), (PRINT_WINDOW_FLAGS)flags).AssertSuccess("PrintWindow failed");
         }
         return result;
     }

@@ -8,6 +8,7 @@ namespace Windows.Win32;
 
 public static partial class PInvoke
 {
+    [SuppressMessage("SonarQube", "S6640", Justification = "Unsafe method has been reviewed")]
     public static unsafe string GetWindowText(HWND hWnd, int nMaxCount)
     {
         Span<char> buffer = stackalloc char[nMaxCount];
@@ -18,6 +19,7 @@ public static partial class PInvoke
         }
     }
 
+    [SuppressMessage("SonarQube", "S6640", Justification = "Unsafe method has been reviewed")]
     public static unsafe HRESULT DwmGetWindowAttribute<T>(HWND hwnd, DWMWINDOWATTRIBUTE dwAttribute, out T attr) where T : unmanaged
     {
         fixed (T* attrPtr = &attr)
@@ -26,6 +28,7 @@ public static partial class PInvoke
         }
     }
 
+    [SuppressMessage("SonarQube", "S6640", Justification = "Unsafe method has been reviewed")]
     public static unsafe HRESULT DwmSetWindowAttribute<T>(HWND hWnd, DWMWINDOWATTRIBUTE attribute, in T value) where T : unmanaged
     {
         fixed (T* attrPtr = &value)

@@ -71,16 +71,6 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Mono_Options {
-            get {
-                object obj = ResourceManager.GetObject("Mono_Options", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap move {
@@ -91,52 +81,12 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] NAudio {
-            get {
-                object obj = ResourceManager.GetObject("NAudio", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap resize {
             get {
                 object obj = ResourceManager.GetObject("resize", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] SharpDX {
-            get {
-                object obj = ResourceManager.GetObject("SharpDX", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] SharpDX_Direct3D11 {
-            get {
-                object obj = ResourceManager.GetObject("SharpDX_Direct3D11", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] SharpDX_DXGI {
-            get {
-                object obj = ResourceManager.GetObject("SharpDX_DXGI", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         
@@ -344,6 +294,15 @@ namespace DiscordAudioStream.Properties {
         internal static string URL_ModuleArtLink {
             get {
                 return ResourceManager.GetString("URL_ModuleArtLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net472-web-installer.
+        /// </summary>
+        internal static string URL_NETFrameworkDownloadLink {
+            get {
+                return ResourceManager.GetString("URL_NETFrameworkDownloadLink", resourceCulture);
             }
         }
         
