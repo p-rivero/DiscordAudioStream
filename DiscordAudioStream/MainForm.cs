@@ -342,7 +342,7 @@ public partial class MainForm : Form
     [System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S4036", Justification = "This ms-settings URI is safe")]
     private void soundDevicesButton_Click(object sender, EventArgs e)
     {
-        if (Environment.OSVersion.Version >= new Version(10, 17063))
+        if (Environment.OSVersion.Version >= new Version(10, 0, 17063))
         {
             Process.Start("ms-settings:sound");
         }
