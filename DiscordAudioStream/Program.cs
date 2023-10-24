@@ -16,7 +16,6 @@ internal static class Program
     {
         Logger.Log($"Started Main method. Arguments: [{args.CommaSeparated()}]");
         ExceptionHandler.Register();
-        EmbeddedAssemblyResolver.Register();
         LogStartupInfo();
         RedirectConsoleOutput();
         CheckFrameworkVersion();
