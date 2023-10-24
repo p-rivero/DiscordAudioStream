@@ -6,6 +6,6 @@ public partial struct CURSORINFO
 {
     public static CURSORINFO New()
     {
-        return new CURSORINFO { cbSize = (uint)Marshal.SizeOf(typeof(CURSORINFO)) };
+        return new() { cbSize = (uint)Marshal.SizeOf(typeof(CURSORINFO)) };
     }
 }

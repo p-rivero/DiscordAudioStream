@@ -28,6 +28,8 @@ using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 
 using Windows.Graphics.DirectX.Direct3D11;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 
 namespace Composition.WindowsRuntimeHelpers;
 
@@ -53,14 +55,9 @@ public static class Direct3D11Helper
         ExactSpelling = true,
         CallingConvention = CallingConvention.StdCall
     )]
-    private static extern uint CreateDirect3D11DeviceFromDXGIDevice(IntPtr dxgiDevice, out IntPtr graphicsDevice);
+    private static extern HRESULT CreateDirect3D11DeviceFromDXGIDevice(nint dxgiDevice, out nint graphicsDevice);
 
-    public static IDirect3DDevice CreateDevice()
-    {
-        return CreateDevice(false);
-    }
-
-    public static IDirect3DDevice CreateDevice(bool useWARP)
+    public static IDirect3DDevice CreateDevice(bool useWARP = false)
     {
         DriverType driverType = useWARP ? DriverType.Software : DriverType.Hardware;
         Device d3dDevice = new(driverType, DeviceCreationFlags.BgraSupport);
@@ -71,11 +68,7 @@ public static class Direct3D11Helper
     {
         using SharpDX.DXGI.Device3 dxgiDevice = d3dDevice.QueryInterface<SharpDX.DXGI.Device3>();
         // Wrap the native device using a WinRT interop object.
-        uint error = CreateDirect3D11DeviceFromDXGIDevice(dxgiDevice.NativePointer, out IntPtr pUnknown);
-        if (error != 0)
-        {
-            throw new ExternalException($"Failed to create Direct3D11 device", (int)error);
-        }
+        CreateDirect3D11DeviceFromDXGIDevice(dxgiDevice.NativePointer, out IntPtr pUnknown).AssertSuccess("Failed to create Direct3D11 device");
         IDirect3DDevice? device = Marshal.GetObjectForIUnknown(pUnknown) as IDirect3DDevice;
         Marshal.Release(pUnknown);
 

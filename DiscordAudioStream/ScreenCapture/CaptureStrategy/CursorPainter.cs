@@ -12,7 +12,7 @@ public class CursorPainter : CaptureSource
 
     private readonly CaptureSource source;
 
-    private IntPtr currentCursorHandle = IntPtr.Zero;
+    private HCURSOR currentCursorHandle;
     private Bitmap? cursorBitmap;
     private Point cursorHotspot = Point.Empty;
 
@@ -99,7 +99,7 @@ public class CursorPainter : CaptureSource
 
     private static Bitmap? BitmapFromCursor(in ICONINFO iconInfo)
     {
-        if (iconInfo.hbmColor == IntPtr.Zero)
+        if (iconInfo.hbmColor.IsNull)
         {
             return null;
         }

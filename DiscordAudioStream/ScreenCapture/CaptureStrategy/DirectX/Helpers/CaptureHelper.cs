@@ -26,11 +26,17 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 
 using Windows.Graphics.Capture;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
 
 namespace Composition.WindowsRuntimeHelpers;
 
 public static class CaptureHelper
 {
+    // Passing null pointer to IGraphicsCaptureItemInterop::CreateForMonitor will capture the entire desktop
+    // Wasn't able to find documentation for this, but it works
+    public static readonly HMONITOR ALL_SCREENS;
+
     private static readonly Guid GraphicsCaptureItemGuid = new("79C3F95B-31F7-4EC2-A464-632EF5D30760");
 
     [ComImport]
@@ -59,7 +65,7 @@ public static class CaptureHelper
         interop.Initialize(hwnd);
     }
 
-    public static GraphicsCaptureItem CreateItemForWindow(IntPtr hwnd)
+    public static GraphicsCaptureItem CreateItemForWindow(HWND hwnd)
     {
         IActivationFactory factory = WindowsRuntimeMarshal.GetActivationFactory(typeof(GraphicsCaptureItem));
         IGraphicsCaptureItemInterop interop = (IGraphicsCaptureItemInterop)factory;
@@ -74,7 +80,7 @@ public static class CaptureHelper
         return item;
     }
 
-    public static GraphicsCaptureItem CreateItemForMonitor(IntPtr hmon)
+    public static GraphicsCaptureItem CreateItemForMonitor(HMONITOR hmon)
     {
         IActivationFactory factory = WindowsRuntimeMarshal.GetActivationFactory(typeof(GraphicsCaptureItem));
         IGraphicsCaptureItemInterop interop = (IGraphicsCaptureItemInterop)factory;

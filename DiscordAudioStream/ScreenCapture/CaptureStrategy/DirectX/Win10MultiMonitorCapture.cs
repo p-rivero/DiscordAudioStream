@@ -10,9 +10,7 @@ public class Win10MultiMonitorCapture : CaptureSource
 
     public Win10MultiMonitorCapture(bool captureCursor)
     {
-        // Passing null pointer to IGraphicsCaptureItemInterop::CreateForMonitor will capture the entire desktop
-        // Wasn't able to find documentation for this, but it works
-        winCapture = new(CaptureHelper.CreateItemForMonitor(IntPtr.Zero), captureCursor);
+        winCapture = new(CaptureHelper.CreateItemForMonitor(CaptureHelper.ALL_SCREENS), captureCursor);
     }
 
     public override Bitmap? CaptureFrame()

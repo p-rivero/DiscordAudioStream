@@ -143,9 +143,9 @@ public class CaptureState
         }
         set
         {
-            if (value == IntPtr.Zero)
+            if (value.IsNull)
             {
-                throw new ArgumentException("Trying to set WindowHandle to IntPtr.Zero");
+                throw new ArgumentException("Trying to set WindowHandle to null value");
             }
             if (hWnd == value && captureTarget == CaptureTarget.Window)
             {

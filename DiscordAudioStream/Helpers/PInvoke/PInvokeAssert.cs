@@ -23,7 +23,7 @@ public static class PInvokeAssert
 
     public static HGDIOBJ AssertSuccess(this HGDIOBJ handle, string message = "Win32 call failed")
     {
-        ThrowIf(handle == IntPtr.Zero || handle == (nint)PInvoke.GDI_ERROR, message);
+        ThrowIf(handle.IsNull || handle == (nint)PInvoke.GDI_ERROR, message);
         return handle;
     }
 
@@ -35,13 +35,13 @@ public static class PInvokeAssert
 
     public static HWND AssertNotNull(this HWND handle, string message = "Win32 call failed")
     {
-        ThrowIf(handle == IntPtr.Zero, message);
+        ThrowIf(handle.IsNull, message);
         return handle;
     }
 
     public static HBITMAP AssertNotNull(this HBITMAP handle, string message = "Win32 call failed")
     {
-        ThrowIf(handle == IntPtr.Zero, message);
+        ThrowIf(handle.IsNull, message);
         return handle;
     }
 

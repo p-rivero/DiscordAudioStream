@@ -3,6 +3,8 @@ using System.Windows.Forms;
 
 using Composition.WindowsRuntimeHelpers;
 
+using Windows.Win32.Graphics.Gdi;
+
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 public class Win10MonitorCapture : CaptureSource
@@ -11,7 +13,7 @@ public class Win10MonitorCapture : CaptureSource
 
     public Win10MonitorCapture(Screen monitor, bool captureCursor)
     {
-        IntPtr hMon = GetScreenHandle(monitor);
+        HMONITOR hMon = GetScreenHandle(monitor);
         winCapture = new(CaptureHelper.CreateItemForMonitor(hMon), captureCursor);
     }
 
@@ -26,10 +28,9 @@ public class Win10MonitorCapture : CaptureSource
         winCapture.Dispose();
     }
 
-    private static IntPtr GetScreenHandle(Screen screen)
+    private static HMONITOR GetScreenHandle(Screen screen)
     {
         // Screen.GetHashCode() is implemented as "return (int)hmonitor"
-        int hmonitor = screen.GetHashCode();
-        return new IntPtr(hmonitor);
+        return (HMONITOR)(nint)screen.GetHashCode();
     }
 }

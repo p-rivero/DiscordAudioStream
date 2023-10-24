@@ -63,7 +63,7 @@ public class ScreenCaptureManager
 
     private Thread CreateCaptureThread()
     {
-        return new Thread(CaptureThreadRun) { IsBackground = true, Name = "Capture Thread" };
+        return new(CaptureThreadRun) { IsBackground = true, Name = "Capture Thread" };
     }
 
     private void CaptureThreadRun()

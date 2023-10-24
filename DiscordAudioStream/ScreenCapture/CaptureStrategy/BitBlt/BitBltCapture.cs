@@ -61,7 +61,7 @@ public class BitBltCapture : CaptureSource
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        if (hBitmap != IntPtr.Zero)
+        if (!hBitmap.IsNull)
         {
             PInvoke.DeleteObject(hBitmap).AssertSuccess("Failed to delete bitmap");
         }
