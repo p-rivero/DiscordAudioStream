@@ -4,6 +4,8 @@ using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 
+using Windows.Win32.Foundation;
+
 using D3D11Device = SharpDX.Direct3D11.Device;
 using DXGIResource = SharpDX.DXGI.Resource;
 
@@ -13,13 +15,6 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 public class DuplicationCapture : CaptureSource
 {
-    // https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values
-    private const int E_ACCESSDENIED = unchecked((int)0x80070005);
-
-    // https://docs.microsoft.com/en-us/windows/win32/direct3ddxgi/dxgi-error
-    private const int DXGI_ERROR_ACCESS_LOST = unchecked((int)0x887A0026);
-    private const int DXGI_ERROR_WAIT_TIMEOUT = unchecked((int)0x887A0027);
-
     private const int FRAME_TIMEOUT_MS = 100;
 
     private static readonly D3D11Device d3dDevice = new(GPU0Adapter);
@@ -72,7 +67,7 @@ public class DuplicationCapture : CaptureSource
         }
         catch (SharpDXException e)
         {
-            if (e.HResult == E_ACCESSDENIED)
+            if (e.HResult == HRESULT.E_ACCESSDENIED)
             {
                 // Could not read resource, do nothing and attempt to refresh on the next frame
                 Logger.Log("Access denied! Screen was not refreshed.");
@@ -109,12 +104,12 @@ public class DuplicationCapture : CaptureSource
         }
         catch (SharpDXException e)
         {
-            if (e.HResult == DXGI_ERROR_WAIT_TIMEOUT)
+            if (e.HResult == HRESULT.DXGI_ERROR_WAIT_TIMEOUT)
             {
                 // The screen does not have new content
                 return CloneThumbnail();
             }
-            else if (e.HResult == DXGI_ERROR_ACCESS_LOST)
+            else if (e.HResult == HRESULT.DXGI_ERROR_ACCESS_LOST)
             {
                 // The desktop duplication interface is invalid. Release the OutputDuplication and create a new one
                 Logger.EmptyLine();
