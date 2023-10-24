@@ -32,7 +32,7 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with:
         name: Release artifact
-        path: DiscordAudioStream\bin\Release\DiscordAudioStream.exe
+        path: DiscordAudioStream\bin\Release\net472\DiscordAudioStream.exe
       
     - name: Remove latest release
       uses: dev-drprasad/delete-older-releases@v0.2.1
@@ -56,5 +56,5 @@ jobs:
         prerelease: true
         name: Latest Build
         generate_release_notes: true
-        files: DiscordAudioStream/bin/Release/DiscordAudioStream.exe
+        files: DiscordAudioStream/bin/Release/net472/DiscordAudioStream.exe
     
