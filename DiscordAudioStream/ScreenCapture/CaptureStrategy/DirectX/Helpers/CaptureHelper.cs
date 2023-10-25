@@ -40,42 +40,25 @@ public static class CaptureHelper
     private static readonly Guid GraphicsCaptureItemGuid = new("79C3F95B-31F7-4EC2-A464-632EF5D30760");
 
     [ComImport]
-    [Guid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    [ComVisible(true)]
-    private interface IInitializeWithWindow
-    {
-        void Initialize(IntPtr hwnd);
-    }
-
-    [ComImport]
     [Guid("3628E81B-3CAC-4C60-B7F4-23CE0E0C3356")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [ComVisible(true)]
     private interface IGraphicsCaptureItemInterop
     {
         IntPtr CreateForWindow([In] IntPtr window, [In] ref Guid iid);
-
         IntPtr CreateForMonitor([In] IntPtr monitor, [In] ref Guid iid);
-    }
-
-    public static void SetWindow(this GraphicsCapturePicker picker, IntPtr hwnd)
-    {
-        IInitializeWithWindow interop = (IInitializeWithWindow)(object)picker;
-        interop.Initialize(hwnd);
     }
 
     public static GraphicsCaptureItem CreateItemForWindow(HWND hwnd)
     {
         IActivationFactory factory = WindowsRuntimeMarshal.GetActivationFactory(typeof(GraphicsCaptureItem));
         IGraphicsCaptureItemInterop interop = (IGraphicsCaptureItemInterop)factory;
-        IntPtr itemPointer = interop.CreateForWindow(hwnd, GraphicsCaptureItemGuid);
+        nint itemPointer = interop.CreateForWindow(hwnd, GraphicsCaptureItemGuid);
         GraphicsCaptureItem? item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
         Marshal.Release(itemPointer);
-
         if (item == null)
         {
-            throw new ExternalException("IGraphicsCaptureItemInterop.CreateItemForWindow returned null");
+            throw new ExternalException("IGraphicsCaptureItemInterop.CreateItemForWindow failed");
         }
         return item;
     }
@@ -84,13 +67,12 @@ public static class CaptureHelper
     {
         IActivationFactory factory = WindowsRuntimeMarshal.GetActivationFactory(typeof(GraphicsCaptureItem));
         IGraphicsCaptureItemInterop interop = (IGraphicsCaptureItemInterop)factory;
-        IntPtr itemPointer = interop.CreateForMonitor(hmon, GraphicsCaptureItemGuid);
+        nint itemPointer = interop.CreateForMonitor(hmon, GraphicsCaptureItemGuid);
         GraphicsCaptureItem? item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
         Marshal.Release(itemPointer);
-
         if (item == null)
         {
-            throw new ExternalException("IGraphicsCaptureItemInterop.CreateForMonitor returned null");
+            throw new ExternalException("IGraphicsCaptureItemInterop.CreateForMonitor failed");
         }
         return item;
     }

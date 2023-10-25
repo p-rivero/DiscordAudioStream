@@ -29,11 +29,11 @@ public static class BitmapHelper
         Rectangle boundsRect = new(0, 0, width, height);
         BitmapData destinationData = bmp.LockBits(boundsRect, ImageLockMode.WriteOnly, bmp.PixelFormat);
 
-        IntPtr sourcePtr =
+        nint sourcePtr =
             sourceData.DataPointer
             + copiedArea.Top * sourceData.RowPitch
             + copiedArea.Left * 4;
-        IntPtr destinationPtr = destinationData.Scan0;
+        nint destinationPtr = destinationData.Scan0;
         for (int y = 0; y < height; y++)
         {
             // Copy a single line

@@ -2,6 +2,7 @@
 
 using Composition.WindowsRuntimeHelpers;
 
+using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 
 using Windows.Foundation.Metadata;
@@ -20,8 +21,8 @@ public class Win10Capture : CaptureSource
     private readonly GraphicsCaptureSession session;
     private SizeInt32 lastSize;
 
-    private static readonly IDirect3DDevice device = Direct3D11Helper.CreateDevice();
-    private static readonly Device d3dDevice = Direct3D11Helper.CreateSharpDXDevice(device);
+    private static readonly Device d3dDevice = new(DriverType.Hardware, DeviceCreationFlags.BgraSupport);
+    private static readonly IDirect3DDevice device = Direct3D11Helper.CreateDirect3DDeviceFromSharpDXDevice(d3dDevice);
 
     public Win10Capture(GraphicsCaptureItem item, bool captureCursor)
     {
