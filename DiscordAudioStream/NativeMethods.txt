@@ -46,7 +46,13 @@ DwmGetWindowAttribute
 DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
 
 
+// Errors
 E_ACCESSDENIED
 AUDCLNT_E_DEVICE_IN_USE
 DXGI_ERROR_ACCESS_LOST
 DXGI_ERROR_WAIT_TIMEOUT
+
+
+// COM Interfaces
+IDirect3DDxgiInterfaceAccess
+IGraphicsCaptureItemInterop

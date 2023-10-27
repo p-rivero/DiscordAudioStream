@@ -34,6 +34,8 @@ public class MainController
 
     public bool IsStreaming { get; private set; }
 
+    private bool MultiMonitor => Screen.AllScreens.Length > 1;
+
     internal void Init()
     {
         RefreshAreaInfo();
@@ -84,38 +86,32 @@ public class MainController
         {
             return;
         }
+        int customAreaIndex = numberOfScreens;
+        int allScreensIndex = customAreaIndex - 1;
+        int firstWindowIndex = customAreaIndex + 1;
 
-        int windowIndex = form.VideoIndex - numberOfScreens - 1;
-
-        if (windowIndex == -1)
+        if (form.VideoIndex == customAreaIndex)
         {
-            // Index right before first Window: Custom area
             captureState.Target = CaptureState.CaptureTarget.CustomArea;
         }
-        else if (windowIndex >= 0)
+        else if (MultiMonitor && form.VideoIndex == allScreensIndex)
         {
-            // Window
+            captureState.Target = CaptureState.CaptureTarget.AllScreens;
+        }
+        else if (form.VideoIndex >= firstWindowIndex)
+        {
+            int windowIndex = form.VideoIndex - firstWindowIndex;
             captureState.WindowHandle = processHandleList[windowIndex];
         }
         else
         {
-            // Screen
-            if (Screen.AllScreens.Length > 1 && form.VideoIndex == numberOfScreens - 1)
-            {
-                // All screens
-                captureState.Target = CaptureState.CaptureTarget.AllScreens;
-            }
-            else
-            {
-                // Single screen
-                captureState.Screen = Screen.AllScreens[form.VideoIndex];
-            }
+            int screenIndex = form.VideoIndex;
+            captureState.Screen = Screen.AllScreens[screenIndex];
         }
 
         form.HideTaskbarEnabled = captureState.HideTaskbarSupported;
         if (captureState.HideTaskbarSupported)
         {
-            // The selected method allows hiding taskbar, see if checkbox is checked
             captureState.HideTaskbar = form.HideTaskbar;
         }
     }
@@ -228,7 +224,7 @@ public class MainController
             })
             .ToList();
 
-        if (Screen.AllScreens.Length > 1)
+        if (MultiMonitor)
         {
             screens.Add("Everything");
         }

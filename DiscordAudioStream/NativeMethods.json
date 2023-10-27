@@ -1,5 +1,8 @@
 ﻿{
     "$schema": "https://aka.ms/CsWin32.schema.json",
     "public": true,
-    "useSafeHandles": false
+    "useSafeHandles": false,
+    "comInterop": {
+        "useIntPtrForComOutPointers": true
+    }
 }

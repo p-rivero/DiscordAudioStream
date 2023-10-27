@@ -29,21 +29,13 @@ using SharpDX.Direct3D11;
 using Windows.Graphics.DirectX.Direct3D11;
 using Windows.Win32;
 using Windows.Win32.Foundation;
+using Windows.Win32.System.WinRT.Direct3D11;
 
 namespace Composition.WindowsRuntimeHelpers;
 
 public static class Direct3D11Helper
 {
-    private static Guid ID3D11Texture2D = new("6f15aaf2-d208-4e89-9ab4-489535d34f9c");
-
-    [ComImport]
-    [Guid("A9B3D012-3DF2-4EE3-B8D1-8695F457D3C1")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    [ComVisible(true)]
-    private interface IDirect3DDxgiInterfaceAccess
-    {
-        nint GetInterface([In] ref Guid iid);
-    };
+    private static Guid ID3D11Texture2DGuid = new("6f15aaf2-d208-4e89-9ab4-489535d34f9c");
 
     [DllImport(
         "d3d11.dll",
@@ -73,7 +65,7 @@ public static class Direct3D11Helper
     public static Texture2D CreateSharpDXTexture2D(IDirect3DSurface surface)
     {
         IDirect3DDxgiInterfaceAccess access = (IDirect3DDxgiInterfaceAccess)surface;
-        nint d3dPointer = access.GetInterface(ID3D11Texture2D);
+        access.GetInterface(ID3D11Texture2DGuid, out nint d3dPointer);
         return new Texture2D(d3dPointer);
     }
 }

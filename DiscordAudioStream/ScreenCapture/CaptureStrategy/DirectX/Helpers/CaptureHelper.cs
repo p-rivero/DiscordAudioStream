@@ -26,8 +26,10 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 
 using Windows.Graphics.Capture;
+using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
+using Windows.Win32.System.WinRT.Graphics.Capture;
 
 namespace Composition.WindowsRuntimeHelpers;
 
@@ -39,21 +41,11 @@ public static class CaptureHelper
 
     private static readonly Guid GraphicsCaptureItemGuid = new("79C3F95B-31F7-4EC2-A464-632EF5D30760");
 
-    [ComImport]
-    [Guid("3628E81B-3CAC-4C60-B7F4-23CE0E0C3356")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    [ComVisible(true)]
-    private interface IGraphicsCaptureItemInterop
-    {
-        IntPtr CreateForWindow([In] IntPtr window, [In] ref Guid iid);
-        IntPtr CreateForMonitor([In] IntPtr monitor, [In] ref Guid iid);
-    }
-
     public static GraphicsCaptureItem CreateItemForWindow(HWND hwnd)
     {
         IActivationFactory factory = WindowsRuntimeMarshal.GetActivationFactory(typeof(GraphicsCaptureItem));
         IGraphicsCaptureItemInterop interop = (IGraphicsCaptureItemInterop)factory;
-        nint itemPointer = interop.CreateForWindow(hwnd, GraphicsCaptureItemGuid);
+        interop.CreateForWindow(hwnd, GraphicsCaptureItemGuid, out nint itemPointer);
         GraphicsCaptureItem? item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
         Marshal.Release(itemPointer);
         if (item == null)
@@ -67,7 +59,7 @@ public static class CaptureHelper
     {
         IActivationFactory factory = WindowsRuntimeMarshal.GetActivationFactory(typeof(GraphicsCaptureItem));
         IGraphicsCaptureItemInterop interop = (IGraphicsCaptureItemInterop)factory;
-        nint itemPointer = interop.CreateForMonitor(hmon, GraphicsCaptureItemGuid);
+        interop.CreateForMonitor(hmon, GraphicsCaptureItemGuid, out nint itemPointer);
         GraphicsCaptureItem? item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
         Marshal.Release(itemPointer);
         if (item == null)

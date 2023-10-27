@@ -70,26 +70,18 @@ public class DarkThemeCheckBox : CheckBox
 
     private void PaintSquare(Graphics g)
     {
-        Color bgColor;
-        if (pressed)
+        Color bgColor = (pressed, hovered) switch
         {
-            bgColor = DarkThemeManager.PressedColor;
-        }
-        else if (hovered)
-        {
-            bgColor = DarkThemeManager.DarkHoverColor;
-        }
-        else
-        {
-            bgColor = DarkThemeManager.DarkSecondColor;
-        }
-
-        int extraThickness = Focused ? 1 : 0;
-        int x = extraThickness;
-        int y = 2 + extraThickness;
-        int size = 12 - extraThickness;
+            (true, _) => DarkThemeManager.PressedColor,
+            (_, true) => DarkThemeManager.DarkHoverColor,
+            _ => DarkThemeManager.DarkSecondColor,
+        };
+        int extraThicknessPx = Focused ? 1 : 0;
+        int x = extraThicknessPx;
+        int y = 2 + extraThicknessPx;
+        int size = 12 - extraThicknessPx;
         using SolidBrush bgBrush = new(bgColor);
-        using Pen edgePen = new(DarkThemeManager.BorderColor, 1 + extraThickness);
+        using Pen edgePen = new(DarkThemeManager.BorderColor, 1 + extraThicknessPx);
         g.FillRectangle(bgBrush, x, y, size, size);
         g.DrawRectangle(edgePen, x, y, size, size);
     }

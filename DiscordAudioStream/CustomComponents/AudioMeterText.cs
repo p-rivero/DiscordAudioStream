@@ -46,14 +46,12 @@ public class AudioMeterText : Control
         const int WIDTH_SHOW_TEXT = 130;
         const int WIDTH_SHOW_DB = 170;
 
-        if (windowWidth < WIDTH_SHOW_TEXT)
+        text = windowWidth switch
         {
-            text = "";
-        }
-        else if (windowWidth > WIDTH_SHOW_DB)
-        {
-            text += " dB";
-        }
+            < WIDTH_SHOW_TEXT => "",
+            < WIDTH_SHOW_DB => text,
+            _ => $"{text} dB"
+        };
 
         SizeF strSz = g.MeasureString(text, Font);
         float lineY = GetYPos(percent);
