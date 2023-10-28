@@ -34,7 +34,7 @@ public class MainController
 
     public bool IsStreaming { get; private set; }
 
-    private bool MultiMonitor => Screen.AllScreens.Length > 1;
+    private static bool MultiMonitor => Screen.AllScreens.Length > 1;
 
     internal void Init()
     {

@@ -68,9 +68,10 @@ public class ScreenCaptureManager
 
     private void CaptureThreadRun()
     {
-        if (currentSource == null)
+        while (currentSource == null)
         {
-            throw new InvalidOperationException("Call UpdateState() before creating the capture thread");
+            Logger.Log("Capture thread waiting for capture source to initialize...");
+            Thread.Sleep(100);
         }
 
         int fps = Properties.Settings.Default.CaptureFramerate;
@@ -89,12 +90,6 @@ public class ScreenCaptureManager
                     EnqueueFrame(currentSource.CaptureFrame());
                 }
             }
-            catch (ThreadAbortException)
-            {
-                Logger.EmptyLine();
-                Logger.Log("Aborting capture due to ThreadAbortException.");
-                break;
-            }
             catch (Exception e)
             {
                 Logger.EmptyLine();
@@ -109,6 +104,7 @@ public class ScreenCaptureManager
             {
                 Thread.Sleep(wait);
             }
+            
             if (captureThreadToken.IsCancellationRequested)
             {
                 Logger.Log("Capture thread got cancellation request, stopping.");
