@@ -1,6 +1,6 @@
 ﻿namespace DiscordAudioStream
 {
-	partial class AreaForm
+	partial class CustomAreaForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AreaForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomAreaForm));
             this.titleBtn = new System.Windows.Forms.Button();
             this.dragBtn = new System.Windows.Forms.PictureBox();
             this.moveBtn = new System.Windows.Forms.PictureBox();
@@ -94,7 +94,7 @@
             this.lockBtn.TabStop = false;
             this.lockBtn.Click += new System.EventHandler(this.lockBtn_Click);
             // 
-            // AreaForm
+            // CustomAreaForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Lime;
@@ -106,7 +106,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(204, 160);
-            this.Name = "AreaForm";
+            this.Name = "CustomAreaForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.TopMost = true;

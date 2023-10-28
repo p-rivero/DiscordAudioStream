@@ -5,7 +5,7 @@
     <Compile Update="AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="AreaForm.cs">
+    <Compile Update="CustomAreaForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="AudioMeterForm.cs">

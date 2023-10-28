@@ -5,7 +5,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 public abstract class CustomAreaCapture : CaptureSource
 {
-    private static readonly AreaForm areaForm = new();
+    private static readonly CustomAreaForm customAreaForm = new();
     private static int instanceCount;
     private static readonly object instanceCountLock = new();
 
@@ -28,7 +28,7 @@ public abstract class CustomAreaCapture : CaptureSource
         {
             if (instanceCount == 0)
             {
-                InvokeOnUI(areaForm.Show);
+                InvokeOnUI(customAreaForm.Show);
             }
             instanceCount++;
         }
@@ -41,7 +41,7 @@ public abstract class CustomAreaCapture : CaptureSource
             instanceCount--;
             if (instanceCount == 0)
             {
-                InvokeOnUI(areaForm.Hide);
+                InvokeOnUI(customAreaForm.Hide);
             }
         }
     }
@@ -49,11 +49,11 @@ public abstract class CustomAreaCapture : CaptureSource
     protected Rectangle GetCustomArea(bool relativeToVirtualScreen)
     {
         // Omit pixels of the red border
-        const int BORDER = AreaForm.BORDER_WIDTH_PX;
-        int left = areaForm.Left + BORDER;
-        int top = areaForm.Top + BORDER;
-        int width = areaForm.Width - 2 * BORDER;
-        int height = areaForm.Height - 2 * BORDER;
+        const int BORDER = CustomAreaForm.BORDER_WIDTH_PX;
+        int left = customAreaForm.Left + BORDER;
+        int top = customAreaForm.Top + BORDER;
+        int width = customAreaForm.Width - 2 * BORDER;
+        int height = customAreaForm.Height - 2 * BORDER;
 
         left = Math.Max(left, bounds.X);
         top = Math.Max(top, bounds.Y);

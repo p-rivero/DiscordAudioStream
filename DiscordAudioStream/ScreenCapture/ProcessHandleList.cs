@@ -62,7 +62,7 @@ public class ProcessHandleList
                 }
 
                 string name = PInvoke.GetWindowText(hWnd, windowTextLength + 1);
-                if (name == AreaForm.AREA_FORM_TITLE)
+                if (name == CustomAreaForm.WINDOW_TITLE)
                 {
                     return true;
                 }

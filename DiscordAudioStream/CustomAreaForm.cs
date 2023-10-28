@@ -7,10 +7,10 @@ using Windows.Win32.Foundation;
 
 namespace DiscordAudioStream;
 
-public partial class AreaForm : Form
+public partial class CustomAreaForm : Form
 {
     public const int BORDER_WIDTH_PX = 2;
-    public const string AREA_FORM_TITLE = "Recording area - Discord Audio Stream";
+    public const string WINDOW_TITLE = "Recording area - Discord Audio Stream";
 
     private Point startPos;
     private Size startSize;
@@ -20,13 +20,13 @@ public partial class AreaForm : Form
 
     private readonly Rectangle bounds = GetScreenBounds();
 
-    public AreaForm()
+    public CustomAreaForm()
     {
         InitializeComponent();
 
         LocationChanged += (sender, e) => EnsureWithinBounds();
         SizeChanged += (sender, e) => Refresh();
-        Text = AREA_FORM_TITLE;
+        Text = WINDOW_TITLE;
 
         resizeTimer.Elapsed += ResizeTimerElapsed;
         resizeTimer.Interval = 30;
