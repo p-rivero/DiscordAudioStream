@@ -286,5 +286,17 @@ namespace DiscordAudioStream.Properties {
                 this["StreamTitle"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NeedsSettingsUpgrade {
+            get {
+                return ((bool)(this["NeedsSettingsUpgrade"]));
+            }
+            set {
+                this["NeedsSettingsUpgrade"] = value;
+            }
+        }
     }
 }

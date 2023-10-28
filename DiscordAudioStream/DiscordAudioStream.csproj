@@ -15,7 +15,7 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <ImplicitUsings>enable</ImplicitUsings>
     <Version>1.4.0</Version>
-    <Authors>p-rivero</Authors>
+    <Authors>DiscordAudioStream</Authors>
     <Product>Discord Audio Stream</Product>
     <Description>Utility for streaming the entire screen (or use OBS) with Discord... with audio!</Description>
     <PackageProjectUrl>https://github.com/p-rivero/DiscordAudioStream</PackageProjectUrl>

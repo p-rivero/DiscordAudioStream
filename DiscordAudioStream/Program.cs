@@ -19,6 +19,7 @@ internal static class Program
         LogStartupInfo();
         RedirectConsoleOutput();
         CheckFrameworkVersion();
+        MigrateSettings();
 
         CommandArguments consoleArgs = new(args);
         if (consoleArgs.ExitImmediately)
@@ -100,6 +101,16 @@ internal static class Program
         {
             Process.Start(Properties.Resources.URL_NETFrameworkDownloadLink);
             Environment.Exit(0);
+        }
+    }
+
+    private static void MigrateSettings()
+    {
+        if (Properties.Settings.Default.NeedsSettingsUpgrade)
+        {
+            Properties.Settings.Default.Upgrade();
+            Properties.Settings.Default.NeedsSettingsUpgrade = false;
+            Properties.Settings.Default.Save();
         }
     }
 
