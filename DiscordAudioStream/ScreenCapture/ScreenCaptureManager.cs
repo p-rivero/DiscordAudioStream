@@ -104,7 +104,7 @@ public class ScreenCaptureManager
             {
                 Thread.Sleep(wait);
             }
-            
+
             if (captureThreadToken.IsCancellationRequested)
             {
                 Logger.Log("Capture thread got cancellation request, stopping.");

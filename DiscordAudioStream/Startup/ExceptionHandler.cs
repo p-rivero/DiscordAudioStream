@@ -60,7 +60,7 @@ internal static class ExceptionHandler
             }
         }
 
-        Application.Exit();
+        Environment.Exit(1);
     }
 
     private static void WriteStackTrace(Exception exception, string tracePath)
