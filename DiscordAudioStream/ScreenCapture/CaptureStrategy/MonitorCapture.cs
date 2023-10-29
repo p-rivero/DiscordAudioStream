@@ -10,7 +10,7 @@ public abstract class MonitorCapture : CaptureSource
     private readonly Screen monitor;
     private readonly bool hideTaskbar;
 
-    public MonitorCapture(Screen monitor, bool hideTaskbar)
+    protected MonitorCapture(Screen monitor, bool hideTaskbar)
     {
         this.monitor = monitor;
         this.hideTaskbar = hideTaskbar;

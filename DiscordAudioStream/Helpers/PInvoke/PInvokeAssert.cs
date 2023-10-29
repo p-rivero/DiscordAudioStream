@@ -21,15 +21,15 @@ public static class PInvokeAssert
         ThrowIf(!success, message);
     }
 
-    public static void AssertNotZero(this uint dword, string message = "Win32 call failed")
-    {
-        ThrowIf(dword == 0, message);
-    }
-
     public static HGDIOBJ AssertSuccess(this HGDIOBJ handle, string message = "Win32 call failed")
     {
         ThrowIf(handle.IsNull || handle == (nint)PInvoke.GDI_ERROR, message);
         return handle;
+    }
+
+    public static void AssertNotZero(this uint dword, string message = "Win32 call failed")
+    {
+        ThrowIf(dword == 0, message);
     }
 
     public static HDC AssertNotNull(this HDC handle, string message = "Win32 call failed")

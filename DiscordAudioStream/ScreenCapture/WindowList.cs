@@ -10,12 +10,12 @@ public class WindowList
 {
     private const char HASH_SEPARATOR = '|';
 
-    private record ProcessHandleItem(HWND handle, string title, string filename);
-    private readonly List<ProcessHandleItem> processes;
+    private sealed record WindowListItem(HWND handle, string title, string filename);
+    private readonly List<WindowListItem> windowList;
 
-    private WindowList(List<ProcessHandleItem> processes)
+    private WindowList(List<WindowListItem> windowList)
     {
-        this.processes = processes;
+        this.windowList = windowList;
     }
 
     public static WindowList Empty()
@@ -27,7 +27,7 @@ public class WindowList
     {
         HWND shellWindow = PInvoke.GetShellWindow().AssertNotNull("No shell process found");
         HWND discordAudioStreamWindow = (HWND)Process.GetCurrentProcess().MainWindowHandle;
-        List<ProcessHandleItem> processes = new();
+        List<WindowListItem> processes = new();
 
         PInvoke.EnumWindows(
             // Called for each top-level window
@@ -79,21 +79,21 @@ public class WindowList
         return new WindowList(processes);
     }
 
-    public IEnumerable<string> Names => processes.Select(p => p.title);
+    public IEnumerable<string> Names => windowList.Select(p => p.title);
 
     public HWND getHandle(int index)
     {
-        return processes[index].handle;
+        return windowList[index].handle;
     }
 
     public string getWindowHash(int index)
     {
-        return processes[index].filename + HASH_SEPARATOR + processes[index].title;
+        return windowList[index].filename + HASH_SEPARATOR + windowList[index].title;
     }
 
     public int IndexOfHandle(HWND handle)
     {
-        return processes.FindIndex(p => p.handle == handle);
+        return windowList.FindIndex(p => p.handle == handle);
     }
 
     public int IndexOfWindowHash(string hash)
@@ -106,19 +106,19 @@ public class WindowList
         string filename = hashParts[0];
         string title = hashParts[1];
 
-        int exactMatch = processes.FindIndex(p => p.filename == filename && p.title == title);
+        int exactMatch = windowList.FindIndex(p => p.filename == filename && p.title == title);
         if (exactMatch != -1)
         {
             return exactMatch;
         }
 
-        int filenameMatch = processes.FindIndex(p => p.filename == filename);
+        int filenameMatch = windowList.FindIndex(p => p.filename == filename);
         if (filenameMatch != -1)
         {
             return filenameMatch;
         }
 
-        int titleMatch = processes.FindIndex(p => p.title == title);
+        int titleMatch = windowList.FindIndex(p => p.title == title);
         if (titleMatch != -1)
         {
             return titleMatch;
