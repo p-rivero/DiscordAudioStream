@@ -360,23 +360,20 @@ public class MainController
 
     private void AbortCapture()
     {
-        form.Invoke(new Action(() =>
+        RefreshScreens();
+        form.VideoIndex = Properties.Settings.Default.AreaIndex;
+        if (!IsStreaming)
         {
-            RefreshScreens();
-            form.VideoIndex = Properties.Settings.Default.AreaIndex;
-            if (!IsStreaming)
-            {
-                return;
-            }
+            return;
+        }
 
-            EndStream();
-            if (Properties.Settings.Default.AutoExit)
-            {
-                Logger.EmptyLine();
-                Logger.Log("AutoExit was enabled, closing form.");
-                form.Close();
-            }
-        }));
+        EndStream();
+        if (Properties.Settings.Default.AutoExit)
+        {
+            Logger.EmptyLine();
+            Logger.Log("AutoExit was enabled, closing form.");
+            InvokeOnUI.RunAsync(form.Close);
+        }
     }
 
     internal void ShowSettingsForm(bool darkMode)

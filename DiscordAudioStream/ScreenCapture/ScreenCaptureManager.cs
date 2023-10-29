@@ -95,7 +95,7 @@ public class ScreenCaptureManager
                 Logger.EmptyLine();
                 Logger.Log("Aborting capture due to exception.");
                 Logger.Log(e);
-                CaptureAborted?.Invoke();
+                InvokeOnUI.RunSync(() => CaptureAborted?.Invoke());
             }
             stopwatch.Stop();
 

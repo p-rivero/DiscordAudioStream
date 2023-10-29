@@ -28,7 +28,7 @@ public abstract class CustomAreaCapture : CaptureSource
         {
             if (instanceCount == 0)
             {
-                InvokeOnUI(customAreaForm.Show);
+                InvokeOnUI.RunSync(customAreaForm.Show);
             }
             instanceCount++;
         }
@@ -41,7 +41,7 @@ public abstract class CustomAreaCapture : CaptureSource
             instanceCount--;
             if (instanceCount == 0)
             {
-                InvokeOnUI(customAreaForm.Hide);
+                InvokeOnUI.RunSync(customAreaForm.Hide);
             }
         }
     }

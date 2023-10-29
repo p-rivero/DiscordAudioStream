@@ -21,7 +21,7 @@ public class BitBltCapture : CaptureSource
     {
         HWND desktopWindow = PInvoke.GetDesktopWindow().AssertNotNull("Failed to get desktop window handle");
 
-        hdcSrc = InvokeOnUI(() => PInvoke.GetWindowDC(desktopWindow).AssertNotNull("Failed to get desktop window DC"));
+        hdcSrc = InvokeOnUI.RunSync(() => PInvoke.GetWindowDC(desktopWindow).AssertNotNull("Failed to get desktop window DC"));
 
         hdcDest = PInvoke.CreateCompatibleDC(hdcSrc).AssertNotNull("Failed to create compatible DC");
     }
