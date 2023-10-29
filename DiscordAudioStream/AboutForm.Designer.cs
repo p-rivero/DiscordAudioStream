@@ -1,32 +1,32 @@
 ﻿namespace DiscordAudioStream
 {
-	partial class AboutForm
-	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+    partial class AboutForm
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.logoPictureBox = new System.Windows.Forms.PictureBox();
@@ -275,22 +275,22 @@
             this.pagesGroup.PerformLayout();
             this.ResumeLayout(false);
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private System.Windows.Forms.PictureBox logoPictureBox;
-		private System.Windows.Forms.Label productLabel;
-		private System.Windows.Forms.Label versionLabel;
-		private System.Windows.Forms.Label basedOnLabel;
-		private System.Windows.Forms.Label descriptionLabel;
-		private System.Windows.Forms.LinkLabel projectLink;
-		private CustomComponents.DarkThemeGroupBox infoGroup;
-		private System.Windows.Forms.LinkLabel issuesLink;
-		private CustomComponents.DarkThemeGroupBox pagesGroup;
-		private System.Windows.Forms.Label licenseLabel;
-		private System.Windows.Forms.LinkLabel licenseLink;
-		private System.Windows.Forms.ToolTip aboutTooltip;
+        private System.Windows.Forms.PictureBox logoPictureBox;
+        private System.Windows.Forms.Label productLabel;
+        private System.Windows.Forms.Label versionLabel;
+        private System.Windows.Forms.Label basedOnLabel;
+        private System.Windows.Forms.Label descriptionLabel;
+        private System.Windows.Forms.LinkLabel projectLink;
+        private CustomComponents.DarkThemeGroupBox infoGroup;
+        private System.Windows.Forms.LinkLabel issuesLink;
+        private CustomComponents.DarkThemeGroupBox pagesGroup;
+        private System.Windows.Forms.Label licenseLabel;
+        private System.Windows.Forms.LinkLabel licenseLink;
+        private System.Windows.Forms.ToolTip aboutTooltip;
         private System.Windows.Forms.LinkLabel updatesLink;
         private System.Windows.Forms.LinkLabel screenRecorderLink;
         private System.Windows.Forms.LinkLabel moduleArtLabel;

@@ -1,33 +1,33 @@
 ﻿namespace DiscordAudioStream
 {
-	partial class MainForm
-	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+    partial class MainForm
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
@@ -384,36 +384,36 @@
             this.ResumeLayout(false);
             this.PerformLayout();
 
-		}
+        }
 
-		#endregion
-		private System.Windows.Forms.Label areaLabel;
-		private CustomComponents.DarkThemeGroupBox videoGroup;
-		private CustomComponents.DarkThemeCheckBox captureCursorCheckBox;
-		private System.Windows.Forms.Label inputDeviceLabel;
-		private CustomComponents.DarkThemeGroupBox audioGroup;
-		private System.Windows.Forms.Timer updateTimer;
-		private CustomComponents.DarkThemeComboBox areaComboBox;
-		private CustomComponents.DarkThemeComboBox inputDeviceComboBox;
-		private CustomComponents.DarkThemeToolStrip toolStrip;
-		private System.Windows.Forms.ToolStripButton onTopBtn;
-		private System.Windows.Forms.ToolStripButton aboutBtn;
-		private System.Windows.Forms.ToolStripButton settingsBtn;
-		private CustomComponents.DarkThemeCheckBox hideTaskbarCheckBox;
-		private System.Windows.Forms.PictureBox previewBox;
-		private System.Windows.Forms.ToolStripButton previewBtn;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        #endregion
+        private System.Windows.Forms.Label areaLabel;
+        private CustomComponents.DarkThemeGroupBox videoGroup;
+        private CustomComponents.DarkThemeCheckBox captureCursorCheckBox;
+        private System.Windows.Forms.Label inputDeviceLabel;
+        private CustomComponents.DarkThemeGroupBox audioGroup;
+        private System.Windows.Forms.Timer updateTimer;
+        private CustomComponents.DarkThemeComboBox areaComboBox;
+        private CustomComponents.DarkThemeComboBox inputDeviceComboBox;
+        private CustomComponents.DarkThemeToolStrip toolStrip;
+        private System.Windows.Forms.ToolStripButton onTopBtn;
+        private System.Windows.Forms.ToolStripButton aboutBtn;
+        private System.Windows.Forms.ToolStripButton settingsBtn;
+        private CustomComponents.DarkThemeCheckBox hideTaskbarCheckBox;
+        private System.Windows.Forms.PictureBox previewBox;
+        private System.Windows.Forms.ToolStripButton previewBtn;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Label scaleLabel;
         private CustomComponents.DarkThemeComboBox scaleComboBox;
         private System.Windows.Forms.ToolStripButton volumeMixerButton;
         private System.Windows.Forms.ToolStripButton soundDevicesButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-		private System.Windows.Forms.ToolTip toolTip;
-		private System.Windows.Forms.ContextMenuStrip streamContextMenu;
-		private System.Windows.Forms.ToolStripMenuItem showAudioMeterToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem stopStreamToolStripMenuItem;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-	}
+        private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.ContextMenuStrip streamContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem showAudioMeterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stopStreamToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+    }
 }
 
