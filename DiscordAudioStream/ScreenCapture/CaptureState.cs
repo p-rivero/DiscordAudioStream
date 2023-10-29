@@ -22,7 +22,7 @@ public class CaptureState
 
     public enum CaptureTarget
     {
-        Invalid,
+        None,
         Screen,
         Window,
         AllScreens,
@@ -33,7 +33,7 @@ public class CaptureState
 
     private HWND hWnd = HWND.Null;
     private Screen? screen;
-    private CaptureTarget captureTarget = CaptureTarget.Invalid;
+    private CaptureTarget captureTarget = CaptureTarget.None;
     private bool capturingCursor;
     private bool hideTaskbar;
 
@@ -97,7 +97,7 @@ public class CaptureState
         get
         {
             // Default value for captureTarget
-            if (captureTarget == CaptureTarget.Invalid)
+            if (captureTarget == CaptureTarget.None)
             {
                 throw new InvalidOperationException("Must set either Target, WindowHandle or Screen before reading Target");
             }
@@ -109,9 +109,9 @@ public class CaptureState
             {
                 throw new ArgumentException("Don't set the Target to Window or Screen manually. Instead, set the WindowHandle or Screen");
             }
-            if (value == CaptureTarget.Invalid)
+            if (value == CaptureTarget.None)
             {
-                throw new ArgumentException("Don't set the capture target to Invalid");
+                throw new ArgumentException("Don't set the capture target to None");
             }
             if (captureTarget == value)
             {

@@ -7,7 +7,7 @@ namespace DiscordAudioStream.ScreenCapture;
 public class ScreenAndWindowList
 {
     private int numberOfScreens = -1;
-    private ProcessHandleList windowList = ProcessHandleList.Empty();
+    private WindowList windowList = WindowList.Empty();
 
     private static bool MultiMonitor => Screen.AllScreens.Length > 1;
 
@@ -28,7 +28,7 @@ public class ScreenAndWindowList
         }
         numberOfScreens = screens.Count;
 
-        windowList = ProcessHandleList.Refresh();
+        windowList = WindowList.Refresh();
         return screens
             .Select(screenName => (screenName, false))
             .Append(("Custom area", true))

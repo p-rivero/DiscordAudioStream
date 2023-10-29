@@ -6,23 +6,23 @@ using Windows.Win32.Graphics.Dwm;
 
 namespace DiscordAudioStream.ScreenCapture;
 
-public class ProcessHandleList
+public class WindowList
 {
     private record ProcessHandleItem(HWND handle, string name, string fileName);
 
     private readonly List<ProcessHandleItem> processes;
 
-    private ProcessHandleList(List<ProcessHandleItem> processes)
+    private WindowList(List<ProcessHandleItem> processes)
     {
         this.processes = processes;
     }
 
-    public static ProcessHandleList Empty()
+    public static WindowList Empty()
     {
         return new(new());
     }
 
-    public static ProcessHandleList Refresh()
+    public static WindowList Refresh()
     {
         HWND shellWindow = PInvoke.GetShellWindow().AssertNotNull("No shell process found");
         HWND discordAudioStreamWindow = (HWND)Process.GetCurrentProcess().MainWindowHandle;
@@ -75,7 +75,7 @@ public class ProcessHandleList
             IntPtr.Zero
         ).AssertSuccess("EnumWindows failed");
 
-        return new ProcessHandleList(processes);
+        return new WindowList(processes);
     }
 
     public IEnumerable<string> Names => processes.Select(p => p.name);

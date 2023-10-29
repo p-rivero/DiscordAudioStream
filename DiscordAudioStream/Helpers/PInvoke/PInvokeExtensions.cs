@@ -20,6 +20,15 @@ public static partial class PInvoke
     }
 
     [SuppressMessage("SonarQube", "S6640", Justification = "Unsafe method has been reviewed")]
+    public static unsafe uint GetWindowThreadProcessId(HWND hWnd, out uint processId)
+    {
+        fixed (uint* processIdPtr = &processId)
+        {
+            return GetWindowThreadProcessId(hWnd, processIdPtr);
+        }
+    }
+
+    [SuppressMessage("SonarQube", "S6640", Justification = "Unsafe method has been reviewed")]
     public static unsafe HRESULT DwmGetWindowAttribute<T>(HWND hwnd, DWMWINDOWATTRIBUTE dwAttribute, out T attr) where T : unmanaged
     {
         fixed (T* attrPtr = &attr)

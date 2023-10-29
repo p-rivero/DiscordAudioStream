@@ -15,6 +15,7 @@ EnumWindows
 IsWindowVisible
 GetWindowTextLength
 GetWindowText
+GetWindowThreadProcessId
 FillRect
 GetStockObject
 WM_NCLBUTTONDOWN

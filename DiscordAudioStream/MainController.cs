@@ -17,7 +17,7 @@ public class MainController
     private bool forceRefresh;
     private Size lastCapturedFrameSize = Size.Empty;
 
-    private ScreenCaptureManager? screenCapture;
+    private VideoCaptureManager? videoCapture;
     private readonly CaptureState captureState = new();
     private readonly CaptureResizer captureResizer = new();
     private readonly ScreenAndWindowList videoSources = new();
@@ -39,8 +39,8 @@ public class MainController
         captureState.HideTaskbar = Properties.Settings.Default.HideTaskbar;
         captureState.CapturingCursor = Properties.Settings.Default.CaptureCursor;
 
-        screenCapture = new(captureState);
-        screenCapture.CaptureAborted += AbortCapture;
+        videoCapture = new(captureState);
+        videoCapture.CaptureAborted += AbortCapture;
 
         Thread drawThread = CreateDrawThread();
         drawThread.Start();
@@ -59,7 +59,7 @@ public class MainController
         {
             Logger.EmptyLine();
             Logger.Log("Close button pressed, stopping program.");
-            screenCapture?.Stop();
+            videoCapture?.Stop();
         }
         return cancel;
     }
@@ -83,14 +83,14 @@ public class MainController
 
     private void DrawThreadRun(HWND formHandle)
     {
-        if (screenCapture == null)
+        if (videoCapture == null)
         {
             throw new InvalidOperationException("Must call Init() before creating draw thread");
         }
 
         int fps = Properties.Settings.Default.CaptureFramerate;
         Logger.EmptyLine();
-        Logger.Log($"Creating Draw thread. Target framerate: {fps} FPS ({screenCapture.CaptureIntervalMs} ms)");
+        Logger.Log($"Creating Draw thread. Target framerate: {fps} FPS ({videoCapture.CaptureIntervalMs} ms)");
 
         Stopwatch stopwatch = new();
         Size oldSize = Size.Empty;
@@ -100,7 +100,7 @@ public class MainController
             stopwatch.Restart();
             try
             {
-                Bitmap? next = ScreenCaptureManager.GetNextFrame();
+                Bitmap? next = VideoCaptureManager.GetNextFrame();
 
                 // No new data, keep displaying last frame
                 if (next == null)
@@ -126,7 +126,7 @@ public class MainController
             }
             stopwatch.Stop();
 
-            int wait = screenCapture.CaptureIntervalMs - (int)stopwatch.ElapsedMilliseconds;
+            int wait = videoCapture.CaptureIntervalMs - (int)stopwatch.ElapsedMilliseconds;
             if (wait > 0)
             {
                 Thread.Sleep(wait);
@@ -292,7 +292,7 @@ public class MainController
     {
         SettingsForm settingsBox = new(darkMode, captureState) { Owner = form, TopMost = form.TopMost };
         settingsBox.CaptureMethodChanged += () => videoSources.UpdateCaptureState(captureState, form.VideoIndex);
-        settingsBox.FramerateChanged += () => screenCapture?.RefreshFramerate();
+        settingsBox.FramerateChanged += () => videoCapture?.RefreshFramerate();
         settingsBox.ShowAudioInputsChanged += RefreshAudioDevices;
         settingsBox.ShowDialog();
     }

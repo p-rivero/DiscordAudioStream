@@ -7,7 +7,7 @@ using DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 namespace DiscordAudioStream.ScreenCapture;
 
-public class ScreenCaptureManager
+public class VideoCaptureManager
 {
     public event Action? CaptureAborted;
 
@@ -26,7 +26,7 @@ public class ScreenCaptureManager
     private CaptureSource? currentSource;
     private readonly object currentSourceLock = new();
 
-    public ScreenCaptureManager(CaptureState captureState)
+    public VideoCaptureManager(CaptureState captureState)
     {
         this.captureState = captureState;
         // Update the capture state in a separate thread to avoid deadlocks
