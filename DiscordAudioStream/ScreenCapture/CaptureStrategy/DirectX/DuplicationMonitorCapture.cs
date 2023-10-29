@@ -3,15 +3,19 @@ using System.Windows.Forms;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
-public class DuplicationMonitorCapture : CaptureSource
+public class DuplicationMonitorCapture : MonitorCapture
 {
     private readonly CaptureSource source;
-    private readonly Screen monitor;
 
-    public DuplicationMonitorCapture(Screen monitor, bool captureCursor)
+    public DuplicationMonitorCapture(Screen monitor, bool captureCursor, bool hideTaskbar) : base(monitor, hideTaskbar)
     {
-        this.monitor = monitor;
         DuplicationCapture dupCapture = new(IndexOf(monitor));
+
+        if (hideTaskbar)
+        {
+            dupCapture.CustomAreaCrop += GetWorkingAreaCrop;
+        }
+
         if (captureCursor)
         {
             CursorPainter paintCursor = new(dupCapture);
@@ -41,10 +45,5 @@ public class DuplicationMonitorCapture : CaptureSource
             DuplicationCapture.GPU0Adapter.Outputs,
             output => output.Description.DeviceName == screen.DeviceName
         );
-    }
-
-    private Rectangle GetMonitorArea()
-    {
-        return monitor.Bounds;
     }
 }

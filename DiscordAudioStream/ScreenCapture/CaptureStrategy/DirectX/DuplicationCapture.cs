@@ -13,7 +13,7 @@ namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
 // DirectX capture using the Desktop Duplication API
 
-public class DuplicationCapture : CaptureSource
+public class DuplicationCapture : DirectXCapture
 {
     private const int FRAME_TIMEOUT_MS = 100;
 
@@ -95,7 +95,7 @@ public class DuplicationCapture : CaptureSource
 
             // Success: convert captured frame to Bitmap
             using Texture2D texture = screenResource.QueryInterface<Texture2D>();
-            Bitmap bmp = BitmapHelper.CreateFromTexture2D(texture, d3dDevice);
+            Bitmap bmp = TextureToBitmap(texture, d3dDevice);
             screenResource.Dispose();
             Screen.ReleaseFrame();
 

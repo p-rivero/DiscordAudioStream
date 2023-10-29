@@ -78,18 +78,7 @@ public class CaptureState
     }
 
     // True if this method supports hiding the taskbar
-    public bool HideTaskbarSupported
-    {
-        get
-        {
-            // Only BitBlt screen capture supports hiding taskbar
-            if (Target != CaptureTarget.Screen)
-            {
-                return false;
-            }
-            return ScreenMethod == ScreenCaptureMethod.BitBlt;
-        }
-    }
+    public bool HideTaskbarSupported => Target == CaptureTarget.Screen;
 
     // What kind of item are we capturing now?
     public CaptureTarget Target

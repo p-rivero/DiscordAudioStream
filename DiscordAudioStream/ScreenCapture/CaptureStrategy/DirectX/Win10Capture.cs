@@ -13,10 +13,8 @@ using Windows.Graphics.DirectX.Direct3D11;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
-public class Win10Capture : CaptureSource
+public class Win10Capture : DirectXCapture
 {
-    public Func<Rectangle>? CustomAreaCrop { get; set; }
-
     private readonly Direct3D11CaptureFramePool framePool;
     private readonly GraphicsCaptureSession session;
     private SizeInt32 lastSize;
@@ -82,10 +80,6 @@ public class Win10Capture : CaptureSource
         }
 
         using Texture2D texture = Direct3D11Helper.CreateSharpDXTexture2D(frame.Surface);
-        if (CustomAreaCrop != null)
-        {
-            return BitmapHelper.CreateFromTexture2D(texture, d3dDevice, CustomAreaCrop());
-        }
-        return BitmapHelper.CreateFromTexture2D(texture, d3dDevice);
+        return TextureToBitmap(texture, d3dDevice);
     }
 }

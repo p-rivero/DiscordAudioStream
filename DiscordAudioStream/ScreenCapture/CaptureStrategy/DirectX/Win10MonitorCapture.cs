@@ -7,14 +7,18 @@ using Windows.Win32.Graphics.Gdi;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
-public class Win10MonitorCapture : CaptureSource
+public class Win10MonitorCapture : MonitorCapture
 {
     private readonly Win10Capture winCapture;
 
-    public Win10MonitorCapture(Screen monitor, bool captureCursor)
+    public Win10MonitorCapture(Screen monitor, bool captureCursor, bool hideTaskbar) : base(monitor, hideTaskbar)
     {
-        HMONITOR hMon = GetScreenHandle(monitor);
-        winCapture = new(CaptureHelper.CreateItemForMonitor(hMon), captureCursor);
+        winCapture = new(CaptureHelper.CreateItemForMonitor(MonitorHandle), captureCursor);
+
+        if (hideTaskbar)
+        {
+            winCapture.CustomAreaCrop += GetWorkingAreaCrop;
+        }
     }
 
     public override Bitmap? CaptureFrame()
@@ -26,11 +30,5 @@ public class Win10MonitorCapture : CaptureSource
     {
         base.Dispose(disposing);
         winCapture.Dispose();
-    }
-
-    private static HMONITOR GetScreenHandle(Screen screen)
-    {
-        // Screen.GetHashCode() is implemented as "return (int)hmonitor"
-        return (HMONITOR)(nint)screen.GetHashCode();
     }
 }

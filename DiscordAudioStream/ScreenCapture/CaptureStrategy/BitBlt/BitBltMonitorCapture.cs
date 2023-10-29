@@ -3,17 +3,12 @@ using System.Windows.Forms;
 
 namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
-public class BitBltMonitorCapture : CaptureSource
+public class BitBltMonitorCapture : MonitorCapture
 {
     private readonly CaptureSource capture;
-    private readonly Screen monitor;
-    private readonly bool hideTaskbar;
 
-    public BitBltMonitorCapture(Screen monitor, bool captureCursor, bool hideTaskbar)
+    public BitBltMonitorCapture(Screen monitor, bool captureCursor, bool hideTaskbar) : base(monitor, hideTaskbar)
     {
-        this.monitor = monitor;
-        this.hideTaskbar = hideTaskbar;
-
         BitBltCapture bitBlt = new();
         bitBlt.CaptureAreaRect += GetMonitorArea;
 
@@ -38,10 +33,5 @@ public class BitBltMonitorCapture : CaptureSource
     {
         base.Dispose(disposing);
         capture.Dispose();
-    }
-
-    private Rectangle GetMonitorArea()
-    {
-        return hideTaskbar ? monitor.WorkingArea : monitor.Bounds;
     }
 }

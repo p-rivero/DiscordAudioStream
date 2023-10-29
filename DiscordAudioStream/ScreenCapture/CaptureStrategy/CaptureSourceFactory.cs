@@ -43,8 +43,8 @@ public static class CaptureSourceFactory
         // Capturing a screen
         return state.ScreenMethod switch
         {
-            CaptureState.ScreenCaptureMethod.DXGIDuplication => new DuplicationMonitorCapture(state.Screen, state.CapturingCursor),
-            CaptureState.ScreenCaptureMethod.Windows10 => new Win10MonitorCapture(state.Screen, state.CapturingCursor),
+            CaptureState.ScreenCaptureMethod.DXGIDuplication => new DuplicationMonitorCapture(state.Screen, state.CapturingCursor, state.HideTaskbar),
+            CaptureState.ScreenCaptureMethod.Windows10 => new Win10MonitorCapture(state.Screen, state.CapturingCursor, state.HideTaskbar),
             CaptureState.ScreenCaptureMethod.BitBlt => new BitBltMonitorCapture(state.Screen, state.CapturingCursor, state.HideTaskbar),
             _ => throw new ArgumentException("Invalid ScreenCaptureMethod"),
         };

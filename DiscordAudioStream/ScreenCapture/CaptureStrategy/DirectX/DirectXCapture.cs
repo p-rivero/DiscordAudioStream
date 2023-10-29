@@ -4,18 +4,15 @@ using System.Drawing.Imaging;
 using SharpDX;
 using SharpDX.Direct3D11;
 
-namespace DiscordAudioStream.ScreenCapture;
+namespace DiscordAudioStream.ScreenCapture.CaptureStrategy;
 
-public static class BitmapHelper
+public abstract class DirectXCapture : CaptureSource
 {
-    public static Bitmap CreateFromTexture2D(Texture2D texture, Device d3dDevice)
-    {
-        Rectangle copiedArea = new(0, 0, texture.Description.Width, texture.Description.Height);
-        return CreateFromTexture2D(texture, d3dDevice, copiedArea);
-    }
+    public Func<Rectangle>? CustomAreaCrop { get; set; }
 
-    public static Bitmap CreateFromTexture2D(Texture2D texture, Device d3dDevice, Rectangle copiedArea)
+    protected Bitmap TextureToBitmap(Texture2D texture, Device d3dDevice)
     {
+        Rectangle copiedArea = CustomAreaCrop?.Invoke() ?? new(0, 0, texture.Description.Width, texture.Description.Height);
         int width = copiedArea.Width;
         int height = copiedArea.Height;
 

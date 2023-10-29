@@ -28,6 +28,7 @@ public class MainController
     public MainController(MainForm owner)
     {
         form = owner;
+        captureState.StateChanged += () => form.HideTaskbarEnabled = captureState.HideTaskbarSupported;
     }
 
     public bool IsStreaming { get; private set; }

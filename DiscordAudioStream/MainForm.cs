@@ -105,16 +105,7 @@ public partial class MainForm : Form
     internal bool HideTaskbarEnabled
     {
         get => hideTaskbarCheckBox.Enabled;
-
-        set
-        {
-            hideTaskbarCheckBox.Enabled = value;
-            // When disabling the checkbox, also set its state to unchecked
-            if (!value)
-            {
-                hideTaskbarCheckBox.Checked = false;
-            }
-        }
+        set => hideTaskbarCheckBox.Enabled = value;
     }
 
     internal void SetPreviewUISize(Size newSize)
