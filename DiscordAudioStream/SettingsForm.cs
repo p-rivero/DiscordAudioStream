@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 using CustomComponents;
 
-using DiscordAudioStream.ScreenCapture;
+using DiscordAudioStream.VideoCapture;
 
 namespace DiscordAudioStream;
 

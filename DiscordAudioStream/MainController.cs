@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using DiscordAudioStream.AudioCapture;
-using DiscordAudioStream.ScreenCapture;
+using DiscordAudioStream.VideoCapture;
 
 using Windows.Win32.Foundation;
 

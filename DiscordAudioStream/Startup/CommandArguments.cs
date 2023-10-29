@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-using DiscordAudioStream.ScreenCapture.CaptureStrategy;
+using DiscordAudioStream.VideoCapture.CaptureStrategy;
 
 using Mono.Options;
 
