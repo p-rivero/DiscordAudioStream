@@ -8,8 +8,9 @@ namespace DiscordAudioStream.ScreenCapture;
 
 public class WindowList
 {
-    private record ProcessHandleItem(HWND handle, string name, string fileName);
+    private const char HASH_SEPARATOR = '|';
 
+    private record ProcessHandleItem(HWND handle, string title, string filename);
     private readonly List<ProcessHandleItem> processes;
 
     private WindowList(List<ProcessHandleItem> processes)
@@ -67,9 +68,9 @@ public class WindowList
                 }
 
                 PInvoke.GetWindowThreadProcessId(hWnd, out uint processId).AssertNotZero("GetWindowThreadProcessId failed");
-                string fileName = Process.GetProcessById((int)processId).MainModule.FileName;
+                string filename = Process.GetProcessById((int)processId).MainModule.FileName;
 
-                processes.Add(new(hWnd, name, fileName));
+                processes.Add(new(hWnd, name, filename));
                 return true;
             },
             IntPtr.Zero
@@ -78,23 +79,51 @@ public class WindowList
         return new WindowList(processes);
     }
 
-    public IEnumerable<string> Names => processes.Select(p => p.name);
+    public IEnumerable<string> Names => processes.Select(p => p.title);
 
     public HWND getHandle(int index)
     {
-        if (processes == null)
-        {
-            throw new InvalidOperationException("Call RefreshHandles() before attempting to get a handle");
-        }
-        if (index < 0 || index >= processes.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index));
-        }
         return processes[index].handle;
     }
 
-    public int IndexOf(HWND handle)
+    public string getWindowHash(int index)
+    {
+        return processes[index].filename + HASH_SEPARATOR + processes[index].title;
+    }
+
+    public int IndexOfHandle(HWND handle)
     {
         return processes.FindIndex(p => p.handle == handle);
+    }
+
+    public int IndexOfWindowHash(string hash)
+    {
+        string[] hashParts = hash.Split(HASH_SEPARATOR);
+        if (hashParts.Length != 2)
+        {
+            throw new ArgumentException("Invalid hash");
+        }
+        string filename = hashParts[0];
+        string title = hashParts[1];
+
+        int exactMatch = processes.FindIndex(p => p.filename == filename && p.title == title);
+        if (exactMatch != -1)
+        {
+            return exactMatch;
+        }
+
+        int filenameMatch = processes.FindIndex(p => p.filename == filename);
+        if (filenameMatch != -1)
+        {
+            return filenameMatch;
+        }
+
+        int titleMatch = processes.FindIndex(p => p.title == title);
+        if (titleMatch != -1)
+        {
+            return titleMatch;
+        }
+
+        throw new InvalidOperationException("No window matches hash");
     }
 }

@@ -1,15 +1,18 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
+using DiscordAudioStream.Properties;
+
 using Windows.Win32.Foundation;
 
 namespace DiscordAudioStream.ScreenCapture;
 public class ScreenAndWindowList
 {
-    private int numberOfScreens = -1;
     private WindowList windowList = WindowList.Empty();
 
+    private int CustomAreaIndex { get; set; } = -1;
     private static bool MultiMonitor => Screen.AllScreens.Length > 1;
+    private int AllScreensIndex => MultiMonitor ? CustomAreaIndex - 1 : throw new InvalidOperationException("AllScreens not available");
 
     public IEnumerable<(string, bool)> Refresh()
     {
@@ -26,7 +29,8 @@ public class ScreenAndWindowList
         {
             screens.Add("Everything");
         }
-        numberOfScreens = screens.Count;
+
+        CustomAreaIndex = screens.Count;
 
         windowList = WindowList.Refresh();
         return screens
@@ -44,7 +48,7 @@ public class ScreenAndWindowList
 
     public int GetIndexOfWindow(HWND hWnd)
     {
-        int windowIndex = windowList.IndexOf(hWnd);
+        int windowIndex = windowList.IndexOfHandle(hWnd);
         if (windowIndex == -1)
         {
             // Window no longer exists, return to first screen
@@ -55,15 +59,13 @@ public class ScreenAndWindowList
 
     public void UpdateCaptureState(CaptureState captureState, int selectedGlobalIndex)
     {
-        int customAreaIndex = numberOfScreens;
-        int allScreensIndex = customAreaIndex - 1;
-        int firstWindowIndex = customAreaIndex + 1;
+        int firstWindowIndex = CustomAreaIndex + 1;
 
-        if (selectedGlobalIndex == customAreaIndex)
+        if (selectedGlobalIndex == CustomAreaIndex)
         {
             captureState.Target = CaptureState.CaptureTarget.CustomArea;
         }
-        else if (MultiMonitor && selectedGlobalIndex == allScreensIndex)
+        else if (MultiMonitor && selectedGlobalIndex == AllScreensIndex)
         {
             captureState.Target = CaptureState.CaptureTarget.AllScreens;
         }
@@ -71,30 +73,48 @@ public class ScreenAndWindowList
         {
             int windowIndex = ToWindowIndex(selectedGlobalIndex);
             captureState.WindowHandle = windowList.getHandle(windowIndex);
+            Settings.Default.LastVideoCaptureValue = windowList.getWindowHash(windowIndex);
         }
         else
         {
             int screenIndex = selectedGlobalIndex;
             captureState.Screen = Screen.AllScreens[screenIndex];
+            Settings.Default.LastVideoCaptureValue = screenIndex.ToString();
         }
 
-        // TODO: Store always
-        if (selectedGlobalIndex <= numberOfScreens)
+        Settings.Default.LastVideoCaptureType = captureState.Target.ToString();
+        Settings.Default.Save();
+    }
+
+    public int GetLastStoredItemIndex()
+    {
+        string value = Settings.Default.LastVideoCaptureValue;
+        try
         {
-            Properties.Settings.Default.AreaIndex = selectedGlobalIndex;
-            Properties.Settings.Default.Save();
+            return Settings.Default.LastVideoCaptureType switch
+            {
+                "Screen" => int.Parse(value),
+                "Window" => ToGlobalIndex(windowList.IndexOfWindowHash(value)),
+                "AllScreens" => MultiMonitor ? AllScreensIndex : throw new InvalidOperationException(),
+                "CustomArea" => CustomAreaIndex,
+                _ => throw new InvalidOperationException()
+            };
+        }
+        catch
+        {
+            return 0;
         }
     }
 
     private int ToWindowIndex(int videoIndex)
     {
-        int firstWindowIndex = numberOfScreens + 1;
+        int firstWindowIndex = CustomAreaIndex + 1;
         return videoIndex - firstWindowIndex;
     }
 
     private int ToGlobalIndex(int windowIndex)
     {
-        int firstWindowIndex = numberOfScreens + 1;
+        int firstWindowIndex = CustomAreaIndex + 1;
         return windowIndex + firstWindowIndex;
     }
 }

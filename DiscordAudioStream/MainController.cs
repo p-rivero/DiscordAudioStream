@@ -142,7 +142,7 @@ public class MainController
         form.SetVideoItems(videoSources.Refresh());
         if (restoreSavedItem)
         {
-            form.VideoIndex = Properties.Settings.Default.AreaIndex;
+            form.VideoIndex = videoSources.GetLastStoredItemIndex();
         }
     }
 
