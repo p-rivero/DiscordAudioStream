@@ -8,14 +8,13 @@ namespace DiscordAudioStream.ScreenCapture;
 
 public class ProcessHandleList
 {
-    private readonly List<HWND> handles;
-    private readonly List<string> processNames;
+    private record ProcessHandleItem(HWND handle, string name, string fileName);
 
-    // Cannot instantiate directly, must call ProcessHandleList.Refresh()
-    private ProcessHandleList(Dictionary<HWND, string> processes)
+    private readonly List<ProcessHandleItem> processes;
+
+    private ProcessHandleList(List<ProcessHandleItem> processes)
     {
-        handles = processes.Keys.ToList();
-        processNames = processes.Values.ToList();
+        this.processes = processes;
     }
 
     public static ProcessHandleList Empty()
@@ -27,7 +26,7 @@ public class ProcessHandleList
     {
         HWND shellWindow = PInvoke.GetShellWindow().AssertNotNull("No shell process found");
         HWND discordAudioStreamWindow = (HWND)Process.GetCurrentProcess().MainWindowHandle;
-        Dictionary<HWND, string> windows = new();
+        List<ProcessHandleItem> processes = new();
 
         PInvoke.EnumWindows(
             // Called for each top-level window
@@ -67,35 +66,35 @@ public class ProcessHandleList
                     return true;
                 }
 
-                windows[hWnd] = name;
+                PInvoke.GetWindowThreadProcessId(hWnd, out uint processId).AssertNotZero("GetWindowThreadProcessId failed");
+                string fileName = Process.GetProcessById((int)processId).MainModule.FileName;
+
+                processes.Add(new(hWnd, name, fileName));
                 return true;
             },
             IntPtr.Zero
         ).AssertSuccess("EnumWindows failed");
 
-        return new ProcessHandleList(windows);
+        return new ProcessHandleList(processes);
     }
 
-    public ICollection<string> Names => processNames;
+    public IEnumerable<string> Names => processes.Select(p => p.name);
 
-    public HWND this[int index]
+    public HWND getHandle(int index)
     {
-        get
+        if (processes == null)
         {
-            if (handles == null)
-            {
-                throw new InvalidOperationException("Call RefreshHandles() before attempting to get a handle");
-            }
-            if (index < 0 || index >= handles.Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
-            return handles[index];
+            throw new InvalidOperationException("Call RefreshHandles() before attempting to get a handle");
         }
+        if (index < 0 || index >= processes.Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(index));
+        }
+        return processes[index].handle;
     }
 
     public int IndexOf(HWND handle)
     {
-        return handles.IndexOf(handle);
+        return processes.FindIndex(p => p.handle == handle);
     }
 }

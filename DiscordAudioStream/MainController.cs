@@ -15,13 +15,12 @@ public class MainController
 
     private readonly MainForm form;
     private bool forceRefresh;
-    private int numberOfScreens = -1;
     private Size lastCapturedFrameSize = Size.Empty;
 
     private ScreenCaptureManager? screenCapture;
-    private ProcessHandleList processHandleList;
     private readonly CaptureState captureState = new();
     private readonly CaptureResizer captureResizer = new();
+    private readonly ScreenAndWindowList videoSources = new();
 
     private AudioPlayback? audioPlayback;
     private AudioMeterForm? currentMeterForm;
@@ -29,16 +28,13 @@ public class MainController
     public MainController(MainForm owner)
     {
         form = owner;
-        processHandleList = ProcessHandleList.Empty();
     }
 
     public bool IsStreaming { get; private set; }
 
-    private static bool MultiMonitor => Screen.AllScreens.Length > 1;
-
     internal void Init()
     {
-        RefreshAreaInfo();
+        videoSources.UpdateCaptureState(captureState, form.VideoIndex);
 
         captureState.HideTaskbar = Properties.Settings.Default.HideTaskbar;
         captureState.CapturingCursor = Properties.Settings.Default.CaptureCursor;
@@ -68,8 +64,6 @@ public class MainController
         return cancel;
     }
 
-    // PRIVATE METHODS
-
     private void SetPreviewSize(Size size)
     {
         lastCapturedFrameSize = size;
@@ -77,42 +71,6 @@ public class MainController
         {
             size = captureResizer.GetScaledSize(size);
             form.SetPreviewUISize(size);
-        }
-    }
-
-    private void RefreshAreaInfo()
-    {
-        if (!form.Created)
-        {
-            return;
-        }
-        int customAreaIndex = numberOfScreens;
-        int allScreensIndex = customAreaIndex - 1;
-        int firstWindowIndex = customAreaIndex + 1;
-
-        if (form.VideoIndex == customAreaIndex)
-        {
-            captureState.Target = CaptureState.CaptureTarget.CustomArea;
-        }
-        else if (MultiMonitor && form.VideoIndex == allScreensIndex)
-        {
-            captureState.Target = CaptureState.CaptureTarget.AllScreens;
-        }
-        else if (form.VideoIndex >= firstWindowIndex)
-        {
-            int windowIndex = form.VideoIndex - firstWindowIndex;
-            captureState.WindowHandle = processHandleList[windowIndex];
-        }
-        else
-        {
-            int screenIndex = form.VideoIndex;
-            captureState.Screen = Screen.AllScreens[screenIndex];
-        }
-
-        form.HideTaskbarEnabled = captureState.HideTaskbarSupported;
-        if (captureState.HideTaskbarSupported)
-        {
-            captureState.HideTaskbar = form.HideTaskbar;
         }
     }
 
@@ -178,65 +136,20 @@ public class MainController
 
     // INTERNAL METHODS (called from MainForm)
 
-    internal void UpdateAreaComboBox(int oldIndex)
+    internal void RefreshScreens(bool restoreSavedItem = true)
     {
-        HWND oldHandle = HWND.Null;
-        if (oldIndex > numberOfScreens)
+        form.SetVideoItems(videoSources.Refresh());
+        if (restoreSavedItem)
         {
-            // We were capturing a window, store its handle
-            int windowIndex = oldIndex - numberOfScreens - 1;
-            oldHandle = processHandleList[windowIndex];
-        }
-
-        // Refresh list of windows
-        RefreshScreens();
-
-        if (oldIndex > numberOfScreens)
-        {
-            // We were capturing a window, see if it still exists
-            int windowIndex = processHandleList.IndexOf(oldHandle);
-            if (windowIndex == -1)
-            {
-                // Window has been closed, return to last saved screen
-                form.VideoIndex = Properties.Settings.Default.AreaIndex;
-            }
-            else
-            {
-                // Window still exists
-                form.VideoIndex = windowIndex + numberOfScreens + 1;
-            }
-        }
-        else
-        {
-            // We were capturing a screen
-            form.VideoIndex = oldIndex;
+            form.VideoIndex = Properties.Settings.Default.AreaIndex;
         }
     }
 
-    internal void RefreshScreens()
+    internal void UpdateAreaComboBox(int oldIndex)
     {
-        List<string> screens = Screen.AllScreens
-            .Select((screen, i) =>
-            {
-                Rectangle bounds = screen.Bounds;
-                string screenName = screen.Primary ? "Primary screen" : $"Screen {i + 1}";
-                return $"{screenName} ({bounds.Width} x {bounds.Height})";
-            })
-            .ToList();
-
-        if (MultiMonitor)
-        {
-            screens.Add("Everything");
-        }
-        numberOfScreens = screens.Count;
-
-        processHandleList = ProcessHandleList.Refresh();
-        IEnumerable<(string, bool)> elements = screens
-            .Select(screenName => (screenName, false))
-            .Append(("Custom area", true))
-            .Concat(processHandleList.Names.Select(windowName => (windowName, false)));
-
-        form.SetVideoItems(elements);
+        HWND capturedWindow = videoSources.GetWindowAtIndex(oldIndex);
+        RefreshScreens(false);
+        form.VideoIndex = capturedWindow.IsNull ? oldIndex : videoSources.GetIndexOfWindow(capturedWindow);
     }
 
     internal void RefreshAudioDevices()
@@ -361,7 +274,6 @@ public class MainController
     private void AbortCapture()
     {
         RefreshScreens();
-        form.VideoIndex = Properties.Settings.Default.AreaIndex;
         if (!IsStreaming)
         {
             return;
@@ -379,7 +291,7 @@ public class MainController
     internal void ShowSettingsForm(bool darkMode)
     {
         SettingsForm settingsBox = new(darkMode, captureState) { Owner = form, TopMost = form.TopMost };
-        settingsBox.CaptureMethodChanged += RefreshAreaInfo;
+        settingsBox.CaptureMethodChanged += () => videoSources.UpdateCaptureState(captureState, form.VideoIndex);
         settingsBox.FramerateChanged += () => screenCapture?.RefreshFramerate();
         settingsBox.ShowAudioInputsChanged += RefreshAudioDevices;
         settingsBox.ShowDialog();
@@ -425,19 +337,7 @@ public class MainController
 
     internal void SetVideoIndex(int index)
     {
-        if (numberOfScreens == -1)
-        {
-            return;
-        }
-
-        RefreshAreaInfo();
-
-        // Do not save settings for Windows (only screen or Custom area)
-        if (index <= numberOfScreens)
-        {
-            Properties.Settings.Default.AreaIndex = index;
-            Properties.Settings.Default.Save();
-        }
+        videoSources.UpdateCaptureState(captureState, index);
     }
 
     internal void SetScaleIndex(int index)
