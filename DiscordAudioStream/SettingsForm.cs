@@ -136,13 +136,13 @@ internal partial class SettingsForm : Form
 
     private void classicVolumeMixerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-        string cplPath = System.IO.Path.Combine(Environment.SystemDirectory, "sndvol.exe");
+        string cplPath = Path.Combine(Environment.SystemDirectory, "sndvol.exe");
         System.Diagnostics.Process.Start(cplPath);
     }
 
     private void audioDevicesLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-        string cplPath = System.IO.Path.Combine(Environment.SystemDirectory, "control.exe");
+        string cplPath = Path.Combine(Environment.SystemDirectory, "control.exe");
         System.Diagnostics.Process.Start(cplPath, "/name Microsoft.Sound");
     }
 
