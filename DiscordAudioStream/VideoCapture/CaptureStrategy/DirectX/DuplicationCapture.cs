@@ -50,7 +50,14 @@ public class DuplicationCapture : DirectXCapture
         _ = Screen.Description;
     }
 
-    internal static Adapter GPU0Adapter => new Factory1().GetAdapter(0);
+    internal static Adapter GPU0Adapter
+    {
+        get
+        {
+            using Factory1 factory = new();
+            return factory.GetAdapter(0);
+        }
+    }
 
     private static OutputDuplication[] InitScreens()
     {
@@ -138,43 +145,10 @@ public class DuplicationCapture : DirectXCapture
     {
         if (CachedThumbnail == null)
         {
-            // AcquireNextFrame failed on the very first frame and we don't have a cache yet.
             Logger.EmptyLine();
-            Logger.Log("AcquireNextFrame: Failed to get the first frame!");
+            Logger.Log("AcquireNextFrame: Failed to get the first frame, no cached thumbnail exists!");
             return null;
         }
-
-        try
-        {
-            return (Bitmap)CachedThumbnail.Clone();
-        }
-        catch (ArgumentException)
-        {
-            Logger.EmptyLine();
-            Logger.Log("Argument exception while cloning cached thumbnail! The thumbnail has probably been disposed.");
-            LogBitmapParams();
-        }
-        catch (Exception e)
-        {
-            Logger.EmptyLine();
-            Logger.Log($"{e.GetType().Name} while cloning cached thumbnail.");
-            LogBitmapParams();
-        }
-        return null;
-    }
-
-    private void LogBitmapParams()
-    {
-        Logger.Log("Attempting to log bitmap params...");
-        try
-        {
-            Logger.Log("Format: " + CachedThumbnail?.PixelFormat);
-            Logger.Log("Size: " + CachedThumbnail?.Size);
-            Logger.Log("Flags: " + CachedThumbnail?.Flags);
-        }
-        catch (Exception e)
-        {
-            Logger.Log($"Could not read bitmap ({e.GetType().Name})");
-        }
+        return (Bitmap)CachedThumbnail.Clone();
     }
 }

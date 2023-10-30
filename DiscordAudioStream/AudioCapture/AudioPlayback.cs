@@ -7,7 +7,7 @@ using Windows.Win32.Foundation;
 
 namespace DiscordAudioStream.AudioCapture;
 
-internal class AudioPlayback
+internal class AudioPlayback : IDisposable
 {
     public event Action<float, float>? AudioLevelChanged;
 
@@ -66,9 +66,25 @@ internal class AudioPlayback
         _ = UpdateAudioMeter(device, audioMeterCancel.Token);
     }
 
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            audioSource.Dispose();
+            output.Dispose();
+            audioMeterCancel.Dispose();
+        }
+    }
+
     public static string[] RefreshDevices()
     {
-        MMDeviceEnumerator enumerator = new();
+        using MMDeviceEnumerator enumerator = new();
         DataFlow flow = Properties.Settings.Default.ShowAudioInputs ? DataFlow.All : DataFlow.Render;
         audioDevices = enumerator.EnumerateAudioEndPoints(flow, DeviceState.Active).ToList();
 
@@ -83,7 +99,7 @@ internal class AudioPlayback
         {
             throw new InvalidOperationException("RefreshDevices() must be called before calling GetDefaultDeviceIndex");
         }
-        MMDeviceEnumerator enumerator = new();
+        using MMDeviceEnumerator enumerator = new();
         if (!enumerator.HasDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia))
         {
             return -1;
@@ -166,7 +182,7 @@ internal class AudioPlayback
                 ? device.AudioMeterInformation.PeakValues[1]
                 : device.AudioMeterInformation.MasterPeakValue;
             AudioLevelChanged?.Invoke(left, right);
-            await Task.Delay(updatePeriod, token);
+            await Task.Delay(updatePeriod, token).ConfigureAwait(true);
         }
     }
 }

@@ -4,6 +4,21 @@ using System.Windows.Forms;
 
 namespace CustomComponents;
 
+public class ComboBoxItemWithSeparator
+{
+    private readonly string text;
+
+    public ComboBoxItemWithSeparator(string text)
+    {
+        this.text = text;
+    }
+
+    public override string ToString()
+    {
+        return text;
+    }
+}
+
 public class DarkThemeComboBox : ComboBox
 {
     private bool darkMode;
@@ -11,21 +26,6 @@ public class DarkThemeComboBox : ComboBox
 
     private int numSeparators;
     private readonly object separatorSentinel = new();
-
-    public class ItemWithSeparator
-    {
-        private readonly string text;
-
-        public ItemWithSeparator(string text)
-        {
-            this.text = text;
-        }
-
-        public override string ToString()
-        {
-            return text;
-        }
-    }
 
     public DarkThemeComboBox()
     {
@@ -118,7 +118,7 @@ public class DarkThemeComboBox : ComboBox
         }
         object item = Items[e.Index];
 
-        if (item is ItemWithSeparator && e.Bounds.Height > ItemHeight)
+        if (item is ComboBoxItemWithSeparator && e.Bounds.Height > ItemHeight)
         {
             Rectangle bounds = e.Bounds;
             bounds.Height -= ItemHeight;
@@ -145,7 +145,7 @@ public class DarkThemeComboBox : ComboBox
 
     protected override void OnMeasureItem(MeasureItemEventArgs e)
     {
-        if (Items[e.Index] is ItemWithSeparator)
+        if (Items[e.Index] is ComboBoxItemWithSeparator)
         {
             e.ItemHeight += ItemHeight;
         }
@@ -177,6 +177,6 @@ public class DarkThemeComboBox : ComboBox
 
     private int CountItemsWithSeparators()
     {
-        return Items.Cast<object>().Count(item => item is ItemWithSeparator);
+        return Items.Cast<object>().Count(item => item is ComboBoxItemWithSeparator);
     }
 }

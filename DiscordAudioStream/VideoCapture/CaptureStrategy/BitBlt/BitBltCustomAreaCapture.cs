@@ -31,6 +31,9 @@ public class BitBltCustomAreaCapture : CustomAreaCapture
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        capture.Dispose();
+        if (disposing)
+        {
+            capture.Dispose();
+        }
     }
 }

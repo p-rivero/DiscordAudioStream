@@ -39,9 +39,11 @@ public class BitBltWindowCapture : WindowCapture
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        capture.Dispose();
-
-        SetWindowTopmost(windowHandle, false);
+        if (disposing)
+        {
+            capture.Dispose();
+            SetWindowTopmost(windowHandle, false);
+        }
     }
 
     private static void SetWindowTopmost(HWND hWnd, bool bringToFront)

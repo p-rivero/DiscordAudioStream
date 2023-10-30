@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 using DiscordAudioStream.Properties;
@@ -79,7 +80,7 @@ public class ScreenAndWindowList
         {
             int screenIndex = selectedGlobalIndex;
             captureState.Screen = Screen.AllScreens[screenIndex];
-            Settings.Default.LastVideoCaptureValue = screenIndex.ToString();
+            Settings.Default.LastVideoCaptureValue = screenIndex.ToString(CultureInfo.InvariantCulture);
         }
 
         Settings.Default.LastVideoCaptureType = captureState.Target.ToString();
@@ -93,7 +94,7 @@ public class ScreenAndWindowList
         {
             return Settings.Default.LastVideoCaptureType switch
             {
-                "Screen" => int.Parse(value),
+                "Screen" => int.Parse(value, CultureInfo.InvariantCulture),
                 "Window" => ToGlobalIndex(windowList.IndexOfWindowHash(value)),
                 "AllScreens" => MultiMonitor ? AllScreensIndex : throw new InvalidOperationException(),
                 "CustomArea" => CustomAreaIndex,

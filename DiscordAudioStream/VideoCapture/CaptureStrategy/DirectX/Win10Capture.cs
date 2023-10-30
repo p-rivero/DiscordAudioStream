@@ -27,7 +27,7 @@ public class Win10Capture : DirectXCapture
         framePool = Direct3D11CaptureFramePool.Create(device, DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, item.Size);
         session = framePool.CreateCaptureSession(item);
 
-        // Attempt to disable yellow capture border. This method is only avaiable from Windows 11
+        // Attempt to disable yellow capture border. This method is only available from Windows 11
         if (ApiInformation.IsPropertyPresent("Windows.Graphics.Capture.GraphicsCaptureSession", "IsBorderRequired"))
         {
             Logger.Log("Attempting to disable yellow border...");
@@ -49,16 +49,19 @@ public class Win10Capture : DirectXCapture
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        try
+        if (disposing)
         {
-            session?.Dispose();
+            try
+            {
+                session?.Dispose();
+            }
+            catch (Exception e)
+            {
+                Logger.Log("Failed to dispose capture session due to exception:");
+                Logger.Log(e);
+            }
+            framePool?.Dispose();
         }
-        catch (Exception e)
-        {
-            Logger.Log("Failed to dispose capture session due to exception:");
-            Logger.Log(e);
-        }
-        framePool?.Dispose();
     }
 
     public override Bitmap? CaptureFrame()

@@ -41,8 +41,11 @@ public class CursorPainter : CaptureSource
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        source.Dispose();
-        cursorBitmap?.Dispose();
+        if (disposing)
+        {
+            source.Dispose();
+            cursorBitmap?.Dispose();
+        }
     }
 
     private Bitmap PaintCursor(Bitmap src, Point originPos)
@@ -110,7 +113,7 @@ public class CursorPainter : CaptureSource
             ImageLockMode.ReadOnly,
             bmp.PixelFormat
         );
-        Bitmap dstBitmap = new(
+        using Bitmap dstBitmap = new(
             bmData.Width,
             bmData.Height,
             bmData.Stride,

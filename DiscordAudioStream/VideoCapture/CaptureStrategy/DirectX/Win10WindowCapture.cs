@@ -35,6 +35,9 @@ public class Win10WindowCapture : WindowCapture
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        winCapture.Dispose();
+        if (disposing)
+        {
+            winCapture.Dispose();
+        }
     }
 }

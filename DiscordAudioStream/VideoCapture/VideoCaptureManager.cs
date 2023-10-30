@@ -7,7 +7,7 @@ using DiscordAudioStream.VideoCapture.CaptureStrategy;
 
 namespace DiscordAudioStream.VideoCapture;
 
-public class VideoCaptureManager
+public class VideoCaptureManager : IDisposable
 {
     public event Action? CaptureAborted;
 
@@ -39,6 +39,19 @@ public class VideoCaptureManager
         captureThread.Start();
     }
 
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        captureThreadToken.Cancel();
+        captureThread.Join();
+        currentSource?.Dispose();
+    }
+
     // Return the next frame, if it exists (null otherwise)
     public static Bitmap? GetNextFrame()
     {
@@ -52,13 +65,6 @@ public class VideoCaptureManager
     public void RefreshFramerate()
     {
         CaptureIntervalMs = 1000 / Properties.Settings.Default.CaptureFramerate;
-    }
-
-    public void Stop()
-    {
-        captureThreadToken.Cancel();
-        captureThread.Join();
-        currentSource?.Dispose();
     }
 
     private Thread CreateCaptureThread()

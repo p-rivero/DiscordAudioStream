@@ -1,4 +1,5 @@
 ﻿
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 using Microsoft.Win32;
@@ -25,7 +26,7 @@ public static class FrameworkInfo
         {
             return -1;
         }
-        return int.Parse(release.ToString());
+        return int.Parse(release.ToString(), CultureInfo.InvariantCulture);
     }
 
     // Encapsulate on separate property to avoid TypeLoadException

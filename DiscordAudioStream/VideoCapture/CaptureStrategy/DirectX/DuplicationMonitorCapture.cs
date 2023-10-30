@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace DiscordAudioStream.VideoCapture.CaptureStrategy;
@@ -36,7 +37,10 @@ public class DuplicationMonitorCapture : MonitorCapture
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        source.Dispose();
+        if (disposing)
+        {
+            source.Dispose();
+        }
     }
 
     private static int IndexOf(Screen screen)

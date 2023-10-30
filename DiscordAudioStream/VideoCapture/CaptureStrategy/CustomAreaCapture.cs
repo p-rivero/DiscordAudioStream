@@ -19,7 +19,10 @@ public abstract class CustomAreaCapture : CaptureSource
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        HideAreaForm();
+        if (disposing)
+        {
+            HideAreaForm();
+        }
     }
 
     private static void ShowAreaForm()

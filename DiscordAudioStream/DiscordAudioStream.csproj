@@ -21,6 +21,7 @@
     <PackageProjectUrl>https://github.com/p-rivero/DiscordAudioStream</PackageProjectUrl>
     <PackageIcon>logo-128.png</PackageIcon>
     <RepositoryUrl>https://github.com/p-rivero/DiscordAudioStream</RepositoryUrl>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

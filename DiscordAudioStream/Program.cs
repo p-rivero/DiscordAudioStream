@@ -32,7 +32,7 @@ internal static class Program
         EnableNativeStyles();
 
         consoleArgs.ProcessArgsBeforeMainForm();
-        MainForm mainForm = new(IsDarkTheme);
+        using MainForm mainForm = new(IsDarkTheme);
         mainForm.Load += (sender, e) => consoleArgs.ProcessArgsAfterMainForm(mainForm.Controller);
         mainForm.Shown += (sender, e) => ExceptionHandler.StartupDone();
         Application.Run(mainForm);

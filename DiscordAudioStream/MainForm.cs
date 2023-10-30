@@ -79,7 +79,7 @@ public partial class MainForm : Form
         {
             if (hasSeparator)
             {
-                areaComboBox.Items.Add(new DarkThemeComboBox.ItemWithSeparator(item));
+                areaComboBox.Items.Add(new ComboBoxItemWithSeparator(item));
             }
             else
             {
@@ -151,7 +151,7 @@ public partial class MainForm : Form
     internal void UpdatePreview(Bitmap newImage, bool forceRefresh, HWND handle)
     {
         // This method is called in a worker thread, redraw the previewBox in the UI thread.
-        // If needed, triger a full redraw of the form, but do it in the worker thread to reduce
+        // If needed, trigger a full redraw of the form, but do it in the worker thread to reduce
         // the load on the UI thread.
         Invoke(new Action(() =>
         {

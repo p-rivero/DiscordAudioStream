@@ -9,7 +9,7 @@ using Windows.Win32.Foundation;
 
 namespace DiscordAudioStream;
 
-public class MainController
+public class MainController : IDisposable
 {
     internal Action? OnAudioMeterClosed { get; set; }
 
@@ -29,6 +29,22 @@ public class MainController
     {
         form = owner;
         captureState.StateChanged += () => form.HideTaskbarEnabled = captureState.HideTaskbarSupported;
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            videoCapture?.Dispose();
+            audioPlayback?.Dispose();
+            currentMeterForm?.Dispose();
+        }
     }
 
     public bool IsStreaming { get; private set; }
@@ -60,7 +76,7 @@ public class MainController
         {
             Logger.EmptyLine();
             Logger.Log("Close button pressed, stopping program.");
-            videoCapture?.Stop();
+            videoCapture?.Dispose();
         }
         return cancel;
     }
@@ -82,6 +98,8 @@ public class MainController
         return new Thread(() => DrawThreadRun(formHandle)) { IsBackground = true, Name = "Draw Thread" };
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope",
+        Justification = "The result of GetNextFrame should not be disposed until the next frame arrives")]
     private void DrawThreadRun(HWND formHandle)
     {
         if (videoCapture == null)
@@ -291,7 +309,7 @@ public class MainController
 
     internal void ShowSettingsForm(bool darkMode)
     {
-        SettingsForm settingsBox = new(darkMode, captureState) { Owner = form, TopMost = form.TopMost };
+        using SettingsForm settingsBox = new(darkMode, captureState) { Owner = form, TopMost = form.TopMost };
         settingsBox.CaptureMethodChanged += () => videoSources.UpdateCaptureState(captureState, form.VideoIndex);
         settingsBox.FramerateChanged += () => videoCapture?.RefreshFramerate();
         settingsBox.ShowAudioInputsChanged += RefreshAudioDevices;
@@ -300,7 +318,7 @@ public class MainController
 
     internal void ShowAboutForm(bool darkMode)
     {
-        AboutForm aboutBox = new(darkMode) { Owner = form, TopMost = form.TopMost };
+        using AboutForm aboutBox = new(darkMode) { Owner = form, TopMost = form.TopMost };
         aboutBox.ShowDialog();
     }
 

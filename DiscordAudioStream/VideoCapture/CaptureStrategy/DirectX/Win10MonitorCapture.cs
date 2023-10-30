@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 using Composition.WindowsRuntimeHelpers;
@@ -29,6 +30,9 @@ public class Win10MonitorCapture : MonitorCapture
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        winCapture.Dispose();
+        if (disposing)
+        {
+            winCapture.Dispose();
+        }
     }
 }

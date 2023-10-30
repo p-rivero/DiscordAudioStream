@@ -20,9 +20,6 @@
     <Compile Update="CustomComponents\DarkThemeCheckBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="CustomComponents\DarkThemeComboBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Update="CustomComponents\DarkThemeGroupBox.cs">
       <SubType>Component</SubType>
     </Compile>

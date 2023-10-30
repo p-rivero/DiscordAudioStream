@@ -22,6 +22,9 @@ public class Win10CustomAreaCapture : CustomAreaCapture
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        capture.Dispose();
+        if (disposing)
+        {
+            capture.Dispose();
+        }
     }
 }
