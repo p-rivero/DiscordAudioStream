@@ -11,8 +11,6 @@ internal class AudioPlayback : IDisposable
 {
     public event Action<float, float>? AudioLevelChanged;
 
-    private const int DESIRED_LATENCY_MS = 50;
-
     private readonly IWaveIn audioSource;
     private readonly DirectSoundOut output;
     private readonly BufferedWaveProvider outputProvider;
@@ -22,17 +20,7 @@ internal class AudioPlayback : IDisposable
 
     public AudioPlayback(int deviceIndex)
     {
-        if (audioDevices == null)
-        {
-            throw new InvalidOperationException("RefreshDevices() must be called before constructor");
-        }
-
-        if (deviceIndex < 0 || deviceIndex > audioDevices.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(deviceIndex));
-        }
-
-        MMDevice device = audioDevices[deviceIndex];
+        MMDevice device = GetDeviceByIndex(deviceIndex);
         if (device.DataFlow == DataFlow.Render)
         {
             // Input from programs outputting to selected device
@@ -46,19 +34,15 @@ internal class AudioPlayback : IDisposable
         audioSource.DataAvailable += AudioSource_DataAvailable;
 
         Logger.Log("Started audio device: " + device);
-
-        Logger.Log("Saving audio device ID: " + device.ID);
-        Properties.Settings.Default.AudioDeviceID = device.ID;
-        Properties.Settings.Default.Save();
+        StoreAudioDeviceID(device.ID);
 
         // Output (to default audio device)
-        output = new DirectSoundOut(DESIRED_LATENCY_MS);
+        output = new DirectSoundOut();
         outputProvider = new BufferedWaveProvider(audioSource.WaveFormat)
         {
             DiscardOnBufferOverflow = true,
-            BufferDuration = TimeSpan.FromSeconds(2)
+            BufferDuration = TimeSpan.FromSeconds(1)
         };
-
         output.Init(outputProvider);
 
         // Start a periodic timer to update the audio meter, discard the result
@@ -184,5 +168,25 @@ internal class AudioPlayback : IDisposable
             AudioLevelChanged?.Invoke(left, right);
             await Task.Delay(updatePeriod, token).ConfigureAwait(true);
         }
+    }
+
+    private static MMDevice GetDeviceByIndex(int index)
+    {
+        if (audioDevices == null)
+        {
+            throw new InvalidOperationException("RefreshDevices() must be called before GetDeviceByIndex");
+        }
+        if (index < 0 || index > audioDevices.Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(index));
+        }
+        return audioDevices[index];
+    }
+
+    private static void StoreAudioDeviceID(string deviceId)
+    {
+        Logger.Log("Saving audio device ID: " + deviceId);
+        Properties.Settings.Default.AudioDeviceID = deviceId;
+        Properties.Settings.Default.Save();
     }
 }
