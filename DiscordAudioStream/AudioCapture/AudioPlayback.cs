@@ -12,7 +12,7 @@ internal class AudioPlayback : IDisposable
     public event Action<float, float>? AudioLevelChanged;
 
     private readonly IWaveIn audioSource;
-    private readonly DirectSoundOut output;
+    private readonly IWavePlayer output;
     private readonly BufferedWaveProvider outputProvider;
     private readonly CancellationTokenSource audioMeterCancel;
 
@@ -20,30 +20,21 @@ internal class AudioPlayback : IDisposable
 
     public AudioPlayback(int deviceIndex)
     {
-        MMDevice device = GetDeviceByIndex(deviceIndex);
-        if (device.DataFlow == DataFlow.Render)
-        {
-            // Input from programs outputting to selected device
-            audioSource = new WasapiLoopbackCapture(device);
-        }
-        else
-        {
-            // Input from microphone
-            audioSource = new WasapiCapture(device);
-        }
+        MMDevice device = GetAudioDevice(deviceIndex);
+        audioSource = CaptureDevice(device);
         audioSource.DataAvailable += AudioSource_DataAvailable;
 
         Logger.Log("Started audio device: " + device);
         StoreAudioDeviceID(device.ID);
 
-        // Output (to default audio device)
         output = new DirectSoundOut();
-        outputProvider = new BufferedWaveProvider(audioSource.WaveFormat)
+        outputProvider = new(audioSource.WaveFormat)
         {
             DiscardOnBufferOverflow = true,
-            BufferDuration = TimeSpan.FromSeconds(1)
+            BufferDuration = TimeSpan.FromMilliseconds(500)
         };
-        output.Init(outputProvider);
+        IWaveProvider stereoOutput = LimitChannels(outputProvider, 2);
+        output.Init(stereoOutput);
 
         // Start a periodic timer to update the audio meter, discard the result
         audioMeterCancel = new();
@@ -148,8 +139,8 @@ internal class AudioPlayback : IDisposable
 
     private void Output_StoppedHandler(object? sender, StoppedEventArgs e)
     {
-        // In some cases, streaming to Discord will cause DirectSoundOut to throw an
-        // exception and stop. If that happens, just resume playback
+        Logger.Log("Resuming playback after being interrupted due to exception:");
+        Logger.Log(e.Exception);
         output.Play();
     }
 
@@ -170,7 +161,7 @@ internal class AudioPlayback : IDisposable
         }
     }
 
-    private static MMDevice GetDeviceByIndex(int index)
+    private static MMDevice GetAudioDevice(int index)
     {
         if (audioDevices == null)
         {
@@ -181,6 +172,22 @@ internal class AudioPlayback : IDisposable
             throw new ArgumentOutOfRangeException(nameof(index));
         }
         return audioDevices[index];
+    }
+
+    private static IWaveIn CaptureDevice(MMDevice device)
+    {
+        bool isOutputDevice = device.DataFlow == DataFlow.Render;
+        return isOutputDevice ? new WasapiLoopbackCapture(device) : new WasapiCapture(device);
+    }
+
+    private static IWaveProvider LimitChannels(IWaveProvider provider, int maxChannels)
+    {
+        if (provider.WaveFormat.Channels <= maxChannels)
+        {
+            return provider;
+        }
+        IWaveProvider[] muxInputs = { provider };
+        return new MultiplexingWaveProvider(muxInputs, maxChannels);
     }
 
     private static void StoreAudioDeviceID(string deviceId)
