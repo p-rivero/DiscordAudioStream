@@ -29,6 +29,7 @@ public class VideoCaptureManager : IDisposable
     public VideoCaptureManager(CaptureState captureState)
     {
         this.captureState = captureState;
+        captureState.StateChangeEventEnabled = true;
         // Update the capture state in a separate thread to avoid deadlocks
         captureState.StateChanged += () => new Thread(UpdateState).Start();
 

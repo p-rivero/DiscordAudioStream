@@ -37,22 +37,6 @@ public partial class CustomAreaForm : Form
         base.Show();
         SetButtonsVisible(true);
         showMarker = true;
-        // Restore saved position
-        if (Properties.Settings.Default.AreaForm_Size != Size.Empty)
-        {
-            Location = Properties.Settings.Default.AreaForm_Position;
-            Size = Properties.Settings.Default.AreaForm_Size;
-            // Screen size may have changed since last time
-            EnsureWithinBounds();
-        }
-    }
-
-    public new void Hide()
-    {
-        // Save position
-        Properties.Settings.Default.AreaForm_Position = Location;
-        Properties.Settings.Default.AreaForm_Size = Size;
-        base.Hide();
     }
 
     private void ResizeTimerElapsed(object sender, ElapsedEventArgs e)

@@ -39,6 +39,23 @@ public class CaptureState
     private bool capturingCursor;
     private bool hideTaskbar;
 
+    private bool stateDirty;
+    private bool stateChangeEventEnabled;
+
+    public bool StateChangeEventEnabled
+    {
+        get => stateChangeEventEnabled;
+        set
+        {
+            stateChangeEventEnabled = value;
+            if (stateChangeEventEnabled && stateDirty)
+            {
+                StateChanged?.Invoke();
+                stateDirty = false;
+            }
+        }
+    }
+
     public bool HideTaskbarSupported => Target == CaptureTarget.Screen;
 
     public CaptureTarget Target
@@ -61,20 +78,11 @@ public class CaptureState
             {
                 throw new ArgumentException("Don't set the capture target to None");
             }
-            if (captureTarget == value)
+            if (captureTarget != value)
             {
-                return; // No changes
+                captureTarget = value;
+                TriggerStateChange("Target", value);
             }
-
-            Logger.EmptyLine();
-            Logger.Log($"Changing CaptureState... (Target = {value})");
-            CaptureTarget oldValue = captureTarget;
-            captureTarget = value;
-            if (oldValue != value)
-            {
-                StateChanged?.Invoke();
-            }
-            Logger.Log($"Done changing CaptureState. Target = {value}");
         }
     }
 
@@ -94,18 +102,13 @@ public class CaptureState
             {
                 throw new ArgumentException("Trying to set WindowHandle to null value");
             }
-            if (hWnd == value && captureTarget == CaptureTarget.Window)
+            if (hWnd != value || captureTarget != CaptureTarget.Window)
             {
-                return; // No changes
+                hWnd = value;
+                captureTarget = CaptureTarget.Window;
+                screen = null;
+                TriggerStateChange("WindowHandle", value);
             }
-
-            Logger.EmptyLine();
-            Logger.Log($"Changing CaptureState... (WindowHandle = {value})");
-            hWnd = value;
-            captureTarget = CaptureTarget.Window;
-            screen = null; // Remove screen (if any)
-            StateChanged?.Invoke();
-            Logger.Log($"Done changing CaptureState. WindowHandle = {value}");
         }
     }
 
@@ -125,18 +128,13 @@ public class CaptureState
             {
                 throw new ArgumentNullException(nameof(value));
             }
-            if (screen == value && captureTarget == CaptureTarget.Screen)
+            if (screen != value || captureTarget != CaptureTarget.Screen)
             {
-                return; // No changes
+                screen = value;
+                captureTarget = CaptureTarget.Screen;
+                hWnd = HWND.Null;
+                TriggerStateChange("Screen", value.DeviceName);
             }
-
-            Logger.EmptyLine();
-            Logger.Log($"Changing CaptureState... (Screen = {value})");
-            screen = value;
-            captureTarget = CaptureTarget.Screen;
-            hWnd = HWND.Null; // Remove window handle (if any)
-            StateChanged?.Invoke();
-            Logger.Log($"Done changing CaptureState. Screen = {value.DeviceName}");
         }
     }
 
@@ -147,11 +145,8 @@ public class CaptureState
         {
             if (CapturingCursor != value)
             {
-                Logger.EmptyLine();
-                Logger.Log($"Changing CaptureState... (CapturingCursor = {value})");
                 capturingCursor = value;
-                StateChanged?.Invoke();
-                Logger.Log($"Done changing CaptureState. CapturingCursor = {value}");
+                TriggerStateChange("CapturingCursor", value);
             }
         }
     }
@@ -163,11 +158,8 @@ public class CaptureState
         {
             if (HideTaskbar != value)
             {
-                Logger.EmptyLine();
-                Logger.Log($"Changing CaptureState... (HideTaskbar = {value})");
                 hideTaskbar = value;
-                StateChanged?.Invoke();
-                Logger.Log($"Done changing CaptureState. HideTaskbar = {value}");
+                TriggerStateChange("HideTaskbar", value);
             }
         }
     }
@@ -179,11 +171,8 @@ public class CaptureState
         {
             if (WindowMethod != value)
             {
-                Logger.EmptyLine();
-                Logger.Log($"Changing CaptureState... (WindowMethod = {value})");
                 Settings.Default.CaptureWindowMethod = (int)value;
-                StateChanged?.Invoke();
-                Logger.Log($"Done changing CaptureState. WindowMethod = {value}");
+                TriggerStateChange("WindowMethod", value);
             }
         }
     }
@@ -195,12 +184,22 @@ public class CaptureState
         {
             if (ScreenMethod != value)
             {
-                Logger.EmptyLine();
-                Logger.Log($"Changing CaptureState... ScreenMethod = {value}");
                 Settings.Default.CaptureScreenMethod = (int)value;
-                StateChanged?.Invoke();
-                Logger.Log($"Done changing CaptureState. ScreenMethod = {value}");
+                TriggerStateChange("ScreenMethod", value);
             }
+        }
+    }
+
+    private void TriggerStateChange(string property, object value)
+    {
+        Logger.Log($"Changing CaptureState ({property} = {value})");
+        if (StateChangeEventEnabled)
+        {
+            StateChanged?.Invoke();
+        }
+        else
+        {
+            stateDirty = true;
         }
     }
 }

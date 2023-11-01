@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 using DiscordAudioStream.AudioCapture;
 using DiscordAudioStream.VideoCapture;
+using DiscordAudioStream.VideoCapture.CaptureStrategy;
 
 using Windows.Win32.Foundation;
 
@@ -81,12 +82,21 @@ public class MainController : IDisposable
 
     private void SetPreviewSize(Size size)
     {
+        if (size == lastCapturedFrameSize)
+        {
+            return;
+        }
         lastCapturedFrameSize = size;
         if (IsStreaming)
         {
-            size = captureResizer.GetScaledSize(size);
-            form.SetPreviewUISize(size);
+            Size scaledSize = captureResizer.GetScaledSize(size);
+            form.SetPreviewUISize(scaledSize);
         }
+    }
+
+    private void ForcePreviewResize()
+    {
+        lastCapturedFrameSize = Size.Empty;
     }
 
     private Thread CreateDrawThread()
@@ -110,7 +120,6 @@ public class MainController : IDisposable
         Logger.Log($"Creating Draw thread. Target framerate: {fps} FPS ({videoCapture.CaptureIntervalMs} ms)");
 
         Stopwatch stopwatch = new();
-        Size oldSize = Size.Empty;
 
         while (true)
         {
@@ -125,16 +134,8 @@ public class MainController : IDisposable
                     continue;
                 }
 
-                // Detect size changes
-                if (next.Size != oldSize)
-                {
-                    oldSize = next.Size;
-                    SetPreviewSize(next.Size);
-                }
-
-                // Display captured frame
-                // Refresh if the stream has started and "Force screen redraw" is enabled
-                form.UpdatePreview(next, IsStreaming && forceRefresh, formHandle);
+                SetPreviewSize(next.Size);
+                form.UpdatePreview(next, forceRefresh && IsStreaming, formHandle);
             }
             catch (InvalidOperationException)
             {
@@ -202,7 +203,7 @@ public class MainController : IDisposable
         Logger.Log("Force screen redraw: " + forceRefresh);
         IsStreaming = true;
 
-        SetPreviewSize(lastCapturedFrameSize);
+        ForcePreviewResize();
     }
 
     private void StartStreamWithoutAudio(bool skipAudioWarning)
@@ -357,7 +358,6 @@ public class MainController : IDisposable
     internal void SetScaleIndex(int index)
     {
         captureResizer.SetScaleMode((ScaleMode)index);
-
         Properties.Settings.Default.ScaleIndex = index;
     }
 
@@ -403,8 +403,12 @@ public class MainController : IDisposable
             );
             return;
         }
+        captureState.StateChangeEventEnabled = false;
         preset.ApplyToSettings();
         form.RefreshCaptureUI();
+        CustomAreaCapture.RestoreCaptureArea();
+        ForcePreviewResize();
+        captureState.StateChangeEventEnabled = true;
 
         if (!IsStreaming)
         {
@@ -419,6 +423,7 @@ public class MainController : IDisposable
 
     internal void SaveCapturePreset(int slotNumber)
     {
+        CustomAreaCapture.SaveCaptureArea();
         CapturePreset.FromCurrentSettings().SaveToSlot(slotNumber);
         MessageBox.Show(
             $"Your settings have been stored as the capture preset {slotNumber}.",

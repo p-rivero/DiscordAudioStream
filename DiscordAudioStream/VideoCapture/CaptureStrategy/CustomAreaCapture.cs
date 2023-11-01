@@ -25,13 +25,32 @@ public abstract class CustomAreaCapture : CaptureSource
         }
     }
 
+    public static void SaveCaptureArea()
+    {
+        Properties.Settings.Default.AreaForm_Position = customAreaForm.Location;
+        Properties.Settings.Default.AreaForm_Size = customAreaForm.Size;
+    }
+
+    public static void RestoreCaptureArea()
+    {
+        if (Properties.Settings.Default.AreaForm_Size != Size.Empty)
+        {
+            customAreaForm.Location = Properties.Settings.Default.AreaForm_Position;
+            customAreaForm.Size = Properties.Settings.Default.AreaForm_Size;
+        }
+    }
+
     private static void ShowAreaForm()
     {
         lock (instanceCountLock)
         {
             if (instanceCount == 0)
             {
-                InvokeOnUI.RunSync(customAreaForm.Show);
+                InvokeOnUI.RunSync(() =>
+                {
+                    customAreaForm.Show();
+                    RestoreCaptureArea();
+                });
             }
             instanceCount++;
         }
@@ -39,6 +58,7 @@ public abstract class CustomAreaCapture : CaptureSource
 
     private static void HideAreaForm()
     {
+        SaveCaptureArea();
         lock (instanceCountLock)
         {
             instanceCount--;
