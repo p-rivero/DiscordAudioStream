@@ -9,6 +9,7 @@ using Windows.Win32.Foundation;
 
 namespace DiscordAudioStream;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static")]
 public class MainController : IDisposable
 {
     internal Action? OnAudioMeterClosed { get; set; }
@@ -52,9 +53,6 @@ public class MainController : IDisposable
     internal void Init()
     {
         videoSources.UpdateCaptureState(captureState, form.VideoIndex);
-
-        captureState.HideTaskbar = Properties.Settings.Default.HideTaskbar;
-        captureState.CapturingCursor = Properties.Settings.Default.CaptureCursor;
 
         videoCapture = new(captureState);
         videoCapture.CaptureAborted += AbortCapture;
@@ -207,7 +205,7 @@ public class MainController : IDisposable
         SetPreviewSize(lastCapturedFrameSize);
     }
 
-    private static void StartStreamWithoutAudio(bool skipAudioWarning)
+    private void StartStreamWithoutAudio(bool skipAudioWarning)
     {
         if (!skipAudioWarning)
         {
@@ -228,8 +226,6 @@ public class MainController : IDisposable
 
         Logger.EmptyLine();
         Logger.Log("START STREAM (Without audio)");
-        // Clear the stored last used audio device
-        Properties.Settings.Default.AudioDeviceID = "";
     }
 
     private void StartStreamAudioRecording(int deviceIndex, bool skipAudioWarning)
@@ -380,5 +376,55 @@ public class MainController : IDisposable
     internal void MoveWindow(Point newPosition)
     {
         form.Location = newPosition;
+    }
+
+    internal void UpdateStoredAudioIndex()
+    {
+        if (form.HasSomeAudioSource)
+        {
+            AudioPlayback.StoreLastDeviceIndex(form.AudioSourceIndex);
+        }
+        else
+        {
+            AudioPlayback.ClearLastDeviceIndex();
+        }
+    }
+
+    internal void LoadCapturePreset(int slotNumber)
+    {
+        CapturePreset? preset = CapturePreset.LoadSlot(slotNumber);
+        if (preset == null)
+        {
+            MessageBox.Show(
+                $"The capture preset slot {slotNumber} is empty.\nFirst, save your current settings using [Ctrl+Shift+{slotNumber}].",
+                "Preset not found",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning
+            );
+            return;
+        }
+        preset.ApplyToSettings();
+        form.RefreshCaptureUI();
+
+        if (!IsStreaming)
+        {
+            MessageBox.Show(
+                $"The capture preset {slotNumber} has been applied.",
+                "Preset loaded",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+    }
+
+    internal void SaveCapturePreset(int slotNumber)
+    {
+        CapturePreset.FromCurrentSettings().SaveToSlot(slotNumber);
+        MessageBox.Show(
+            $"Your settings have been stored as the capture preset {slotNumber}.",
+            "Preset saved",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Information
+        );
     }
 }

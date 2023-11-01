@@ -310,5 +310,17 @@ namespace DiscordAudioStream.Properties {
                 this["LastVideoCaptureValue"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("[]")]
+        public string StoredPresets {
+            get {
+                return ((string)(this["StoredPresets"]));
+            }
+            set {
+                this["StoredPresets"] = value;
+            }
+        }
     }
 }

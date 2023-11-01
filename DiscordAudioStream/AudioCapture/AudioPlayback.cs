@@ -23,9 +23,7 @@ internal class AudioPlayback : IDisposable
         MMDevice device = GetAudioDevice(deviceIndex);
         audioSource = CaptureDevice(device);
         audioSource.DataAvailable += AudioSource_DataAvailable;
-
         Logger.Log("Started audio device: " + device);
-        StoreAudioDeviceID(device.ID);
 
         output = new DirectSoundOut();
         outputProvider = new(audioSource.WaveFormat)
@@ -86,6 +84,22 @@ internal class AudioPlayback : IDisposable
         }
         string lastDeviceId = Properties.Settings.Default.AudioDeviceID;
         return audioDevices.FindIndex(device => device.ID == lastDeviceId);
+    }
+
+    public static void StoreLastDeviceIndex(int deviceIndex)
+    {
+        MMDevice device = GetAudioDevice(deviceIndex);
+        if (Properties.Settings.Default.AudioDeviceID != device.ID)
+        {
+            Logger.Log("Storing audio device ID: " + device.ID);
+            Properties.Settings.Default.AudioDeviceID = device.ID;
+        }
+    }
+    
+    public static void ClearLastDeviceIndex()
+    {
+        Logger.Log("Clearing stored audio device");
+        Properties.Settings.Default.AudioDeviceID = "";
     }
 
     public void Start()
@@ -197,11 +211,5 @@ internal class AudioPlayback : IDisposable
         Logger.Log($"Limiting audio channels to {maxChannels}, provider has {provider.WaveFormat.Channels}");
         IWaveProvider[] muxInputs = { provider };
         return new MultiplexingWaveProvider(muxInputs, maxChannels);
-    }
-
-    private static void StoreAudioDeviceID(string deviceId)
-    {
-        Logger.Log("Storing audio device ID: " + deviceId);
-        Properties.Settings.Default.AudioDeviceID = deviceId;
     }
 }

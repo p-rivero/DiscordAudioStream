@@ -1,5 +1,7 @@
 ﻿using System.Windows.Forms;
 
+using DiscordAudioStream.Properties;
+
 using Windows.Win32.Foundation;
 
 namespace DiscordAudioStream.VideoCapture;
@@ -37,55 +39,12 @@ public class CaptureState
     private bool capturingCursor;
     private bool hideTaskbar;
 
-    // True if the cursor should be captured
-    public bool CapturingCursor
-    {
-        get => capturingCursor;
-
-        set
-        {
-            if (capturingCursor == value)
-            {
-                return; // No changes
-            }
-
-            Logger.EmptyLine();
-            Logger.Log($"Changing CaptureState... (CapturingCursor = {value})");
-            capturingCursor = value;
-            StateChanged?.Invoke();
-            Logger.Log($"Done changing CaptureState. CapturingCursor = {value}");
-        }
-    }
-
-    // True if the taskbar should be hidden
-    public bool HideTaskbar
-    {
-        get => hideTaskbar;
-
-        set
-        {
-            if (hideTaskbar == value)
-            {
-                return; // No changes
-            }
-
-            Logger.EmptyLine();
-            Logger.Log($"Changing CaptureState... (HideTaskbar = {value})");
-            hideTaskbar = value;
-            StateChanged?.Invoke();
-            Logger.Log($"Done changing CaptureState. HideTaskbar = {value}");
-        }
-    }
-
-    // True if this method supports hiding the taskbar
     public bool HideTaskbarSupported => Target == CaptureTarget.Screen;
 
-    // What kind of item are we capturing now?
     public CaptureTarget Target
     {
         get
         {
-            // Default value for captureTarget
             if (captureTarget == CaptureTarget.None)
             {
                 throw new InvalidOperationException("Must set either Target, WindowHandle or Screen before reading Target");
@@ -119,7 +78,6 @@ public class CaptureState
         }
     }
 
-    // Handle to the captured window (if any)
     public HWND WindowHandle
     {
         get
@@ -151,7 +109,6 @@ public class CaptureState
         }
     }
 
-    // Captured screen (if any)
     public Screen Screen
     {
         get
@@ -183,21 +140,48 @@ public class CaptureState
         }
     }
 
-    public WindowCaptureMethod WindowMethod
+    public bool CapturingCursor
     {
-        get
-        {
-            int method = Properties.Settings.Default.CaptureWindowMethod;
-            return (WindowCaptureMethod)method;
-        }
+        get => capturingCursor;
         set
         {
-            WindowCaptureMethod oldValue = WindowMethod;
-            if (oldValue != value)
+            if (CapturingCursor != value)
+            {
+                Logger.EmptyLine();
+                Logger.Log($"Changing CaptureState... (CapturingCursor = {value})");
+                capturingCursor = value;
+                StateChanged?.Invoke();
+                Logger.Log($"Done changing CaptureState. CapturingCursor = {value}");
+            }
+        }
+    }
+
+    public bool HideTaskbar
+    {
+        get => hideTaskbar;
+        set
+        {
+            if (HideTaskbar != value)
+            {
+                Logger.EmptyLine();
+                Logger.Log($"Changing CaptureState... (HideTaskbar = {value})");
+                hideTaskbar = value;
+                StateChanged?.Invoke();
+                Logger.Log($"Done changing CaptureState. HideTaskbar = {value}");
+            }
+        }
+    }
+
+    public WindowCaptureMethod WindowMethod
+    {
+        get => (WindowCaptureMethod)Settings.Default.CaptureWindowMethod;
+        set
+        {
+            if (WindowMethod != value)
             {
                 Logger.EmptyLine();
                 Logger.Log($"Changing CaptureState... (WindowMethod = {value})");
-                Properties.Settings.Default.CaptureWindowMethod = (int)value;
+                Settings.Default.CaptureWindowMethod = (int)value;
                 StateChanged?.Invoke();
                 Logger.Log($"Done changing CaptureState. WindowMethod = {value}");
             }
@@ -206,19 +190,14 @@ public class CaptureState
 
     public ScreenCaptureMethod ScreenMethod
     {
-        get
-        {
-            int method = Properties.Settings.Default.CaptureScreenMethod;
-            return (ScreenCaptureMethod)method;
-        }
+        get => (ScreenCaptureMethod)Settings.Default.CaptureScreenMethod;
         set
         {
-            ScreenCaptureMethod oldValue = ScreenMethod;
-            if (oldValue != value)
+            if (ScreenMethod != value)
             {
                 Logger.EmptyLine();
                 Logger.Log($"Changing CaptureState... ScreenMethod = {value}");
-                Properties.Settings.Default.CaptureScreenMethod = (int)value;
+                Settings.Default.CaptureScreenMethod = (int)value;
                 StateChanged?.Invoke();
                 Logger.Log($"Done changing CaptureState. ScreenMethod = {value}");
             }

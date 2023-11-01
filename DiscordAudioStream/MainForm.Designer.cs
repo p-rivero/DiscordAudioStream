@@ -131,7 +131,7 @@
             this.toolStripSeparator2,
             this.settingsBtn,
             this.aboutBtn});
-            this.toolStrip.Location = new System.Drawing.Point(9, 9);
+            this.toolStrip.Location = new System.Drawing.Point(6, 9);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(9);
             this.toolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -157,6 +157,7 @@
             // onTopBtn
             // 
             this.onTopBtn.AutoSize = false;
+            this.onTopBtn.Checked = global::DiscordAudioStream.Properties.Settings.Default.AlwaysOnTop;
             this.onTopBtn.CheckOnClick = true;
             this.onTopBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.onTopBtn.Image = ((System.Drawing.Image)(resources.GetObject("onTopBtn.Image")));
@@ -254,6 +255,7 @@
             this.inputDeviceComboBox.Name = "inputDeviceComboBox";
             this.inputDeviceComboBox.Size = new System.Drawing.Size(279, 24);
             this.inputDeviceComboBox.TabIndex = 17;
+            this.inputDeviceComboBox.SelectedIndexChanged += new System.EventHandler(this.inputDeviceComboBox_SelectedIndexChanged);
             // 
             // inputDeviceLabel
             // 
@@ -333,8 +335,6 @@
             // 
             // captureCursorCheckBox
             // 
-            this.captureCursorCheckBox.Checked = true;
-            this.captureCursorCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.captureCursorCheckBox.Location = new System.Drawing.Point(230, 79);
             this.captureCursorCheckBox.Name = "captureCursorCheckBox";
             this.captureCursorCheckBox.Size = new System.Drawing.Size(104, 19);
@@ -363,6 +363,7 @@
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.audioGroup);
             this.Controls.Add(this.videoGroup);
+            this.DataBindings.Add(new System.Windows.Forms.Binding("TopMost", global::DiscordAudioStream.Properties.Settings.Default, "AlwaysOnTop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -371,6 +372,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Discord Audio Stream";
+            this.TopMost = global::DiscordAudioStream.Properties.Settings.Default.AlwaysOnTop;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).EndInit();

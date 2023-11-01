@@ -152,8 +152,7 @@ namespace DiscordAudioStream.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Don&apos;t show the taskbar at the bottom of the screen.
-        ///Only available when using the BitBlt fullscreen method..
+        ///   Looks up a localized string similar to Don&apos;t show the taskbar at the bottom of the screen..
         /// </summary>
         internal static string Tooltip_HideTaskbar {
             get {

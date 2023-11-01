@@ -37,15 +37,10 @@ public partial class MainForm : Form
         defaultPreviewSize = previewBox.Size;
         defaultPreviewLocation = previewBox.Location;
 
-        inputDeviceComboBox.SelectedIndex = 0;
-
-        Controller.RefreshScreens();
-        Controller.RefreshAudioDevices();
+        RefreshCaptureUI();
 
         previewBtn.Checked = Properties.Settings.Default.Preview;
         DisplayPreview(previewBtn.Checked);
-
-        scaleComboBox.SelectedIndex = Math.Min(Properties.Settings.Default.ScaleIndex, scaleComboBox.Items.Count - 1);
 
         Controller.OnAudioMeterClosed += () => showAudioMeterToolStripMenuItem.Checked = false;
 
@@ -90,7 +85,6 @@ public partial class MainForm : Form
     }
 
     internal bool HasSomeAudioSource => inputDeviceComboBox.SelectedIndex > 0;
-
     internal int AudioSourceIndex => inputDeviceComboBox.SelectedIndex - 1;
 
     internal void SetAudioElements(IEnumerable<string> elements, int defaultIndex)
@@ -106,6 +100,15 @@ public partial class MainForm : Form
     {
         get => hideTaskbarCheckBox.Enabled;
         set => hideTaskbarCheckBox.Enabled = value;
+    }
+
+    internal void RefreshCaptureUI()
+    {
+        Controller.RefreshScreens();
+        Controller.RefreshAudioDevices();
+        scaleComboBox.SelectedIndex = Properties.Settings.Default.ScaleIndex;
+        captureCursorCheckBox.Checked = Properties.Settings.Default.CaptureCursor;
+        hideTaskbarCheckBox.Checked = Properties.Settings.Default.HideTaskbar;
     }
 
     internal void SetPreviewUISize(Size newSize)
@@ -210,7 +213,7 @@ public partial class MainForm : Form
         else
         {
             Size newSize = Size;
-            newSize.Width = defaultWindowSize.Width - (defaultPreviewSize.Width + 10);
+            newSize.Width = defaultWindowSize.Width - (defaultPreviewSize.Width + 9);
             Size = newSize;
 
             previewBox.Image?.Dispose();
@@ -223,9 +226,6 @@ public partial class MainForm : Form
     private void MainForm_Load(object sender, EventArgs e)
     {
         Controller.Init();
-        onTopBtn.Checked = Properties.Settings.Default.AlwaysOnTop;
-        captureCursorCheckBox.Checked = Properties.Settings.Default.CaptureCursor;
-        hideTaskbarCheckBox.Checked = Properties.Settings.Default.HideTaskbar;
     }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
@@ -243,47 +243,62 @@ public partial class MainForm : Form
 
     private void MainForm_KeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Control)
+        switch (e.KeyData)
         {
-            switch (e.KeyCode)
-            {
-                case Keys.P:
-                    previewBtn.PerformClick();
-                    break;
-                case Keys.T:
-                    onTopBtn.PerformClick();
-                    break;
-                case Keys.Oemcomma:
-                    settingsBtn.PerformClick();
-                    break;
-                case Keys.V:
-                    volumeMixerButton.PerformClick();
-                    break;
-                case Keys.A:
-                    soundDevicesButton.PerformClick();
-                    break;
-                case Keys.Enter:
-                    if (!Controller.IsStreaming)
-                    {
-                        Controller.StartStream(false);
-                    }
-                    break;
-            }
-        }
-        else
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.F1:
-                    aboutBtn.PerformClick();
-                    break;
-                case Keys.Escape:
-                    if (Controller.IsStreaming)
-                    {
-                        Controller.Stop();
-                    }
-                    break;
-            }
+            case Keys.F1:
+                aboutBtn.PerformClick();
+                break;
+            case Keys.Control | Keys.P:
+                previewBtn.PerformClick();
+                break;
+            case Keys.Control | Keys.T:
+                onTopBtn.PerformClick();
+                break;
+            case Keys.Control | Keys.Oemcomma:
+                settingsBtn.PerformClick();
+                break;
+            case Keys.Control | Keys.V:
+                volumeMixerButton.PerformClick();
+                break;
+            case Keys.Control | Keys.A:
+                soundDevicesButton.PerformClick();
+                break;
+            case Keys.Control | Keys.Enter:
+                if (!Controller.IsStreaming) { Controller.StartStream(false); }
+                break;
+            case Keys.Escape:
+                if (Controller.IsStreaming) { Controller.Stop(); }
+                break;
+            case Keys.Control | Keys.D1:
+                Controller.LoadCapturePreset(1);
+                break;
+            case Keys.Control | Keys.Shift | Keys.D1:
+                Controller.SaveCapturePreset(1);
+                break;
+            case Keys.Control | Keys.D2:
+                Controller.LoadCapturePreset(2);
+                break;
+            case Keys.Control | Keys.Shift | Keys.D2:
+                Controller.SaveCapturePreset(2);
+                break;
+            case Keys.Control | Keys.D3:
+                Controller.LoadCapturePreset(3);
+                break;
+            case Keys.Control | Keys.Shift | Keys.D3:
+                Controller.SaveCapturePreset(3);
+                break;
+            case Keys.Control | Keys.D4:
+                Controller.LoadCapturePreset(4);
+                break;
+            case Keys.Control | Keys.Shift | Keys.D4:
+                Controller.SaveCapturePreset(4);
+                break;
+            case Keys.Control | Keys.D5:
+                Controller.LoadCapturePreset(5); 
+                break;
+            case Keys.Control | Keys.Shift | Keys.D5:
+                Controller.SaveCapturePreset(5);
+                break;
         }
     }
 
@@ -341,7 +356,7 @@ public partial class MainForm : Form
 
     private void startButton_Click(object sender, EventArgs e)
     {
-        Controller.StartStream(false);
+        Controller.StartStream(skipAudioWarning: false);
     }
 
     private void areaComboBox_DropDown(object sender, EventArgs e)
@@ -390,5 +405,10 @@ public partial class MainForm : Form
     private void stopStreamToolStripMenuItem_Click(object sender, EventArgs e)
     {
         Controller.Stop();
+    }
+
+    private void inputDeviceComboBox_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        Controller.UpdateStoredAudioIndex();
     }
 }

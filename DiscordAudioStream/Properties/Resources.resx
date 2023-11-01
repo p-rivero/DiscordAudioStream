@@ -216,8 +216,7 @@ If the viewers are seeing 2 cursors (or the cursor position is incorrect), Disco
 cursor on top of the one added by DiscordAudioStream.</value>
   </data>
   <data name="Tooltip_HideTaskbar" xml:space="preserve">
-    <value>Don't show the taskbar at the bottom of the screen.
-Only available when using the BitBlt fullscreen method.</value>
+    <value>Don't show the taskbar at the bottom of the screen.</value>
   </data>
   <data name="Tooltip_AudioSource" xml:space="preserve">
     <value>Choose the audio source (the audio device to listen).
