@@ -33,8 +33,7 @@ internal class AudioPlayback : IDisposable
             DiscardOnBufferOverflow = true,
             BufferDuration = TimeSpan.FromMilliseconds(500)
         };
-        IWaveProvider stereoOutput = LimitChannels(outputProvider, 2);
-        output.Init(stereoOutput);
+        output.Init(LimitChannels(outputProvider));
 
         // Start a periodic timer to update the audio meter, discard the result
         audioMeterCancel = new();
@@ -74,13 +73,8 @@ internal class AudioPlayback : IDisposable
         {
             throw new InvalidOperationException("RefreshDevices() must be called before calling GetDefaultDeviceIndex");
         }
-        using MMDeviceEnumerator enumerator = new();
-        if (!enumerator.HasDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia))
-        {
-            return -1;
-        }
-
-        string defaultDeviceId = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia).ID;
+        using MMDevice? defaultDevice = GetDefaultDevice();
+        string? defaultDeviceId = defaultDevice?.ID;
         return audioDevices.FindIndex(device => device.ID == defaultDeviceId);
     }
 
@@ -161,6 +155,16 @@ internal class AudioPlayback : IDisposable
         }
     }
 
+    private static MMDevice? GetDefaultDevice()
+    {
+        using MMDeviceEnumerator enumerator = new();
+        if (!enumerator.HasDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia))
+        {
+            return null;
+        }
+        return enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+    }
+
     private static MMDevice GetAudioDevice(int index)
     {
         if (audioDevices == null)
@@ -180,8 +184,12 @@ internal class AudioPlayback : IDisposable
         return isOutputDevice ? new WasapiLoopbackCapture(device) : new WasapiCapture(device);
     }
 
-    private static IWaveProvider LimitChannels(IWaveProvider provider, int maxChannels)
+    private static IWaveProvider LimitChannels(IWaveProvider provider)
     {
+        using MMDevice? defaultDevice = GetDefaultDevice();
+        int maxChannels = defaultDevice?.AudioMeterInformation.PeakValues.Count ?? 2;
+        Logger.Log($"Limiting audio channels to {maxChannels}, provider has {provider.WaveFormat.Channels}");
+
         if (provider.WaveFormat.Channels <= maxChannels)
         {
             return provider;
@@ -192,7 +200,7 @@ internal class AudioPlayback : IDisposable
 
     private static void StoreAudioDeviceID(string deviceId)
     {
-        Logger.Log("Saving audio device ID: " + deviceId);
+        Logger.Log("Storing audio device ID: " + deviceId);
         Properties.Settings.Default.AudioDeviceID = deviceId;
         Properties.Settings.Default.Save();
     }
