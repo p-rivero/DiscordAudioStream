@@ -126,7 +126,6 @@ internal partial class SettingsForm : Form
         }
 
         Properties.Settings.Default.Theme = theme;
-        Properties.Settings.Default.Save();
         Logger.EmptyLine();
         Logger.Log($"Change settings: Theme={Properties.Settings.Default.Theme}. Restarting...");
 
@@ -155,7 +154,6 @@ internal partial class SettingsForm : Form
         }
 
         Properties.Settings.Default.AutoExit = autoExitCheckbox.Checked;
-        Properties.Settings.Default.Save();
         Logger.EmptyLine();
         Logger.Log("Change settings: AutoExit=" + Properties.Settings.Default.AutoExit);
     }
@@ -169,7 +167,6 @@ internal partial class SettingsForm : Form
         }
 
         Properties.Settings.Default.OutputLogFile = outputLogCheckbox.Checked;
-        Properties.Settings.Default.Save();
         Logger.EmptyLine();
         Logger.Log("Change settings: OutputLogFile=" + Properties.Settings.Default.OutputLogFile);
     }
@@ -198,7 +195,6 @@ internal partial class SettingsForm : Form
         }
 
         Properties.Settings.Default.CaptureFramerate = (int)selectedFramerate;
-        Properties.Settings.Default.Save();
         Logger.EmptyLine();
         Logger.Log("Change settings: CaptureFramerate=" + selectedFramerate);
 
@@ -214,7 +210,6 @@ internal partial class SettingsForm : Form
         }
 
         Properties.Settings.Default.OffscreenDraw = offscreenDrawCheckbox.Checked;
-        Properties.Settings.Default.Save();
         Logger.EmptyLine();
         Logger.Log("Change settings: OffscreenDraw=" + Properties.Settings.Default.OffscreenDraw);
     }
@@ -233,7 +228,6 @@ internal partial class SettingsForm : Form
         }
 
         Properties.Settings.Default.ShowAudioInputs = showAudioInputsCheckbox.Checked;
-        Properties.Settings.Default.Save();
         Logger.EmptyLine();
         Logger.Log("Change settings: ShowAudioInputs=" + Properties.Settings.Default.ShowAudioInputs);
 
@@ -250,7 +244,6 @@ internal partial class SettingsForm : Form
         try
         {
             Properties.Settings.Default.StreamTitle = streamTitleBox.Text;
-            Properties.Settings.Default.Save();
             // Text could contain sensitive information, don't log it
             Logger.Log("Stream title saved successfully");
         }
@@ -271,7 +264,6 @@ internal partial class SettingsForm : Form
         }
 
         Properties.Settings.Default.ShowAudioMeter = audioMeterCheckBox.Checked;
-        Properties.Settings.Default.Save();
         Logger.EmptyLine();
         Logger.Log("Change settings: ShowAudioMeter=" + Properties.Settings.Default.ShowAudioMeter);
     }

@@ -290,16 +290,12 @@ public partial class MainForm : Form
     private void previewBtn_CheckedChanged(object sender, EventArgs e)
     {
         Properties.Settings.Default.Preview = previewBtn.Checked;
-        Properties.Settings.Default.Save();
-
         DisplayPreview(previewBtn.Checked);
     }
 
     private void onTopCheckBox_CheckedChanged(object sender, EventArgs e)
     {
         Properties.Settings.Default.AlwaysOnTop = onTopBtn.Checked;
-        Properties.Settings.Default.Save();
-
         TopMost = onTopBtn.Checked;
     }
 
@@ -380,7 +376,6 @@ public partial class MainForm : Form
 
         showAudioMeterToolStripMenuItem.Checked = show;
         Properties.Settings.Default.ShowAudioMeter = show;
-        Properties.Settings.Default.Save();
 
         if (show)
         {

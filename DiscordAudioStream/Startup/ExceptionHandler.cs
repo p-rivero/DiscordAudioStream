@@ -56,7 +56,6 @@ internal static class ExceptionHandler
             if (result == DialogResult.Yes)
             {
                 Properties.Settings.Default.OutputLogFile = true;
-                Properties.Settings.Default.Save();
             }
         }
 

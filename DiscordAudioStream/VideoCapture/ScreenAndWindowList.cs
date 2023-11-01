@@ -84,7 +84,6 @@ public class ScreenAndWindowList
         }
 
         Settings.Default.LastVideoCaptureType = captureState.Target.ToString();
-        Settings.Default.Save();
     }
 
     public int GetLastStoredItemIndex()

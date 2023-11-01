@@ -188,12 +188,13 @@ internal class AudioPlayback : IDisposable
     {
         using MMDevice? defaultDevice = GetDefaultDevice();
         int maxChannels = defaultDevice?.AudioMeterInformation.PeakValues.Count ?? 2;
-        Logger.Log($"Limiting audio channels to {maxChannels}, provider has {provider.WaveFormat.Channels}");
 
         if (provider.WaveFormat.Channels <= maxChannels)
         {
             return provider;
         }
+
+        Logger.Log($"Limiting audio channels to {maxChannels}, provider has {provider.WaveFormat.Channels}");
         IWaveProvider[] muxInputs = { provider };
         return new MultiplexingWaveProvider(muxInputs, maxChannels);
     }
@@ -202,6 +203,5 @@ internal class AudioPlayback : IDisposable
     {
         Logger.Log("Storing audio device ID: " + deviceId);
         Properties.Settings.Default.AudioDeviceID = deviceId;
-        Properties.Settings.Default.Save();
     }
 }

@@ -198,7 +198,6 @@ public class CaptureState
                 Logger.EmptyLine();
                 Logger.Log($"Changing CaptureState... (WindowMethod = {value})");
                 Properties.Settings.Default.CaptureWindowMethod = (int)value;
-                Properties.Settings.Default.Save();
                 StateChanged?.Invoke();
                 Logger.Log($"Done changing CaptureState. WindowMethod = {value}");
             }
@@ -220,7 +219,6 @@ public class CaptureState
                 Logger.EmptyLine();
                 Logger.Log($"Changing CaptureState... ScreenMethod = {value}");
                 Properties.Settings.Default.CaptureScreenMethod = (int)value;
-                Properties.Settings.Default.Save();
                 StateChanged?.Invoke();
                 Logger.Log($"Done changing CaptureState. ScreenMethod = {value}");
             }

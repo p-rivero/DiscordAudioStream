@@ -52,7 +52,6 @@ public partial class CustomAreaForm : Form
         // Save position
         Properties.Settings.Default.AreaForm_Position = Location;
         Properties.Settings.Default.AreaForm_Size = Size;
-        Properties.Settings.Default.Save();
         base.Hide();
     }
 
@@ -118,7 +117,6 @@ public partial class CustomAreaForm : Form
             }
 
             Properties.Settings.Default.SeenLockAreaDiag = true;
-            Properties.Settings.Default.Save();
             Logger.Log("Set SeenLockAreaDiag = true");
         }
         Logger.Log("Locking area");

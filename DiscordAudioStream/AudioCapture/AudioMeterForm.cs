@@ -56,7 +56,6 @@ public partial class AudioMeterForm : Form
     {
         Properties.Settings.Default.AudioMeterForm_Position = Location;
         Properties.Settings.Default.AudioMeterForm_Size = Size;
-        Properties.Settings.Default.Save();
     }
 
     private void RestoreSavedPosition()

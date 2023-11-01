@@ -4,6 +4,8 @@ using System.Windows.Forms;
 
 using CustomComponents;
 
+using DiscordAudioStream.Properties;
+
 using Windows.Win32;
 using Windows.Win32.UI.HiDpi;
 
@@ -19,7 +21,7 @@ internal static class Program
         LogStartupInfo();
         RedirectConsoleOutput();
         CheckFrameworkVersion();
-        MigrateSettings();
+        InitializeSettings();
 
         CommandArguments consoleArgs = new(args);
         if (consoleArgs.ExitImmediately)
@@ -46,7 +48,7 @@ internal static class Program
         Logger.Log($"Log ID: {new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds()}");
     }
 
-    private static bool IsDarkTheme => Properties.Settings.Default.Theme switch
+    private static bool IsDarkTheme => Settings.Default.Theme switch
     {
         0 => DarkThemeManager.IsDarkTheme(),
         1 => false,
@@ -99,18 +101,18 @@ internal static class Program
         );
         if (result == DialogResult.Yes)
         {
-            Process.Start(Properties.Resources.URL_NETFrameworkDownloadLink);
+            Process.Start(Resources.URL_NETFrameworkDownloadLink);
             Environment.Exit(0);
         }
     }
 
-    private static void MigrateSettings()
+    private static void InitializeSettings()
     {
-        if (Properties.Settings.Default.NeedsSettingsUpgrade)
+        Settings.Default.PropertyChanged += (sender, e) => Settings.Default.Save();
+        if (Settings.Default.NeedsSettingsUpgrade)
         {
-            Properties.Settings.Default.Upgrade();
-            Properties.Settings.Default.NeedsSettingsUpgrade = false;
-            Properties.Settings.Default.Save();
+            Settings.Default.Upgrade();
+            Settings.Default.NeedsSettingsUpgrade = false;
         }
     }
 

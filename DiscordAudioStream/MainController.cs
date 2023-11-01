@@ -230,7 +230,6 @@ public class MainController : IDisposable
         Logger.Log("START STREAM (Without audio)");
         // Clear the stored last used audio device
         Properties.Settings.Default.AudioDeviceID = "";
-        Properties.Settings.Default.Save();
     }
 
     private void StartStreamAudioRecording(int deviceIndex, bool skipAudioWarning)
@@ -364,21 +363,18 @@ public class MainController : IDisposable
         captureResizer.SetScaleMode((ScaleMode)index);
 
         Properties.Settings.Default.ScaleIndex = index;
-        Properties.Settings.Default.Save();
     }
 
     internal void SetHideTaskbar(bool hideTaskbar)
     {
         captureState.HideTaskbar = hideTaskbar;
         Properties.Settings.Default.HideTaskbar = hideTaskbar;
-        Properties.Settings.Default.Save();
     }
 
     internal void SetCapturingCursor(bool capturing)
     {
         captureState.CapturingCursor = capturing;
         Properties.Settings.Default.CaptureCursor = capturing;
-        Properties.Settings.Default.Save();
     }
 
     internal void MoveWindow(Point newPosition)
