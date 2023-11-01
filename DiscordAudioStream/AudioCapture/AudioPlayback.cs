@@ -11,6 +11,7 @@ internal class AudioPlayback : IDisposable
 {
     public event Action<float, float>? AudioLevelChanged;
 
+    private readonly string deviceId;
     private readonly IWaveIn audioSource;
     private readonly IWavePlayer output;
     private readonly BufferedWaveProvider outputProvider;
@@ -21,6 +22,7 @@ internal class AudioPlayback : IDisposable
     public AudioPlayback(int deviceIndex)
     {
         MMDevice device = GetAudioDevice(deviceIndex);
+        deviceId = device.ID;
         audioSource = CaptureDevice(device);
         audioSource.DataAvailable += AudioSource_DataAvailable;
         Logger.Log("Started audio device: " + device);
@@ -67,23 +69,13 @@ internal class AudioPlayback : IDisposable
 
     public static int GetDefaultDeviceIndex()
     {
-        if (audioDevices == null)
-        {
-            throw new InvalidOperationException("RefreshDevices() must be called before calling GetDefaultDeviceIndex");
-        }
         using MMDevice? defaultDevice = GetDefaultDevice();
-        string? defaultDeviceId = defaultDevice?.ID;
-        return audioDevices.FindIndex(device => device.ID == defaultDeviceId);
+        return defaultDevice != null ? GetIndexOfDeviceWithId(defaultDevice.ID) : -1;
     }
 
     public static int GetLastDeviceIndex()
     {
-        if (audioDevices == null)
-        {
-            throw new InvalidOperationException("RefreshDevices() must be called before calling GetLastDeviceIndex");
-        }
-        string lastDeviceId = Properties.Settings.Default.AudioDeviceID;
-        return audioDevices.FindIndex(device => device.ID == lastDeviceId);
+        return GetIndexOfDeviceWithId(Properties.Settings.Default.AudioDeviceID);
     }
 
     public static void StoreLastDeviceIndex(int deviceIndex)
@@ -91,7 +83,7 @@ internal class AudioPlayback : IDisposable
         MMDevice device = GetAudioDevice(deviceIndex);
         if (Properties.Settings.Default.AudioDeviceID != device.ID)
         {
-            Logger.Log("Storing audio device ID: " + device.ID);
+            Logger.Log($"Storing audio device ID: {device.ID}");
             Properties.Settings.Default.AudioDeviceID = device.ID;
         }
     }
@@ -139,6 +131,11 @@ internal class AudioPlayback : IDisposable
         output.Stop();
     }
 
+    public int GetIndex()
+    {
+        return GetIndexOfDeviceWithId(deviceId);
+    }
+
     private void AudioSource_DataAvailable(object? sender, WaveInEventArgs e)
     {
         // New audio data available, append to output audio buffer
@@ -179,11 +176,20 @@ internal class AudioPlayback : IDisposable
         return enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
     }
 
+    private static int GetIndexOfDeviceWithId(string id)
+    {
+        if (audioDevices == null)
+        {
+            throw new InvalidOperationException("RefreshDevices() must be called before attempting to find index");
+        }
+        return audioDevices.FindIndex(device => device.ID == id);
+    }
+
     private static MMDevice GetAudioDevice(int index)
     {
         if (audioDevices == null)
         {
-            throw new InvalidOperationException("RefreshDevices() must be called before GetDeviceByIndex");
+            throw new InvalidOperationException("RefreshDevices() must be called before attempting to get device");
         }
         if (index < 0 || index > audioDevices.Count)
         {

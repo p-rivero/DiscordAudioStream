@@ -409,6 +409,6 @@ public partial class MainForm : Form
 
     private void inputDeviceComboBox_SelectedIndexChanged(object sender, EventArgs e)
     {
-        Controller.UpdateStoredAudioIndex();
+        Controller.UpdateAudioIndex();
     }
 }

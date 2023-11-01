@@ -257,7 +257,20 @@ public class MainController : IDisposable
 
         Logger.EmptyLine();
         Logger.Log("START STREAM (With audio)");
+        StartAudioPlayback(deviceIndex);
+    }
 
+    private void EndStream()
+    {
+        Logger.EmptyLine();
+        Logger.Log("END STREAM");
+        StopAudioPlayback();
+        form.EnableStreamingUI(false);
+        IsStreaming = false;
+    }
+
+    private void StartAudioPlayback(int deviceIndex)
+    {
         audioPlayback = new(deviceIndex);
         audioPlayback.AudioLevelChanged += (left, right) => currentMeterForm?.SetLevels(left, right);
         try
@@ -277,13 +290,15 @@ public class MainController : IDisposable
         }
     }
 
-    private void EndStream()
+    private void StopAudioPlayback()
     {
-        Logger.EmptyLine();
-        Logger.Log("END STREAM");
-        form.EnableStreamingUI(false);
-        IsStreaming = false;
-        audioPlayback?.Stop();
+        if (audioPlayback != null)
+        {
+            Logger.Log("Stopping audio playback");
+            audioPlayback.Stop();
+            audioPlayback.Dispose();
+            audioPlayback = null;
+        }
     }
 
     private void AbortCapture()
@@ -378,20 +393,30 @@ public class MainController : IDisposable
         form.Location = newPosition;
     }
 
-    internal void UpdateStoredAudioIndex()
+    internal void UpdateAudioIndex()
     {
         if (form.HasSomeAudioSource)
         {
             AudioPlayback.StoreLastDeviceIndex(form.AudioSourceIndex);
+            if (IsStreaming && audioPlayback?.GetIndex() != form.AudioSourceIndex)
+            {
+                StopAudioPlayback();
+                StartAudioPlayback(form.AudioSourceIndex);
+            }
         }
         else
         {
             AudioPlayback.ClearLastDeviceIndex();
+            if (IsStreaming && audioPlayback != null)
+            {
+                StopAudioPlayback();
+            }
         }
     }
 
     internal void LoadCapturePreset(int slotNumber)
     {
+        Logger.Log($"Loading capture preset {slotNumber}");
         CapturePreset? preset = CapturePreset.LoadSlot(slotNumber);
         if (preset == null)
         {
@@ -423,6 +448,7 @@ public class MainController : IDisposable
 
     internal void SaveCapturePreset(int slotNumber)
     {
+        Logger.Log($"Storing capture preset {slotNumber}");
         CustomAreaCapture.SaveCaptureArea();
         CapturePreset.FromCurrentSettings().SaveToSlot(slotNumber);
         MessageBox.Show(
