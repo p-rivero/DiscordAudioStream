@@ -29,7 +29,7 @@ internal static class DarkThemeManager
     {
         if (sender is Form form)
         {
-            EnableDarkTitlebar((HWND)form.Handle, dark: true);
+            EnableDarkTitlebar(form.HWnd(), dark: true);
         }
     }
 

@@ -86,7 +86,7 @@ public partial class CustomAreaForm : Form
     {
         Cursor.Current = Cursors.SizeAll;
         PInvoke.ReleaseCapture().AssertSuccess("Could not release capture");
-        PInvoke.SendMessage((HWND)Handle, PInvoke.WM_NCLBUTTONDOWN, (WPARAM)PInvoke.HTCAPTION, (LPARAM)0);
+        PInvoke.SendMessage(this.HWnd(), PInvoke.WM_NCLBUTTONDOWN, (WPARAM)PInvoke.HTCAPTION, (LPARAM)0);
     }
 
     private void dragBtn_MouseDown(object sender, MouseEventArgs e)

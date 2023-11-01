@@ -94,7 +94,7 @@ public class MainController : IDisposable
     private Thread CreateDrawThread()
     {
         // Get the handle now, since we cannot get it from inside the thread
-        HWND formHandle = (HWND)form.Handle;
+        HWND formHandle = form.HWnd();
         return new Thread(() => DrawThreadRun(formHandle)) { IsBackground = true, Name = "Draw Thread" };
     }
 
