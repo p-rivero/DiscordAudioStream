@@ -64,7 +64,6 @@ public class DarkThemeComboBox : ComboBox
     public override int SelectedIndex
     {
         get => base.SelectedIndex;
-
         set => base.SelectedIndex = Math.Min(value, Items.Count - numSeparators - 1);
     }
 
@@ -117,6 +116,11 @@ public class DarkThemeComboBox : ComboBox
             return;
         }
         object item = Items[e.Index];
+
+        if (item == separatorSentinel)
+        {
+            return;
+        }
 
         if (item is ComboBoxItemWithSeparator && e.Bounds.Height > ItemHeight)
         {
