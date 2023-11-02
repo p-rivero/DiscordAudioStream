@@ -127,7 +127,13 @@ public class CursorPainter : CaptureSource
 
     private static void CleanUpIconInfo(in ICONINFO iconInfo)
     {
-        PInvoke.DeleteObject(iconInfo.hbmMask).AssertSuccess("Could not delete cursor mask");
-        PInvoke.DeleteObject(iconInfo.hbmColor).AssertSuccess("Could not delete cursor color bitmap");
+        if (!iconInfo.hbmMask.IsNull)
+        {
+            PInvoke.DeleteObject(iconInfo.hbmMask).AssertSuccess("Could not delete cursor mask");
+        }
+        if (!iconInfo.hbmColor.IsNull)
+        {
+            PInvoke.DeleteObject(iconInfo.hbmColor).AssertSuccess("Could not delete cursor color bitmap");
+        }
     }
 }
