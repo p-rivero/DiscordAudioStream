@@ -55,6 +55,17 @@ public partial class MainForm : Form
         toolTip.SetToolTip(inputDeviceComboBox, Properties.Resources.Tooltip_AudioSource);
         toolTip.SetToolTip(inputDeviceLabel, Properties.Resources.Tooltip_AudioSource);
         toolTip.SetToolTip(startButton, Properties.Resources.Tooltip_StartStream);
+
+        toolStripLoadSlot1.Click += (sender, e) => Controller.LoadCapturePreset(1);
+        toolStripLoadSlot2.Click += (sender, e) => Controller.LoadCapturePreset(2);
+        toolStripLoadSlot3.Click += (sender, e) => Controller.LoadCapturePreset(3);
+        toolStripLoadSlot4.Click += (sender, e) => Controller.LoadCapturePreset(4);
+        toolStripLoadSlot5.Click += (sender, e) => Controller.LoadCapturePreset(5);
+        toolStripStoreSlot1.Click += (sender, e) => Controller.SaveCapturePreset(1);
+        toolStripStoreSlot2.Click += (sender, e) => Controller.SaveCapturePreset(2);
+        toolStripStoreSlot3.Click += (sender, e) => Controller.SaveCapturePreset(3);
+        toolStripStoreSlot4.Click += (sender, e) => Controller.SaveCapturePreset(4);
+        toolStripStoreSlot5.Click += (sender, e) => Controller.SaveCapturePreset(5);
     }
 
     public MainController Controller { get; }
@@ -134,10 +145,6 @@ public partial class MainForm : Form
             previewBox.Location = Point.Empty;
             Controller.ShowAudioMeterForm(darkMode);
             Text = Properties.Settings.Default.StreamTitle;
-            previewBox.ContextMenuStrip = streamContextMenu;
-
-            showAudioMeterToolStripMenuItem.Enabled = HasSomeAudioSource;
-            showAudioMeterToolStripMenuItem.Checked = HasSomeAudioSource && Properties.Settings.Default.ShowAudioMeter;
         }
         else
         {
@@ -147,7 +154,6 @@ public partial class MainForm : Form
             CenterToScreen();
             Controller.HideAudioMeterForm();
             Text = "Discord Audio Stream";
-            previewBox.ContextMenuStrip = null;
         }
     }
 
@@ -186,6 +192,7 @@ public partial class MainForm : Form
 
             aboutBtn.Image = Properties.Resources.white_about;
             onTopBtn.Image = Properties.Resources.white_ontop;
+            managePresetsButton.Image = Properties.Resources.white_save;
             volumeMixerButton.Image = Properties.Resources.white_mixer;
             soundDevicesButton.Image = Properties.Resources.white_speaker;
             settingsBtn.Image = Properties.Resources.white_settings;
@@ -294,7 +301,7 @@ public partial class MainForm : Form
                 Controller.SaveCapturePreset(4);
                 break;
             case Keys.Control | Keys.D5:
-                Controller.LoadCapturePreset(5); 
+                Controller.LoadCapturePreset(5);
                 break;
             case Keys.Control | Keys.Shift | Keys.D5:
                 Controller.SaveCapturePreset(5);
@@ -410,5 +417,37 @@ public partial class MainForm : Form
     private void inputDeviceComboBox_SelectedIndexChanged(object sender, EventArgs e)
     {
         Controller.UpdateAudioIndex();
+    }
+
+    private void toolStripLoad_DropDownOpening(object sender, EventArgs e)
+    {
+        ToolStripMenuItem[] loadMenuItems = { toolStripLoadSlot1, toolStripLoadSlot2, toolStripLoadSlot3, toolStripLoadSlot4, toolStripLoadSlot5 };
+        IList<bool> populatedPresets = Controller.PopulatedPresets;
+        for (int i = 0; i < loadMenuItems.Length; i++)
+        {
+            loadMenuItems[i].Enabled = populatedPresets[i];
+            loadMenuItems[i].Text = SlotText(i, populatedPresets[i]);
+        }
+    }
+
+    private static string SlotText(int index, bool populated)
+    {
+        const int MIN_SLOT = 1;
+        int slotNum = MIN_SLOT + index;
+        return populated ? $"Slot {slotNum}   [Ctrl+{slotNum}]" : $"Slot {slotNum} (Empty)";
+    }
+
+    private void managePresetsButton_Click(object sender, EventArgs e)
+    {
+        streamContextMenu.Show(Cursor.Position);
+    }
+
+    private void streamContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        stopStreamToolStripMenuItem.Visible = Controller.IsStreaming;
+        stopStreamToolStripSeparator.Visible = Controller.IsStreaming;
+        showAudioMeterToolStripMenuItem.Visible = Controller.IsStreaming;
+        showAudioMeterToolStripMenuItem.Enabled = HasSomeAudioSource;
+        showAudioMeterToolStripMenuItem.Checked = HasSomeAudioSource && Properties.Settings.Default.ShowAudioMeter;
     }
 }

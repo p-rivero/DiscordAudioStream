@@ -32,15 +32,28 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.previewBox = new System.Windows.Forms.PictureBox();
-            this.startButton = new System.Windows.Forms.Button();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.streamContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showAudioMeterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLoad = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripLoadSlot1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripLoadSlot2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripLoadSlot3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripLoadSlot4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripLoadSlot5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStore = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStoreSlot1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStoreSlot2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStoreSlot3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStoreSlot4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStoreSlot5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopStreamToolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.stopStreamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.startButton = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.toolStrip = new CustomComponents.DarkThemeToolStrip();
             this.previewBtn = new System.Windows.Forms.ToolStripButton();
             this.onTopBtn = new System.Windows.Forms.ToolStripButton();
+            this.managePresetsButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.volumeMixerButton = new System.Windows.Forms.ToolStripButton();
             this.soundDevicesButton = new System.Windows.Forms.ToolStripButton();
@@ -67,6 +80,7 @@
             // previewBox
             // 
             this.previewBox.BackColor = System.Drawing.Color.Black;
+            this.previewBox.ContextMenuStrip = this.streamContextMenu;
             this.previewBox.InitialImage = null;
             this.previewBox.Location = new System.Drawing.Point(358, 9);
             this.previewBox.Margin = new System.Windows.Forms.Padding(9, 0, 0, 0);
@@ -76,45 +90,133 @@
             this.previewBox.TabIndex = 26;
             this.previewBox.TabStop = false;
             // 
-            // startButton
-            // 
-            this.startButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.startButton.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.startButton.Location = new System.Drawing.Point(208, 14);
-            this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(140, 34);
-            this.startButton.TabIndex = 27;
-            this.startButton.Text = "START STREAM";
-            this.startButton.UseVisualStyleBackColor = true;
-            this.startButton.Click += new System.EventHandler(this.startButton_Click);
-            // 
             // streamContextMenu
             // 
             this.streamContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showAudioMeterToolStripMenuItem,
-            this.toolStripSeparator3,
+            this.toolStripLoad,
+            this.toolStripStore,
+            this.stopStreamToolStripSeparator,
             this.stopStreamToolStripMenuItem});
             this.streamContextMenu.Name = "contextMenu";
-            this.streamContextMenu.Size = new System.Drawing.Size(171, 54);
+            this.streamContextMenu.Size = new System.Drawing.Size(180, 98);
+            this.streamContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.streamContextMenu_Opening);
             // 
             // showAudioMeterToolStripMenuItem
             // 
             this.showAudioMeterToolStripMenuItem.Name = "showAudioMeterToolStripMenuItem";
-            this.showAudioMeterToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.showAudioMeterToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.showAudioMeterToolStripMenuItem.Text = "Show audio meter";
             this.showAudioMeterToolStripMenuItem.Click += new System.EventHandler(this.showAudioMeterToolStripMenuItem_Click);
             // 
-            // toolStripSeparator3
+            // toolStripLoad
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(167, 6);
+            this.toolStripLoad.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLoadSlot1,
+            this.toolStripLoadSlot2,
+            this.toolStripLoadSlot3,
+            this.toolStripLoadSlot4,
+            this.toolStripLoadSlot5});
+            this.toolStripLoad.Name = "toolStripLoad";
+            this.toolStripLoad.Size = new System.Drawing.Size(179, 22);
+            this.toolStripLoad.Text = "Load capture preset";
+            this.toolStripLoad.DropDownOpening += new System.EventHandler(this.toolStripLoad_DropDownOpening);
+            // 
+            // toolStripLoadSlot1
+            // 
+            this.toolStripLoadSlot1.Name = "toolStripLoadSlot1";
+            this.toolStripLoadSlot1.Size = new System.Drawing.Size(103, 22);
+            this.toolStripLoadSlot1.Text = "Slot 1";
+            // 
+            // toolStripLoadSlot2
+            // 
+            this.toolStripLoadSlot2.Name = "toolStripLoadSlot2";
+            this.toolStripLoadSlot2.Size = new System.Drawing.Size(103, 22);
+            this.toolStripLoadSlot2.Text = "Slot 2";
+            // 
+            // toolStripLoadSlot3
+            // 
+            this.toolStripLoadSlot3.Name = "toolStripLoadSlot3";
+            this.toolStripLoadSlot3.Size = new System.Drawing.Size(103, 22);
+            this.toolStripLoadSlot3.Text = "Slot 3";
+            // 
+            // toolStripLoadSlot4
+            // 
+            this.toolStripLoadSlot4.Name = "toolStripLoadSlot4";
+            this.toolStripLoadSlot4.Size = new System.Drawing.Size(103, 22);
+            this.toolStripLoadSlot4.Text = "Slot 4";
+            // 
+            // toolStripLoadSlot5
+            // 
+            this.toolStripLoadSlot5.Name = "toolStripLoadSlot5";
+            this.toolStripLoadSlot5.Size = new System.Drawing.Size(103, 22);
+            this.toolStripLoadSlot5.Text = "Slot 5";
+            // 
+            // toolStripStore
+            // 
+            this.toolStripStore.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStoreSlot1,
+            this.toolStripStoreSlot2,
+            this.toolStripStoreSlot3,
+            this.toolStripStoreSlot4,
+            this.toolStripStoreSlot5});
+            this.toolStripStore.Name = "toolStripStore";
+            this.toolStripStore.Size = new System.Drawing.Size(179, 22);
+            this.toolStripStore.Text = "Store capture preset";
+            // 
+            // toolStripStoreSlot1
+            // 
+            this.toolStripStoreSlot1.Name = "toolStripStoreSlot1";
+            this.toolStripStoreSlot1.Size = new System.Drawing.Size(176, 22);
+            this.toolStripStoreSlot1.Text = "Slot 1   [Ctrl+Alt+1]";
+            // 
+            // toolStripStoreSlot2
+            // 
+            this.toolStripStoreSlot2.Name = "toolStripStoreSlot2";
+            this.toolStripStoreSlot2.Size = new System.Drawing.Size(176, 22);
+            this.toolStripStoreSlot2.Text = "Slot 2   [Ctrl+Alt+2]";
+            // 
+            // toolStripStoreSlot3
+            // 
+            this.toolStripStoreSlot3.Name = "toolStripStoreSlot3";
+            this.toolStripStoreSlot3.Size = new System.Drawing.Size(176, 22);
+            this.toolStripStoreSlot3.Text = "Slot 3   [Ctrl+Alt+3]";
+            // 
+            // toolStripStoreSlot4
+            // 
+            this.toolStripStoreSlot4.Name = "toolStripStoreSlot4";
+            this.toolStripStoreSlot4.Size = new System.Drawing.Size(176, 22);
+            this.toolStripStoreSlot4.Text = "Slot 4   [Ctrl+Alt+4]";
+            // 
+            // toolStripStoreSlot5
+            // 
+            this.toolStripStoreSlot5.Name = "toolStripStoreSlot5";
+            this.toolStripStoreSlot5.Size = new System.Drawing.Size(176, 22);
+            this.toolStripStoreSlot5.Text = "Slot 5   [Ctrl+Alt+5]";
+            // 
+            // stopStreamToolStripSeparator
+            // 
+            this.stopStreamToolStripSeparator.Name = "stopStreamToolStripSeparator";
+            this.stopStreamToolStripSeparator.Size = new System.Drawing.Size(176, 6);
             // 
             // stopStreamToolStripMenuItem
             // 
             this.stopStreamToolStripMenuItem.Name = "stopStreamToolStripMenuItem";
-            this.stopStreamToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.stopStreamToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.stopStreamToolStripMenuItem.Text = "Stop stream";
             this.stopStreamToolStripMenuItem.Click += new System.EventHandler(this.stopStreamToolStripMenuItem_Click);
+            // 
+            // startButton
+            // 
+            this.startButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.startButton.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.startButton.Location = new System.Drawing.Point(219, 14);
+            this.startButton.Name = "startButton";
+            this.startButton.Size = new System.Drawing.Size(129, 34);
+            this.startButton.TabIndex = 27;
+            this.startButton.Text = "START STREAM";
+            this.startButton.UseVisualStyleBackColor = true;
+            this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
             // toolStrip
             // 
@@ -125,6 +227,7 @@
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.previewBtn,
             this.onTopBtn,
+            this.managePresetsButton,
             this.toolStripSeparator1,
             this.volumeMixerButton,
             this.soundDevicesButton,
@@ -135,7 +238,7 @@
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(9);
             this.toolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip.Size = new System.Drawing.Size(186, 43);
+            this.toolStrip.Size = new System.Drawing.Size(210, 43);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.TabStop = true;
             this.toolStrip.Text = "toolStrip1";
@@ -146,7 +249,6 @@
             this.previewBtn.CheckOnClick = true;
             this.previewBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.previewBtn.Image = ((System.Drawing.Image)(resources.GetObject("previewBtn.Image")));
-            this.previewBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.previewBtn.Margin = new System.Windows.Forms.Padding(0);
             this.previewBtn.Name = "previewBtn";
             this.previewBtn.Size = new System.Drawing.Size(24, 25);
@@ -161,7 +263,6 @@
             this.onTopBtn.CheckOnClick = true;
             this.onTopBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.onTopBtn.Image = ((System.Drawing.Image)(resources.GetObject("onTopBtn.Image")));
-            this.onTopBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.onTopBtn.Margin = new System.Windows.Forms.Padding(0);
             this.onTopBtn.Name = "onTopBtn";
             this.onTopBtn.Size = new System.Drawing.Size(24, 25);
@@ -169,9 +270,21 @@
             this.onTopBtn.ToolTipText = "Always on top | Ctrl+T";
             this.onTopBtn.CheckedChanged += new System.EventHandler(this.onTopCheckBox_CheckedChanged);
             // 
+            // managePresetsButton
+            // 
+            this.managePresetsButton.AutoSize = false;
+            this.managePresetsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.managePresetsButton.Image = ((System.Drawing.Image)(resources.GetObject("managePresetsButton.Image")));
+            this.managePresetsButton.Margin = new System.Windows.Forms.Padding(0);
+            this.managePresetsButton.Name = "managePresetsButton";
+            this.managePresetsButton.Size = new System.Drawing.Size(24, 25);
+            this.managePresetsButton.Text = "Manage capture presets";
+            this.managePresetsButton.Click += new System.EventHandler(this.managePresetsButton_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.AutoSize = false;
+            this.toolStripSeparator1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(2, 20);
@@ -180,7 +293,6 @@
             // 
             this.volumeMixerButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.volumeMixerButton.Image = ((System.Drawing.Image)(resources.GetObject("volumeMixerButton.Image")));
-            this.volumeMixerButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.volumeMixerButton.Name = "volumeMixerButton";
             this.volumeMixerButton.Size = new System.Drawing.Size(23, 22);
             this.volumeMixerButton.Text = "Open volume mixer | Ctrl+V";
@@ -190,7 +302,6 @@
             // 
             this.soundDevicesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.soundDevicesButton.Image = ((System.Drawing.Image)(resources.GetObject("soundDevicesButton.Image")));
-            this.soundDevicesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.soundDevicesButton.Name = "soundDevicesButton";
             this.soundDevicesButton.Size = new System.Drawing.Size(23, 22);
             this.soundDevicesButton.Text = "Configure audio devices | Ctrl+A";
@@ -199,6 +310,7 @@
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.AutoSize = false;
+            this.toolStripSeparator2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripSeparator2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(2, 20);
@@ -208,12 +320,10 @@
             this.settingsBtn.AutoSize = false;
             this.settingsBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.settingsBtn.Image = ((System.Drawing.Image)(resources.GetObject("settingsBtn.Image")));
-            this.settingsBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.settingsBtn.Margin = new System.Windows.Forms.Padding(0);
             this.settingsBtn.Name = "settingsBtn";
             this.settingsBtn.Size = new System.Drawing.Size(24, 25);
-            this.settingsBtn.Text = "About | F1";
-            this.settingsBtn.ToolTipText = "Settings | Ctrl+Comma";
+            this.settingsBtn.Text = "Settings | Ctrl+Comma";
             this.settingsBtn.Click += new System.EventHandler(this.settingsBtn_Click);
             // 
             // aboutBtn
@@ -221,7 +331,6 @@
             this.aboutBtn.AutoSize = false;
             this.aboutBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.aboutBtn.Image = ((System.Drawing.Image)(resources.GetObject("aboutBtn.Image")));
-            this.aboutBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.aboutBtn.Margin = new System.Windows.Forms.Padding(0);
             this.aboutBtn.Name = "aboutBtn";
             this.aboutBtn.Size = new System.Drawing.Size(24, 25);
@@ -324,8 +433,10 @@
             // 
             // areaComboBox
             // 
+            this.areaComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
             this.areaComboBox.DropDownHeight = 250;
             this.areaComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.areaComboBox.IntegralHeight = false;
             this.areaComboBox.Location = new System.Drawing.Point(55, 19);
             this.areaComboBox.Name = "areaComboBox";
             this.areaComboBox.Size = new System.Drawing.Size(279, 24);
@@ -415,7 +526,20 @@
         private System.Windows.Forms.ContextMenuStrip streamContextMenu;
         private System.Windows.Forms.ToolStripMenuItem showAudioMeterToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopStreamToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripStore;
+        private System.Windows.Forms.ToolStripMenuItem toolStripStoreSlot1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripStoreSlot2;
+        private System.Windows.Forms.ToolStripMenuItem toolStripStoreSlot3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripStoreSlot4;
+        private System.Windows.Forms.ToolStripMenuItem toolStripStoreSlot5;
+        private System.Windows.Forms.ToolStripMenuItem toolStripLoad;
+        private System.Windows.Forms.ToolStripMenuItem toolStripLoadSlot1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripLoadSlot2;
+        private System.Windows.Forms.ToolStripMenuItem toolStripLoadSlot3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripLoadSlot4;
+        private System.Windows.Forms.ToolStripMenuItem toolStripLoadSlot5;
+        private System.Windows.Forms.ToolStripButton managePresetsButton;
+        private System.Windows.Forms.ToolStripSeparator stopStreamToolStripSeparator;
     }
 }
 

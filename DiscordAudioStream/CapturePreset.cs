@@ -61,6 +61,8 @@ public record CapturePreset
         SerializePresets(presetList);
     }
 
+    public static IList<bool> PopulatedPresets => presetList.Select(p => p != null).ToList();
+
     private static List<CapturePreset?> DeserializeStoredPresets()
     {
         const int LIST_REQUIRED_SIZE = MAX_SLOT - MIN_SLOT + 1;
@@ -72,7 +74,7 @@ public record CapturePreset
         }
         return list;
     }
-    
+
     private static void SerializePresets(List<CapturePreset?> presets)
     {
         Settings.Default.StoredPresets = JsonSerializer.Serialize(presets);

@@ -87,7 +87,7 @@ internal class AudioPlayback : IDisposable
             Properties.Settings.Default.AudioDeviceID = device.ID;
         }
     }
-    
+
     public static void ClearLastDeviceIndex()
     {
         Logger.Log("Clearing stored audio device");

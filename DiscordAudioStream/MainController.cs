@@ -15,6 +15,8 @@ public class MainController : IDisposable
 {
     internal Action? OnAudioMeterClosed { get; set; }
 
+    public bool IsStreaming { get; private set; }
+
     private readonly MainForm form;
     private bool forceRefresh;
     private Size lastCapturedFrameSize = Size.Empty;
@@ -48,8 +50,6 @@ public class MainController : IDisposable
             currentMeterForm?.Dispose();
         }
     }
-
-    public bool IsStreaming { get; private set; }
 
     internal void Init()
     {
@@ -458,4 +458,6 @@ public class MainController : IDisposable
             MessageBoxIcon.Information
         );
     }
+
+    internal IList<bool> PopulatedPresets => CapturePreset.PopulatedPresets;
 }
