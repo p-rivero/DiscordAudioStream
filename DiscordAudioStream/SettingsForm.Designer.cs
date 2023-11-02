@@ -46,6 +46,7 @@
             this.captureFramerateLabel = new System.Windows.Forms.Label();
             this.autoExitCheckbox = new CustomComponents.DarkThemeCheckBox();
             this.debugPage = new System.Windows.Forms.TabPage();
+            this.settingsXMLLink = new System.Windows.Forms.LinkLabel();
             this.showAudioInputsCheckbox = new CustomComponents.DarkThemeCheckBox();
             this.offscreenDrawCheckbox = new CustomComponents.DarkThemeCheckBox();
             this.outputLogCheckbox = new CustomComponents.DarkThemeCheckBox();
@@ -260,6 +261,7 @@
             // debugPage
             // 
             this.debugPage.BackColor = System.Drawing.Color.White;
+            this.debugPage.Controls.Add(this.settingsXMLLink);
             this.debugPage.Controls.Add(this.showAudioInputsCheckbox);
             this.debugPage.Controls.Add(this.offscreenDrawCheckbox);
             this.debugPage.Controls.Add(this.outputLogCheckbox);
@@ -271,6 +273,18 @@
             this.debugPage.Size = new System.Drawing.Size(248, 163);
             this.debugPage.TabIndex = 2;
             this.debugPage.Text = "Debug";
+            // 
+            // settingsXMLLink
+            // 
+            this.settingsXMLLink.AutoSize = true;
+            this.settingsXMLLink.Location = new System.Drawing.Point(6, 138);
+            this.settingsXMLLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
+            this.settingsXMLLink.Name = "settingsXMLLink";
+            this.settingsXMLLink.Size = new System.Drawing.Size(126, 15);
+            this.settingsXMLLink.TabIndex = 42;
+            this.settingsXMLLink.TabStop = true;
+            this.settingsXMLLink.Text = "Open settings XML file";
+            this.settingsXMLLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.settingsXMLLink_LinkClicked);
             // 
             // showAudioInputsCheckbox
             // 
@@ -305,7 +319,7 @@
             // audioDevicesLink
             // 
             this.audioDevicesLink.AutoSize = true;
-            this.audioDevicesLink.Location = new System.Drawing.Point(6, 117);
+            this.audioDevicesLink.Location = new System.Drawing.Point(6, 114);
             this.audioDevicesLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
             this.audioDevicesLink.Name = "audioDevicesLink";
             this.audioDevicesLink.Size = new System.Drawing.Size(125, 15);
@@ -384,5 +398,6 @@
         private System.Windows.Forms.Label streamTitleLabel;
         private CustomComponents.DarkThemeTextBox streamTitleBox;
         private CustomComponents.DarkThemeCheckBox audioMeterCheckBox;
+        private System.Windows.Forms.LinkLabel settingsXMLLink;
     }
 }

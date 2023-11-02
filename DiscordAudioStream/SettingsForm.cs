@@ -1,8 +1,12 @@
-﻿using System.Drawing;
+﻿using System.Configuration;
+using System.Diagnostics;
+using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 using CustomComponents;
 
+using DiscordAudioStream.Properties;
 using DiscordAudioStream.VideoCapture;
 
 namespace DiscordAudioStream;
@@ -42,37 +46,37 @@ internal partial class SettingsForm : Form
 
         // Set default values
 
-        themeComboBox.SelectedIndex = Properties.Settings.Default.Theme;
-        autoExitCheckbox.Checked = Properties.Settings.Default.AutoExit;
-        outputLogCheckbox.Checked = Properties.Settings.Default.OutputLogFile;
-        offscreenDrawCheckbox.Checked = Properties.Settings.Default.OffscreenDraw;
-        showAudioInputsCheckbox.Checked = Properties.Settings.Default.ShowAudioInputs;
-        streamTitleBox.Text = Properties.Settings.Default.StreamTitle;
-        audioMeterCheckBox.Checked = Properties.Settings.Default.ShowAudioMeter;
+        themeComboBox.SelectedIndex = Settings.Default.Theme;
+        autoExitCheckbox.Checked = Settings.Default.AutoExit;
+        outputLogCheckbox.Checked = Settings.Default.OutputLogFile;
+        offscreenDrawCheckbox.Checked = Settings.Default.OffscreenDraw;
+        showAudioInputsCheckbox.Checked = Settings.Default.ShowAudioInputs;
+        streamTitleBox.Text = Settings.Default.StreamTitle;
+        audioMeterCheckBox.Checked = Settings.Default.ShowAudioMeter;
 
         windowMethodComboBox.SelectedIndex = (int)captureState.WindowMethod;
         fullscreenMethodComboBox.SelectedIndex = (int)captureState.ScreenMethod;
 
-        FrameRates selectedFramerate = (FrameRates)Properties.Settings.Default.CaptureFramerate;
+        FrameRates selectedFramerate = (FrameRates)Settings.Default.CaptureFramerate;
         Array allFramerates = Enum.GetValues(typeof(FrameRates));
         captureFramerateComboBox.SelectedIndex = Array.IndexOf(allFramerates, selectedFramerate);
 
         // Set tooltips
-        toolTip.SetToolTip(autoExitCheckbox, Properties.Resources.Tooltip_AutoExit);
-        toolTip.SetToolTip(captureFramerateLabel, Properties.Resources.Tooltip_CaptureFramerate);
-        toolTip.SetToolTip(captureFramerateComboBox, Properties.Resources.Tooltip_CaptureFramerate);
-        toolTip.SetToolTip(fullscreenMethodLabel, Properties.Resources.Tooltip_FullscreenMethod);
-        toolTip.SetToolTip(fullscreenMethodComboBox, Properties.Resources.Tooltip_FullscreenMethod);
-        toolTip.SetToolTip(windowMethodLabel, Properties.Resources.Tooltip_WindowMethod);
-        toolTip.SetToolTip(windowMethodComboBox, Properties.Resources.Tooltip_WindowMethod);
-        toolTip.SetToolTip(outputLogCheckbox, Properties.Resources.Tooltip_OutputLog);
-        toolTip.SetToolTip(offscreenDrawCheckbox, Properties.Resources.Tooltip_OffscreenDraw);
-        toolTip.SetToolTip(showAudioInputsCheckbox, Properties.Resources.Tooltip_ShowAudioInputs);
-        toolTip.SetToolTip(themeLabel, Properties.Resources.Tooltip_WindowTheme);
-        toolTip.SetToolTip(themeComboBox, Properties.Resources.Tooltip_WindowTheme);
-        toolTip.SetToolTip(streamTitleLabel, Properties.Resources.Tooltip_StreamTitle);
-        toolTip.SetToolTip(streamTitleBox, Properties.Resources.Tooltip_StreamTitle);
-        toolTip.SetToolTip(audioMeterCheckBox, Properties.Resources.Tooltip_ShowAudioMeter);
+        toolTip.SetToolTip(autoExitCheckbox, Resources.Tooltip_AutoExit);
+        toolTip.SetToolTip(captureFramerateLabel, Resources.Tooltip_CaptureFramerate);
+        toolTip.SetToolTip(captureFramerateComboBox, Resources.Tooltip_CaptureFramerate);
+        toolTip.SetToolTip(fullscreenMethodLabel, Resources.Tooltip_FullscreenMethod);
+        toolTip.SetToolTip(fullscreenMethodComboBox, Resources.Tooltip_FullscreenMethod);
+        toolTip.SetToolTip(windowMethodLabel, Resources.Tooltip_WindowMethod);
+        toolTip.SetToolTip(windowMethodComboBox, Resources.Tooltip_WindowMethod);
+        toolTip.SetToolTip(outputLogCheckbox, Resources.Tooltip_OutputLog);
+        toolTip.SetToolTip(offscreenDrawCheckbox, Resources.Tooltip_OffscreenDraw);
+        toolTip.SetToolTip(showAudioInputsCheckbox, Resources.Tooltip_ShowAudioInputs);
+        toolTip.SetToolTip(themeLabel, Resources.Tooltip_WindowTheme);
+        toolTip.SetToolTip(themeComboBox, Resources.Tooltip_WindowTheme);
+        toolTip.SetToolTip(streamTitleLabel, Resources.Tooltip_StreamTitle);
+        toolTip.SetToolTip(streamTitleBox, Resources.Tooltip_StreamTitle);
+        toolTip.SetToolTip(audioMeterCheckBox, Resources.Tooltip_ShowAudioMeter);
     }
 
     private void ApplyDarkTheme(bool darkMode)
@@ -104,6 +108,7 @@ internal partial class SettingsForm : Form
 
         classicVolumeMixerLink.LinkColor = DarkThemeManager.AccentColor;
         audioDevicesLink.LinkColor = DarkThemeManager.AccentColor;
+        settingsXMLLink.LinkColor = DarkThemeManager.AccentColor;
     }
 
     // Events
@@ -120,14 +125,14 @@ internal partial class SettingsForm : Form
     {
         int theme = themeComboBox.SelectedIndex;
         // Nothing changed
-        if (Properties.Settings.Default.Theme == theme)
+        if (Settings.Default.Theme == theme)
         {
             return;
         }
 
-        Properties.Settings.Default.Theme = theme;
+        Settings.Default.Theme = theme;
         Logger.EmptyLine();
-        Logger.Log($"Change settings: Theme={Properties.Settings.Default.Theme}. Restarting...");
+        Logger.Log($"Change settings: Theme={Settings.Default.Theme}. Restarting...");
 
         Application.Restart();
         Environment.Exit(0);
@@ -136,39 +141,46 @@ internal partial class SettingsForm : Form
     private void classicVolumeMixerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
         string cplPath = Path.Combine(Environment.SystemDirectory, "sndvol.exe");
-        System.Diagnostics.Process.Start(cplPath);
+        Process.Start(cplPath);
     }
 
     private void audioDevicesLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
         string cplPath = Path.Combine(Environment.SystemDirectory, "control.exe");
-        System.Diagnostics.Process.Start(cplPath, "/name Microsoft.Sound");
+        Process.Start(cplPath, "/name Microsoft.Sound");
+    }
+
+    private void settingsXMLLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+    {
+        string settingsPath = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath;
+        Logger.Log($"Opening settings XML file: {settingsPath}");
+        Process.Start(settingsPath);
     }
 
     private void autoExitCheckbox_CheckedChanged(object sender, EventArgs e)
     {
         // Nothing changed
-        if (Properties.Settings.Default.AutoExit == autoExitCheckbox.Checked)
+        if (Settings.Default.AutoExit == autoExitCheckbox.Checked)
         {
             return;
         }
 
-        Properties.Settings.Default.AutoExit = autoExitCheckbox.Checked;
+        Settings.Default.AutoExit = autoExitCheckbox.Checked;
         Logger.EmptyLine();
-        Logger.Log("Change settings: AutoExit=" + Properties.Settings.Default.AutoExit);
+        Logger.Log("Change settings: AutoExit=" + Settings.Default.AutoExit);
     }
 
     private void outputLogCheckbox_CheckedChanged(object sender, EventArgs e)
     {
         // Nothing changed
-        if (Properties.Settings.Default.OutputLogFile == outputLogCheckbox.Checked)
+        if (Settings.Default.OutputLogFile == outputLogCheckbox.Checked)
         {
             return;
         }
 
-        Properties.Settings.Default.OutputLogFile = outputLogCheckbox.Checked;
+        Settings.Default.OutputLogFile = outputLogCheckbox.Checked;
         Logger.EmptyLine();
-        Logger.Log("Change settings: OutputLogFile=" + Properties.Settings.Default.OutputLogFile);
+        Logger.Log("Change settings: OutputLogFile=" + Settings.Default.OutputLogFile);
     }
 
     private void fullscreenMethodComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -189,12 +201,12 @@ internal partial class SettingsForm : Form
         FrameRates selectedFramerate = (FrameRates)allFramerates.GetValue(captureFramerateComboBox.SelectedIndex);
 
         // Nothing changed
-        if (Properties.Settings.Default.CaptureFramerate == (int)selectedFramerate)
+        if (Settings.Default.CaptureFramerate == (int)selectedFramerate)
         {
             return;
         }
 
-        Properties.Settings.Default.CaptureFramerate = (int)selectedFramerate;
+        Settings.Default.CaptureFramerate = (int)selectedFramerate;
         Logger.EmptyLine();
         Logger.Log("Change settings: CaptureFramerate=" + selectedFramerate);
 
@@ -204,32 +216,32 @@ internal partial class SettingsForm : Form
     private void offscreenDrawCheckbox_CheckedChanged(object sender, EventArgs e)
     {
         // Nothing changed
-        if (Properties.Settings.Default.OffscreenDraw == offscreenDrawCheckbox.Checked)
+        if (Settings.Default.OffscreenDraw == offscreenDrawCheckbox.Checked)
         {
             return;
         }
 
-        Properties.Settings.Default.OffscreenDraw = offscreenDrawCheckbox.Checked;
+        Settings.Default.OffscreenDraw = offscreenDrawCheckbox.Checked;
         Logger.EmptyLine();
-        Logger.Log("Change settings: OffscreenDraw=" + Properties.Settings.Default.OffscreenDraw);
+        Logger.Log("Change settings: OffscreenDraw=" + Settings.Default.OffscreenDraw);
     }
 
     private void SettingsForm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
     {
-        System.Diagnostics.Process.Start(Properties.Resources.URL_CaptureMethodsInfoLink);
+        Process.Start(Resources.URL_CaptureMethodsInfoLink);
     }
 
     private void showAudioInputsCheckbox_CheckedChanged(object sender, EventArgs e)
     {
         // Nothing changed
-        if (Properties.Settings.Default.ShowAudioInputs == showAudioInputsCheckbox.Checked)
+        if (Settings.Default.ShowAudioInputs == showAudioInputsCheckbox.Checked)
         {
             return;
         }
 
-        Properties.Settings.Default.ShowAudioInputs = showAudioInputsCheckbox.Checked;
+        Settings.Default.ShowAudioInputs = showAudioInputsCheckbox.Checked;
         Logger.EmptyLine();
-        Logger.Log("Change settings: ShowAudioInputs=" + Properties.Settings.Default.ShowAudioInputs);
+        Logger.Log("Change settings: ShowAudioInputs=" + Settings.Default.ShowAudioInputs);
 
         ShowAudioInputsChanged?.Invoke();
     }
@@ -237,13 +249,13 @@ internal partial class SettingsForm : Form
     private void streamTitleBox_TextChanged(object sender, EventArgs e)
     {
         // Nothing changed
-        if (Properties.Settings.Default.StreamTitle == streamTitleBox.Text)
+        if (Settings.Default.StreamTitle == streamTitleBox.Text)
         {
             return;
         }
         try
         {
-            Properties.Settings.Default.StreamTitle = streamTitleBox.Text;
+            Settings.Default.StreamTitle = streamTitleBox.Text;
             // Text could contain sensitive information, don't log it
             Logger.Log("Stream title saved successfully");
         }
@@ -258,13 +270,13 @@ internal partial class SettingsForm : Form
     private void audioMeterCheckBox_CheckedChanged(object sender, EventArgs e)
     {
         // Nothing changed
-        if (Properties.Settings.Default.ShowAudioMeter == audioMeterCheckBox.Checked)
+        if (Settings.Default.ShowAudioMeter == audioMeterCheckBox.Checked)
         {
             return;
         }
 
-        Properties.Settings.Default.ShowAudioMeter = audioMeterCheckBox.Checked;
+        Settings.Default.ShowAudioMeter = audioMeterCheckBox.Checked;
         Logger.EmptyLine();
-        Logger.Log("Change settings: ShowAudioMeter=" + Properties.Settings.Default.ShowAudioMeter);
+        Logger.Log("Change settings: ShowAudioMeter=" + Settings.Default.ShowAudioMeter);
     }
 }
