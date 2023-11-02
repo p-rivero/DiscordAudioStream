@@ -34,8 +34,8 @@ public class VideoCaptureManager : IDisposable
         captureState.StateChanged += () => new Thread(UpdateState).Start();
 
         // Start capture
+        new Thread(UpdateState).Start();
         RefreshFramerate();
-        UpdateState();
         captureThread = CreateCaptureThread();
         captureThread.Start();
     }
@@ -75,17 +75,16 @@ public class VideoCaptureManager : IDisposable
 
     private void CaptureThreadRun()
     {
+        int fps = Properties.Settings.Default.CaptureFramerate;
+        Logger.EmptyLine();
+        Logger.Log($"Creating Capture thread. Target framerate: {fps} FPS ({CaptureIntervalMs} ms)");
+        Stopwatch stopwatch = new();
+
         while (currentSource == null)
         {
             Logger.Log("Capture thread waiting for capture source to initialize...");
             Thread.Sleep(100);
         }
-
-        int fps = Properties.Settings.Default.CaptureFramerate;
-        Logger.EmptyLine();
-        Logger.Log($"Creating Capture thread. Target framerate: {fps} FPS ({CaptureIntervalMs} ms)");
-
-        Stopwatch stopwatch = new();
 
         while (true)
         {
