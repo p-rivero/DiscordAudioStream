@@ -206,9 +206,7 @@ internal class AudioPlayback : IDisposable
 
     private static IWaveProvider LimitChannels(IWaveProvider provider)
     {
-        using MMDevice? defaultDevice = GetDefaultDevice();
-        int maxChannels = defaultDevice?.AudioMeterInformation.PeakValues.Count ?? 2;
-
+        const int maxChannels = 2;
         if (provider.WaveFormat.Channels <= maxChannels)
         {
             return provider;
