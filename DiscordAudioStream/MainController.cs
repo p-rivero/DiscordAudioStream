@@ -8,6 +8,8 @@ using DiscordAudioStream.VideoCapture.CaptureStrategy;
 
 using Windows.Win32.Foundation;
 
+using static System.Net.Mime.MediaTypeNames;
+
 namespace DiscordAudioStream;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static")]
@@ -58,7 +60,12 @@ public class MainController : IDisposable
         videoCapture = new(captureState);
         videoCapture.CaptureAborted += AbortCapture;
 
-        Thread drawThread = CreateDrawThread();
+        DrawThread drawThread = new(videoCapture);
+        drawThread.PaintFrame += frame =>
+        {
+            SetPreviewSize(frame.Size);
+            form.UpdatePreview(frame, forceRefresh && IsStreaming);
+        };
         drawThread.Start();
 
         // Prefetch preset slots
@@ -100,59 +107,6 @@ public class MainController : IDisposable
     private void ForcePreviewResize()
     {
         lastCapturedFrameSize = Size.Empty;
-    }
-
-    private Thread CreateDrawThread()
-    {
-        // Get the handle now, since we cannot get it from inside the thread
-        HWND formHandle = form.HWnd();
-        return new Thread(() => DrawThreadRun(formHandle)) { IsBackground = true, Name = "Draw Thread" };
-    }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope",
-        Justification = "The result of GetNextFrame should not be disposed until the next frame arrives")]
-    private void DrawThreadRun(HWND formHandle)
-    {
-        if (videoCapture == null)
-        {
-            throw new InvalidOperationException("Must call Init() before creating draw thread");
-        }
-
-        int fps = Properties.Settings.Default.CaptureFramerate;
-        Logger.EmptyLine();
-        Logger.Log($"Creating Draw thread. Target framerate: {fps} FPS ({videoCapture.CaptureIntervalMs} ms)");
-
-        Stopwatch stopwatch = new();
-
-        while (true)
-        {
-            stopwatch.Restart();
-            try
-            {
-                Bitmap? next = VideoCaptureManager.GetNextFrame();
-
-                // No new data, keep displaying last frame
-                if (next == null)
-                {
-                    continue;
-                }
-
-                SetPreviewSize(next.Size);
-                form.UpdatePreview(next, forceRefresh && IsStreaming, formHandle);
-            }
-            catch (InvalidOperationException)
-            {
-                Logger.Log("Form is closing, stop Draw thread.");
-                return;
-            }
-            stopwatch.Stop();
-
-            int wait = videoCapture.CaptureIntervalMs - (int)stopwatch.ElapsedMilliseconds;
-            if (wait > 0)
-            {
-                Thread.Sleep(wait);
-            }
-        }
     }
 
     // INTERNAL METHODS (called from MainForm)

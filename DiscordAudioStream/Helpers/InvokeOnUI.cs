@@ -8,21 +8,16 @@ public static class InvokeOnUI
 
     public static T RunSync<T>(Func<T> func)
     {
-        return (T)RunImpl(func, false);
+        return (T)mainForm.Invoke(func);
     }
 
     public static void RunSync(Action action)
     {
-        RunImpl(action, false);
+        mainForm.Invoke(action);
     }
 
     public static void RunAsync(Action action)
     {
-        RunImpl(action, true);
-    }
-
-    private static object RunImpl(Delegate func, bool runAsync)
-    {
-        return runAsync ? mainForm.BeginInvoke(func) : mainForm.Invoke(func);
+        mainForm.BeginInvoke(action);
     }
 }
