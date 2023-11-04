@@ -69,7 +69,7 @@ public class MainController : IDisposable
         drawThread.Start();
 
         // Prefetch preset slots
-        InvokeOnUI.RunAsync(() => _ = PopulatedPresets);
+        InvokeOnUI.RunAsync(() => _ = GetPopulatedPresets());
     }
 
     // Called when the X button is pressed
@@ -416,5 +416,8 @@ public class MainController : IDisposable
         );
     }
 
-    internal IList<bool> PopulatedPresets => CapturePreset.PopulatedPresets;
+    internal IList<bool> GetPopulatedPresets()
+    {
+        return CapturePreset.GetPopulatedPresets();
+    }
 }

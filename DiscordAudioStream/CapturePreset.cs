@@ -61,7 +61,10 @@ public record CapturePreset
         SerializePresets(presetList);
     }
 
-    public static IList<bool> PopulatedPresets => presetList.Select(p => p != null).ToList();
+    public static IList<bool> GetPopulatedPresets()
+    {
+        return presetList.Select(p => p != null).ToList();
+    }
 
     private static List<CapturePreset?> DeserializeStoredPresets()
     {

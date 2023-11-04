@@ -421,7 +421,7 @@ public partial class MainForm : Form
     private void toolStripLoad_DropDownOpening(object sender, EventArgs e)
     {
         ToolStripMenuItem[] loadMenuItems = { toolStripLoadSlot1, toolStripLoadSlot2, toolStripLoadSlot3, toolStripLoadSlot4, toolStripLoadSlot5 };
-        IList<bool> populatedPresets = Controller.PopulatedPresets;
+        IList<bool> populatedPresets = Controller.GetPopulatedPresets();
         for (int i = 0; i < loadMenuItems.Length; i++)
         {
             loadMenuItems[i].Enabled = populatedPresets[i];
