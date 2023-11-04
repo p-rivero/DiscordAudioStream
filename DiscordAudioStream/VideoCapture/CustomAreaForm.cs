@@ -12,6 +12,8 @@ public partial class CustomAreaForm : Form
     public const int BORDER_WIDTH_PX = 2;
     public const string WINDOW_TITLE = "Recording area - Discord Audio Stream";
 
+    public bool FormHidden { get; set; }
+
     private Point startPos;
     private Size startSize;
     private bool showMarker;
@@ -35,7 +37,7 @@ public partial class CustomAreaForm : Form
     public new void Show()
     {
         base.Show();
-        showMarker = true;
+        showMarker = !FormHidden;
     }
 
     private void ResizeTimerElapsed(object sender, ElapsedEventArgs e)
@@ -104,9 +106,7 @@ public partial class CustomAreaForm : Form
         }
         Logger.Log("Locking area");
         showMarker = false;
-        // Hide buttons
         SetButtonsVisible(false);
-        // Redraw (lack of) red rectangle
         Refresh();
     }
 

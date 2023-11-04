@@ -388,7 +388,7 @@ public class MainController : IDisposable
         captureState.StateChangeEventEnabled = false;
         preset.ApplyToSettings();
         form.RefreshCaptureUI();
-        CustomAreaCapture.RestoreCaptureArea();
+        CustomAreaCapture.RestoreCaptureArea(hideForm: true);
         ForcePreviewResize();
         captureState.StateChangeEventEnabled = true;
 

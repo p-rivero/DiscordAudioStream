@@ -31,13 +31,14 @@ public abstract class CustomAreaCapture : CaptureSource
         Properties.Settings.Default.AreaForm_Size = customAreaForm.Size;
     }
 
-    public static void RestoreCaptureArea()
+    public static void RestoreCaptureArea(bool hideForm = false)
     {
         if (Properties.Settings.Default.AreaForm_Size != Size.Empty)
         {
             customAreaForm.Location = Properties.Settings.Default.AreaForm_Position;
             customAreaForm.Size = Properties.Settings.Default.AreaForm_Size;
         }
+        customAreaForm.FormHidden = hideForm;
     }
 
     private static void ShowAreaForm()
