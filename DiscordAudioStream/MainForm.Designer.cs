@@ -484,7 +484,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Discord Audio Stream";
             this.TopMost = global::DiscordAudioStream.Properties.Settings.Default.AlwaysOnTop;
-            this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.previewBox)).EndInit();
             this.streamContextMenu.ResumeLayout(false);

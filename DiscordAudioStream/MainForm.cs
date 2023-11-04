@@ -31,20 +31,17 @@ public partial class MainForm : Form
         }
 
         InitializeComponent();
+        ApplyDarkTheme(darkMode);
         previewBox.Visible = true;
 
         defaultWindowSize = Size;
         defaultPreviewSize = previewBox.Size;
         defaultPreviewLocation = previewBox.Location;
 
-        RefreshCaptureUI();
-
         previewBtn.Checked = Properties.Settings.Default.Preview;
         DisplayPreview(previewBtn.Checked);
 
         Controller.OnAudioMeterClosed += () => showAudioMeterToolStripMenuItem.Checked = false;
-
-        ApplyDarkTheme(darkMode);
 
         toolTip.SetToolTip(captureCursorCheckBox, Properties.Resources.Tooltip_CaptureCursor);
         toolTip.SetToolTip(hideTaskbarCheckBox, Properties.Resources.Tooltip_HideTaskbar);
@@ -230,8 +227,11 @@ public partial class MainForm : Form
 
     // EVENTS
 
-    private void MainForm_Load(object sender, EventArgs e)
+    private async void MainForm_Shown(object sender, EventArgs e)
     {
+        // Wait for the black theme to be applied to avoid flashes
+        await Task.Delay(40).ConfigureAwait(true);
+        RefreshCaptureUI();
         Controller.Init();
     }
 

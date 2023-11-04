@@ -4,6 +4,8 @@ namespace DiscordAudioStream;
 
 public static class InvokeOnUI
 {
+    private static readonly Control mainForm = Application.OpenForms[0];
+
     public static T RunSync<T>(Func<T> func)
     {
         return (T)RunImpl(func, false);
@@ -21,11 +23,6 @@ public static class InvokeOnUI
 
     private static object RunImpl(Delegate func, bool runAsync)
     {
-        if (Application.OpenForms.Count == 0)
-        {
-            throw new InvalidOperationException("Cannot invoke on UI thread: no open forms");
-        }
-        Control form = Application.OpenForms[0];
-        return runAsync ? form.BeginInvoke(func) : form.Invoke(func);
+        return runAsync ? mainForm.BeginInvoke(func) : mainForm.Invoke(func);
     }
 }

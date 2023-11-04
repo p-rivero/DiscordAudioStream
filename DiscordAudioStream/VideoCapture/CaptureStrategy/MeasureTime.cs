@@ -18,8 +18,11 @@ public class MeasureTime : CaptureSource
         Bitmap? bmp = capture.CaptureFrame();
 
         long elapsed_ms = watch.ElapsedMilliseconds;
-        float fps = 1000f / elapsed_ms;
-        Console.WriteLine($"{capture.GetType().Name}: {elapsed_ms} ms ({fps:0.#} FPS)");
+        if (elapsed_ms != 0)
+        {
+            float fps = 1000f / elapsed_ms;
+            Console.WriteLine($"{capture.GetType().Name}: {elapsed_ms} ms ({fps:0.#} FPS)");
+        }
 
         return bmp;
     }

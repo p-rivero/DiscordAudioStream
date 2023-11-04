@@ -60,6 +60,9 @@ public class MainController : IDisposable
 
         Thread drawThread = CreateDrawThread();
         drawThread.Start();
+
+        // Prefetch preset slots
+        InvokeOnUI.RunAsync(() => _ = PopulatedPresets);
     }
 
     // Called when the X button is pressed
