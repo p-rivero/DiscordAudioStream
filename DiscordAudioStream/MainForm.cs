@@ -82,11 +82,11 @@ public partial class MainForm : Form
         {
             if (hasSeparator)
             {
-                areaComboBox.Items.Add(new ComboBoxItemWithSeparator(item));
+                _ = areaComboBox.Items.Add(new ComboBoxItemWithSeparator(item));
             }
             else
             {
-                areaComboBox.Items.Add(item);
+                _ = areaComboBox.Items.Add(item);
             }
         }
         areaComboBox.RefreshSeparators();
@@ -121,7 +121,7 @@ public partial class MainForm : Form
 
     internal void SetPreviewUISize(Size newSize)
     {
-        BeginInvoke(new Action(() => previewBox.Size = newSize));
+        InvokeOnUI.RunAsync(() => previewBox.Size = newSize);
     }
 
     internal void EnableStreamingUI(bool streaming)
@@ -247,8 +247,6 @@ public partial class MainForm : Form
         e.Cancel = Controller.Stop();
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0010:Add missing cases",
-        Justification = "Not adding cases all non-shortcut keys")]
     private void MainForm_KeyDown(object sender, KeyEventArgs e)
     {
         switch (e.KeyData)
@@ -275,7 +273,7 @@ public partial class MainForm : Form
                 if (!Controller.IsStreaming) { Controller.StartStream(false); }
                 break;
             case Keys.Escape:
-                if (Controller.IsStreaming) { Controller.Stop(); }
+                if (Controller.IsStreaming) { Controller.Stop().AssertSuccess(); }
                 break;
             case Keys.Control | Keys.D1:
                 Controller.LoadCapturePreset(1);
@@ -327,13 +325,13 @@ public partial class MainForm : Form
     {
         if (Environment.OSVersion.Version.Major >= 10)
         {
-            Process.Start("ms-settings:apps-volume");
+            _ = Process.Start("ms-settings:apps-volume");
         }
         else
         {
             // Use old volume mixer
             string cplPath = Path.Combine(Environment.SystemDirectory, "sndvol.exe");
-            Process.Start(cplPath);
+            _ = Process.Start(cplPath);
         }
     }
 
@@ -342,13 +340,13 @@ public partial class MainForm : Form
     {
         if (Environment.OSVersion.Version >= new Version(10, 0, 17063))
         {
-            Process.Start("ms-settings:sound");
+            _ = Process.Start("ms-settings:sound");
         }
         else
         {
             // Use old sound settings
             string cplPath = Path.Combine(Environment.SystemDirectory, "control.exe");
-            Process.Start(cplPath, "/name Microsoft.Sound");
+            _ = Process.Start(cplPath, "/name Microsoft.Sound");
         }
     }
 
@@ -412,7 +410,7 @@ public partial class MainForm : Form
 
     private void stopStreamToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Controller.Stop();
+        Controller.Stop().AssertSuccess();
     }
 
     private void inputDeviceComboBox_SelectedIndexChanged(object sender, EventArgs e)

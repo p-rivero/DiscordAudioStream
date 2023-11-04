@@ -55,12 +55,8 @@ public static class Direct3D11Helper
         CreateDirect3D11DeviceFromDXGIDevice(dxgiDevice.NativePointer, out nint pUnknown).AssertSuccess("Failed to create Direct3D11 device");
 
         IDirect3DDevice? device = Marshal.GetObjectForIUnknown(pUnknown) as IDirect3DDevice;
-        Marshal.Release(pUnknown);
-        if (device == null)
-        {
-            throw new ExternalException("CreateDirect3D11DeviceFromDXGIDevice returned null");
-        }
-        return device;
+        _ = Marshal.Release(pUnknown);
+        return device ?? throw new ExternalException("CreateDirect3D11DeviceFromDXGIDevice returned null");
     }
 
     public static Texture2D CreateSharpDXTexture2D(IDirect3DSurface surface)

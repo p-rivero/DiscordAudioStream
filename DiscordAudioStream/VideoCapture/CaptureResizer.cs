@@ -66,16 +66,7 @@ public class CaptureResizer
 
     public Size GetScaledSize(Size original)
     {
-        double dynamicScaleFactor;
-        if (constantScaleFactor != 0)
-        {
-            dynamicScaleFactor = constantScaleFactor;
-        }
-        else
-        {
-            dynamicScaleFactor = ComputeDynamicScaleFactor(original);
-        }
-
+        double dynamicScaleFactor = constantScaleFactor != 0 ? constantScaleFactor : ComputeDynamicScaleFactor(original);
         int newWidth = (int)(original.Width * dynamicScaleFactor);
         int newHeight = (int)(original.Height * dynamicScaleFactor);
         return new Size(newWidth, newHeight);

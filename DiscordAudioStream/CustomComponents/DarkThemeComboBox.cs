@@ -175,7 +175,7 @@ public class DarkThemeComboBox : ComboBox
     {
         for (int i = 0; i < amount; i++)
         {
-            Items.Add(separatorSentinel);
+            _ = Items.Add(separatorSentinel);
         }
     }
 

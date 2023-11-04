@@ -45,12 +45,12 @@ public class BitBltCapture : CaptureSource
             }
             hBitmap = PInvoke.CreateCompatibleBitmap(hdcSrc, area.Width, area.Height).AssertNotNull("CreateCompatibleBitmap failed");
             bitmapSize = new(area.Width, area.Height);
-            PInvoke.SelectObject(hdcDest, hBitmap).AssertSuccess("Failed to select bitmap into DC");
+            _ = PInvoke.SelectObject(hdcDest, hBitmap).AssertSuccess("Failed to select bitmap into DC");
         }
         else if (ClearBackground)
         {
             RECT rect = RECT.FromXYWH(0, 0, area.Width, area.Height);
-            PInvoke.FillRect(hdcDest, rect, blackBrush);
+            PInvoke.FillRect(hdcDest, rect, blackBrush).AssertNotZero();
         }
 
         PInvoke.BitBlt(hdcDest, 0, 0, area.Width, area.Height, hdcSrc, area.X, area.Y, ROP_CODE.SRCCOPY).AssertSuccess("BitBlt failed");

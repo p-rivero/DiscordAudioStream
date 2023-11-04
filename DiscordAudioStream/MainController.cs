@@ -5,6 +5,7 @@ using DiscordAudioStream.AudioCapture;
 using DiscordAudioStream.VideoCapture;
 using DiscordAudioStream.VideoCapture.CaptureStrategy;
 
+using Windows.Win32;
 using Windows.Win32.Foundation;
 
 namespace DiscordAudioStream;
@@ -233,7 +234,7 @@ public class MainController : IDisposable
         }
         catch (InvalidOperationException e)
         {
-            MessageBox.Show(
+            _ = MessageBox.Show(
                 e.Message,
                 "Unable to capture the audio device",
                 MessageBoxButtons.OK,
@@ -278,13 +279,13 @@ public class MainController : IDisposable
         settingsBox.CaptureMethodChanged += () => videoSources.UpdateCaptureState(captureState, form.VideoIndex);
         settingsBox.FramerateChanged += () => videoCapture?.RefreshFramerate();
         settingsBox.ShowAudioInputsChanged += RefreshAudioDevices;
-        settingsBox.ShowDialog();
+        _ = settingsBox.ShowDialog();
     }
 
     internal void ShowAboutForm(bool darkMode)
     {
         using AboutForm aboutBox = new(darkMode) { Owner = form, TopMost = form.TopMost };
-        aboutBox.ShowDialog();
+        _ = aboutBox.ShowDialog();
     }
 
     internal void ShowAudioMeterForm(bool darkMode)
@@ -311,7 +312,7 @@ public class MainController : IDisposable
         }
         currentMeterForm.TopMost = form.TopMost;
         currentMeterForm.Show();
-        form.Focus();
+        form.Focus().AssertSuccess("Failed to re-focus main form");
     }
 
     internal void HideAudioMeterForm()
@@ -374,7 +375,7 @@ public class MainController : IDisposable
         CapturePreset? preset = CapturePreset.LoadSlot(slotNumber);
         if (preset == null)
         {
-            MessageBox.Show(
+            _ = MessageBox.Show(
                 $"The capture preset slot {slotNumber} is empty.\nFirst, save your current settings using [Ctrl+Shift+{slotNumber}].",
                 "Preset not found",
                 MessageBoxButtons.OK,
@@ -391,7 +392,7 @@ public class MainController : IDisposable
 
         if (!IsStreaming)
         {
-            MessageBox.Show(
+            _ = MessageBox.Show(
                 $"The capture preset {slotNumber} has been applied.",
                 "Preset loaded",
                 MessageBoxButtons.OK,
@@ -405,7 +406,7 @@ public class MainController : IDisposable
         Logger.Log($"Storing capture preset {slotNumber}");
         CustomAreaCapture.SaveCaptureArea();
         CapturePreset.FromCurrentSettings().SaveToSlot(slotNumber);
-        MessageBox.Show(
+        _ = MessageBox.Show(
             $"Your settings have been stored as the capture preset {slotNumber}.",
             "Preset saved",
             MessageBoxButtons.OK,

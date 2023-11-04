@@ -22,7 +22,7 @@ internal static class Logger
             try
             {
                 Stream file = File.Create(LOG_FILE_PATH);
-                Trace.Listeners.Add(new TextWriterTraceListener(file));
+                _ = Trace.Listeners.Add(new TextWriterTraceListener(file));
                 Trace.AutoFlush = true;
             }
             catch (IOException)

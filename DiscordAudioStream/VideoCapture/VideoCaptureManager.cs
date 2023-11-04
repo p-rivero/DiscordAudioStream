@@ -144,7 +144,7 @@ public class VideoCaptureManager : IDisposable
                 string msg =
                     "Unable to display this item.\n"
                     + "If the problem persists, consider changing the capture method in Settings > Capture";
-                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _ = MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -166,10 +166,9 @@ public class VideoCaptureManager : IDisposable
         }
         frameQueue.Enqueue(frame);
 
-        if (frameQueue.Count > LIMIT_QUEUE_SZ)
+        if (frameQueue.Count > LIMIT_QUEUE_SZ && frameQueue.TryDequeue(out Bitmap b))
         {
-            frameQueue.TryDequeue(out Bitmap b);
-            b?.Dispose();
+            b.Dispose();
         }
     }
 }

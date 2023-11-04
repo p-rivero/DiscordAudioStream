@@ -13,16 +13,16 @@ public static class InvokeOnUI
 
     public static void RunSync(Action action)
     {
-        mainForm.Invoke(action);
+        _ = mainForm.Invoke(action);
     }
 
     public static void RunAsync(Action action)
     {
-        mainForm.BeginInvoke(action);
+        _ = mainForm.BeginInvoke(action);
     }
 
-    public static void FocusMainForm()
+    public static bool FocusMainForm()
     {
-        mainForm.Focus();
+        return mainForm.Focus();
     }
 }

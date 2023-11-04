@@ -140,20 +140,20 @@ internal partial class SettingsForm : Form
     private void classicVolumeMixerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
         string cplPath = Path.Combine(Environment.SystemDirectory, "sndvol.exe");
-        Process.Start(cplPath);
+        _ = Process.Start(cplPath);
     }
 
     private void audioDevicesLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
         string cplPath = Path.Combine(Environment.SystemDirectory, "control.exe");
-        Process.Start(cplPath, "/name Microsoft.Sound");
+        _ = Process.Start(cplPath, "/name Microsoft.Sound");
     }
 
     private void settingsXMLLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
         string settingsPath = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath;
         Logger.Log($"Opening settings XML file: {settingsPath}");
-        Process.Start(settingsPath);
+        _ = Process.Start(settingsPath);
     }
 
     private void autoExitCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -227,7 +227,7 @@ internal partial class SettingsForm : Form
 
     private void SettingsForm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
     {
-        Process.Start(Resources.URL_CaptureMethodsInfoLink);
+        _ = Process.Start(Resources.URL_CaptureMethodsInfoLink);
     }
 
     private void showAudioInputsCheckbox_CheckedChanged(object sender, EventArgs e)

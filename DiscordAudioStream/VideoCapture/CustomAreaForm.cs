@@ -42,7 +42,7 @@ public partial class CustomAreaForm : Form
 
     private void ResizeTimerElapsed(object sender, ElapsedEventArgs e)
     {
-        Invoke((MethodInvoker)(() =>
+        InvokeOnUI.RunSync(() =>
         {
             Point curPos = PointToClient(Cursor.Position);
 
@@ -52,7 +52,7 @@ public partial class CustomAreaForm : Form
             // Clip to bottom-right corner
             Width = Math.Min(targetWidth, bounds.Right - Left);
             Height = Math.Min(targetHeight, bounds.Bottom - Top);
-        }));
+        });
     }
 
     protected override void OnPaint(PaintEventArgs e)
@@ -70,7 +70,7 @@ public partial class CustomAreaForm : Form
     {
         Cursor.Current = Cursors.SizeAll;
         PInvoke.ReleaseCapture().AssertSuccess("Could not release capture");
-        PInvoke.SendMessage(this.HWnd(), PInvoke.WM_NCLBUTTONDOWN, (WPARAM)PInvoke.HTCAPTION, (LPARAM)0);
+        _ = PInvoke.SendMessage(this.HWnd(), PInvoke.WM_NCLBUTTONDOWN, (WPARAM)PInvoke.HTCAPTION, (LPARAM)0);
     }
 
     private void dragBtn_MouseDown(object sender, MouseEventArgs e)

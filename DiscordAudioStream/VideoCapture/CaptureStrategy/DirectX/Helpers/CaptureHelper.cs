@@ -47,12 +47,8 @@ public static class CaptureHelper
         IGraphicsCaptureItemInterop interop = (IGraphicsCaptureItemInterop)factory;
         interop.CreateForWindow(hwnd, GraphicsCaptureItemGuid, out nint itemPointer);
         GraphicsCaptureItem? item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
-        Marshal.Release(itemPointer);
-        if (item == null)
-        {
-            throw new ExternalException("IGraphicsCaptureItemInterop.CreateItemForWindow failed");
-        }
-        return item;
+        _ = Marshal.Release(itemPointer);
+        return item ?? throw new ExternalException("IGraphicsCaptureItemInterop.CreateItemForWindow failed");
     }
 
     public static GraphicsCaptureItem CreateItemForMonitor(HMONITOR hmon)
@@ -61,11 +57,7 @@ public static class CaptureHelper
         IGraphicsCaptureItemInterop interop = (IGraphicsCaptureItemInterop)factory;
         interop.CreateForMonitor(hmon, GraphicsCaptureItemGuid, out nint itemPointer);
         GraphicsCaptureItem? item = Marshal.GetObjectForIUnknown(itemPointer) as GraphicsCaptureItem;
-        Marshal.Release(itemPointer);
-        if (item == null)
-        {
-            throw new ExternalException("IGraphicsCaptureItemInterop.CreateForMonitor failed");
-        }
-        return item;
+        _ = Marshal.Release(itemPointer);
+        return item ?? throw new ExternalException("IGraphicsCaptureItemInterop.CreateForMonitor failed");
     }
 }

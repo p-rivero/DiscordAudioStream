@@ -100,7 +100,7 @@ internal static class Program
         );
         if (result == DialogResult.Yes)
         {
-            Process.Start(Resources.URL_NETFrameworkDownloadLink);
+            _ = Process.Start(Resources.URL_NETFrameworkDownloadLink);
             Environment.Exit(0);
         }
     }

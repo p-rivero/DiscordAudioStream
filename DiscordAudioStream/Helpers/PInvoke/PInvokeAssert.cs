@@ -26,9 +26,14 @@ public static class PInvokeAssert
         return handle;
     }
 
-    public static void AssertNotZero(this uint dword, string message = "Win32 call failed")
+    public static void AssertNotZero(this uint number, string message = "Win32 call failed")
     {
-        ThrowIf(dword == 0, message);
+        ThrowIf(number == 0, message);
+    }
+
+    public static void AssertNotZero(this int number, string message = "Win32 call failed")
+    {
+        ThrowIf(number == 0, message);
     }
 
     public static HDC AssertNotNull(this HDC handle, string message = "Win32 call failed")

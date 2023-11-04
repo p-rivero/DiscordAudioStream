@@ -27,7 +27,7 @@ public class Win10WindowCapture : WindowCapture
         {
             // Check if the window has been closed or it just doesn't have new content
             // GetWindowArea will throw an exception if the window has been closed, but not if it's minimized
-            GetWindowArea(windowHandle);
+            _ = GetWindowArea(windowHandle);
         }
         return result;
     }

@@ -35,7 +35,7 @@ internal static class ExceptionHandler
         string tracePath = Path.GetFullPath(TRACE_FILE_NAME);
         WriteStackTrace(exception, tracePath);
 
-        MessageBox.Show(
+        _ = MessageBox.Show(
             $"Unhandled exception: {exception.Message}\nClick OK to open the generated trace file:\n{tracePath}",
             "DiscordAudioStream Error",
             MessageBoxButtons.OK,
@@ -73,6 +73,6 @@ internal static class ExceptionHandler
 
     private static void OpenFile(string path)
     {
-        System.Diagnostics.Process.Start(path);
+        _ = System.Diagnostics.Process.Start(path);
     }
 }
