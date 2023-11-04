@@ -20,4 +20,9 @@ public static class InvokeOnUI
     {
         mainForm.BeginInvoke(action);
     }
+
+    public static void FocusMainForm()
+    {
+        mainForm.Focus();
+    }
 }

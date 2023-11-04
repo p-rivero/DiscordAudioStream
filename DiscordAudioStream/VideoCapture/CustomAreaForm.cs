@@ -35,7 +35,6 @@ public partial class CustomAreaForm : Form
     public new void Show()
     {
         base.Show();
-        SetButtonsVisible(true);
         showMarker = true;
     }
 

@@ -50,6 +50,7 @@ public abstract class CustomAreaCapture : CaptureSource
                 {
                     customAreaForm.Show();
                     RestoreCaptureArea();
+                    InvokeOnUI.FocusMainForm();
                 });
             }
             instanceCount++;
