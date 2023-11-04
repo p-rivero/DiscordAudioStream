@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 using DiscordAudioStream.AudioCapture;
@@ -7,8 +6,6 @@ using DiscordAudioStream.VideoCapture;
 using DiscordAudioStream.VideoCapture.CaptureStrategy;
 
 using Windows.Win32.Foundation;
-
-using static System.Net.Mime.MediaTypeNames;
 
 namespace DiscordAudioStream;
 

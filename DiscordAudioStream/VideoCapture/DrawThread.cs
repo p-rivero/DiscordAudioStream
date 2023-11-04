@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.Drawing;
 
-using Windows.Win32.Foundation;
-
 namespace DiscordAudioStream.VideoCapture;
 
 public class DrawThread

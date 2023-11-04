@@ -1,10 +1,7 @@
 ﻿using System.Drawing;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 using Composition.WindowsRuntimeHelpers;
-
-using Windows.Win32.Graphics.Gdi;
 
 namespace DiscordAudioStream.VideoCapture.CaptureStrategy;
 

@@ -247,6 +247,8 @@ public partial class MainForm : Form
         e.Cancel = Controller.Stop();
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0010:Add missing cases",
+        Justification = "Not adding cases all non-shortcut keys")]
     private void MainForm_KeyDown(object sender, KeyEventArgs e)
     {
         switch (e.KeyData)

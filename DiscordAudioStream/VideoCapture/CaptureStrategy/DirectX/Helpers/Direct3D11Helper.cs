@@ -45,6 +45,7 @@ public static class Direct3D11Helper
         ExactSpelling = true,
         CallingConvention = CallingConvention.StdCall
     )]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     private static extern HRESULT CreateDirect3D11DeviceFromDXGIDevice(nint dxgiDevice, out nint graphicsDevice);
 
     public static IDirect3DDevice CreateDirect3DDeviceFromSharpDXDevice(Device d3dDevice)

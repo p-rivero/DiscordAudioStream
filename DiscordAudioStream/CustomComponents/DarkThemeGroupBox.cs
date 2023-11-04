@@ -10,7 +10,7 @@ public class DarkThemeGroupBox : GroupBox
 
     public DarkThemeGroupBox()
     {
-        base.Paint += PaintDarkGroupBox;
+        Paint += PaintDarkGroupBox;
     }
 
     public void SetDarkMode(bool dark)
@@ -18,7 +18,7 @@ public class DarkThemeGroupBox : GroupBox
         darkMode = dark;
     }
 
-    public void PaintDarkGroupBox(object sender, PaintEventArgs p)
+    private void PaintDarkGroupBox(object sender, PaintEventArgs p)
     {
         if (!darkMode)
         {
