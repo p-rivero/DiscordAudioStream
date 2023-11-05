@@ -60,11 +60,14 @@ public class MainController : IDisposable
         DrawThread drawThread = new(videoCapture);
         drawThread.PaintFrame += frame =>
         {
-            SetPreviewSize(frame.Size);
+            if (frame.Size != lastCapturedFrameSize)
+            {
+                lastCapturedFrameSize = frame.Size;
+                SetPreviewSize(frame.Size);
+            }
             form.UpdatePreview(frame, forceRefresh && IsStreaming);
         };
-        drawThread.GetCurrentlyDisplayedFrame +=
-            () => form.CurrentFrame ?? throw new InvalidOperationException("No frame displayed");
+        drawThread.GetCurrentlyDisplayedFrame += () => form.CurrentFrame;
         drawThread.Start();
 
         RefreshAudioDevices();
@@ -102,11 +105,6 @@ public class MainController : IDisposable
 
     private void SetPreviewSize(Size size)
     {
-        if (size == lastCapturedFrameSize)
-        {
-            return;
-        }
-        lastCapturedFrameSize = size;
         if (IsStreaming)
         {
             Size scaledSize = captureResizer.GetScaledSize(size);
@@ -114,9 +112,9 @@ public class MainController : IDisposable
         }
     }
 
-    private void ForcePreviewResize()
+    private void RefreshPreviewSize()
     {
-        lastCapturedFrameSize = Size.Empty;
+        SetPreviewSize(form.CurrentFrame.Size);
     }
 
     // INTERNAL METHODS (called from MainForm)
@@ -161,7 +159,7 @@ public class MainController : IDisposable
         Logger.Log("Force screen redraw: " + forceRefresh);
         IsStreaming = true;
 
-        ForcePreviewResize();
+        RefreshPreviewSize();
     }
 
     private void StartStreamWithoutAudio(bool skipAudioWarning)
@@ -368,7 +366,7 @@ public class MainController : IDisposable
         preset.ApplyToSettings();
         form.RefreshCaptureUI();
         CustomAreaCapture.RestoreCaptureArea(hideForm: true);
-        ForcePreviewResize();
+        RefreshPreviewSize();
         RefreshAudioDevices();
         captureState.TriggerChangeEvents = true;
 
