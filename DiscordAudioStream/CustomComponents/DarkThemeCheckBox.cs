@@ -21,10 +21,10 @@ public class DarkThemeCheckBox : CheckBox
         {
             SetStyle(ControlStyles.UserPaint, value: true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, value: true);
-            base.MouseEnter += (s, e) => UpdateHovered(true);
-            base.MouseLeave += (s, e) => UpdateHovered(false);
-            base.MouseDown += (s, e) => UpdatePressed(true);
-            base.MouseUp += (s, e) => UpdatePressed(false);
+            MouseEnter += (s, e) => UpdateHovered(true);
+            MouseLeave += (s, e) => UpdateHovered(false);
+            MouseDown += (s, e) => UpdatePressed(true);
+            MouseUp += (s, e) => UpdatePressed(false);
         }
     }
 
@@ -48,6 +48,16 @@ public class DarkThemeCheckBox : CheckBox
             darkText = Text;
             Text = " ";
         }
+    }
+
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.Enter)
+        {
+            Checked = !Checked;
+            e.Handled = true;
+        }
+        base.OnKeyDown(e);
     }
 
     protected override void OnPaint(PaintEventArgs pevent)
@@ -76,12 +86,13 @@ public class DarkThemeCheckBox : CheckBox
             (_, true) => DarkThemeManager.DarkHoverColor,
             _ => DarkThemeManager.DarkSecondColor,
         };
+        Color edgeColor = Focused ? DarkThemeManager.PressedColor : DarkThemeManager.BorderColor;
         int extraThicknessPx = Focused ? 1 : 0;
         int x = extraThicknessPx;
         int y = 2 + extraThicknessPx;
         int size = 12 - extraThicknessPx;
         using SolidBrush bgBrush = new(bgColor);
-        using Pen edgePen = new(DarkThemeManager.BorderColor, 1 + extraThicknessPx);
+        using Pen edgePen = new(edgeColor, 1 + extraThicknessPx);
         g.FillRectangle(bgBrush, x, y, size, size);
         g.DrawRectangle(edgePen, x, y, size, size);
     }

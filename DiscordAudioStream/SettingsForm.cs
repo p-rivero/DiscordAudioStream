@@ -76,6 +76,8 @@ internal partial class SettingsForm : Form
         toolTip.SetToolTip(streamTitleLabel, Resources.Tooltip_StreamTitle);
         toolTip.SetToolTip(streamTitleBox, Resources.Tooltip_StreamTitle);
         toolTip.SetToolTip(audioMeterCheckBox, Resources.Tooltip_ShowAudioMeter);
+
+        Shown += (sender, e) => themeComboBox.Focus();
     }
 
     private void ApplyDarkTheme(bool darkMode)
@@ -90,8 +92,6 @@ internal partial class SettingsForm : Form
             settingsTabs.HeaderColor = DarkThemeManager.DarkSecondColor;
             settingsTabs.TextColor = Color.White;
         }
-
-        settingsTabs.ActiveColor = DarkThemeManager.AccentColor;
 
         captureMethodGroup.SetDarkMode(darkMode);
         windowMethodComboBox.SetDarkMode(darkMode);

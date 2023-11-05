@@ -213,7 +213,7 @@
             this.startButton.Location = new System.Drawing.Point(219, 14);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(129, 34);
-            this.startButton.TabIndex = 27;
+            this.startButton.TabIndex = 1;
             this.startButton.Text = "START STREAM";
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Click += new System.EventHandler(this.startButton_Click);
@@ -238,8 +238,8 @@
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(9);
             this.toolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip.Size = new System.Drawing.Size(210, 43);
-            this.toolStrip.TabIndex = 1;
+            this.toolStrip.Size = new System.Drawing.Size(243, 45);
+            this.toolStrip.TabIndex = 0;
             this.toolStrip.TabStop = true;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -251,7 +251,7 @@
             this.previewBtn.Image = ((System.Drawing.Image)(resources.GetObject("previewBtn.Image")));
             this.previewBtn.Margin = new System.Windows.Forms.Padding(0);
             this.previewBtn.Name = "previewBtn";
-            this.previewBtn.Size = new System.Drawing.Size(24, 25);
+            this.previewBtn.Size = new System.Drawing.Size(24, 24);
             this.previewBtn.Text = "Preview | Ctrl + P";
             this.previewBtn.ToolTipText = "Preview | Ctrl + P";
             this.previewBtn.CheckedChanged += new System.EventHandler(this.previewBtn_CheckedChanged);
@@ -265,7 +265,7 @@
             this.onTopBtn.Image = ((System.Drawing.Image)(resources.GetObject("onTopBtn.Image")));
             this.onTopBtn.Margin = new System.Windows.Forms.Padding(0);
             this.onTopBtn.Name = "onTopBtn";
-            this.onTopBtn.Size = new System.Drawing.Size(24, 25);
+            this.onTopBtn.Size = new System.Drawing.Size(24, 24);
             this.onTopBtn.Text = "Always on top | Ctrl + T";
             this.onTopBtn.ToolTipText = "Always on top | Ctrl+T";
             this.onTopBtn.CheckedChanged += new System.EventHandler(this.onTopCheckBox_CheckedChanged);
@@ -277,7 +277,7 @@
             this.managePresetsButton.Image = ((System.Drawing.Image)(resources.GetObject("managePresetsButton.Image")));
             this.managePresetsButton.Margin = new System.Windows.Forms.Padding(0);
             this.managePresetsButton.Name = "managePresetsButton";
-            this.managePresetsButton.Size = new System.Drawing.Size(24, 25);
+            this.managePresetsButton.Size = new System.Drawing.Size(24, 24);
             this.managePresetsButton.Text = "Manage capture presets";
             this.managePresetsButton.Click += new System.EventHandler(this.managePresetsButton_Click);
             // 
@@ -291,19 +291,21 @@
             // 
             // volumeMixerButton
             // 
+            this.volumeMixerButton.AutoSize = false;
             this.volumeMixerButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.volumeMixerButton.Image = ((System.Drawing.Image)(resources.GetObject("volumeMixerButton.Image")));
             this.volumeMixerButton.Name = "volumeMixerButton";
-            this.volumeMixerButton.Size = new System.Drawing.Size(23, 22);
+            this.volumeMixerButton.Size = new System.Drawing.Size(24, 24);
             this.volumeMixerButton.Text = "Open volume mixer | Ctrl+V";
             this.volumeMixerButton.Click += new System.EventHandler(this.volumeMixerButton_Click);
             // 
             // soundDevicesButton
             // 
+            this.soundDevicesButton.AutoSize = false;
             this.soundDevicesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.soundDevicesButton.Image = ((System.Drawing.Image)(resources.GetObject("soundDevicesButton.Image")));
             this.soundDevicesButton.Name = "soundDevicesButton";
-            this.soundDevicesButton.Size = new System.Drawing.Size(23, 22);
+            this.soundDevicesButton.Size = new System.Drawing.Size(24, 24);
             this.soundDevicesButton.Text = "Configure audio devices | Ctrl+A";
             this.soundDevicesButton.Click += new System.EventHandler(this.soundDevicesButton_Click);
             // 
@@ -322,7 +324,7 @@
             this.settingsBtn.Image = ((System.Drawing.Image)(resources.GetObject("settingsBtn.Image")));
             this.settingsBtn.Margin = new System.Windows.Forms.Padding(0);
             this.settingsBtn.Name = "settingsBtn";
-            this.settingsBtn.Size = new System.Drawing.Size(24, 25);
+            this.settingsBtn.Size = new System.Drawing.Size(24, 24);
             this.settingsBtn.Text = "Settings | Ctrl+Comma";
             this.settingsBtn.Click += new System.EventHandler(this.settingsBtn_Click);
             // 
@@ -333,7 +335,7 @@
             this.aboutBtn.Image = ((System.Drawing.Image)(resources.GetObject("aboutBtn.Image")));
             this.aboutBtn.Margin = new System.Windows.Forms.Padding(0);
             this.aboutBtn.Name = "aboutBtn";
-            this.aboutBtn.Size = new System.Drawing.Size(24, 25);
+            this.aboutBtn.Size = new System.Drawing.Size(24, 24);
             this.aboutBtn.Text = "About | F1";
             this.aboutBtn.Click += new System.EventHandler(this.aboutBtn_Click);
             // 
@@ -363,7 +365,7 @@
             this.inputDeviceComboBox.Location = new System.Drawing.Point(55, 22);
             this.inputDeviceComboBox.Name = "inputDeviceComboBox";
             this.inputDeviceComboBox.Size = new System.Drawing.Size(279, 24);
-            this.inputDeviceComboBox.TabIndex = 17;
+            this.inputDeviceComboBox.TabIndex = 7;
             this.inputDeviceComboBox.SelectedIndexChanged += new System.EventHandler(this.inputDeviceComboBox_SelectedIndexChanged);
             // 
             // inputDeviceLabel
@@ -418,7 +420,7 @@
             this.scaleComboBox.Location = new System.Drawing.Point(55, 49);
             this.scaleComboBox.Name = "scaleComboBox";
             this.scaleComboBox.Size = new System.Drawing.Size(279, 24);
-            this.scaleComboBox.TabIndex = 23;
+            this.scaleComboBox.TabIndex = 4;
             this.scaleComboBox.SelectedIndexChanged += new System.EventHandler(this.scaleComboBox_SelectedIndexChanged);
             // 
             // hideTaskbarCheckBox
@@ -426,7 +428,7 @@
             this.hideTaskbarCheckBox.Location = new System.Drawing.Point(132, 79);
             this.hideTaskbarCheckBox.Name = "hideTaskbarCheckBox";
             this.hideTaskbarCheckBox.Size = new System.Drawing.Size(92, 19);
-            this.hideTaskbarCheckBox.TabIndex = 14;
+            this.hideTaskbarCheckBox.TabIndex = 5;
             this.hideTaskbarCheckBox.Text = "Hide taskbar";
             this.hideTaskbarCheckBox.UseVisualStyleBackColor = true;
             this.hideTaskbarCheckBox.CheckedChanged += new System.EventHandler(this.hideTaskbarCheckBox_CheckedChanged);
@@ -440,7 +442,7 @@
             this.areaComboBox.Location = new System.Drawing.Point(55, 19);
             this.areaComboBox.Name = "areaComboBox";
             this.areaComboBox.Size = new System.Drawing.Size(279, 24);
-            this.areaComboBox.TabIndex = 8;
+            this.areaComboBox.TabIndex = 3;
             this.areaComboBox.DropDown += new System.EventHandler(this.areaComboBox_DropDown);
             this.areaComboBox.SelectedIndexChanged += new System.EventHandler(this.areaComboBox_SelectedIndexChanged);
             // 
@@ -449,7 +451,7 @@
             this.captureCursorCheckBox.Location = new System.Drawing.Point(230, 79);
             this.captureCursorCheckBox.Name = "captureCursorCheckBox";
             this.captureCursorCheckBox.Size = new System.Drawing.Size(104, 19);
-            this.captureCursorCheckBox.TabIndex = 15;
+            this.captureCursorCheckBox.TabIndex = 6;
             this.captureCursorCheckBox.Text = "Capture cursor";
             this.captureCursorCheckBox.UseVisualStyleBackColor = true;
             this.captureCursorCheckBox.CheckedChanged += new System.EventHandler(this.captureCursorCheckBox_CheckedChanged);

@@ -79,6 +79,25 @@ public class DarkThemeComboBox : ComboBox
         }
     }
 
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        if (e.KeyCode is Keys.Enter or Keys.Space)
+        {
+            DroppedDown = !DroppedDown;
+            e.Handled = true;
+        }
+        base.OnKeyDown(e);
+    }
+
+    protected override void OnKeyPress(KeyPressEventArgs e)
+    {
+        if (e.KeyChar == '\r')
+        {
+            e.Handled = true;
+        }
+        base.OnKeyPress(e);
+    }
+
     protected override void OnPaint(PaintEventArgs e)
     {
         Color hoverColor = darkMode ? DarkThemeManager.DarkHoverColor : DarkThemeManager.LightHoverColor;

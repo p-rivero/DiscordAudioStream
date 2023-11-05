@@ -16,11 +16,6 @@ public class DarkThemeTabControl : TabControl
 
     [Category("Colors")]
     [Browsable(true)]
-    [Description("The color of the selected page")]
-    public Color ActiveColor { get; set; } = Color.FromArgb(0, 122, 204);
-
-    [Category("Colors")]
-    [Browsable(true)]
     [Description("The color of the background of the tab")]
     public Color BackTabColor { get; set; } = Color.FromArgb(28, 28, 28);
 
@@ -33,11 +28,6 @@ public class DarkThemeTabControl : TabControl
     [Browsable(true)]
     [Description("The color of the header.")]
     public Color HeaderColor { get; set; } = Color.FromArgb(45, 45, 48);
-
-    [Category("Colors")]
-    [Browsable(true)]
-    [Description("The color of the title of the page")]
-    public Color SelectedTextColor { get; set; } = Color.FromArgb(255, 255, 255);
 
     [Category("Colors")]
     [Browsable(true)]
@@ -88,21 +78,23 @@ public class DarkThemeTabControl : TabControl
 
             if (i == SelectedIndex)
             {
-                using SolidBrush brush = new(ActiveColor);
+                using SolidBrush brush = new(BackTabColor);
                 graphics.FillRectangle(brush, rectangle.X - 3, rectangle.Y - 3, rectangle.Width, rectangle.Height + 5);
+
+                if (Focused)
+                {
+                    using Pen pen = new(TextColor) { DashPattern = new float[2] { 2f, 2f } };
+                    graphics.DrawRectangle(pen, tabRect);
+                }
             }
 
-            Color textColor = i == SelectedIndex ? SelectedTextColor : TextColor;
-            using SolidBrush textBrush = new(textColor);
+            using SolidBrush textBrush = new(TextColor);
             graphics.DrawString(TabPages[i].Text, Font, textBrush, rectangle, CenterSringFormat);
         }
 
-        using (SolidBrush backTabBrush = new(BackTabColor))
-        using (Pen borderPen = new(BorderColor, 2f))
-        {
-            graphics.FillRectangle(backTabBrush, new Rectangle(0, 20, Width, Height - 20));
-            graphics.DrawRectangle(borderPen, new Rectangle(0, 0, Width, Height));
-        }
-        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+        using SolidBrush backTabBrush = new(BackTabColor);
+        using Pen borderPen = new(BorderColor, 2f);
+        graphics.FillRectangle(backTabBrush, new Rectangle(0, 20, Width, Height - 20));
+        graphics.DrawRectangle(borderPen, new Rectangle(0, 0, Width, Height));
     }
 }

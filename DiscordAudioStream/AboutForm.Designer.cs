@@ -111,7 +111,7 @@
             this.projectLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
             this.projectLink.Name = "projectLink";
             this.projectLink.Size = new System.Drawing.Size(73, 15);
-            this.projectLink.TabIndex = 3;
+            this.projectLink.TabIndex = 4;
             this.projectLink.TabStop = true;
             this.projectLink.Text = "Project page";
             this.aboutTooltip.SetToolTip(this.projectLink, "Open project page in browser");
@@ -143,7 +143,7 @@
             this.moduleArtLabel.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
             this.moduleArtLabel.Name = "moduleArtLabel";
             this.moduleArtLabel.Size = new System.Drawing.Size(162, 15);
-            this.moduleArtLabel.TabIndex = 39;
+            this.moduleArtLabel.TabIndex = 2;
             this.moduleArtLabel.TabStop = true;
             this.moduleArtLabel.Text = "Module Art (Eugene Volynko)";
             this.aboutTooltip.SetToolTip(this.moduleArtLabel, "Open \"Quick Screen Recorder\" in GitHub");
@@ -167,7 +167,7 @@
             this.screenRecorderLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
             this.screenRecorderLink.Name = "screenRecorderLink";
             this.screenRecorderLink.Size = new System.Drawing.Size(126, 15);
-            this.screenRecorderLink.TabIndex = 7;
+            this.screenRecorderLink.TabIndex = 1;
             this.screenRecorderLink.TabStop = true;
             this.screenRecorderLink.Text = "Quick Screen Recorder";
             this.aboutTooltip.SetToolTip(this.screenRecorderLink, "Open \"Quick Screen Recorder\" in GitHub");
@@ -202,7 +202,7 @@
             this.issuesLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
             this.issuesLink.Name = "issuesLink";
             this.issuesLink.Size = new System.Drawing.Size(38, 15);
-            this.issuesLink.TabIndex = 4;
+            this.issuesLink.TabIndex = 5;
             this.issuesLink.TabStop = true;
             this.issuesLink.Text = "Issues";
             this.aboutTooltip.SetToolTip(this.issuesLink, "Open GitHub issues page in browser");
@@ -229,7 +229,7 @@
             this.authorLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
             this.authorLink.Name = "authorLink";
             this.authorLink.Size = new System.Drawing.Size(44, 15);
-            this.authorLink.TabIndex = 40;
+            this.authorLink.TabIndex = 3;
             this.authorLink.TabStop = true;
             this.authorLink.Text = "Author";
             this.aboutTooltip.SetToolTip(this.authorLink, "Open author page in GitHub");
@@ -242,7 +242,7 @@
             this.licenseLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
             this.licenseLink.Name = "licenseLink";
             this.licenseLink.Size = new System.Drawing.Size(46, 15);
-            this.licenseLink.TabIndex = 5;
+            this.licenseLink.TabIndex = 6;
             this.licenseLink.TabStop = true;
             this.licenseLink.Text = "License";
             this.aboutTooltip.SetToolTip(this.licenseLink, "Open license page in browser");

@@ -33,17 +33,27 @@ internal class CustomToolStripSystemRenderer : ToolStripSystemRenderer
     protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
     {
         ToolStripButton button = (ToolStripButton)e.Item;
-        if (!button.Checked)
-        {
-            return;
-        }
 
         int xOffset = button.Pressed ? 1 : 0;
         Rectangle buttonArea = new(xOffset, 0, e.Item.Width - 2, e.Item.Height - 3);
+
+        if (button.Checked)
+        {
+            PaintBackground(e.Graphics, buttonArea);
+            using Pen edgePen = new(DarkThemeManager.AccentColor);
+            e.Graphics.DrawRectangle(edgePen, buttonArea);
+        }
+        if (e.Item.Selected)
+        {
+            using Pen edgePen = new(DarkThemeManager.BorderColor) { DashPattern = new float[2] { 2f, 2f } };
+            e.Graphics.DrawRectangle(edgePen, buttonArea);
+        }
+    }
+
+    private void PaintBackground(Graphics g, Rectangle buttonArea)
+    {
         Color backColor = darkMode ? DarkThemeManager.DarkPaleColor : DarkThemeManager.LightPaleColor;
         using SolidBrush backBrush = new(backColor);
-        using Pen edgePen = new(DarkThemeManager.AccentColor);
-        e.Graphics.FillRectangle(backBrush, buttonArea);
-        e.Graphics.DrawRectangle(edgePen, buttonArea);
+        g.FillRectangle(backBrush, buttonArea);
     }
 }

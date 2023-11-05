@@ -61,7 +61,6 @@
             // 
             // settingsTabs
             // 
-            this.settingsTabs.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             this.settingsTabs.AllowDrop = true;
             this.settingsTabs.BackTabColor = System.Drawing.Color.White;
             this.settingsTabs.BorderColor = System.Drawing.SystemColors.ControlLight;
@@ -74,9 +73,8 @@
             this.settingsTabs.Margin = new System.Windows.Forms.Padding(0, 0, 0, 9);
             this.settingsTabs.Name = "settingsTabs";
             this.settingsTabs.SelectedIndex = 0;
-            this.settingsTabs.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.settingsTabs.Size = new System.Drawing.Size(256, 187);
-            this.settingsTabs.TabIndex = 13;
+            this.settingsTabs.TabIndex = 99;
             this.settingsTabs.TextColor = System.Drawing.Color.Black;
             // 
             // windowPage
@@ -100,7 +98,7 @@
             this.audioMeterCheckBox.Location = new System.Drawing.Point(9, 86);
             this.audioMeterCheckBox.Name = "audioMeterCheckBox";
             this.audioMeterCheckBox.Size = new System.Drawing.Size(233, 19);
-            this.audioMeterCheckBox.TabIndex = 43;
+            this.audioMeterCheckBox.TabIndex = 3;
             this.audioMeterCheckBox.Text = "Show audio meter window";
             this.audioMeterCheckBox.UseVisualStyleBackColor = true;
             this.audioMeterCheckBox.CheckedChanged += new System.EventHandler(this.audioMeterCheckBox_CheckedChanged);
@@ -112,7 +110,7 @@
             this.streamTitleBox.MaxLength = 100;
             this.streamTitleBox.Name = "streamTitleBox";
             this.streamTitleBox.Size = new System.Drawing.Size(142, 23);
-            this.streamTitleBox.TabIndex = 42;
+            this.streamTitleBox.TabIndex = 2;
             this.streamTitleBox.TextChanged += new System.EventHandler(this.streamTitleBox_TextChanged);
             // 
             // streamTitleLabel
@@ -136,7 +134,7 @@
             this.themeComboBox.Location = new System.Drawing.Point(100, 16);
             this.themeComboBox.Name = "themeComboBox";
             this.themeComboBox.Size = new System.Drawing.Size(142, 24);
-            this.themeComboBox.TabIndex = 40;
+            this.themeComboBox.TabIndex = 1;
             this.themeComboBox.SelectedIndexChanged += new System.EventHandler(this.themeComboBox_SelectedIndexChanged);
             // 
             // themeLabel
@@ -175,7 +173,7 @@
             this.captureFramerateComboBox.Location = new System.Drawing.Point(128, 34);
             this.captureFramerateComboBox.Name = "captureFramerateComboBox";
             this.captureFramerateComboBox.Size = new System.Drawing.Size(108, 24);
-            this.captureFramerateComboBox.TabIndex = 7;
+            this.captureFramerateComboBox.TabIndex = 2;
             this.captureFramerateComboBox.SelectedIndexChanged += new System.EventHandler(this.captureFramerateComboBox_SelectedIndexChanged);
             // 
             // captureMethodGroup
@@ -212,7 +210,7 @@
             this.fullscreenMethodComboBox.Location = new System.Drawing.Point(81, 22);
             this.fullscreenMethodComboBox.Name = "fullscreenMethodComboBox";
             this.fullscreenMethodComboBox.Size = new System.Drawing.Size(146, 24);
-            this.fullscreenMethodComboBox.TabIndex = 5;
+            this.fullscreenMethodComboBox.TabIndex = 3;
             this.fullscreenMethodComboBox.SelectedIndexChanged += new System.EventHandler(this.fullscreenMethodComboBox_SelectedIndexChanged);
             // 
             // fullscreenMethodLabel
@@ -236,7 +234,7 @@
             this.windowMethodComboBox.Location = new System.Drawing.Point(81, 52);
             this.windowMethodComboBox.Name = "windowMethodComboBox";
             this.windowMethodComboBox.Size = new System.Drawing.Size(146, 24);
-            this.windowMethodComboBox.TabIndex = 3;
+            this.windowMethodComboBox.TabIndex = 4;
             this.windowMethodComboBox.SelectedIndexChanged += new System.EventHandler(this.windowMethodComboBox_SelectedIndexChanged);
             // 
             // captureFramerateLabel
@@ -253,7 +251,7 @@
             this.autoExitCheckbox.Location = new System.Drawing.Point(9, 9);
             this.autoExitCheckbox.Name = "autoExitCheckbox";
             this.autoExitCheckbox.Size = new System.Drawing.Size(233, 19);
-            this.autoExitCheckbox.TabIndex = 0;
+            this.autoExitCheckbox.TabIndex = 1;
             this.autoExitCheckbox.Text = "Exit when captured window closes";
             this.autoExitCheckbox.UseVisualStyleBackColor = true;
             this.autoExitCheckbox.CheckedChanged += new System.EventHandler(this.autoExitCheckbox_CheckedChanged);
@@ -281,7 +279,7 @@
             this.settingsXMLLink.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
             this.settingsXMLLink.Name = "settingsXMLLink";
             this.settingsXMLLink.Size = new System.Drawing.Size(126, 15);
-            this.settingsXMLLink.TabIndex = 42;
+            this.settingsXMLLink.TabIndex = 6;
             this.settingsXMLLink.TabStop = true;
             this.settingsXMLLink.Text = "Open settings XML file";
             this.settingsXMLLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.settingsXMLLink_LinkClicked);
@@ -291,7 +289,7 @@
             this.showAudioInputsCheckbox.Location = new System.Drawing.Point(9, 59);
             this.showAudioInputsCheckbox.Name = "showAudioInputsCheckbox";
             this.showAudioInputsCheckbox.Size = new System.Drawing.Size(200, 19);
-            this.showAudioInputsCheckbox.TabIndex = 41;
+            this.showAudioInputsCheckbox.TabIndex = 3;
             this.showAudioInputsCheckbox.Text = "Show audio input devices";
             this.showAudioInputsCheckbox.UseVisualStyleBackColor = true;
             this.showAudioInputsCheckbox.CheckedChanged += new System.EventHandler(this.showAudioInputsCheckbox_CheckedChanged);
@@ -301,7 +299,7 @@
             this.offscreenDrawCheckbox.Location = new System.Drawing.Point(9, 34);
             this.offscreenDrawCheckbox.Name = "offscreenDrawCheckbox";
             this.offscreenDrawCheckbox.Size = new System.Drawing.Size(200, 19);
-            this.offscreenDrawCheckbox.TabIndex = 40;
+            this.offscreenDrawCheckbox.TabIndex = 2;
             this.offscreenDrawCheckbox.Text = "Force screen redraw";
             this.offscreenDrawCheckbox.UseVisualStyleBackColor = true;
             this.offscreenDrawCheckbox.CheckedChanged += new System.EventHandler(this.offscreenDrawCheckbox_CheckedChanged);
@@ -311,7 +309,7 @@
             this.outputLogCheckbox.Location = new System.Drawing.Point(9, 9);
             this.outputLogCheckbox.Name = "outputLogCheckbox";
             this.outputLogCheckbox.Size = new System.Drawing.Size(200, 19);
-            this.outputLogCheckbox.TabIndex = 6;
+            this.outputLogCheckbox.TabIndex = 1;
             this.outputLogCheckbox.Text = "Output log file";
             this.outputLogCheckbox.UseVisualStyleBackColor = true;
             this.outputLogCheckbox.CheckedChanged += new System.EventHandler(this.outputLogCheckbox_CheckedChanged);
