@@ -63,6 +63,8 @@ public class MainController : IDisposable
             SetPreviewSize(frame.Size);
             form.UpdatePreview(frame, forceRefresh && IsStreaming);
         };
+        drawThread.GetCurrentlyDisplayedFrame +=
+            () => form.CurrentFrame ?? throw new InvalidOperationException("No frame displayed");
         drawThread.Start();
 
         RefreshAudioDevices();

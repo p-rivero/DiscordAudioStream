@@ -7,8 +7,12 @@ namespace DiscordAudioStream.VideoCapture;
 public class DrawThread
 {
     public event Action<Bitmap>? PaintFrame;
+    public Func<Bitmap>? GetCurrentlyDisplayedFrame { get; set; }
 
     private readonly VideoCaptureManager captureSource;
+
+    private readonly Stopwatch timeSinceLastFrame = new();
+    private const int TIME_TO_MINIMIZED_WARNING_MS = 300;
 
     public DrawThread(VideoCaptureManager captureSource)
     {
@@ -41,12 +45,14 @@ public class DrawThread
                 // No new data, keep displaying last frame
                 if (next == null)
                 {
+                    NoNewContent();
                     continue;
                 }
 
                 PaintFrame?.Invoke(next);
+                timeSinceLastFrame.Restart();
             }
-            catch (InvalidOperationException)
+            catch (ObjectDisposedException)
             {
                 Logger.Log("Form is closing, stop Draw thread.");
                 return;
@@ -59,5 +65,47 @@ public class DrawThread
                 Thread.Sleep(wait);
             }
         }
+    }
+
+    private void NoNewContent()
+    {
+        if (!timeSinceLastFrame.IsRunning || timeSinceLastFrame.ElapsedMilliseconds < TIME_TO_MINIMIZED_WARNING_MS)
+        {
+            return;
+        }
+
+        if (GetCurrentlyDisplayedFrame != null)
+        {
+            Bitmap frame = (Bitmap)GetCurrentlyDisplayedFrame().Clone();
+            DrawMinimizedWarning(frame);
+            PaintFrame?.Invoke(frame);
+        }
+        timeSinceLastFrame.Stop();
+    }
+
+    private static void DrawMinimizedWarning(Bitmap frame)
+    {
+        using Graphics g = Graphics.FromImage(frame);
+        FillBackground(g, Color.FromArgb(128, 0, 0, 0));
+        DrawText(g, "Minimized window");
+    }
+
+    private static void FillBackground(Graphics g, Color color)
+    {
+        using Brush darkFade = new SolidBrush(color);
+        g.FillRectangle(darkFade, g.VisibleClipBounds);
+    }
+
+    private static void DrawText(Graphics g, string text)
+    {
+        const float SIZE_FACTOR = 0.4f;
+        float fontSize = SIZE_FACTOR * g.VisibleClipBounds.Width / text.Length;
+        using Font font = new(SystemFonts.MessageBoxFont.Name, fontSize, FontStyle.Bold);
+
+        SizeF textMeasure = g.MeasureString(text, font);
+        float x = (g.VisibleClipBounds.Width - textMeasure.Width) / 2;
+        float y = (g.VisibleClipBounds.Height - textMeasure.Height) / 2;
+
+        g.DrawString(text, font, Brushes.White, x, y);
     }
 }
