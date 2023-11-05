@@ -26,7 +26,7 @@ public class BitBltCapture : CaptureSource
         hdcDest = PInvoke.CreateCompatibleDC(hdcSrc).AssertNotNull("Failed to create compatible DC");
     }
 
-    public override Bitmap CaptureFrame()
+    public override Bitmap? CaptureFrame()
     {
         if (CaptureAreaRect == null)
         {
@@ -35,6 +35,12 @@ public class BitBltCapture : CaptureSource
 
         // Get the target area
         Rectangle area = CaptureAreaRect();
+
+        if (area.IsEmpty)
+        {
+            // Minimized window
+            return null;
+        }
 
         // Create the bitmap only if it doesn't exist or if its size has changed
         if (hBitmap.IsNull || area.Width != bitmapSize.Width || area.Height != bitmapSize.Height)

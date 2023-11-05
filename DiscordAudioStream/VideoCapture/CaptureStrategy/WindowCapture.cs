@@ -11,6 +11,11 @@ public abstract class WindowCapture : CaptureSource
 {
     protected static Rectangle GetWindowArea(HWND windowHandle)
     {
+        if (PInvoke.IsIconic(windowHandle))
+        {
+            return Rectangle.Empty;
+        }
+
         // Get size of client area (don't use X and Y, these are relative to the WINDOW rect)
         Rectangle clientRect = GetClientArea(windowHandle);
         try

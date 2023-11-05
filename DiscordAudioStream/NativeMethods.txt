@@ -18,6 +18,7 @@ GetWindowText
 GetWindowThreadProcessId
 FillRect
 GetStockObject
+IsIconic
 WM_NCLBUTTONDOWN
 HTCAPTION
 PW_RENDERFULLCONTENT
