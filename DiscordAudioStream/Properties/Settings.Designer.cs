@@ -170,12 +170,12 @@ namespace DiscordAudioStream.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SeenLockAreaDiag {
+        public bool SeenLockAreaDialog {
             get {
-                return ((bool)(this["SeenLockAreaDiag"]));
+                return ((bool)(this["SeenLockAreaDialog"]));
             }
             set {
-                this["SeenLockAreaDiag"] = value;
+                this["SeenLockAreaDialog"] = value;
             }
         }
         

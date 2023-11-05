@@ -38,7 +38,7 @@
     <Setting Name="CaptureFramerate" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">30</Value>
     </Setting>
-    <Setting Name="SeenLockAreaDiag" Type="System.Boolean" Scope="User">
+    <Setting Name="SeenLockAreaDialog" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="AreaForm_Position" Type="System.Drawing.Point" Scope="User">

@@ -75,7 +75,7 @@ public partial class CustomAreaForm : Form
     private void lockBtn_Click(object sender, EventArgs e)
     {
         // If the user has not seen the warning, display it
-        if (!Properties.Settings.Default.SeenLockAreaDiag)
+        if (!Properties.Settings.Default.SeenLockAreaDialog)
         {
             DialogResult r = ShowMessage.Information()
                 .Title("Lock area")
@@ -89,7 +89,7 @@ public partial class CustomAreaForm : Form
                 return;
             }
 
-            Properties.Settings.Default.SeenLockAreaDiag = true;
+            Properties.Settings.Default.SeenLockAreaDialog = true;
             Logger.Log("Set SeenLockAreaDiag = true");
         }
         Logger.Log("Locking area");
