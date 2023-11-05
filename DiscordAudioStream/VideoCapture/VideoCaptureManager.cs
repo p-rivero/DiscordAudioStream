@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms;
 
 using DiscordAudioStream.VideoCapture.CaptureStrategy;
 
@@ -141,10 +140,10 @@ public class VideoCaptureManager : IDisposable
                 Logger.Log(e);
 
                 // We already have a valid source, do not call Dispose and just show warning
-                string msg =
-                    "Unable to display this item.\n"
-                    + "If the problem persists, consider changing the capture method in Settings > Capture";
-                _ = MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowMessage.Error()
+                    .Text("Unable to display this item.")
+                    .Text("If the problem persists, consider changing the capture method in Settings > Capture")
+                    .Show();
                 return;
             }
 

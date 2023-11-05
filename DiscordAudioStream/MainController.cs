@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Windows.Forms;
 
 using DiscordAudioStream.AudioCapture;
 using DiscordAudioStream.VideoCapture;
@@ -165,19 +164,10 @@ public class MainController : IDisposable
     {
         if (!skipAudioWarning)
         {
-            DialogResult r = MessageBox.Show(
-                "No audio source selected, continue anyways?",
-                "Warning",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question,
-                // The second button ("No") is the default option
-                MessageBoxDefaultButton.Button2
-            );
-
-            if (r == DialogResult.No)
-            {
-                throw new OperationCanceledException();
-            }
+            ShowMessage.Warning()
+                .Text("No audio source selected, continue anyways?")
+                .IfNo(() => throw new OperationCanceledException())
+                .Show();
         }
 
         Logger.EmptyLine();
@@ -190,20 +180,11 @@ public class MainController : IDisposable
         {
             if (!skipAudioWarning)
             {
-                DialogResult r = MessageBox.Show(
-                    "The captured audio device is the same as the output device of DiscordAudioStream.\n"
-                        + "This will cause an audio loop, which may result in echo or very loud sounds. Continue anyways?",
-                    "Warning",
-                    MessageBoxButtons.OKCancel,
-                    MessageBoxIcon.Warning,
-                    // The second button ("Cancel") is the default option
-                    MessageBoxDefaultButton.Button2
-                );
-
-                if (r == DialogResult.Cancel)
-                {
-                    throw new OperationCanceledException();
-                }
+                ShowMessage.Warning()
+                    .Text("The captured audio device is the same as the output device of DiscordAudioStream.")
+                    .Text("This will cause an audio loop, which may result in echo or very loud sounds. Continue anyways?")
+                    .IfCancel(() => throw new OperationCanceledException())
+                    .Show();
             }
 
             Logger.EmptyLine();
@@ -234,13 +215,10 @@ public class MainController : IDisposable
         }
         catch (InvalidOperationException e)
         {
-            _ = MessageBox.Show(
-                e.Message,
-                "Unable to capture the audio device",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error,
-                MessageBoxDefaultButton.Button1
-            );
+            ShowMessage.Error()
+                .Title("Unable to capture the audio device")
+                .Text(e.Message)
+                .Show();
             throw new OperationCanceledException();
         }
     }
@@ -375,12 +353,11 @@ public class MainController : IDisposable
         CapturePreset? preset = CapturePreset.LoadSlot(slotNumber);
         if (preset == null)
         {
-            _ = MessageBox.Show(
-                $"The capture preset slot {slotNumber} is empty.\nFirst, save your current settings using [Ctrl+Shift+{slotNumber}].",
-                "Preset not found",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Warning
-            );
+            ShowMessage.Warning()
+                .Title("Preset not found")
+                .Text($"The capture preset slot {slotNumber} is empty.")
+                .Text($"First, save your current settings using [Ctrl+Shift+{slotNumber}].")
+                .Show();
             return;
         }
         captureState.StateChangeEventEnabled = false;
@@ -392,12 +369,10 @@ public class MainController : IDisposable
 
         if (!IsStreaming)
         {
-            _ = MessageBox.Show(
-                $"The capture preset {slotNumber} has been applied.",
-                "Preset loaded",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+            ShowMessage.Information()
+                .Title("Preset loaded")
+                .Text($"The capture preset {slotNumber} has been applied.")
+                .Show();
         }
     }
 
@@ -406,12 +381,10 @@ public class MainController : IDisposable
         Logger.Log($"Storing capture preset {slotNumber}");
         CustomAreaCapture.SaveCaptureArea();
         CapturePreset.FromCurrentSettings().SaveToSlot(slotNumber);
-        _ = MessageBox.Show(
-            $"Your settings have been stored as the capture preset {slotNumber}.",
-            "Preset saved",
-            MessageBoxButtons.OK,
-            MessageBoxIcon.Information
-        );
+        ShowMessage.Information()
+            .Title("Preset saved")
+            .Text($"Your settings have been stored as the capture preset {slotNumber}.")
+            .Show();
     }
 
     internal IList<bool> GetPopulatedPresets()

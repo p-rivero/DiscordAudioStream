@@ -91,18 +91,17 @@ internal static class Program
         {
             return;
         }
-        DialogResult result = MessageBox.Show(
-            "This application requires .NET Framework 4.7.2 or newer to work properly.\n"
-                + "Do you want to open the download page?",
-            ".NET Framework runtime not found",
-            MessageBoxButtons.YesNo,
-            MessageBoxIcon.Warning
-        );
-        if (result == DialogResult.Yes)
-        {
-            _ = Process.Start(Resources.URL_NETFrameworkDownloadLink);
-            Environment.Exit(0);
-        }
+        ShowMessage.Warning()
+            .Title(".NET Framework runtime not found")
+            .Text("This application requires .NET Framework 4.7.2 or newer to work properly.")
+            .Text("Do you want to open the download page?")
+            .IfYes(() =>
+            {
+                _ = Process.Start(Resources.URL_NETFrameworkDownloadLink);
+                Environment.Exit(0);
+            })
+            .AcceptByDefault()
+            .Show();
     }
 
     private static void InitializeSettings()

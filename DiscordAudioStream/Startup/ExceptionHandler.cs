@@ -35,28 +35,23 @@ internal static class ExceptionHandler
         string tracePath = Path.GetFullPath(TRACE_FILE_NAME);
         WriteStackTrace(exception, tracePath);
 
-        _ = MessageBox.Show(
-            $"Unhandled exception: {exception.Message}\nClick OK to open the generated trace file:\n{tracePath}",
-            "DiscordAudioStream Error",
-            MessageBoxButtons.OK,
-            MessageBoxIcon.Error
-        );
+        ShowMessage.Error()
+            .Title("DiscordAudioStream Error")
+            .Text($"Unhandled exception: {exception.Message}")
+            .Text("Click OK to open the generated trace file:")
+            .Text(tracePath)
+            .Show();
         OpenFile(tracePath);
 
         if (crashDuringStartup && !Properties.Settings.Default.OutputLogFile)
         {
             Thread.Sleep(500);
-            DialogResult result = MessageBox.Show(
-                "The application crashed before it could finish starting up.\n"
-                    + "Do you want to enable debug logging?",
-                "DiscordAudioStream Error",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
-            if (result == DialogResult.Yes)
-            {
-                Properties.Settings.Default.OutputLogFile = true;
-            }
+            ShowMessage.Question()
+                .Title("DiscordAudioStream Error")
+                .Text("The application crashed before it could finish starting up.")
+                .Text("Do you want to enable debug logging?")
+                .IfYes(() => Properties.Settings.Default.OutputLogFile = true)
+                .Show();
         }
 
         Environment.Exit(1);

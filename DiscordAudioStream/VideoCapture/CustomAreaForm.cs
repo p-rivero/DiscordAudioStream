@@ -86,16 +86,13 @@ public partial class CustomAreaForm : Form
         // If the user has not seen the warning, display it
         if (!Properties.Settings.Default.SeenLockAreaDiag)
         {
-            DialogResult r = MessageBox.Show(
-                "This will hide the red area marker and you won't be able to move it anymore. "
-                    + "To show the red marker again, change the capture to anything else and then back to \"Custom area\".\n"
-                    + "This message won't be shown again.",
-                "Lock area",
-                MessageBoxButtons.OKCancel,
-                MessageBoxIcon.Information,
-                // The second button ("Cancel") is the default option
-                MessageBoxDefaultButton.Button2
-            );
+            DialogResult r = ShowMessage.Information()
+                .Title("Lock area")
+                .Text("This will hide the red area marker and you won't be able to move it anymore.")
+                .Text("To show the red marker again, change the capture to anything else and then back to \"Custom area\".")
+                .Text("This message won't be shown again.")
+                .Cancelable()
+                .GetResult();
             if (r == DialogResult.Cancel)
             {
                 return;
