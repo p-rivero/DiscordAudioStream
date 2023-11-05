@@ -86,7 +86,7 @@ public class DrawThread
     private static void DrawMinimizedWarning(Bitmap frame)
     {
         using Graphics g = Graphics.FromImage(frame);
-        FillBackground(g, Color.FromArgb(128, 0, 0, 0));
+        FillBackground(g, Color.FromArgb(150, 0, 0, 0));
         DrawText(g, "Minimized window");
     }
 
