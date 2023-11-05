@@ -56,6 +56,15 @@ public class DarkThemeTabControl : TabControl
         AllowDrop = true;
     }
 
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            CenterSringFormat.Dispose();
+        }
+    }
+
     protected override void CreateHandle()
     {
         base.CreateHandle();

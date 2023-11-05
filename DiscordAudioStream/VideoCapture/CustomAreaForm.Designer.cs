@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomAreaForm));
             this.titleBtn = new System.Windows.Forms.Button();
             this.dragBtn = new System.Windows.Forms.PictureBox();
             this.moveBtn = new System.Windows.Forms.PictureBox();
             this.lockBtn = new System.Windows.Forms.PictureBox();
+            this.resizeTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dragBtn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.moveBtn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lockBtn)).BeginInit();
@@ -94,6 +96,11 @@
             this.lockBtn.TabStop = false;
             this.lockBtn.Click += new System.EventHandler(this.lockBtn_Click);
             // 
+            // resizeTimer
+            // 
+            this.resizeTimer.Interval = 30;
+            this.resizeTimer.Tick += new System.EventHandler(this.resizeTimer_Tick);
+            // 
             // CustomAreaForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -128,5 +135,6 @@
         private System.Windows.Forms.PictureBox dragBtn;
         private System.Windows.Forms.PictureBox moveBtn;
         private System.Windows.Forms.PictureBox lockBtn;
+        private System.Windows.Forms.Timer resizeTimer;
     }
 }

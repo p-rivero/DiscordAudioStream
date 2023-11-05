@@ -22,6 +22,7 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 using SharpDX.Direct3D11;
@@ -33,6 +34,8 @@ using Windows.Win32.System.WinRT.Direct3D11;
 
 namespace Composition.WindowsRuntimeHelpers;
 
+[SuppressMessage("Usage", "CA2201:Do not raise reserved exception types",
+    Justification = "Throwing ExternalException in a P/Invoke helper seems correct")]
 public static class Direct3D11Helper
 {
     private static Guid ID3D11Texture2DGuid = new("6f15aaf2-d208-4e89-9ab4-489535d34f9c");
@@ -56,7 +59,7 @@ public static class Direct3D11Helper
 
         IDirect3DDevice? device = Marshal.GetObjectForIUnknown(pUnknown) as IDirect3DDevice;
         _ = Marshal.Release(pUnknown);
-        return device ?? throw new ExternalException("CreateDirect3D11DeviceFromDXGIDevice returned null");
+        return device ?? throw new ExternalException("CreateDirect3D11DeviceFromDXGIDevice failed");
     }
 
     public static Texture2D CreateSharpDXTexture2D(IDirect3DSurface surface)

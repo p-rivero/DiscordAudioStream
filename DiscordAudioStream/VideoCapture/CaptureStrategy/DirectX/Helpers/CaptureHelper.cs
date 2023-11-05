@@ -22,6 +22,7 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 
@@ -33,6 +34,8 @@ using Windows.Win32.System.WinRT.Graphics.Capture;
 
 namespace Composition.WindowsRuntimeHelpers;
 
+[SuppressMessage("Usage", "CA2201:Do not raise reserved exception types",
+    Justification = "Throwing ExternalException in a P/Invoke helper seems correct")]
 public static class CaptureHelper
 {
     // Passing null pointer to IGraphicsCaptureItemInterop::CreateForMonitor will capture the entire desktop

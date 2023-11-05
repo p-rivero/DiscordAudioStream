@@ -1,10 +1,13 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
 
 namespace Windows.Win32;
 
+[SuppressMessage("Usage", "CA2201:Do not raise reserved exception types",
+    Justification = "Throwing ExternalException in a P/Invoke helper seems correct")]
 public static class PInvokeAssert
 {
     public static void AssertSuccess(this HRESULT result, string message = "Win32 call failed")

@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Timers;
 using System.Windows.Forms;
 
 using Windows.Win32;
@@ -18,8 +17,6 @@ public partial class CustomAreaForm : Form
     private Size startSize;
     private bool showMarker;
 
-    private readonly System.Timers.Timer resizeTimer = new();
-
     private readonly Rectangle bounds = GetScreenBounds();
 
     public CustomAreaForm()
@@ -29,9 +26,6 @@ public partial class CustomAreaForm : Form
         LocationChanged += (sender, e) => EnsureWithinBounds();
         SizeChanged += (sender, e) => Refresh();
         Text = WINDOW_TITLE;
-
-        resizeTimer.Elapsed += ResizeTimerElapsed;
-        resizeTimer.Interval = 30;
     }
 
     public new void Show()
@@ -40,19 +34,16 @@ public partial class CustomAreaForm : Form
         showMarker = !FormHidden;
     }
 
-    private void ResizeTimerElapsed(object sender, ElapsedEventArgs e)
+    private void resizeTimer_Tick(object sender, EventArgs e)
     {
-        InvokeOnUI.RunSync(() =>
-        {
-            Point curPos = PointToClient(Cursor.Position);
+        Point curPos = PointToClient(Cursor.Position);
 
-            int targetWidth = startSize.Width + curPos.X - startPos.X;
-            int targetHeight = startSize.Height + curPos.Y - startPos.Y;
+        int targetWidth = startSize.Width + curPos.X - startPos.X;
+        int targetHeight = startSize.Height + curPos.Y - startPos.Y;
 
-            // Clip to bottom-right corner
-            Width = Math.Min(targetWidth, bounds.Right - Left);
-            Height = Math.Min(targetHeight, bounds.Bottom - Top);
-        });
+        // Clip to bottom-right corner
+        Width = Math.Min(targetWidth, bounds.Right - Left);
+        Height = Math.Min(targetHeight, bounds.Bottom - Top);
     }
 
     protected override void OnPaint(PaintEventArgs e)
