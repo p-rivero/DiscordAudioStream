@@ -59,11 +59,12 @@ internal class AudioPlayback : IDisposable
     public static string[] RefreshDevices()
     {
         using MMDeviceEnumerator enumerator = new();
-        DataFlow flow = Properties.Settings.Default.ShowAudioInputs ? DataFlow.All : DataFlow.Render;
+        bool showInputs = Properties.Settings.Default.ShowAudioInputs;
+        DataFlow flow = showInputs ? DataFlow.All : DataFlow.Render;
         audioDevices = enumerator.EnumerateAudioEndPoints(flow, DeviceState.Active).ToList();
 
         return audioDevices
-            .Select(device => (device.DataFlow == DataFlow.Capture ? "[IN] " : "") + device.FriendlyName)
+            .Select(device => (showInputs && device.DataFlow == DataFlow.Capture ? "[IN] " : "") + device.FriendlyName)
             .ToArray();
     }
 

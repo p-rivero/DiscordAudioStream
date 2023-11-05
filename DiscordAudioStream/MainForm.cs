@@ -113,7 +113,6 @@ public partial class MainForm : Form
     internal void RefreshCaptureUI()
     {
         Controller.RefreshScreens();
-        Controller.RefreshAudioDevices();
         scaleComboBox.SelectedIndex = Properties.Settings.Default.ScaleIndex;
         captureCursorCheckBox.Checked = Properties.Settings.Default.CaptureCursor;
         hideTaskbarCheckBox.Checked = Properties.Settings.Default.HideTaskbar;
@@ -229,7 +228,7 @@ public partial class MainForm : Form
     private async void MainForm_Shown(object sender, EventArgs e)
     {
         // Wait for the black theme to be applied to avoid flashes
-        await Task.Delay(40).ConfigureAwait(true);
+        await Task.Delay(30).ConfigureAwait(true);
         RefreshCaptureUI();
         Controller.Init();
     }

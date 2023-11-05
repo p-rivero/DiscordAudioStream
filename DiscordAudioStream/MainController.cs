@@ -65,8 +65,19 @@ public class MainController : IDisposable
         };
         drawThread.Start();
 
+        RefreshAudioDevices();
+
         // Prefetch preset slots
         InvokeOnUI.RunAsync(() => _ = GetPopulatedPresets());
+    }
+
+    private void RefreshAudioDevices()
+    {
+        IEnumerable<string> elements = new string[] { "(None)" }
+            .Concat(AudioPlayback.RefreshDevices());
+
+        int defaultIndex = AudioPlayback.GetLastDeviceIndex() + 1; // Add 1 for "None" element
+        form.SetAudioElements(elements, defaultIndex);
     }
 
     // Called when the X button is pressed
@@ -122,15 +133,6 @@ public class MainController : IDisposable
         HWND capturedWindow = videoSources.GetWindowAtIndex(oldIndex);
         RefreshScreens(false);
         form.VideoIndex = capturedWindow.IsNull ? oldIndex : videoSources.GetIndexOfWindow(capturedWindow);
-    }
-
-    internal void RefreshAudioDevices()
-    {
-        IEnumerable<string> elements = new string[] { "(None)" }
-            .Concat(AudioPlayback.RefreshDevices());
-
-        int defaultIndex = AudioPlayback.GetLastDeviceIndex() + 1; // Add 1 for "None" element
-        form.SetAudioElements(elements, defaultIndex);
     }
 
     internal void StartStream(bool skipAudioWarning)
@@ -365,6 +367,7 @@ public class MainController : IDisposable
         form.RefreshCaptureUI();
         CustomAreaCapture.RestoreCaptureArea(hideForm: true);
         ForcePreviewResize();
+        RefreshAudioDevices();
         captureState.TriggerChangeEvents = true;
 
         if (!IsStreaming)
