@@ -42,7 +42,7 @@ public class CaptureState
     private bool stateDirty;
     private bool stateChangeEventEnabled;
 
-    public bool StateChangeEventEnabled
+    public bool TriggerChangeEvents
     {
         get => stateChangeEventEnabled;
         set
@@ -193,7 +193,7 @@ public class CaptureState
     private void TriggerStateChange(string property, object value)
     {
         Logger.Log($"Changing CaptureState ({property} = {value})");
-        if (StateChangeEventEnabled)
+        if (TriggerChangeEvents)
         {
             StateChanged?.Invoke();
         }

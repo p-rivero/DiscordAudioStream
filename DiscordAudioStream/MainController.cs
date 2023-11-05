@@ -360,12 +360,12 @@ public class MainController : IDisposable
                 .Show();
             return;
         }
-        captureState.StateChangeEventEnabled = false;
+        captureState.TriggerChangeEvents = false;
         preset.ApplyToSettings();
         form.RefreshCaptureUI();
         CustomAreaCapture.RestoreCaptureArea(hideForm: true);
         ForcePreviewResize();
-        captureState.StateChangeEventEnabled = true;
+        captureState.TriggerChangeEvents = true;
 
         if (!IsStreaming)
         {

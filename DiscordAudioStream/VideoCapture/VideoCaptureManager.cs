@@ -28,7 +28,7 @@ public class VideoCaptureManager : IDisposable
     public VideoCaptureManager(CaptureState captureState)
     {
         this.captureState = captureState;
-        captureState.StateChangeEventEnabled = true;
+        captureState.TriggerChangeEvents = true;
         // Update the capture state in a separate thread to avoid deadlocks
         captureState.StateChanged += () => new Thread(UpdateState).Start();
 
@@ -151,8 +151,10 @@ public class VideoCaptureManager : IDisposable
             Logger.Log("CANNOT INSTANTIATE FIRST SOURCE. Changing capture methods to BitBlt.");
             Logger.Log(e);
             // We do not have a valid source, fallback to the safest methods
+            captureState.TriggerChangeEvents = false;
             captureState.ScreenMethod = CaptureState.ScreenCaptureMethod.BitBlt;
             captureState.WindowMethod = CaptureState.WindowCaptureMethod.BitBlt;
+            captureState.TriggerChangeEvents = true;
         }
     }
 
