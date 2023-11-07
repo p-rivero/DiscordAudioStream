@@ -197,4 +197,4 @@ Reproduce the crash (with the least number of steps, if possible) and send me th
 
 > **Privacy notice:** The logged information may include your Windows version, the resolution of your screen(s) and the name of the audio devices you are using. For privacy reasons, the titles/names of your opened windows/programs are **NOT** logged. The captured video/audio is **NOT** logged either. 
 > 
-> The logs never leave your computer unless you send them to me on GitHub, so feel free to read them before sending them and manually remove any unwanted information.
+> The logs never leave your computer unless you upload them, so feel free to read them and manually remove any unwanted information. Keep in mind that all files posted to GitHub issues can be read by anyone on the internet.
