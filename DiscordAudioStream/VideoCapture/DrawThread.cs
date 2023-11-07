@@ -7,7 +7,7 @@ namespace DiscordAudioStream.VideoCapture;
 public class DrawThread
 {
     public event Action<Bitmap>? PaintFrame;
-    public Func<Bitmap>? GetCurrentlyDisplayedFrame { get; set; }
+    public Func<Bitmap?>? GetCurrentlyDisplayedFrame { get; set; }
 
     private readonly VideoCaptureManager captureSource;
 
@@ -32,13 +32,14 @@ public class DrawThread
         Logger.Log($"Creating Draw thread. Target framerate: {fps} FPS ({captureSource.CaptureIntervalMs} ms)");
 
         Stopwatch stopwatch = new();
+        timeSinceLastFrame.Start();
 
         while (true)
         {
             stopwatch.Restart();
             try
             {
-                Bitmap? next = VideoCaptureManager.GetNextFrame();
+                using Bitmap? next = VideoCaptureManager.GetNextFrame();
 
                 // No new data, keep displaying last frame
                 if (next == null)
@@ -74,11 +75,16 @@ public class DrawThread
 
         if (GetCurrentlyDisplayedFrame != null)
         {
-            Bitmap frame = (Bitmap)GetCurrentlyDisplayedFrame().Clone();
+            using Bitmap frame = CloneBitmap(GetCurrentlyDisplayedFrame());
             DrawMinimizedWarning(frame);
             PaintFrame?.Invoke(frame);
         }
         timeSinceLastFrame.Stop();
+    }
+
+    private static Bitmap CloneBitmap(Bitmap? old)
+    {
+        return old != null ? (Bitmap)old.Clone() : new Bitmap(1000, 500);
     }
 
     private static void DrawMinimizedWarning(Bitmap frame)

@@ -110,7 +110,7 @@ public partial class MainForm : Form
         set => hideTaskbarCheckBox.Enabled = value;
     }
 
-    internal Bitmap CurrentFrame => (Bitmap)previewBox.Image;
+    internal Bitmap? CurrentFrame => previewBox.Image as Bitmap;
 
     internal void RefreshCaptureUI()
     {

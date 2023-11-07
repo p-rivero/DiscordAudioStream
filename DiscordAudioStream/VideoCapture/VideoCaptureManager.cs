@@ -50,7 +50,7 @@ public class VideoCaptureManager : IDisposable
         captureThreadToken.Cancel();
         captureThread.Join();
         currentSource?.Dispose();
-        captureThreadToken?.Dispose();
+        captureThreadToken.Dispose();
     }
 
     // Return the next frame, if it exists (null otherwise)
