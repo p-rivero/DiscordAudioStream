@@ -25,8 +25,6 @@ public class DrawThread
         drawThread.Start();
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope",
-        Justification = "The result of GetNextFrame should not be disposed until the next frame arrives")]
     private void DrawThreadRun()
     {
         int fps = Properties.Settings.Default.CaptureFramerate;
