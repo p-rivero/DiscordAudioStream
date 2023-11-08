@@ -6,7 +6,7 @@ Made out of necessity and continuous frustration. Built with WinForms (C#).
 
 
 <p align="center">
-    <img alt="Logo" src="docs/img/logo-100.png">
+    <img alt="Logo" src="DiscordAudioStream/resources/imgs/icon.svg" width="110">
 </p>
 <p align="center">
     <a href="https://github.com/p-rivero/DiscordAudioStream/releases">

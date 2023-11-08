@@ -8,7 +8,7 @@
     <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
     <StartupObject>DiscordAudioStream.Program</StartupObject>
-    <ApplicationIcon>resources\imgs\logo.ico</ApplicationIcon>
+    <ApplicationIcon>resources\imgs\icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
@@ -19,7 +19,7 @@
     <Product>Discord Audio Stream</Product>
     <Description>Utility for streaming the entire screen (or use OBS) with Discord... with audio!</Description>
     <PackageProjectUrl>https://github.com/p-rivero/DiscordAudioStream</PackageProjectUrl>
-    <PackageIcon>logo-128.png</PackageIcon>
+    <PackageIcon>icon-128.png</PackageIcon>
     <RepositoryUrl>https://github.com/p-rivero/DiscordAudioStream</RepositoryUrl>
     <NeutralLanguage>en</NeutralLanguage>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -97,7 +97,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Update="resources\imgs\logo-128.png">
+    <None Update="resources\imgs\icon-128.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>

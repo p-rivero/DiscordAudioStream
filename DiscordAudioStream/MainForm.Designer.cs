@@ -238,7 +238,7 @@
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(9);
             this.toolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip.Size = new System.Drawing.Size(243, 45);
+            this.toolStrip.Size = new System.Drawing.Size(212, 45);
             this.toolStrip.TabIndex = 0;
             this.toolStrip.TabStop = true;
             this.toolStrip.Text = "toolStrip1";
