@@ -12,7 +12,7 @@ public class DrawThread
     private readonly VideoCaptureManager captureSource;
 
     private readonly Stopwatch timeSinceLastFrame = new();
-    private const int TIME_TO_MINIMIZED_WARNING_MS = 300;
+    private const int TIME_TO_MINIMIZED_WARNING_MS = 500;
 
     public DrawThread(VideoCaptureManager captureSource)
     {

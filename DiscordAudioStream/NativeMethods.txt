@@ -15,6 +15,7 @@ GetIconInfo
 GetShellWindow
 GetStockObject
 GetWindowDC
+GetWindowRect
 GetWindowText
 GetWindowTextLength
 GetWindowThreadProcessId

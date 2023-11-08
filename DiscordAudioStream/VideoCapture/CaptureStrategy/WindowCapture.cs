@@ -17,7 +17,7 @@ public abstract class WindowCapture : CaptureSource
         }
 
         // Get size of client area (don't use X and Y, these are relative to the WINDOW rect)
-        Rectangle clientRect = GetClientArea(windowHandle);
+        Rectangle clientRect = GetClientRect(windowHandle);
         try
         {
             // Get frame size and position (generally more accurate than GetWindowRect)
@@ -32,17 +32,23 @@ public abstract class WindowCapture : CaptureSource
         }
         catch (ExternalException)
         {
-            // GetClientRect is not always accurate when the window is maximized, but doesn't fail on Windows 7
-            return GetClientArea(windowHandle);
+            // GetWindowRect is not always accurate when the window is maximized, but doesn't fail on Windows 7
+            return GetWindowRect(windowHandle);
         }
     }
 
-    private static Rectangle GetClientArea(HWND hWnd)
+    private static Rectangle GetClientRect(HWND hWnd)
     {
-        if (!PInvoke.GetClientRect(hWnd, out RECT clientRect))
+        if (PInvoke.GetClientRect(hWnd, out RECT clientRect))
         {
-            throw new InvalidOperationException("Window was closed");
+            return clientRect;
         }
-        return clientRect;
+        throw new InvalidOperationException("Window was closed");
+    }
+
+    private static Rectangle GetWindowRect(HWND hWnd)
+    {
+        PInvoke.GetWindowRect(hWnd, out RECT windowRect).AssertSuccess("GetWindowRect failed");
+        return windowRect;
     }
 }
