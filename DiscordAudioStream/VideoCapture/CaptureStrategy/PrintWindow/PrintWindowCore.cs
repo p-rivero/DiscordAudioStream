@@ -31,10 +31,8 @@ internal class PrintWindowCore : WindowCapture
         uint renderFullContent = isWindows8_1 ? PInvoke.PW_RENDERFULLCONTENT : 0;
         uint flags = (uint)PRINT_WINDOW_FLAGS.PW_CLIENTONLY | renderFullContent;
 
-        using (Graphics g = Graphics.FromImage(result))
-        {
-            PInvoke.PrintWindow(windowHandle, (HDC)g.GetHdc(), (PRINT_WINDOW_FLAGS)flags).AssertSuccess("PrintWindow failed");
-        }
-        return result;
+        using Graphics g = Graphics.FromImage(result);
+        bool success = PInvoke.PrintWindow(windowHandle, (HDC)g.GetHdc(), (PRINT_WINDOW_FLAGS)flags);
+        return success ? result : null;
     }
 }

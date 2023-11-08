@@ -102,24 +102,20 @@ public class DarkThemeComboBox : ComboBox
     {
         Color hoverColor = darkMode ? DarkThemeManager.DarkHoverColor : DarkThemeManager.LightHoverColor;
         Color rectangleColor = hovered ? hoverColor : BackColor;
-        using (SolidBrush brush = new(rectangleColor))
-        {
-            e.Graphics.FillRectangle(brush, 0, 0, Width, Height - 2);
-        }
+        using SolidBrush brush = new(rectangleColor);
+        e.Graphics.FillRectangle(brush, 0, 0, Width, Height - 2);
 
         e.Graphics.TextRenderingHint = TextRenderingHint.SystemDefault;
-        using (SolidBrush foreground = new(ForeColor))
-        using (SolidBrush background = new(BackColor))
+        using SolidBrush foreground = new(ForeColor);
+        using SolidBrush background = new(BackColor);
+        e.Graphics.DrawString(Text, Font, foreground, 3f, 3f);
+        e.Graphics.FillRectangle(background, Width - 18, 0, 18, Height);
+        e.Graphics.FillPolygon(foreground, new PointF[3]
         {
-            e.Graphics.DrawString(Text, Font, foreground, 3f, 3f);
-            e.Graphics.FillRectangle(background, Width - 18, 0, 18, Height);
-            e.Graphics.FillPolygon(foreground, new PointF[3]
-            {
-                new(Width - 13, 10f),
-                new(Width - 9, 14f),
-                new(Width - 5, 10f)
-            });
-        }
+            new(Width - 13, 10f),
+            new(Width - 9, 14f),
+            new(Width - 5, 10f)
+        });
 
         Rectangle bounds = new(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height - 1);
         ControlPaint.DrawBorder(e.Graphics, bounds, DarkThemeManager.BorderColor, ButtonBorderStyle.Solid);
@@ -145,10 +141,8 @@ public class DarkThemeComboBox : ComboBox
         {
             Rectangle bounds = e.Bounds;
             bounds.Height -= ItemHeight;
-            using (SolidBrush brush = new(e.BackColor))
-            {
-                e.Graphics.FillRectangle(brush, bounds);
-            }
+            using SolidBrush brush = new(e.BackColor);
+            e.Graphics.FillRectangle(brush, bounds);
 
             float y = e.Bounds.Bottom - ItemHeight / 2;
             using Pen pen = new(DarkThemeManager.BorderColor);

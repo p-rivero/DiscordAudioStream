@@ -114,7 +114,7 @@ public partial class MainForm : Form
 
     internal void RefreshCaptureUI()
     {
-        Controller.RefreshScreens();
+        Controller.RefreshScreens(restoreSavedItem: true);
         scaleComboBox.SelectedIndex = Properties.Settings.Default.ScaleIndex;
         captureCursorCheckBox.Checked = Properties.Settings.Default.CaptureCursor;
         hideTaskbarCheckBox.Checked = Properties.Settings.Default.HideTaskbar;

@@ -119,7 +119,7 @@ public class MainController : IDisposable
 
     // INTERNAL METHODS (called from MainForm)
 
-    internal void RefreshScreens(bool restoreSavedItem = true)
+    internal void RefreshScreens(bool restoreSavedItem = false)
     {
         form.SetVideoItems(videoSources.Refresh());
         if (restoreSavedItem)
@@ -131,7 +131,7 @@ public class MainController : IDisposable
     internal void UpdateAreaComboBox(int oldIndex)
     {
         HWND capturedWindow = videoSources.GetWindowAtIndex(oldIndex);
-        RefreshScreens(false);
+        RefreshScreens();
         form.VideoIndex = capturedWindow.IsNull ? oldIndex : videoSources.GetIndexOfWindow(capturedWindow);
     }
 
@@ -239,6 +239,7 @@ public class MainController : IDisposable
     private void AbortCapture()
     {
         RefreshScreens();
+        form.VideoIndex = 0;
         if (!IsStreaming)
         {
             return;
