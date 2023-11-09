@@ -230,7 +230,7 @@ public partial class MainForm : Form
     private async void MainForm_Shown(object sender, EventArgs e)
     {
         // Wait for the black theme to be applied to avoid flashes
-        await Task.Delay(30).ConfigureAwait(true);
+        await Task.Delay(100).ConfigureAwait(true);
         RefreshCaptureUI();
         Controller.Init();
     }
