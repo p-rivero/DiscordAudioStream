@@ -1,10 +1,15 @@
 ﻿
 using System.Windows.Forms;
 
+using CustomComponents;
+
 namespace DiscordAudioStream;
 
 public class ShowMessage
 {
+    public static bool UseDarkTheme { get; set; }
+    public static IWin32Window? ParentWindow { get; set; }
+
     private readonly MessageBoxIcon icon;
     private string title;
     private string text = "";
@@ -103,9 +108,9 @@ public class ShowMessage
         return this;
     }
 
-    public DialogResult GetResult()
+    public DialogResult GetResult(IWin32Window? parent, bool native = false)
     {
-        DialogResult result = ShowMessageBox();
+        DialogResult result = ShowMessageBox(parent, native);
         switch (result)
         {
             case DialogResult.OK:
@@ -126,14 +131,42 @@ public class ShowMessage
         return result;
     }
 
-    public void Show()
+    public DialogResult GetResult(bool native = false)
     {
-        _ = GetResult();
+        return GetResult(ParentWindow, native);
     }
 
-    private DialogResult ShowMessageBox()
+    public void Show(IWin32Window? parent, bool native = false)
     {
-        return MessageBox.Show(text, title, GetButtons(), icon, GetDefaultButton());
+        _ = GetResult(parent, native);
+    }
+
+    public void Show(bool native = false)
+    {
+        Show(ParentWindow, native);
+    }
+
+    private DialogResult ShowMessageBox(IWin32Window? parent, bool native)
+    {
+        if (native)
+        {
+            return MessageBox.Show(text, title, GetButtons(), icon, GetDefaultButton());
+        }
+
+        using DarkThemeMessageBox form = new(UseDarkTheme)
+        {
+            Text = title,
+            MessageText = text,
+            Buttons = GetButtons(),
+            Icon = icon,
+            DefaultButton = GetDefaultButton()
+        };
+
+        if (Application.OpenForms.Count > 0)
+        {
+            return InvokeOnUI.RunSync(() => form.ShowDialog(parent));
+        }
+        return form.ShowDialog(parent);
     }
 
     private void AssertYesNoCancel()

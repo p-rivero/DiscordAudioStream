@@ -93,7 +93,7 @@ internal static class Program
                 Environment.Exit(0);
             })
             .AcceptByDefault()
-            .Show();
+            .Show(native: true);
     }
 
     private static void InitializeSettings()

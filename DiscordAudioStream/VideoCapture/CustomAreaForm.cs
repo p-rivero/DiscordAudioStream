@@ -83,7 +83,7 @@ public partial class CustomAreaForm : Form
                 .Text("To show the red marker again, change the capture to anything else and then back to \"Custom area\".")
                 .Text("This message won't be shown again.")
                 .Cancelable()
-                .GetResult();
+                .GetResult(this);
             if (r == DialogResult.Cancel)
             {
                 return;

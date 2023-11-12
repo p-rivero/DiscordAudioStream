@@ -20,6 +20,7 @@ public partial class MainForm : Form
     public MainForm(bool darkMode)
     {
         Logger.Log("Initializing MainForm. darkMode = " + darkMode);
+        ShowMessage.UseDarkTheme = darkMode;
 
         Controller = new(this);
 
@@ -236,6 +237,7 @@ public partial class MainForm : Form
 
     private async void MainForm_Shown(object sender, EventArgs e)
     {
+        ShowMessage.ParentWindow = this;
         // Wait for the black theme to be applied to avoid flashes
         await Task.Delay(100).ConfigureAwait(true);
         RefreshCaptureUI();
