@@ -65,7 +65,7 @@ public class MainController : IDisposable
                 lastCapturedFrameSize = frame.Size;
                 SetPreviewSize(frame.Size);
             }
-            form.UpdatePreview((Bitmap)frame.Clone(), forceRefresh && IsStreaming);
+            form.UpdatePreview(frame, forceRefresh && IsStreaming);
         };
         drawThread.GetCurrentlyDisplayedFrame += () => form.CurrentFrame;
         drawThread.Start();
@@ -114,7 +114,8 @@ public class MainController : IDisposable
 
     private void RefreshPreviewSize()
     {
-        SetPreviewSize(form.CurrentFrame?.Size ?? Size.Empty);
+        Size size = InvokeOnUI.RunSync(() => form.CurrentFrame?.Size ?? Size.Empty);
+        SetPreviewSize(size);
     }
 
     // INTERNAL METHODS (called from MainForm)

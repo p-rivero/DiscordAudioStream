@@ -66,6 +66,17 @@ public partial class MainForm : Form
 
     public MainController Controller { get; }
 
+    private Bitmap? OutputImage
+    {
+        get => previewBox.Image as Bitmap;
+        set
+        {
+            Image? old = previewBox.Image;
+            previewBox.Image = value;
+            old?.Dispose();
+        }
+    }
+
     // INTERNAL METHODS (called from controller)
 
     internal int VideoIndex
@@ -109,7 +120,7 @@ public partial class MainForm : Form
         set => hideTaskbarCheckBox.Enabled = value;
     }
 
-    internal Bitmap? CurrentFrame => InvokeOnUI.RunSync(() => previewBox.Image as Bitmap);
+    internal Bitmap? CurrentFrame => InvokeOnUI.RunSync(() => OutputImage);
 
     internal void RefreshCaptureUI()
     {
@@ -163,8 +174,7 @@ public partial class MainForm : Form
         {
             if (!IsDisposed)
             {
-                previewBox.Image?.Dispose();
-                previewBox.Image = newImage;
+                OutputImage = newImage;
             }
             return this.HWnd();
         });
@@ -218,9 +228,7 @@ public partial class MainForm : Form
             Size newSize = Size;
             newSize.Width = defaultWindowSize.Width - (defaultPreviewSize.Width + 9);
             Size = newSize;
-
-            previewBox.Image?.Dispose();
-            previewBox.Image = null;
+            OutputImage = null;
         }
     }
 

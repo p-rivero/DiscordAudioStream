@@ -39,7 +39,7 @@ public class DrawThread
             stopwatch.Restart();
             try
             {
-                using Bitmap? next = VideoCaptureManager.GetNextFrame();
+                Bitmap? next = VideoCaptureManager.GetNextFrame();
 
                 // No new data, keep displaying last frame
                 if (next == null)
@@ -75,7 +75,7 @@ public class DrawThread
 
         if (GetCurrentlyDisplayedFrame != null)
         {
-            using Bitmap frame = CloneBitmap(GetCurrentlyDisplayedFrame());
+            Bitmap frame = CloneBitmap(GetCurrentlyDisplayedFrame());
             DrawMinimizedWarning(frame);
             PaintFrame?.Invoke(frame);
         }
@@ -84,7 +84,7 @@ public class DrawThread
 
     private static Bitmap CloneBitmap(Bitmap? old)
     {
-        return old != null ? (Bitmap)old.Clone() : new Bitmap(1000, 500);
+        return old != null ? new Bitmap(old) : new Bitmap(1000, 500);
     }
 
     private static void DrawMinimizedWarning(Bitmap frame)

@@ -106,7 +106,7 @@ public class DuplicationCapture : DirectXCapture
             screenResource.Dispose();
             Screen.ReleaseFrame();
 
-            CachedThumbnail = (Bitmap)bmp.Clone();
+            CachedThumbnail = new Bitmap(bmp);
             return bmp;
         }
         catch (SharpDXException e)
@@ -149,6 +149,6 @@ public class DuplicationCapture : DirectXCapture
             Logger.Log("AcquireNextFrame: Failed to get the first frame, no cached thumbnail exists!");
             return null;
         }
-        return (Bitmap)CachedThumbnail.Clone();
+        return new Bitmap(CachedThumbnail);
     }
 }
