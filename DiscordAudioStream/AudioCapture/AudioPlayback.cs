@@ -115,7 +115,7 @@ internal class AudioPlayback : IDisposable
                 throw;
             }
         }
-        catch (Exception)
+        catch
         {
             output.PlaybackStopped -= Output_StoppedHandler;
             throw;

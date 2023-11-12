@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics;
+using System.Drawing;
 
 using DiscordAudioStream.AudioCapture;
 using DiscordAudioStream.VideoCapture;
@@ -72,8 +73,24 @@ public class MainController : IDisposable
 
         RefreshAudioDevices();
 
+        new Thread(BackgroundInit) { IsBackground = true }.Start();
+    }
+
+    private async void BackgroundInit()
+    {
         // Prefetch preset slots
         InvokeOnUI.RunAsync(() => _ = GetPopulatedPresets());
+
+        GitHubRelease release = await GitHubRelease.GetLatest().ConfigureAwait(false);
+        if (release.Version > BuildInfo.Version)
+        {
+            ShowMessage.Question()
+                .Title("New version available")
+                .Text($"A new version of DiscordAudioStream is available: {release.Version}")
+                .Text("Do you want to open the download page?")
+                .IfYes(() => Process.Start(release.DownloadUrl.AbsoluteUri))
+                .Show();
+        }
     }
 
     private void RefreshAudioDevices()
