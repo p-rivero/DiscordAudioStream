@@ -158,7 +158,7 @@ public class ShowMessage
             Text = title,
             MessageText = text,
             Buttons = GetButtons(),
-            Icon = icon,
+            MessageIcon = icon,
             DefaultButton = GetDefaultButton()
         };
 

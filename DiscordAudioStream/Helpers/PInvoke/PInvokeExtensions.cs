@@ -3,12 +3,14 @@ using System.Runtime.InteropServices;
 
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Dwm;
+using Windows.Win32.UI.Controls;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace Windows.Win32;
 
+[SuppressMessage("SonarQube", "S6640", Justification = "Unsafe methods have been reviewed")]
 public static partial class PInvoke
 {
-    [SuppressMessage("SonarQube", "S6640", Justification = "Unsafe method has been reviewed")]
     public static unsafe string GetWindowText(HWND hWnd, int nMaxCount)
     {
         Span<char> buffer = stackalloc char[nMaxCount];
@@ -19,7 +21,6 @@ public static partial class PInvoke
         }
     }
 
-    [SuppressMessage("SonarQube", "S6640", Justification = "Unsafe method has been reviewed")]
     public static unsafe uint GetWindowThreadProcessId(HWND hWnd, out uint processId)
     {
         fixed (uint* processIdPtr = &processId)
@@ -28,7 +29,14 @@ public static partial class PInvoke
         }
     }
 
-    [SuppressMessage("SonarQube", "S6640", Justification = "Unsafe method has been reviewed")]
+    public static unsafe HRESULT LoadIconMetric(HINSTANCE hinst, PCWSTR pszName, _LI_METRIC lims, out HICON hico)
+    {
+        fixed (HICON* phico = &hico)
+        {
+            return LoadIconMetric(hinst, pszName, lims, phico);
+        }
+    }
+
     public static unsafe HRESULT DwmGetWindowAttribute<T>(HWND hwnd, DWMWINDOWATTRIBUTE dwAttribute, out T attr) where T : unmanaged
     {
         fixed (T* attrPtr = &attr)
@@ -37,7 +45,6 @@ public static partial class PInvoke
         }
     }
 
-    [SuppressMessage("SonarQube", "S6640", Justification = "Unsafe method has been reviewed")]
     public static unsafe HRESULT DwmSetWindowAttribute<T>(HWND hWnd, DWMWINDOWATTRIBUTE attribute, in T value) where T : unmanaged
     {
         fixed (T* attrPtr = &value)

@@ -1,5 +1,13 @@
 ﻿using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
+
+using DiscordAudioStream;
+
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.UI.Controls;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace CustomComponents;
 
@@ -19,6 +27,7 @@ internal partial class DarkThemeMessageBox : Form
     private static readonly Size LabelPadding = new(120, 130);
 
     private MessageBoxButtons buttons;
+    private MessageBoxIcon icon;
 
     public string MessageText
     {
@@ -27,6 +36,7 @@ internal partial class DarkThemeMessageBox : Form
         {
             messageLabel.Text = value;
             Size = messageLabel.Size + LabelPadding;
+            UpdateIconPosition();
         }
     }
 
@@ -78,7 +88,32 @@ internal partial class DarkThemeMessageBox : Form
         }
     }
 
-    public MessageBoxIcon Icon { get; init; } = MessageBoxIcon.None;
+    public MessageBoxIcon MessageIcon
+    {
+        get => icon;
+        set
+        {
+            icon = value;
+            PCWSTR pszName = value switch
+            {
+                MessageBoxIcon.Error => PInvoke.IDI_ERROR,
+                MessageBoxIcon.Question => PInvoke.IDI_QUESTION,
+                MessageBoxIcon.Warning => PInvoke.IDI_WARNING,
+                MessageBoxIcon.Information => PInvoke.IDI_INFORMATION,
+                _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid MessageBoxIcon"),
+            };
+            try
+            {
+                PInvoke.LoadIconMetric(HINSTANCE.Null, pszName, _LI_METRIC.LIM_LARGE, out HICON hIcon).AssertSuccess("LoadIconMetric failed");
+                iconPicture.Image = Icon.FromHandle(hIcon).ToBitmap();
+            }
+            catch (ExternalException e)
+            {
+                Logger.Log("Cannot load MessageBox icon");
+                Logger.Log(e);
+            }
+        }
+    }
 
     public MessageBoxDefaultButton DefaultButton { get; init; } = MessageBoxDefaultButton.Button1;
 
@@ -122,6 +157,13 @@ internal partial class DarkThemeMessageBox : Form
         button.Visible = true;
         button.Text = buttonTexts[result];
         button.DialogResult = result;
+    }
+
+    private void UpdateIconPosition()
+    {
+        int textCenterY = messageLabel.Location.Y + messageLabel.Size.Height / 2;
+        int iconTargetY = textCenterY - iconPicture.Size.Height / 2;
+        iconPicture.Location = new(iconPicture.Location.X, iconTargetY);
     }
 
     private void AboutForm_KeyDown(object sender, KeyEventArgs e)

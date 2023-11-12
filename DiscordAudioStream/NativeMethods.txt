@@ -23,6 +23,7 @@ IDirect3DDxgiInterfaceAccess
 IGraphicsCaptureItemInterop
 IsIconic
 IsWindowVisible
+LoadIconMetric
 PrintWindow
 ReleaseCapture
 ReleaseDC
@@ -42,5 +43,9 @@ HMONITOR
 HTCAPTION
 HWND_NOTOPMOST
 HWND_TOPMOST
+IDI_ERROR
+IDI_INFORMATION
+IDI_QUESTION
+IDI_WARNING
 PW_RENDERFULLCONTENT
 WM_NCLBUTTONDOWN

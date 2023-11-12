@@ -31,6 +31,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.messageLabel = new System.Windows.Forms.Label();
+            this.iconPicture = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.iconPicture)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -72,12 +74,21 @@
             this.messageLabel.TabIndex = 3;
             this.messageLabel.Text = "label1";
             // 
+            // iconPicture
+            // 
+            this.iconPicture.Location = new System.Drawing.Point(30, 0);
+            this.iconPicture.Name = "iconPicture";
+            this.iconPicture.Size = new System.Drawing.Size(32, 32);
+            this.iconPicture.TabIndex = 4;
+            this.iconPicture.TabStop = false;
+            // 
             // DarkThemeMessageBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(284, 111);
+            this.Controls.Add(this.iconPicture);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.messageLabel);
@@ -94,6 +105,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AboutForm_KeyDown);
+            ((System.ComponentModel.ISupportInitialize)(this.iconPicture)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -105,5 +117,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label messageLabel;
+        private System.Windows.Forms.PictureBox iconPicture;
     }
 }
