@@ -17,7 +17,7 @@ internal static class Program
     {
         Logger.Log($"Started Main method. Arguments: [{args.CommaSeparated()}]");
         ExceptionHandler.Register();
-        LogStartupInfo();
+        Logger.Log(BuildInfo.FullInfo);
         RedirectConsoleOutput();
         CheckFrameworkVersion();
         InitializeSettings();
@@ -37,14 +37,6 @@ internal static class Program
         mainForm.Load += (sender, e) => consoleArgs.ProcessArgsAfterMainForm(mainForm.Controller);
         mainForm.Shown += (sender, e) => ExceptionHandler.StartupDone();
         Application.Run(mainForm);
-    }
-
-    private static void LogStartupInfo()
-    {
-        Logger.Log($"OS Version: {Environment.OSVersion}");
-        Logger.Log($"Installed framework: {FrameworkInfo.VersionName}");
-        Logger.Log($"Build ID: {BuildId.Id}");
-        Logger.Log($"Log ID: {new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds()}");
     }
 
     private static bool IsDarkTheme => Settings.Default.Theme switch

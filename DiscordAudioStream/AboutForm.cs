@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
 
 using CustomComponents;
@@ -21,10 +20,7 @@ internal partial class AboutForm : Form
 
         InitializeComponent();
 
-        string fullVer = Assembly.GetExecutingAssembly().GetName().Version.ToString(); // major.minor.build.revision
-        string version = fullVer.Substring(0, fullVer.LastIndexOf('.')); // major.minor.build
-        int bitness = Environment.Is64BitProcess ? 64 : 32;
-        versionLabel.Text = $"Version: {version} ({bitness} bit)";
+        versionLabel.Text = $"Version: {BuildInfo.Version} ({BuildInfo.Bitness})";
 
         ApplyDarkTheme(darkMode);
     }

@@ -22,7 +22,7 @@ public static class FrameworkInfo
     private static int GetReleaseNumber()
     {
         object? release = Registry.GetValue(FRAMEWORK_VERSION_SUBKEY, "Release", null);
-        if (release is null)
+        if (release == null)
         {
             return -1;
         }

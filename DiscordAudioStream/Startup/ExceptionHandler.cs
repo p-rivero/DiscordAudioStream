@@ -61,7 +61,8 @@ internal static class ExceptionHandler
     {
         Logger.Log("  Trace path is: " + tracePath);
 
-        File.WriteAllText(tracePath, exception.ToString());
+        string contents = $"{exception}\n\n{BuildInfo.FullInfo}";
+        File.WriteAllText(tracePath, contents);
 
         Logger.Log("  Stack trace written successfully.");
     }

@@ -19,7 +19,6 @@ public partial class MainForm : Form
 
     public MainForm(bool darkMode)
     {
-        Logger.EmptyLine();
         Logger.Log("Initializing MainForm. darkMode = " + darkMode);
 
         Controller = new(this);
