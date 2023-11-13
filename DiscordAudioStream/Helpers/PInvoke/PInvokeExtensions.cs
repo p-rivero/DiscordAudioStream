@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Dwm;
+using Windows.Win32.System.Threading;
 using Windows.Win32.UI.Controls;
 using Windows.Win32.UI.WindowsAndMessaging;
 
@@ -18,6 +19,17 @@ public static partial class PInvoke
         {
             int length = GetWindowText(hWnd, bufferPtr, nMaxCount);
             return buffer.Slice(0, length).ToString();
+        }
+    }
+
+    public static unsafe string QueryFullProcessImageName(HANDLE hProcess, PROCESS_NAME_FORMAT dwFlags, int nMaxCount)
+    {
+        Span<char> buffer = stackalloc char[nMaxCount];
+        uint dwSize = (uint)nMaxCount;
+        fixed (char* bufferPtr = buffer)
+        {
+            QueryFullProcessImageName(hProcess, dwFlags, bufferPtr, ref dwSize).AssertSuccess("QueryFullProcessImageName failed");
+            return buffer.Slice(0, (int)dwSize).ToString();
         }
     }
 

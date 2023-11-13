@@ -3,6 +3,7 @@
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Dwm;
+using Windows.Win32.System.Threading;
 
 namespace DiscordAudioStream.VideoCapture;
 
@@ -68,7 +69,7 @@ public class WindowList
                 }
 
                 PInvoke.GetWindowThreadProcessId(hWnd, out uint processId).AssertNotZero("GetWindowThreadProcessId failed");
-                string filename = Process.GetProcessById((int)processId).MainModule.FileName;
+                string filename = GetProcessFilename(processId);
 
                 processes.Add(new(hWnd, name, filename));
                 return true;
@@ -125,5 +126,11 @@ public class WindowList
         }
 
         throw new InvalidOperationException("No window matches hash");
+    }
+
+    private static string GetProcessFilename(uint processId)
+    {
+        HANDLE processHandle = PInvoke.OpenProcess(PROCESS_ACCESS_RIGHTS.PROCESS_QUERY_LIMITED_INFORMATION, false, processId);
+        return PInvoke.QueryFullProcessImageName(processHandle, PROCESS_NAME_FORMAT.PROCESS_NAME_WIN32, 512);
     }
 }

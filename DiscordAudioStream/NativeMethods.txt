@@ -24,7 +24,9 @@ IGraphicsCaptureItemInterop
 IsIconic
 IsWindowVisible
 LoadIconMetric
+OpenProcess
 PrintWindow
+QueryFullProcessImageName
 ReleaseCapture
 ReleaseDC
 SelectObject
