@@ -13,6 +13,8 @@ namespace CustomComponents;
 
 internal partial class DarkThemeMessageBox : Form
 {
+    public event Action? OnDontShowAgain;
+
     private static readonly Dictionary<DialogResult, string> buttonTexts = new()
     {
         { DialogResult.OK, "OK" },
@@ -24,7 +26,8 @@ internal partial class DarkThemeMessageBox : Form
         { DialogResult.Ignore, "Ignore" },
     };
 
-    private static readonly Size LabelPadding = new(100, 125);
+    private static readonly Size labelPadding = new(100, 125);
+    private static readonly Size dontShowAgainPadding = new(0, 25);
 
     private MessageBoxButtons buttons;
     private MessageBoxIcon icon;
@@ -36,7 +39,7 @@ internal partial class DarkThemeMessageBox : Form
         init
         {
             messageLabel.Text = value;
-            Size = messageLabel.Size + LabelPadding;
+            Size = messageLabel.Size + labelPadding;
             UpdateIconPosition();
         }
     }
@@ -56,6 +59,7 @@ internal partial class DarkThemeMessageBox : Form
             button1.Visible = false;
             button2.Visible = false;
             button3.Visible = false;
+            DialogResult defaultResult = DialogResult.Cancel;
             switch (value)
             {
                 case MessageBoxButtons.OK:
@@ -66,6 +70,7 @@ internal partial class DarkThemeMessageBox : Form
                     ActivateButton(button3, DialogResult.Cancel);
                     break;
                 case MessageBoxButtons.YesNo:
+                    defaultResult = DialogResult.No;
                     ActivateButton(button2, DialogResult.Yes);
                     ActivateButton(button3, DialogResult.No);
                     break;
@@ -79,6 +84,7 @@ internal partial class DarkThemeMessageBox : Form
                     ActivateButton(button3, DialogResult.Retry);
                     break;
                 case MessageBoxButtons.AbortRetryIgnore:
+                    defaultResult = DialogResult.Ignore;
                     ActivateButton(button1, DialogResult.Abort);
                     ActivateButton(button2, DialogResult.Retry);
                     ActivateButton(button3, DialogResult.Ignore);
@@ -86,6 +92,7 @@ internal partial class DarkThemeMessageBox : Form
                 default:
                     throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid MessageBoxButtons");
             }
+            FormClosing += (sender, e) => DialogResult = defaultResult;
         }
     }
 
@@ -149,6 +156,22 @@ internal partial class DarkThemeMessageBox : Form
         }
     }
 
+    public bool HasDontShowAgain
+    {
+        get => dontShowAgainCheckBox.Visible;
+        set
+        {
+            dontShowAgainCheckBox.Visible = value;
+            dontShowAgainCheckBox.Checked = false;
+
+            if (value)
+            {
+                Size += dontShowAgainPadding;
+                UpdateDontShowAgainCheckboxPosition();
+            }
+        }
+    }
+
     public DarkThemeMessageBox(bool darkMode)
     {
         if (darkMode)
@@ -184,11 +207,20 @@ internal partial class DarkThemeMessageBox : Form
         }
     }
 
-    private static void ActivateButton(Button button, DialogResult result)
+    private void ActivateButton(Button button, DialogResult result)
     {
         button.Visible = true;
         button.Text = buttonTexts[result];
-        button.DialogResult = result;
+        button.Click += (sender, e) =>
+        {
+            if (dontShowAgainCheckBox.Checked && result != DialogResult.Cancel)
+            {
+                OnDontShowAgain?.Invoke();
+            }
+            Form form = button.FindForm() ?? throw new InvalidOperationException();
+            form.Close();
+            form.DialogResult = result;
+        };
     }
 
     private void UpdateIconPosition()
@@ -196,6 +228,13 @@ internal partial class DarkThemeMessageBox : Form
         int textCenterY = messageLabel.Location.Y + messageLabel.Size.Height / 2;
         int iconTargetY = textCenterY - iconPicture.Size.Height / 2;
         iconPicture.Location = new(iconPicture.Location.X, iconTargetY);
+    }
+
+    private void UpdateDontShowAgainCheckboxPosition()
+    {
+        const int PADDING = 15;
+        int textBottomY = messageLabel.Location.Y + messageLabel.Size.Height;
+        dontShowAgainCheckBox.Location = new(dontShowAgainCheckBox.Location.X, textBottomY + PADDING);
     }
 
     private void AboutForm_KeyDown(object sender, KeyEventArgs e)

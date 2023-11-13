@@ -81,16 +81,13 @@ public partial class CustomAreaForm : Form
                 .Title("Lock area")
                 .Text("This will hide the red area marker and you won't be able to move it anymore.")
                 .Text("To show the red marker again, change the capture to anything else and then back to \"Custom area\".")
-                .Text("This message won't be shown again.")
                 .Cancelable()
+                .IfDontShowAgain(() => Properties.Settings.Default.SeenLockAreaDialog = true)
                 .GetResult(this);
             if (r == DialogResult.Cancel)
             {
                 return;
             }
-
-            Properties.Settings.Default.SeenLockAreaDialog = true;
-            Logger.Log("Set SeenLockAreaDiag = true");
         }
         Logger.Log("Locking area");
         showMarker = false;

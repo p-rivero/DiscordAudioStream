@@ -322,5 +322,17 @@ namespace DiscordAudioStream.Properties {
                 this["StoredPresets"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SeenAvailableUpdateDialog {
+            get {
+                return ((bool)(this["SeenAvailableUpdateDialog"]));
+            }
+            set {
+                this["SeenAvailableUpdateDialog"] = value;
+            }
+        }
     }
 }

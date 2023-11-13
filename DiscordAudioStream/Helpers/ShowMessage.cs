@@ -18,10 +18,12 @@ public class ShowMessage
     private Action? ifNo;
     private Action? ifOk;
     private Action? ifCancel;
+    private Action? ifDontShowAgain;
 
     private bool HasYesNo => ifYes != null || ifNo != null;
     private bool HasOk => ifOk != null;
     private bool HasCancel => ifCancel != null;
+    private bool HasDontShowAgain => ifDontShowAgain != null;
 
     public static ShowMessage Information()
     {
@@ -96,6 +98,12 @@ public class ShowMessage
         return this;
     }
 
+    public ShowMessage IfDontShowAgain(Action action)
+    {
+        ifDontShowAgain = action;
+        return this;
+    }
+
     public ShowMessage Cancelable()
     {
         ifCancel = () => { };
@@ -148,6 +156,11 @@ public class ShowMessage
 
     private DialogResult ShowMessageBox(IWin32Window? parent, bool native)
     {
+        if (HasDontShowAgain && native)
+        {
+            throw new InvalidOperationException("Native dialog does not support 'Don't show again'");
+        }
+
         if (native)
         {
             return MessageBox.Show(text, title, GetButtons(), icon, GetDefaultButton());
@@ -159,8 +172,10 @@ public class ShowMessage
             MessageText = text,
             Buttons = GetButtons(),
             MessageIcon = icon,
-            DefaultButton = GetDefaultButton()
+            DefaultButton = GetDefaultButton(),
+            HasDontShowAgain = HasDontShowAgain,
         };
+        form.OnDontShowAgain += () => ifDontShowAgain?.Invoke();
 
         if (Application.OpenForms.Count > 0)
         {

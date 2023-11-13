@@ -82,13 +82,15 @@ public class MainController : IDisposable
         InvokeOnUI.RunAsync(() => _ = GetPopulatedPresets());
 
         GitHubRelease release = await GitHubRelease.GetLatest().ConfigureAwait(false);
-        if (release.Version > BuildInfo.Version)
+        if (release.Version > BuildInfo.Version && !Properties.Settings.Default.SeenAvailableUpdateDialog)
         {
             ShowMessage.Question()
                 .Title("New version available")
                 .Text($"A new version of DiscordAudioStream is available: {release.Version}")
                 .Text("Do you want to open the download page?")
                 .IfYes(() => Process.Start(release.DownloadUrl.AbsoluteUri))
+                .AcceptByDefault()
+                .IfDontShowAgain(() => Properties.Settings.Default.SeenAvailableUpdateDialog = true)
                 .Show();
         }
     }
