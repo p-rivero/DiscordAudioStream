@@ -68,7 +68,7 @@
             // messageLabel
             // 
             this.messageLabel.AutoSize = true;
-            this.messageLabel.Location = new System.Drawing.Point(75, 25);
+            this.messageLabel.Location = new System.Drawing.Point(63, 25);
             this.messageLabel.Name = "messageLabel";
             this.messageLabel.Size = new System.Drawing.Size(38, 15);
             this.messageLabel.TabIndex = 3;
@@ -76,7 +76,7 @@
             // 
             // iconPicture
             // 
-            this.iconPicture.Location = new System.Drawing.Point(30, 0);
+            this.iconPicture.Location = new System.Drawing.Point(18, 0);
             this.iconPicture.Name = "iconPicture";
             this.iconPicture.Size = new System.Drawing.Size(32, 32);
             this.iconPicture.TabIndex = 4;

@@ -24,10 +24,11 @@ internal partial class DarkThemeMessageBox : Form
         { DialogResult.Ignore, "Ignore" },
     };
 
-    private static readonly Size LabelPadding = new(120, 130);
+    private static readonly Size LabelPadding = new(100, 125);
 
     private MessageBoxButtons buttons;
     private MessageBoxIcon icon;
+    private MessageBoxDefaultButton defaultButton;
 
     public string MessageText
     {
@@ -91,7 +92,7 @@ internal partial class DarkThemeMessageBox : Form
     public MessageBoxIcon MessageIcon
     {
         get => icon;
-        set
+        init
         {
             icon = value;
             PCWSTR pszName = value switch
@@ -107,7 +108,7 @@ internal partial class DarkThemeMessageBox : Form
                 PInvoke.LoadIconMetric(HINSTANCE.Null, pszName, _LI_METRIC.LIM_LARGE, out HICON hIcon).AssertSuccess("LoadIconMetric failed");
                 iconPicture.Image = Icon.FromHandle(hIcon).ToBitmap();
             }
-            catch (ExternalException e)
+            catch (Exception e) when (e is ExternalException or EntryPointNotFoundException)
             {
                 Logger.Log("Cannot load MessageBox icon");
                 Logger.Log(e);
@@ -115,7 +116,38 @@ internal partial class DarkThemeMessageBox : Form
         }
     }
 
-    public MessageBoxDefaultButton DefaultButton { get; init; } = MessageBoxDefaultButton.Button1;
+    public MessageBoxDefaultButton DefaultButton
+    {
+        get => defaultButton;
+        init
+        {
+            defaultButton = value;
+            int numberOfButtons = buttons switch
+            {
+                MessageBoxButtons.OK => 1,
+                MessageBoxButtons.OKCancel => 2,
+                MessageBoxButtons.YesNo => 2,
+                MessageBoxButtons.RetryCancel => 2,
+                MessageBoxButtons.AbortRetryIgnore => 3,
+                MessageBoxButtons.YesNoCancel => 3,
+                _ => throw new InvalidDataException()
+            };
+            Button button = (value, numberOfButtons) switch
+            {
+                (MessageBoxDefaultButton.Button1, 1) => button3,
+                (MessageBoxDefaultButton.Button2, 1) => throw new InvalidDataException(),
+                (MessageBoxDefaultButton.Button3, 1) => throw new InvalidDataException(),
+                (MessageBoxDefaultButton.Button1, 2) => button2,
+                (MessageBoxDefaultButton.Button2, 2) => button3,
+                (MessageBoxDefaultButton.Button3, 2) => throw new InvalidDataException(),
+                (MessageBoxDefaultButton.Button1, 3) => button1,
+                (MessageBoxDefaultButton.Button2, 3) => button2,
+                (MessageBoxDefaultButton.Button3, 3) => button3,
+                _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid MessageBoxDefaultButton"),
+            };
+            button.Select();
+        }
+    }
 
     public DarkThemeMessageBox(bool darkMode)
     {

@@ -30,6 +30,22 @@ internal static class ExceptionHandler
 
     private static void HandleException(Exception exception)
     {
+        try
+        {
+            HandleExceptionUnsafe(exception);
+        }
+        catch (Exception e)
+        {
+            Logger.Log("ERROR WHILE HANDLING EXCEPTION:");
+            Logger.Log(e);
+            Logger.Log("ORIGINAL EXCEPTION BEING HANDLED:");
+            Logger.Log(exception);
+        }
+        Environment.Exit(1);
+    }
+
+    private static void HandleExceptionUnsafe(Exception exception)
+    {
         Logger.Log("Unhandled exception caught, outputting stack trace...");
 
         string tracePath = Path.GetFullPath(TRACE_FILE_NAME);
@@ -53,8 +69,6 @@ internal static class ExceptionHandler
                 .IfYes(() => Properties.Settings.Default.OutputLogFile = true)
                 .Show();
         }
-
-        Environment.Exit(1);
     }
 
     private static void WriteStackTrace(Exception exception, string tracePath)
