@@ -14,7 +14,8 @@ public record CapturePreset
     bool hideTaskbar,
     bool captureCursor,
     int scaleIndex,
-    string audioDeviceID
+    string audioDeviceID,
+    string? streamTitle     // v1.4.1
 )
 {
     private const int MIN_SLOT = 1;
@@ -32,7 +33,8 @@ public record CapturePreset
             Settings.Default.HideTaskbar,
             Settings.Default.CaptureCursor,
             Settings.Default.ScaleIndex,
-            Settings.Default.AudioDeviceID
+            Settings.Default.AudioDeviceID,
+            Settings.Default.StreamTitle
         );
     }
 
@@ -46,6 +48,10 @@ public record CapturePreset
         Settings.Default.CaptureCursor = captureCursor;
         Settings.Default.ScaleIndex = scaleIndex;
         Settings.Default.AudioDeviceID = audioDeviceID;
+        if (streamTitle != null)
+        {
+            Settings.Default.StreamTitle = streamTitle;
+        }
     }
 
     public static CapturePreset? LoadSlot(int slotNumber)

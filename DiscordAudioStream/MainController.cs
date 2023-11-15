@@ -391,7 +391,11 @@ public class MainController : IDisposable
         RefreshAudioDevices();
         captureState.TriggerChangeEvents = true;
 
-        if (!IsStreaming)
+        if (IsStreaming)
+        {
+            form.Text = Properties.Settings.Default.StreamTitle;
+        }
+        else
         {
             ShowMessage.Information()
                 .Title("Preset loaded")
