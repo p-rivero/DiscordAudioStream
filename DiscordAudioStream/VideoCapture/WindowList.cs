@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 using Windows.Win32;
 using Windows.Win32.Foundation;
@@ -69,7 +70,7 @@ public class WindowList
                 }
 
                 PInvoke.GetWindowThreadProcessId(hWnd, out uint processId).AssertNotZero("GetWindowThreadProcessId failed");
-                string filename = GetProcessFilename(processId);
+                string filename = GetProcessFilename(processId, name);
 
                 processes.Add(new(hWnd, name, filename));
                 return true;
@@ -128,9 +129,17 @@ public class WindowList
         throw new InvalidOperationException("No window matches hash");
     }
 
-    private static string GetProcessFilename(uint processId)
+    private static string GetProcessFilename(uint processId, string backupName)
     {
         HANDLE processHandle = PInvoke.OpenProcess(PROCESS_ACCESS_RIGHTS.PROCESS_QUERY_LIMITED_INFORMATION, false, processId);
-        return PInvoke.QueryFullProcessImageName(processHandle, PROCESS_NAME_FORMAT.PROCESS_NAME_WIN32, 512);
+        try
+        {
+            return PInvoke.QueryFullProcessImageName(processHandle, PROCESS_NAME_FORMAT.PROCESS_NAME_WIN32, 512);
+        }
+        catch (ExternalException)
+        {
+            Logger.Log($"Failed to get filename for '{backupName}'. Process may be suspended.");
+            return backupName;
+        }
     }
 }
