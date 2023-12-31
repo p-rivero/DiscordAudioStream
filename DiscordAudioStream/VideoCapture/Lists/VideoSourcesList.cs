@@ -5,7 +5,8 @@ using System.Windows.Forms;
 using DiscordAudioStream.Properties;
 
 namespace DiscordAudioStream.VideoCapture;
-public class ScreenAndWindowList
+
+public class VideoSourcesList
 {
     private WindowList windowList = WindowList.Empty();
     private WebcamList webcamList = WebcamList.Empty();

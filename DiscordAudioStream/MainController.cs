@@ -6,7 +6,6 @@ using DiscordAudioStream.VideoCapture;
 using DiscordAudioStream.VideoCapture.CaptureStrategy;
 
 using Windows.Win32;
-using Windows.Win32.Foundation;
 
 namespace DiscordAudioStream;
 
@@ -24,7 +23,7 @@ public class MainController : IDisposable
     private VideoCaptureManager? videoCapture;
     private readonly CaptureState captureState = new();
     private readonly CaptureResizer captureResizer = new();
-    private readonly ScreenAndWindowList videoSources = new();
+    private readonly VideoSourcesList videoSources = new();
 
     private AudioPlayback? audioPlayback;
     private AudioMeterForm? currentMeterForm;
