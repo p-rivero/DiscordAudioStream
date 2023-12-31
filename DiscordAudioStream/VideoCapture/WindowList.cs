@@ -83,12 +83,14 @@ public class WindowList
 
     public IEnumerable<string> Names => windowList.Select(p => p.title);
 
-    public HWND getHandle(int index)
+    public int Count => windowList.Count;
+
+    public HWND GetHandle(int index)
     {
         return windowList[index].handle;
     }
 
-    public string getWindowHash(int index)
+    public string GetWindowHash(int index)
     {
         return windowList[index].filename + HASH_SEPARATOR + windowList[index].title;
     }
@@ -100,7 +102,7 @@ public class WindowList
 
     public int IndexOfWindowHash(string hash)
     {
-        string[] hashParts = hash.Split(HASH_SEPARATOR);
+        string[] hashParts = hash.Split(new char[] { HASH_SEPARATOR }, 2);
         if (hashParts.Length != 2)
         {
             throw new ArgumentException("Invalid hash");

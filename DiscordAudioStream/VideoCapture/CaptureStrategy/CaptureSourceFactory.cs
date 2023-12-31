@@ -13,6 +13,7 @@ public static class CaptureSourceFactory
         {
             CaptureState.CaptureTarget.Window => WindowSource(state),
             CaptureState.CaptureTarget.Screen => MonitorSource(state),
+            CaptureState.CaptureTarget.Webcam => WebcamSource(state),
             CaptureState.CaptureTarget.AllScreens => MultiMonitorSource(state),
             CaptureState.CaptureTarget.CustomArea => CustomAreaSource(state),
             _ => throw new ArgumentException("Invalid capture target"),
@@ -28,7 +29,6 @@ public static class CaptureSourceFactory
 
     private static CaptureSource WindowSource(CaptureState state)
     {
-        // Capturing a window
         return state.WindowMethod switch
         {
             CaptureState.WindowCaptureMethod.Windows10 => new Win10WindowCapture(state.WindowHandle, state.CapturingCursor),
@@ -40,7 +40,6 @@ public static class CaptureSourceFactory
 
     private static CaptureSource MonitorSource(CaptureState state)
     {
-        // Capturing a screen
         return state.ScreenMethod switch
         {
             CaptureState.ScreenCaptureMethod.DXGIDuplication => new DuplicationMonitorCapture(state.Screen, state.CapturingCursor, state.HideTaskbar),
@@ -48,6 +47,11 @@ public static class CaptureSourceFactory
             CaptureState.ScreenCaptureMethod.BitBlt => new BitBltMonitorCapture(state.Screen, state.CapturingCursor, state.HideTaskbar),
             _ => throw new ArgumentException("Invalid ScreenCaptureMethod"),
         };
+    }
+
+    private static CaptureSource WebcamSource(CaptureState state)
+    {
+        return new WebcamCapture(state.WebcamMonikerString);
     }
 
     private static CaptureSource MultiMonitorSource(CaptureState state)

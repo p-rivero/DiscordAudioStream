@@ -378,7 +378,7 @@ public partial class MainForm : Form
     private void areaComboBox_DropDown(object sender, EventArgs e)
     {
         // When the user expands the area combobox, update its elements
-        Controller.UpdateAreaComboBox(VideoIndex);
+        Controller.RefreshScreens(restoreSavedItem: true);
     }
 
     private void areaComboBox_SelectedIndexChanged(object sender, EventArgs e)

@@ -12,14 +12,14 @@ public class CaptureState
     {
         Windows10,
         BitBlt,
-        PrintScreen
+        PrintScreen,
     }
 
     public enum ScreenCaptureMethod
     {
         DXGIDuplication,
         Windows10,
-        BitBlt
+        BitBlt,
     }
 
     public enum CaptureTarget
@@ -27,14 +27,16 @@ public class CaptureState
         None,
         Screen,
         Window,
+        Webcam,
         AllScreens,
-        CustomArea
+        CustomArea,
     }
 
     public event Action? StateChanged;
 
     private HWND hWnd = HWND.Null;
     private Screen? screen;
+    private string? webcamMonikerString;
     private CaptureTarget captureTarget = CaptureTarget.None;
     private bool capturingCursor;
     private bool hideTaskbar;
@@ -90,7 +92,7 @@ public class CaptureState
     {
         get
         {
-            if (hWnd.IsNull)
+            if (hWnd.IsNull || captureTarget != CaptureTarget.Window)
             {
                 throw new InvalidOperationException("Trying to get WindowHandle without setting it first");
             }
@@ -106,7 +108,6 @@ public class CaptureState
             {
                 hWnd = value;
                 captureTarget = CaptureTarget.Window;
-                screen = null;
                 TriggerStateChange("WindowHandle", value);
             }
         }
@@ -116,7 +117,7 @@ public class CaptureState
     {
         get
         {
-            if (screen == null)
+            if (screen == null || captureTarget != CaptureTarget.Screen)
             {
                 throw new InvalidOperationException("Trying to get Screen without setting it first");
             }
@@ -132,8 +133,32 @@ public class CaptureState
             {
                 screen = value;
                 captureTarget = CaptureTarget.Screen;
-                hWnd = HWND.Null;
                 TriggerStateChange("Screen", value.DeviceName);
+            }
+        }
+    }
+
+    public string WebcamMonikerString
+    {
+        get
+        {
+            if (webcamMonikerString == null || captureTarget != CaptureTarget.Webcam)
+            {
+                throw new InvalidOperationException("Trying to get WebcamMonikerString without setting it first");
+            }
+            return webcamMonikerString;
+        }
+        set
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            if (webcamMonikerString != value || captureTarget != CaptureTarget.Webcam)
+            {
+                webcamMonikerString = value;
+                captureTarget = CaptureTarget.Webcam;
+                TriggerStateChange("WebcamMonikerString", value);
             }
         }
     }

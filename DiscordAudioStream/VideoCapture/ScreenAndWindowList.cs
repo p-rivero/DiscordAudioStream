@@ -4,20 +4,20 @@ using System.Windows.Forms;
 
 using DiscordAudioStream.Properties;
 
-using Windows.Win32.Foundation;
-
 namespace DiscordAudioStream.VideoCapture;
 public class ScreenAndWindowList
 {
     private WindowList windowList = WindowList.Empty();
+    private WebcamList webcamList = WebcamList.Empty();
 
     private int CustomAreaIndex { get; set; } = -1;
+    private int LastWindowIndex { get; set; } = -1;
     private static bool MultiMonitor => Screen.AllScreens.Length > 1;
     private int AllScreensIndex => MultiMonitor ? CustomAreaIndex - 1 : throw new InvalidOperationException("AllScreens not available");
 
     public IEnumerable<(string, bool)> Refresh()
     {
-        List<string> screens = Screen.AllScreens
+        List<string> screenNames = Screen.AllScreens
             .Select((screen, i) =>
             {
                 Rectangle bounds = screen.Bounds;
@@ -28,39 +28,31 @@ public class ScreenAndWindowList
 
         if (MultiMonitor)
         {
-            screens.Add("Everything");
+            screenNames.Add("Everything");
         }
-
-        CustomAreaIndex = screens.Count;
 
         windowList = WindowList.Refresh();
-        return screens
-            .Select(screenName => (screenName, false))
-            .Append(("Custom area", true))
-            .Concat(windowList.Names.Select(windowName => (windowName, false)));
-    }
+        webcamList = WebcamList.Refresh();
+        CustomAreaIndex = screenNames.Count;
+        LastWindowIndex = CustomAreaIndex + windowList.Count;
 
-    public HWND GetWindowAtIndex(int globalIndex)
-    {
-        int windowIndex = ToWindowIndex(globalIndex);
-        bool capturingWindow = windowIndex >= 0;
-        return capturingWindow ? windowList.getHandle(windowIndex) : HWND.Null;
-    }
+        IEnumerable<string> names = screenNames
+            .Append("Custom area")
+            .Concat(windowList.Names)
+            .Concat(webcamList.Names);
 
-    public int GetIndexOfWindow(HWND hWnd)
-    {
-        int windowIndex = windowList.IndexOfHandle(hWnd);
-        if (windowIndex == -1)
+        List<int> separators = new() { CustomAreaIndex };
+        if (webcamList.Count > 0)
         {
-            // Window no longer exists, return to first screen
-            return 0;
+            separators.Add(LastWindowIndex);
         }
-        return ToGlobalIndex(windowIndex);
+        return AddSeparators(names, separators);
     }
 
     public void UpdateCaptureState(CaptureState captureState, int selectedGlobalIndex)
     {
         int firstWindowIndex = CustomAreaIndex + 1;
+        int firstWebcamIndex = LastWindowIndex + 1;
 
         if (selectedGlobalIndex == CustomAreaIndex)
         {
@@ -70,11 +62,17 @@ public class ScreenAndWindowList
         {
             captureState.Target = CaptureState.CaptureTarget.AllScreens;
         }
+        else if (selectedGlobalIndex >= firstWebcamIndex)
+        {
+            int webcamIndex = ToWebcamIndex(selectedGlobalIndex);
+            captureState.WebcamMonikerString = webcamList.GetMonikerString(webcamIndex);
+            Settings.Default.LastVideoCaptureValue = captureState.WebcamMonikerString;
+        }
         else if (selectedGlobalIndex >= firstWindowIndex)
         {
             int windowIndex = ToWindowIndex(selectedGlobalIndex);
-            captureState.WindowHandle = windowList.getHandle(windowIndex);
-            Settings.Default.LastVideoCaptureValue = windowList.getWindowHash(windowIndex);
+            captureState.WindowHandle = windowList.GetHandle(windowIndex);
+            Settings.Default.LastVideoCaptureValue = windowList.GetWindowHash(windowIndex);
         }
         else
         {
@@ -94,7 +92,8 @@ public class ScreenAndWindowList
             return Settings.Default.LastVideoCaptureType switch
             {
                 "Screen" => int.Parse(value, CultureInfo.InvariantCulture),
-                "Window" => ToGlobalIndex(windowList.IndexOfWindowHash(value)),
+                "Window" => WindowIndexToGlobalIndex(windowList.IndexOfWindowHash(value)),
+                "Webcam" => WebcamIndexToGlobalIndex(webcamList.IndexOfMonikerString(value)),
                 "AllScreens" => MultiMonitor ? AllScreensIndex : throw new InvalidOperationException(),
                 "CustomArea" => CustomAreaIndex,
                 _ => throw new InvalidOperationException()
@@ -112,9 +111,26 @@ public class ScreenAndWindowList
         return videoIndex - firstWindowIndex;
     }
 
-    private int ToGlobalIndex(int windowIndex)
+    private int ToWebcamIndex(int videoIndex)
+    {
+        int firstWebcamIndex = LastWindowIndex + 1;
+        return videoIndex - firstWebcamIndex;
+    }
+
+    private int WindowIndexToGlobalIndex(int windowIndex)
     {
         int firstWindowIndex = CustomAreaIndex + 1;
         return windowIndex + firstWindowIndex;
+    }
+
+    private int WebcamIndexToGlobalIndex(int webcamIndex)
+    {
+        int firstWebcamIndex = LastWindowIndex + 1;
+        return webcamIndex + firstWebcamIndex;
+    }
+
+    private static IEnumerable<(string, bool)> AddSeparators(IEnumerable<string> names, IEnumerable<int> separators)
+    {
+        return names.Select((name, index) => (name, separators.Contains(index)));
     }
 }

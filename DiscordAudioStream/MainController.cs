@@ -148,13 +148,6 @@ public class MainController : IDisposable
         }
     }
 
-    internal void UpdateAreaComboBox(int oldIndex)
-    {
-        HWND capturedWindow = videoSources.GetWindowAtIndex(oldIndex);
-        RefreshScreens();
-        form.VideoIndex = capturedWindow.IsNull ? oldIndex : videoSources.GetIndexOfWindow(capturedWindow);
-    }
-
     internal void StartStream(bool skipAudioWarning)
     {
         try
