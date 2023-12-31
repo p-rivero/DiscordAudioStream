@@ -92,7 +92,7 @@ public class WindowList
 
     public string GetWindowHash(int index)
     {
-        return windowList[index].filename + HASH_SEPARATOR + windowList[index].title;
+        return $"{windowList[index].handle}{HASH_SEPARATOR}{windowList[index].filename}{HASH_SEPARATOR}{windowList[index].title}";
     }
 
     public int IndexOfHandle(HWND handle)
@@ -102,18 +102,25 @@ public class WindowList
 
     public int IndexOfWindowHash(string hash)
     {
-        string[] hashParts = hash.Split(new char[] { HASH_SEPARATOR }, 2);
-        if (hashParts.Length != 2)
+        string[] hashParts = hash.Split(new char[] { HASH_SEPARATOR }, 3);
+        if (hashParts.Length != 3)
         {
             throw new ArgumentException("Invalid hash");
         }
-        string filename = hashParts[0];
-        string title = hashParts[1];
+        string handle = hashParts[0];
+        string filename = hashParts[1];
+        string title = hashParts[2];
 
-        int exactMatch = windowList.FindIndex(p => p.filename == filename && p.title == title);
-        if (exactMatch != -1)
+        int exactHandleMatch = windowList.FindIndex(p => p.filename == filename && p.handle.ToString() == handle);
+        if (exactHandleMatch != -1)
         {
-            return exactMatch;
+            return exactHandleMatch;
+        }
+
+        int exactTitleMatch = windowList.FindIndex(p => p.filename == filename && p.title == title);
+        if (exactTitleMatch != -1)
+        {
+            return exactTitleMatch;
         }
 
         int filenameMatch = windowList.FindIndex(p => p.filename == filename);
