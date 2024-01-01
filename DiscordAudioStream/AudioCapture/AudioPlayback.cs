@@ -15,7 +15,7 @@ internal class AudioPlayback : IDisposable
     private readonly IWaveIn audioSource;
     private readonly IWavePlayer output;
     private readonly BufferedWaveProvider outputProvider;
-    private readonly CancellationTokenSource audioMeterCancel;
+    private readonly CancellationTokenSource audioMeterCancel = new();
 
     private static List<MMDevice>? audioDevices;
 
@@ -36,7 +36,6 @@ internal class AudioPlayback : IDisposable
         output.Init(LimitChannels(outputProvider));
 
         // Start a periodic timer to update the audio meter, discard the result
-        audioMeterCancel = new();
         _ = UpdateAudioMeter(device, audioMeterCancel.Token);
     }
 
