@@ -7,21 +7,34 @@ namespace DiscordAudioStream.VideoCapture.CaptureStrategy;
 public class WebcamCapture : CaptureSource
 {
     private readonly VideoCaptureDevice captureDevice;
+    private readonly object currentBitmapLock = new();
     private Bitmap? currentBitmap;
 
     private Bitmap? CurrentBitmap
     {
-        get => currentBitmap?.Clone() as Bitmap;
+        get
+        {
+            lock (currentBitmapLock)
+            {
+                return currentBitmap?.Clone() as Bitmap;
+            }
+        }
         set
         {
-            using Bitmap? oldBitmap = currentBitmap;
-            currentBitmap = value?.Clone() as Bitmap;
+            Bitmap? newBitmap = value?.Clone() as Bitmap;
+            lock (currentBitmapLock)
+            {
+                currentBitmap?.Dispose();
+                currentBitmap = newBitmap;
+            }
         }
     }
 
     public WebcamCapture(string monkerString)
     {
         captureDevice = new(monkerString);
+        VideoCapabilities[] vcs = captureDevice.VideoCapabilities;
+        captureDevice.VideoResolution = vcs[0];
         captureDevice.NewFrame += (s, e) => CurrentBitmap = e.Frame;
         captureDevice.Start();
     }
