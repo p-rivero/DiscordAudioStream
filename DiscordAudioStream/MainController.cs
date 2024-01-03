@@ -67,7 +67,7 @@ public class MainController : IDisposable
             }
             form.UpdatePreview(frame, forceRefresh && IsStreaming);
         };
-        drawThread.GetCurrentlyDisplayedFrame += () => form.CurrentFrame;
+        drawThread.GetCurrentlyDisplayedFrame += () => form.OutputImage;
         drawThread.GetWaitText += () => captureState.Target switch
         {
             CaptureState.CaptureTarget.Window => "Minimized window",
@@ -139,7 +139,7 @@ public class MainController : IDisposable
 
     private void RefreshPreviewSize()
     {
-        Size size = InvokeOnUI.RunSync(() => form.CurrentFrame?.Size ?? Size.Empty);
+        Size size = InvokeOnUI.RunSync(() => form.OutputImage?.Size ?? Size.Empty);
         SetPreviewSize(size);
     }
 

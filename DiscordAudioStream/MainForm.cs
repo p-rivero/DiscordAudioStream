@@ -67,10 +67,10 @@ public partial class MainForm : Form
 
     public MainController Controller { get; }
 
-    private Bitmap? OutputImage
+    internal Bitmap? OutputImage
     {
         get => previewBox.Image as Bitmap;
-        set
+        private set
         {
             Image? old = previewBox.Image;
             previewBox.Image = value;
@@ -120,8 +120,6 @@ public partial class MainForm : Form
         get => hideTaskbarCheckBox.Enabled;
         set => hideTaskbarCheckBox.Enabled = value;
     }
-
-    internal Bitmap? CurrentFrame => InvokeOnUI.RunSync(() => OutputImage);
 
     internal void RefreshCaptureUI()
     {
