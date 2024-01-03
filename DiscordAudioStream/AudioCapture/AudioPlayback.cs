@@ -55,16 +55,32 @@ internal class AudioPlayback : IDisposable
         }
     }
 
-    public static string[] RefreshDevices()
+    public static IEnumerable<string> RefreshDevices()
     {
         using MMDeviceEnumerator enumerator = new();
         bool showInputs = Properties.Settings.Default.ShowAudioInputs;
         DataFlow flow = showInputs ? DataFlow.All : DataFlow.Render;
         audioDevices = enumerator.EnumerateAudioEndPoints(flow, DeviceState.Active).ToList();
 
-        return audioDevices
-            .Select(device => (showInputs && device.DataFlow == DataFlow.Capture ? "[IN] " : "") + device.FriendlyName)
-            .ToArray();
+        List<string> names = new(audioDevices.Count);
+        foreach (MMDevice device in audioDevices)
+        {
+            try
+            {
+                bool isInput = showInputs && device.DataFlow == DataFlow.Capture;
+                string prefix = isInput ? "[IN] " : "";
+                names.Add(prefix + device.FriendlyName);
+            }
+            catch (ExternalException e)
+            {
+                Logger.Log("Got external exception while enumerating audio devices. Ignoring device.");
+                string deviceId = "[unknown]";
+                try { deviceId = device.ID; } catch { }
+                Logger.Log($"Ignored Device ID: {deviceId}");
+                Logger.Log(e);
+            }
+        }
+        return names;
     }
 
     public static int GetDefaultDeviceIndex()
