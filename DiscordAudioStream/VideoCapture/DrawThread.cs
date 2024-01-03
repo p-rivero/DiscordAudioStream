@@ -8,11 +8,14 @@ public class DrawThread
 {
     public event Action<Bitmap>? PaintFrame;
     public Func<Bitmap?>? GetCurrentlyDisplayedFrame { get; set; }
+    public Func<string>? GetWaitText { get; set; }
 
     private readonly VideoCaptureManager captureSource;
 
     private readonly Stopwatch timeSinceLastFrame = new();
     private const int TIME_TO_MINIMIZED_WARNING_MS = 500;
+
+    public bool Paused => !timeSinceLastFrame.IsRunning;
 
     public DrawThread(VideoCaptureManager captureSource)
     {
@@ -76,7 +79,8 @@ public class DrawThread
         if (GetCurrentlyDisplayedFrame != null)
         {
             Bitmap frame = CloneBitmap(GetCurrentlyDisplayedFrame());
-            DrawMinimizedWarning(frame);
+            string waitText = GetWaitText?.Invoke() ?? "";
+            DrawMinimizedWarning(frame, waitText);
             PaintFrame?.Invoke(frame);
         }
         timeSinceLastFrame.Stop();
@@ -87,11 +91,11 @@ public class DrawThread
         return old != null ? new Bitmap(old) : new Bitmap(1000, 500);
     }
 
-    private static void DrawMinimizedWarning(Bitmap frame)
+    private static void DrawMinimizedWarning(Bitmap frame, string waitText)
     {
         using Graphics g = Graphics.FromImage(frame);
         FillBackground(g, Color.FromArgb(150, 0, 0, 0));
-        DrawText(g, "Minimized window");
+        DrawText(g, waitText);
     }
 
     private static void FillBackground(Graphics g, Color color)
@@ -102,8 +106,8 @@ public class DrawThread
 
     private static void DrawText(Graphics g, string text)
     {
-        const float SIZE_FACTOR = 0.4f;
-        float fontSize = SIZE_FACTOR * g.VisibleClipBounds.Width / text.Length;
+        const float SIZE_FACTOR = 0.015f;
+        float fontSize = SIZE_FACTOR * g.VisibleClipBounds.Width;
         using Font font = new(SystemFonts.MessageBoxFont.Name, fontSize, FontStyle.Bold);
 
         SizeF textMeasure = g.MeasureString(text, font);

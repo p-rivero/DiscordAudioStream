@@ -68,6 +68,13 @@ public class MainController : IDisposable
             form.UpdatePreview(frame, forceRefresh && IsStreaming);
         };
         drawThread.GetCurrentlyDisplayedFrame += () => form.CurrentFrame;
+        drawThread.GetWaitText += () => captureState.Target switch
+        {
+            CaptureState.CaptureTarget.Window => "Minimized window",
+            CaptureState.CaptureTarget.Webcam => "Camera is unavailable or already in use",
+            _ => "Video not available",
+        };
+        videoCapture.ShouldClearStaleFrame += () => drawThread.Paused;
         drawThread.Start();
 
         RefreshAudioDevices();

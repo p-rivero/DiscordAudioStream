@@ -9,6 +9,7 @@ namespace DiscordAudioStream.VideoCapture;
 public class VideoCaptureManager : IDisposable
 {
     public event Action? CaptureAborted;
+    public event Func<bool>? ShouldClearStaleFrame;
 
     // Control framerate limit
     public int CaptureIntervalMs { get; private set; }
@@ -129,6 +130,10 @@ public class VideoCaptureManager : IDisposable
                 CaptureSource? oldSource = currentSource;
                 currentSource = CaptureSourceFactory.Build(captureState);
                 oldSource?.Dispose();
+                if (ShouldClearStaleFrame?.Invoke() ?? false)
+                {
+                    ClearStaleFrame(0xFF101010);
+                }
             }
             Logger.Log("Changed current source to " + currentSource.GetType().Name);
         }
@@ -172,5 +177,13 @@ public class VideoCaptureManager : IDisposable
         {
             b.Dispose();
         }
+    }
+
+    private static void ClearStaleFrame(uint color)
+    {
+        Bitmap bitmap = new(1920, 1080);
+        using Graphics g = Graphics.FromImage(bitmap);
+        g.Clear(Color.FromArgb((int)color));
+        EnqueueFrame(bitmap);
     }
 }
