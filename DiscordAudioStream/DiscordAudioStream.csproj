@@ -14,7 +14,7 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>1.4.1</Version>
+    <Version>1.4.2</Version>
     <Authors>DiscordAudioStream</Authors>
     <Product>Discord Audio Stream</Product>
     <Description>Utility for streaming the entire screen (or use OBS) with Discord... with audio!</Description>
