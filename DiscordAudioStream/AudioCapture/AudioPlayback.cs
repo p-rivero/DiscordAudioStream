@@ -73,10 +73,15 @@ internal class AudioPlayback : IDisposable
             }
             catch (ExternalException e)
             {
-                Logger.Log("Got external exception while enumerating audio devices. Ignoring device.");
-                string deviceId = "[unknown]";
-                try { deviceId = device.ID; } catch { }
-                Logger.Log($"Ignored Device ID: {deviceId}");
+                Logger.Log("Got external exception while enumerating audio devices.");
+                try
+                {
+                    Logger.Log($"Ignoring device {device.ID}");
+                }
+                catch
+                {
+                    Logger.Log("Failed to get ignored device ID");
+                }
                 Logger.Log(e);
             }
         }
