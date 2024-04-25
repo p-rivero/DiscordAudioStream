@@ -101,8 +101,29 @@ internal static class Program
         Settings.Default.PropertyChanged += (sender, e) => Settings.Default.Save();
         if (Settings.Default.NeedsSettingsUpgrade)
         {
-            Settings.Default.Upgrade();
+            try
+            {
+                Settings.Default.Upgrade();
+            }
+            catch (ArgumentNullException)
+            {
+                Logger.Log("Settings upgrade failed. Attempting to reset settings.");
+                ResetSettings();
+            }
             Settings.Default.NeedsSettingsUpgrade = false;
+        }
+    }
+
+    private static void ResetSettings()
+    {
+        try
+        {
+            Settings.Default.Reset();
+            Settings.Default.Save();
+        }
+        catch (Exception ex)
+        {
+            Logger.Log($"Failed to reset settings: {ex}");
         }
     }
 
