@@ -18,7 +18,7 @@ public enum ScaleMode
 public class CaptureResizer
 {
     private const double DISCORD_ASPECT_RATIO = 16.0 / 9.0;
-    private double constantScaleFactor;
+    private double percentScaleFactor;
     private uint fixedHeight;
     private uint fixedWidth;
 
@@ -32,32 +32,32 @@ public class CaptureResizer
         switch (mode)
         {
             case ScaleMode.Fixed720p:
-                constantScaleFactor = 0;
+                percentScaleFactor = 0;
                 fixedHeight = 720;
                 fixedWidth = (uint)(fixedHeight * DISCORD_ASPECT_RATIO);
                 break;
             case ScaleMode.Fixed1080p:
-                constantScaleFactor = 0;
+                percentScaleFactor = 0;
                 fixedHeight = 1080;
                 fixedWidth = (uint)(fixedHeight * DISCORD_ASPECT_RATIO);
                 break;
             case ScaleMode.Scale100:
-                constantScaleFactor = 1;
+                percentScaleFactor = 1;
                 break;
             case ScaleMode.Scale50:
-                constantScaleFactor = Math.Sqrt(0.5);
+                percentScaleFactor = Math.Sqrt(0.5);
                 break;
             case ScaleMode.Scale25:
-                constantScaleFactor = Math.Sqrt(0.25);
+                percentScaleFactor = Math.Sqrt(0.25);
                 break;
             case ScaleMode.Scale20:
-                constantScaleFactor = Math.Sqrt(0.2);
+                percentScaleFactor = Math.Sqrt(0.2);
                 break;
             case ScaleMode.Scale15:
-                constantScaleFactor = Math.Sqrt(0.15);
+                percentScaleFactor = Math.Sqrt(0.15);
                 break;
             case ScaleMode.Scale10:
-                constantScaleFactor = Math.Sqrt(0.1);
+                percentScaleFactor = Math.Sqrt(0.1);
                 break;
             default:
                 throw new ArgumentException("Unknown scale mode");
@@ -66,11 +66,13 @@ public class CaptureResizer
 
     public Size GetScaledSize(Size original)
     {
-        double dynamicScaleFactor = constantScaleFactor != 0 ? constantScaleFactor : ComputeDynamicScaleFactor(original);
+        double dynamicScaleFactor = UsesPercentScaling ? percentScaleFactor : ComputeDynamicScaleFactor(original);
         int newWidth = (int)(original.Width * dynamicScaleFactor);
         int newHeight = (int)(original.Height * dynamicScaleFactor);
         return new Size(newWidth, newHeight);
     }
+
+    private bool UsesPercentScaling => percentScaleFactor > 0.001;
 
     private double ComputeDynamicScaleFactor(Size original)
     {

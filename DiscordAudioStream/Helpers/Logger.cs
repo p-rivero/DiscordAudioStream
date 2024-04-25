@@ -2,6 +2,7 @@
 
 namespace DiscordAudioStream;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("SonarQube", "S6670", Justification = "Trace.WriteLine in this class is intentional")]
 internal static class Logger
 {
     private const string LOG_FILE_PATH = "DiscordAudioStream_log.txt";

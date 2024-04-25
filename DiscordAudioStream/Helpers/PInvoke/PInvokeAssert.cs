@@ -10,7 +10,9 @@ namespace Windows.Win32;
     Justification = "Throwing ExternalException in a P/Invoke helper seems correct")]
 public static class PInvokeAssert
 {
-    public static void AssertSuccess(this HRESULT result, string message = "Win32 call failed")
+    private const string DEFAULT_MESSAGE = "Win32 call failed";
+
+    public static void AssertSuccess(this HRESULT result, string message = DEFAULT_MESSAGE)
     {
         if (result.Failed)
         {
@@ -18,40 +20,40 @@ public static class PInvokeAssert
         }
     }
 
-    public static void AssertSuccess(this BOOL success, string message = "Win32 call failed")
+    public static void AssertSuccess(this BOOL success, string message = DEFAULT_MESSAGE)
     {
         ThrowIf(!success, message);
     }
 
-    public static HGDIOBJ AssertSuccess(this HGDIOBJ handle, string message = "Win32 call failed")
+    public static HGDIOBJ AssertSuccess(this HGDIOBJ handle, string message = DEFAULT_MESSAGE)
     {
         ThrowIf(handle.IsNull || handle == (nint)PInvoke.GDI_ERROR, message);
         return handle;
     }
 
-    public static void AssertNotZero(this uint number, string message = "Win32 call failed")
+    public static void AssertNotZero(this uint number, string message = DEFAULT_MESSAGE)
     {
         ThrowIf(number == 0, message);
     }
 
-    public static void AssertNotZero(this int number, string message = "Win32 call failed")
+    public static void AssertNotZero(this int number, string message = DEFAULT_MESSAGE)
     {
         ThrowIf(number == 0, message);
     }
 
-    public static HDC AssertNotNull(this HDC handle, string message = "Win32 call failed")
+    public static HDC AssertNotNull(this HDC handle, string message = DEFAULT_MESSAGE)
     {
         ThrowIf(handle == IntPtr.Zero, message);
         return handle;
     }
 
-    public static HWND AssertNotNull(this HWND handle, string message = "Win32 call failed")
+    public static HWND AssertNotNull(this HWND handle, string message = DEFAULT_MESSAGE)
     {
         ThrowIf(handle.IsNull, message);
         return handle;
     }
 
-    public static HBITMAP AssertNotNull(this HBITMAP handle, string message = "Win32 call failed")
+    public static HBITMAP AssertNotNull(this HBITMAP handle, string message = DEFAULT_MESSAGE)
     {
         ThrowIf(handle.IsNull, message);
         return handle;
