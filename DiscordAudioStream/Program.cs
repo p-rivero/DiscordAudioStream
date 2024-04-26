@@ -123,7 +123,8 @@ internal static class Program
         }
         catch (Exception ex)
         {
-            Logger.Log($"Failed to reset settings: {ex}");
+            Logger.Log("Failed to reset settings:");
+            Logger.Log(ex);
         }
     }
 
