@@ -1,3 +1,8 @@
+# ⚠️ Update 2024 ⚠️
+
+As of 2024, Discord has added the ability to stream the entire desktop with audio. If you have a basic use case (streaming the audio from **all** programs in your computer), you should use this feature instead of DiscordAudioStream.  
+However, if you need more control over which specific audio sources are shared, you can still use DiscordAudioStream.
+
 # Stream the entire desktop with audio
 
 1. Decide which programs you want to share the audio from.
