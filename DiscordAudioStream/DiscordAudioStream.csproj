@@ -66,7 +66,7 @@
     <PackageReference Include="Mono.Options" Version="6.12.0.148" />
     <PackageReference Include="NAudio" Version="1.10.0" />
     <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
-    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>
