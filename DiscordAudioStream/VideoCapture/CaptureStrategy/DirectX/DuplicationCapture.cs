@@ -99,15 +99,16 @@ public class DuplicationCapture : DirectXCapture
             }
 
             Screen.AcquireNextFrame(FRAME_TIMEOUT_MS, out _, out DXGIResource screenResource);
+            using (screenResource)
+            {
+                // Success: convert captured frame to Bitmap
+                using Texture2D texture = screenResource.QueryInterface<Texture2D>();
+                Bitmap bmp = TextureToBitmap(texture, d3dDevice);
+                Screen.ReleaseFrame();
 
-            // Success: convert captured frame to Bitmap
-            using Texture2D texture = screenResource.QueryInterface<Texture2D>();
-            Bitmap bmp = TextureToBitmap(texture, d3dDevice);
-            screenResource.Dispose();
-            Screen.ReleaseFrame();
-
-            CachedThumbnail = new Bitmap(bmp);
-            return bmp;
+                CachedThumbnail = new Bitmap(bmp);
+                return bmp;
+            }
         }
         catch (SharpDXException e)
         {
