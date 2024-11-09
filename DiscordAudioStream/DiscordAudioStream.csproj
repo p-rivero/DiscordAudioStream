@@ -49,6 +49,13 @@
 
   <ItemGroup>
     <None Remove="NativeMethods.json" />
+    <None Remove="Shaders\rescalePixelShader.cso" />
+    <None Remove="Shaders\rescaleVertexShader.cso" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Shaders\rescalePixelShader.cso" />
+    <EmbeddedResource Include="Shaders\rescaleVertexShader.cso" />
   </ItemGroup>
 
   <ItemGroup>
