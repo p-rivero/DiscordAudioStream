@@ -22,7 +22,7 @@ public class Win10Capture : DirectXCapture
     private static readonly Device d3dDevice = new(DriverType.Hardware, DeviceCreationFlags.BgraSupport);
     private static readonly IDirect3DDevice device = Direct3D11Helper.CreateDirect3DDeviceFromSharpDXDevice(d3dDevice);
 
-    public Win10Capture(GraphicsCaptureItem item, bool captureCursor)
+    public Win10Capture(GraphicsCaptureItem item, bool captureCursor) : base(d3dDevice)
     {
         framePool = Direct3D11CaptureFramePool.Create(device, DirectXPixelFormat.B8G8R8A8UIntNormalized, 1, item.Size);
         session = framePool.CreateCaptureSession(item);
@@ -83,6 +83,6 @@ public class Win10Capture : DirectXCapture
         }
 
         using Texture2D texture = Direct3D11Helper.CreateSharpDXTexture2D(frame.Surface);
-        return TextureToBitmap(texture, d3dDevice);
+        return TextureToBitmap(texture, 0.5);
     }
 }

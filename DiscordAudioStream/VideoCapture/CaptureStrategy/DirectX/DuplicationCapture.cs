@@ -43,7 +43,7 @@ public class DuplicationCapture : DirectXCapture
         }
     }
 
-    public DuplicationCapture(int index)
+    public DuplicationCapture(int index) : base(d3dDevice)
     {
         selectedIndex = index;
         // Trigger InitScreens(), we want to throw during the constructor if there's an error
@@ -103,8 +103,7 @@ public class DuplicationCapture : DirectXCapture
             {
                 // Success: convert captured frame to Bitmap
                 using Texture2D texture = screenResource.QueryInterface<Texture2D>();
-                using Texture2D scaledTexture = ScaleTexture(texture, d3dDevice);
-                Bitmap bmp = TextureToBitmap(scaledTexture, d3dDevice);
+                Bitmap bmp = TextureToBitmap(texture, 0.5);
                 Screen.ReleaseFrame();
 
                 CachedThumbnail = new Bitmap(bmp);
