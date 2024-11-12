@@ -38,6 +38,8 @@ public class CursorPainter : CaptureSource
         return PaintCursor(bmp, CaptureAreaRect().Location);
     }
 
+    public override bool ScaleWithGPU => source.ScaleWithGPU;
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

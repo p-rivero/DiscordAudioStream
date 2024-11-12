@@ -24,6 +24,8 @@ public class Win10MonitorCapture : MonitorCapture
         return winCapture.CaptureFrame();
     }
 
+    public override bool ScaleWithGPU => winCapture.ScaleWithGPU;
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

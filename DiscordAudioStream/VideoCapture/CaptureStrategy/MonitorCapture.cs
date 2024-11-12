@@ -24,9 +24,6 @@ public abstract class MonitorCapture : CaptureSource
     protected Rectangle GetWorkingAreaCrop()
     {
         Rectangle area = monitor.WorkingArea;
-        // TODO: Remove the following 2 lines
-        area.Height /= 2;
-        area.Width /= 2;
         area.Location = Point.Empty;
         return area;
     }

@@ -103,7 +103,7 @@ public class DuplicationCapture : DirectXCapture
             {
                 // Success: convert captured frame to Bitmap
                 using Texture2D texture = screenResource.QueryInterface<Texture2D>();
-                Bitmap bmp = TextureToBitmap(texture, 0.5);
+                Bitmap bmp = ScaledTextureToBitmap(texture);
                 Screen.ReleaseFrame();
 
                 CachedThumbnail = new Bitmap(bmp);

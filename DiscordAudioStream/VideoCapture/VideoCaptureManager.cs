@@ -129,6 +129,7 @@ public class VideoCaptureManager : IDisposable
                 // Don't dispose the old source until the new source is instantiated without errors
                 CaptureSource? oldSource = currentSource;
                 currentSource = CaptureSourceFactory.Build(captureState);
+                CaptureResizer.ScaleWithGPU = currentSource.ScaleWithGPU;
                 oldSource?.Dispose();
                 if (ShouldClearStaleFrame?.Invoke() ?? false)
                 {

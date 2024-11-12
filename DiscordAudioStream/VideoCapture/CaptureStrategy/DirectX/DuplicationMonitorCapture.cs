@@ -33,6 +33,8 @@ public class DuplicationMonitorCapture : MonitorCapture
         return source.CaptureFrame();
     }
 
+    public override bool ScaleWithGPU => source.ScaleWithGPU;
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

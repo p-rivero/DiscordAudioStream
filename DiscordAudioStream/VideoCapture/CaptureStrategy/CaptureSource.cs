@@ -6,6 +6,8 @@ public abstract class CaptureSource : IDisposable
 {
     public abstract Bitmap? CaptureFrame();
 
+    public abstract bool ScaleWithGPU { get; }
+
     public void Dispose()
     {
         Dispose(true);

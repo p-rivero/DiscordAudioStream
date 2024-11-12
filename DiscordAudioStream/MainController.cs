@@ -22,7 +22,6 @@ public class MainController : IDisposable
 
     private VideoCaptureManager? videoCapture;
     private readonly CaptureState captureState = new();
-    private readonly CaptureResizer captureResizer = new();
     private readonly VideoSourcesList videoSources = new();
 
     private AudioPlayback? audioPlayback;
@@ -132,7 +131,8 @@ public class MainController : IDisposable
     {
         if (IsStreaming)
         {
-            Size scaledSize = captureResizer.GetScaledSize(size);
+            double scaleFactor = CaptureResizer.GetCPUScaleFactor(size);
+            Size scaledSize = size.Scale(scaleFactor);
             form.SetPreviewUISize(scaledSize);
         }
     }
@@ -327,7 +327,7 @@ public class MainController : IDisposable
 
     internal void SetScaleIndex(int index)
     {
-        captureResizer.SetScaleMode((ScaleMode)index);
+        CaptureResizer.SetScaleMode((ScaleMode)index);
         Properties.Settings.Default.ScaleIndex = index;
     }
 

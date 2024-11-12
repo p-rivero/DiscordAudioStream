@@ -83,6 +83,6 @@ public class Win10Capture : DirectXCapture
         }
 
         using Texture2D texture = Direct3D11Helper.CreateSharpDXTexture2D(frame.Surface);
-        return TextureToBitmap(texture, 0.5);
+        return ScaledTextureToBitmap(texture);
     }
 }

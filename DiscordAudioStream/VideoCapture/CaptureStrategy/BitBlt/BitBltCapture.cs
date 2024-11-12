@@ -64,6 +64,8 @@ public class BitBltCapture : CaptureSource
         return Image.FromHbitmap(hBitmap, IntPtr.Zero);
     }
 
+    public override bool ScaleWithGPU => false;
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

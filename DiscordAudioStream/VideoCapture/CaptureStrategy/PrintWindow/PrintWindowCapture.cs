@@ -29,6 +29,8 @@ public class PrintWindowCapture : WindowCapture
         return capture.CaptureFrame();
     }
 
+    public override bool ScaleWithGPU => capture.ScaleWithGPU;
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

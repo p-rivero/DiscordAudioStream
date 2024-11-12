@@ -32,6 +32,8 @@ public class Win10WindowCapture : WindowCapture
         return result;
     }
 
+    public override bool ScaleWithGPU => winCapture.ScaleWithGPU;
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

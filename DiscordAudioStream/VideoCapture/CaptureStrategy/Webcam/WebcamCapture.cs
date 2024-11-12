@@ -47,6 +47,8 @@ public class WebcamCapture : CaptureSource
         return CurrentBitmap;
     }
 
+    public override bool ScaleWithGPU => false;
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

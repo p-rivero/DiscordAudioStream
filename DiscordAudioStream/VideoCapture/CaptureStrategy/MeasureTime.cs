@@ -27,6 +27,8 @@ public class MeasureTime : CaptureSource
         return bmp;
     }
 
+    public override bool ScaleWithGPU => capture.ScaleWithGPU;
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

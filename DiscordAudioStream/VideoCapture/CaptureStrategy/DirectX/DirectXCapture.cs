@@ -19,19 +19,22 @@ public abstract class DirectXCapture : CaptureSource
 
     public Func<Rectangle>? CustomAreaCrop { get; set; }
 
-    protected Bitmap TextureToBitmap(Texture2D originalTexture, double scale)
+    public override bool ScaleWithGPU => true;
+
+    protected Bitmap ScaledTextureToBitmap(Texture2D originalTexture)
     {
-        if (Math.Abs(scale - 1) < 0.0001)
+        Rectangle area = CustomAreaCrop?.Invoke() ?? new(0, 0, originalTexture.Description.Width, originalTexture.Description.Height);
+        double scaleFactor = CaptureResizer.GetScaleFactor(area.Size);
+        if (scaleFactor.Is1())
         {
-            return TextureToBitmap(originalTexture);
+            return TextureToBitmap(originalTexture, area);
         }
-        using Texture2D scaledTexture = rescaler.ScaleTexture(originalTexture, scale);
-        return TextureToBitmap(scaledTexture);
+        using Texture2D scaledTexture = rescaler.ScaleTexture(originalTexture, scaleFactor);
+        return TextureToBitmap(scaledTexture, area.Scale(scaleFactor));
     }
 
-    private Bitmap TextureToBitmap(Texture2D texture)
+    private Bitmap TextureToBitmap(Texture2D texture, Rectangle copiedArea)
     {
-        Rectangle copiedArea = CustomAreaCrop?.Invoke() ?? new(0, 0, texture.Description.Width, texture.Description.Height);
         int width = copiedArea.Width;
         int height = copiedArea.Height;
 

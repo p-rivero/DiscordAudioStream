@@ -15,19 +15,19 @@ public enum ScaleMode
     Scale10,
 }
 
-public class CaptureResizer
+public static class CaptureResizer
 {
     private const double DISCORD_ASPECT_RATIO = 16.0 / 9.0;
-    private double percentScaleFactor;
-    private uint fixedHeight;
-    private uint fixedWidth;
+    private static double percentScaleFactor;
+    private static uint fixedHeight;
+    private static uint fixedWidth;
 
-    public CaptureResizer()
+    static CaptureResizer()
     {
         SetScaleMode(ScaleMode.Scale100);
     }
 
-    public void SetScaleMode(ScaleMode mode)
+    public static void SetScaleMode(ScaleMode mode)
     {
         switch (mode)
         {
@@ -64,17 +64,21 @@ public class CaptureResizer
         }
     }
 
-    public Size GetScaledSize(Size original)
+    public static bool ScaleWithGPU { get; set; }
+
+    public static double GetScaleFactor(Size original)
     {
-        double dynamicScaleFactor = UsesPercentScaling ? percentScaleFactor : ComputeDynamicScaleFactor(original);
-        int newWidth = (int)(original.Width * dynamicScaleFactor);
-        int newHeight = (int)(original.Height * dynamicScaleFactor);
-        return new Size(newWidth, newHeight);
+        return UsesPercentScaling ? percentScaleFactor : ComputeDynamicScaleFactor(original);
     }
 
-    private bool UsesPercentScaling => percentScaleFactor > 0.001;
+    public static double GetCPUScaleFactor(Size original)
+    {
+        return ScaleWithGPU ? 1 : GetScaleFactor(original);
+    }
 
-    private double ComputeDynamicScaleFactor(Size original)
+    private static bool UsesPercentScaling => percentScaleFactor > 0.001;
+
+    private static double ComputeDynamicScaleFactor(Size original)
     {
         double widthScaleFactor = (double)fixedWidth / original.Width;
         double heightScaleFactor = (double)fixedHeight / original.Height;
@@ -82,5 +86,29 @@ public class CaptureResizer
         double scaleFactor = Math.Min(widthScaleFactor, heightScaleFactor);
         // Do not upscale
         return Math.Min(1, scaleFactor);
+    }
+}
+
+public static class ScaleExtensions
+{
+    public static Rectangle Scale(this Rectangle rect, double scaleFactor)
+    {
+        int newX = (int)(rect.X * scaleFactor);
+        int newY = (int)(rect.Y * scaleFactor);
+        int newWidth = (int)(rect.Width * scaleFactor);
+        int newHeight = (int)(rect.Height * scaleFactor);
+        return new Rectangle(newX, newY, newWidth, newHeight);
+    }
+
+    public static Size Scale(this Size size, double scaleFactor)
+    {
+        int newWidth = (int)(size.Width * scaleFactor);
+        int newHeight = (int)(size.Height * scaleFactor);
+        return new Size(newWidth, newHeight);
+    }
+
+    public static bool Is1(this double value)
+    {
+        return Math.Abs(value - 1) < 0.001;
     }
 }

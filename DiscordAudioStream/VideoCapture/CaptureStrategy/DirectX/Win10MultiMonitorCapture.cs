@@ -18,6 +18,8 @@ public class Win10MultiMonitorCapture : CaptureSource
         return winCapture.CaptureFrame();
     }
 
+    public override bool ScaleWithGPU => winCapture.ScaleWithGPU;
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

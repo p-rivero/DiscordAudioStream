@@ -35,4 +35,6 @@ internal class PrintWindowCore : WindowCapture
         bool success = PInvoke.PrintWindow(windowHandle, (HDC)g.GetHdc(), (PRINT_WINDOW_FLAGS)flags);
         return success ? result : null;
     }
+
+    public override bool ScaleWithGPU => false;
 }
