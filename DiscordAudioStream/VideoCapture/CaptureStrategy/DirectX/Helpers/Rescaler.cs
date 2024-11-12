@@ -1,8 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 
+using DiscordAudioStream.Shaders;
+
 using SharpDX;
 using SharpDX.Direct3D11;
-using DiscordAudioStream.Shaders;
 
 using Buffer = SharpDX.Direct3D11.Buffer;
 

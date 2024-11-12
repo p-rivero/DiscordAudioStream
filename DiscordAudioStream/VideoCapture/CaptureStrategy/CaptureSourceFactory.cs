@@ -19,12 +19,7 @@ public static class CaptureSourceFactory
             _ => throw new ArgumentException("Invalid capture target"),
         };
 
-        if (PrintFrameTime)
-        {
-            return new MeasureTime(result);
-        }
-
-        return result;
+        return PrintFrameTime ? new MeasureTime(result) : result;
     }
 
     private static CaptureSource WindowSource(CaptureState state)
@@ -49,7 +44,7 @@ public static class CaptureSourceFactory
         };
     }
 
-    private static CaptureSource WebcamSource(CaptureState state)
+    private static WebcamCapture WebcamSource(CaptureState state)
     {
         return new WebcamCapture(state.WebcamMonikerString);
     }

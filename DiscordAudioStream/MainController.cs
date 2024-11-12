@@ -26,6 +26,7 @@ public class MainController : IDisposable
 
     private AudioPlayback? audioPlayback;
     private AudioMeterForm? currentMeterForm;
+    private static readonly string[] NONE_ELEMENT = new string[] { "(None)" };
 
     public MainController(MainForm owner)
     {
@@ -81,7 +82,7 @@ public class MainController : IDisposable
         new Thread(BackgroundInit) { IsBackground = true }.Start();
     }
 
-    private async void BackgroundInit()
+    private static async void BackgroundInit()
     {
         // Prefetch preset slots
         InvokeOnUI.RunAsync(() => _ = GetPopulatedPresets());
@@ -102,10 +103,8 @@ public class MainController : IDisposable
 
     private void RefreshAudioDevices()
     {
-        IEnumerable<string> elements = new string[] { "(None)" }
-            .Concat(AudioPlayback.RefreshDevices());
-
-        int defaultIndex = AudioPlayback.GetLastDeviceIndex() + 1; // Add 1 for "None" element
+        IEnumerable<string> elements = NONE_ELEMENT.Concat(AudioPlayback.RefreshDevices());
+        int defaultIndex = NONE_ELEMENT.Length + AudioPlayback.GetLastDeviceIndex();
         form.SetAudioElements(elements, defaultIndex);
     }
 
@@ -181,7 +180,7 @@ public class MainController : IDisposable
         RefreshPreviewSize();
     }
 
-    private void StartStreamWithoutAudio(bool skipAudioWarning)
+    private static void StartStreamWithoutAudio(bool skipAudioWarning)
     {
         if (!skipAudioWarning)
         {
@@ -325,7 +324,7 @@ public class MainController : IDisposable
         videoSources.UpdateCaptureState(captureState, index);
     }
 
-    internal void SetScaleIndex(int index)
+    internal static void SetScaleIndex(int index)
     {
         CaptureResizer.SetScaleMode((ScaleMode)index);
         Properties.Settings.Default.ScaleIndex = index;
@@ -403,7 +402,7 @@ public class MainController : IDisposable
         }
     }
 
-    internal void SaveCapturePreset(int slotNumber)
+    internal static void SaveCapturePreset(int slotNumber)
     {
         Logger.Log($"Storing capture preset {slotNumber}");
         CustomAreaCapture.SaveCaptureArea();
@@ -414,7 +413,7 @@ public class MainController : IDisposable
             .Show();
     }
 
-    internal IList<bool> GetPopulatedPresets()
+    internal static IList<bool> GetPopulatedPresets()
     {
         return CapturePreset.GetPopulatedPresets();
     }

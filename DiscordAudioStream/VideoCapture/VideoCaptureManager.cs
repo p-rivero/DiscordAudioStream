@@ -54,14 +54,9 @@ public class VideoCaptureManager : IDisposable
         captureThreadToken.Dispose();
     }
 
-    // Return the next frame, if it exists (null otherwise)
     public static Bitmap? GetNextFrame()
     {
-        if (frameQueue.TryDequeue(out Bitmap frame))
-        {
-            return frame;
-        }
-        return null;
+        return frameQueue.TryDequeue(out Bitmap frame) ? frame : null;
     }
 
     public void RefreshFramerate()
