@@ -76,6 +76,11 @@ public static class CaptureResizer
         return ScaleWithGPU ? 1 : GetScaleFactor(original);
     }
 
+    public static double GetGPUScaleFactor(Size original)
+    {
+        return ScaleWithGPU ? GetScaleFactor(original) : 1;
+    }
+
     private static bool UsesPercentScaling => percentScaleFactor > 0.001;
 
     private static double ComputeDynamicScaleFactor(Size original)
@@ -105,6 +110,13 @@ public static class ScaleExtensions
         int newWidth = (int)(size.Width * scaleFactor);
         int newHeight = (int)(size.Height * scaleFactor);
         return new Size(newWidth, newHeight);
+    }
+
+    public static Point Scale(this Point point, double scaleFactor)
+    {
+        int newX = (int)(point.X * scaleFactor);
+        int newY = (int)(point.Y * scaleFactor);
+        return new Point(newX, newY);
     }
 
     public static bool Is1(this double value)

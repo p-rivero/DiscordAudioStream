@@ -79,6 +79,8 @@ public class CursorPainter : CaptureSource
         cursorPos.X -= originPos.X;
         cursorPos.Y -= originPos.Y;
 
+        cursorPos = cursorPos.Scale(CaptureResizer.GetGPUScaleFactor(src.Size));
+
         // Draw the cursor only if it's inside the bounds
         if (cursorPos.X >= 0 && cursorPos.Y >= 0 && cursorPos.X <= src.Width && cursorPos.Y <= src.Height)
         {
