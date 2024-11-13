@@ -58,11 +58,11 @@ public partial class MainForm : Form
         toolStripLoadSlot3.Click += (sender, e) => Controller.LoadCapturePreset(3);
         toolStripLoadSlot4.Click += (sender, e) => Controller.LoadCapturePreset(4);
         toolStripLoadSlot5.Click += (sender, e) => Controller.LoadCapturePreset(5);
-        toolStripStoreSlot1.Click += (sender, e) => Controller.SaveCapturePreset(1);
-        toolStripStoreSlot2.Click += (sender, e) => Controller.SaveCapturePreset(2);
-        toolStripStoreSlot3.Click += (sender, e) => Controller.SaveCapturePreset(3);
-        toolStripStoreSlot4.Click += (sender, e) => Controller.SaveCapturePreset(4);
-        toolStripStoreSlot5.Click += (sender, e) => Controller.SaveCapturePreset(5);
+        toolStripStoreSlot1.Click += (sender, e) => MainController.SaveCapturePreset(1);
+        toolStripStoreSlot2.Click += (sender, e) => MainController.SaveCapturePreset(2);
+        toolStripStoreSlot3.Click += (sender, e) => MainController.SaveCapturePreset(3);
+        toolStripStoreSlot4.Click += (sender, e) => MainController.SaveCapturePreset(4);
+        toolStripStoreSlot5.Click += (sender, e) => MainController.SaveCapturePreset(5);
     }
 
     public MainController Controller { get; }
@@ -287,31 +287,31 @@ public partial class MainForm : Form
                 Controller.LoadCapturePreset(1);
                 break;
             case Keys.Control | Keys.Shift | Keys.D1:
-                Controller.SaveCapturePreset(1);
+                MainController.SaveCapturePreset(1);
                 break;
             case Keys.Control | Keys.D2:
                 Controller.LoadCapturePreset(2);
                 break;
             case Keys.Control | Keys.Shift | Keys.D2:
-                Controller.SaveCapturePreset(2);
+                MainController.SaveCapturePreset(2);
                 break;
             case Keys.Control | Keys.D3:
                 Controller.LoadCapturePreset(3);
                 break;
             case Keys.Control | Keys.Shift | Keys.D3:
-                Controller.SaveCapturePreset(3);
+                MainController.SaveCapturePreset(3);
                 break;
             case Keys.Control | Keys.D4:
                 Controller.LoadCapturePreset(4);
                 break;
             case Keys.Control | Keys.Shift | Keys.D4:
-                Controller.SaveCapturePreset(4);
+                MainController.SaveCapturePreset(4);
                 break;
             case Keys.Control | Keys.D5:
                 Controller.LoadCapturePreset(5);
                 break;
             case Keys.Control | Keys.Shift | Keys.D5:
-                Controller.SaveCapturePreset(5);
+                MainController.SaveCapturePreset(5);
                 break;
         }
     }
@@ -386,7 +386,7 @@ public partial class MainForm : Form
 
     private void scaleComboBox_SelectedIndexChanged(object sender, EventArgs e)
     {
-        Controller.SetScaleIndex(scaleComboBox.SelectedIndex);
+        MainController.SetScaleIndex(scaleComboBox.SelectedIndex);
     }
 
     private void hideTaskbarCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -429,7 +429,7 @@ public partial class MainForm : Form
     private void toolStripLoad_DropDownOpening(object sender, EventArgs e)
     {
         ToolStripMenuItem[] loadMenuItems = { toolStripLoadSlot1, toolStripLoadSlot2, toolStripLoadSlot3, toolStripLoadSlot4, toolStripLoadSlot5 };
-        IList<bool> populatedPresets = Controller.GetPopulatedPresets();
+        IList<bool> populatedPresets = MainController.GetPopulatedPresets();
         for (int i = 0; i < loadMenuItems.Length; i++)
         {
             loadMenuItems[i].Enabled = populatedPresets[i];
