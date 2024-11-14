@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
-            this.previewBox = new System.Windows.Forms.PictureBox();
+            this.previewBox = new CustomComponents.PictureBoxWithoutAntiAliasing();
             this.streamContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showAudioMeterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripLoad = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,6 +81,7 @@
             // 
             this.previewBox.BackColor = System.Drawing.Color.Black;
             this.previewBox.ContextMenuStrip = this.streamContextMenu;
+            this.previewBox.DisableAntiAliasing = false;
             this.previewBox.InitialImage = null;
             this.previewBox.Location = new System.Drawing.Point(358, 9);
             this.previewBox.Margin = new System.Windows.Forms.Padding(9, 0, 0, 0);
@@ -515,7 +516,7 @@
         private System.Windows.Forms.ToolStripButton aboutBtn;
         private System.Windows.Forms.ToolStripButton settingsBtn;
         private CustomComponents.DarkThemeCheckBox hideTaskbarCheckBox;
-        private System.Windows.Forms.PictureBox previewBox;
+        private CustomComponents.PictureBoxWithoutAntiAliasing previewBox;
         private System.Windows.Forms.ToolStripButton previewBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.Button startButton;

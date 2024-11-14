@@ -4,6 +4,8 @@ using System.Windows.Forms;
 
 using CustomComponents;
 
+using DiscordAudioStream.VideoCapture;
+
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
@@ -150,6 +152,7 @@ public partial class MainForm : Form
             // If we start streaming, override previewBtn and enable the previewBox
             DisplayPreview(true);
             previewBox.Location = Point.Empty;
+            previewBox.DisableAntiAliasing = CaptureResizer.ScaleWithGPU;
             Controller.ShowAudioMeterForm(darkMode);
             Text = Properties.Settings.Default.StreamTitle;
         }
@@ -158,6 +161,7 @@ public partial class MainForm : Form
             DisplayPreview(previewBtn.Checked);
             previewBox.Size = defaultPreviewSize;
             previewBox.Location = defaultPreviewLocation;
+            previewBox.DisableAntiAliasing = false;
             CenterToScreen();
             Controller.HideAudioMeterForm();
             Text = "Discord Audio Stream";
