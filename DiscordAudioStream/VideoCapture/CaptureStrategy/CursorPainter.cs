@@ -35,7 +35,7 @@ public class CursorPainter : CaptureSource
             return null;
         }
 
-        return PaintCursor(bmp, CaptureAreaRect().Location);
+        return PaintCursor(bmp, CaptureAreaRect());
     }
 
     public override bool ScaleWithGPU => source.ScaleWithGPU;
@@ -50,7 +50,7 @@ public class CursorPainter : CaptureSource
         }
     }
 
-    private Bitmap PaintCursor(Bitmap src, Point originPos)
+    private Bitmap PaintCursor(Bitmap src, Rectangle capturedArea)
     {
         CURSORINFO pci = CURSORINFO.New();
 
@@ -76,10 +76,10 @@ public class CursorPainter : CaptureSource
             pci.ptScreenPos.Y - cursorHotspot.Y
         );
         // Transform from screen coordinates (relative to main screen) to window coordinates (relative to captured area)
-        cursorPos.X -= originPos.X;
-        cursorPos.Y -= originPos.Y;
+        cursorPos.X -= capturedArea.X;
+        cursorPos.Y -= capturedArea.Y;
 
-        cursorPos = cursorPos.Scale(CaptureResizer.GetGPUScaleFactor(src.Size));
+        cursorPos = cursorPos.Scale(CaptureResizer.GetGPUScaleFactor(capturedArea.Size));
 
         // Draw the cursor only if it's inside the bounds
         if (cursorPos.X >= 0 && cursorPos.Y >= 0 && cursorPos.X <= src.Width && cursorPos.Y <= src.Height)
